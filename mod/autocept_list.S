@@ -18,21 +18,15 @@
 #include "autocept_generic.S"
 
 // general libc functions
-add_interceptor rand
-add_interceptor time
-add_interceptor sleep
-add_interceptor puts
-add_interceptor atexit
-add_interceptor printf
-add_interceptor exit
 add_interceptor abort
-add_interceptor malloc
+add_interceptor atexit
+add_interceptor exit
+add_interceptor fread
 add_interceptor free
 add_interceptor fwrite
-add_interceptor fread
-
-add_interceptor __cxa_guard_abort
-add_interceptor __cxa_guard_acquire
-add_interceptor __cxa_guard_release
-add_interceptor __cxa_atexit
-
+add_interceptor malloc
+add_interceptor printf
+add_interceptor puts
+add_interceptor rand
+add_interceptor sleep
+add_interceptor time

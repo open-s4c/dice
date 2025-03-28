@@ -5,16 +5,19 @@
 
 #if defined(__APPLE__)
 #define SYM(name) _##name
-#else
-#define SYM(name) name
-#endif
-
-#if defined(__APPLE__)
+#define FUNC(name) ___fake_##name
 .macro .size lab, other
 .endmacro
 .macro .type lab, other
 .endmacro
-.macro .section lab
+.macro .sec_rodata
+.section __TEXT,__text,regular,pure_instructions
+.endmacro
+#else
+#define SYM(name) name
+#define FUNC(name) name
+.macro .sec_rodata
+.section .rodata
 .endmacro
 #endif
 
@@ -26,14 +29,14 @@
  * @param name symbol name of intercepted function
  */
 .macro add_interceptor name
-        .section .rodata
+        .sec_rodata
 .func_\name:
         .string "\name"
         .text
         .align  4
-        .global SYM(\name)
-        .type   SYM(\name), @function
-SYM(\name):
+        .global FUNC(\name)
+        .type   FUNC(\name), @function
+FUNC(\name):
         /* Push callee-save AND caller-save registers onto the stack. */
         prologue
         push_caller_save
@@ -45,7 +48,11 @@ SYM(\name):
 
         /* CALL: restore caller-save registers and perform real call. */
         pop_caller_save
+#if defined(__APPLE__)
+        call_func SYM(\name)
+#else
         call_func_ptr
+#endif
 
         /* AFTER_CALL: Save return value and finish book keeping. */
         push_retval
@@ -59,5 +66,14 @@ SYM(\name):
 
 .end_\name:
         .size \name, .- \name
+
+#if defined(__APPLE__)
+	/* Darwin interpose object */
+	.section	__DATA,__interpose
+	.p2align	3, 0x0
+__interpose_\name:
+	.quad	FUNC(\name)
+	.quad	SYM(\name)
+#endif
 .endm
 
