@@ -22,10 +22,9 @@ typedef struct {
 /* On NetBSD pthread_exit is a macro mapping to __libc_thread_exit. However, we
  * have to capture the real pthread_exit, hence, we undefine it. */
 #undef pthread_exit
-BINGO_NORET void
-pthread_exit(void *ptr)
+BINGO_NORET
+INTERPOSE(void, pthread_exit, void *ptr)
 {
-    REAL_INIT(void, pthread_exit, void *ptr);
     intercept_at(EVENT_THREAD_FINI, 0, 0);
     REAL(pthread_exit, ptr);
     exit(1); // unreachable
@@ -45,13 +44,9 @@ _trampoline(void *targ)
     return ret;
 }
 
-int
-pthread_create(pthread_t *thread, const pthread_attr_t *attr,
-               void *(*run)(void *), void *arg)
+INTERPOSE(int, pthread_create, pthread_t *thread, const pthread_attr_t *attr,
+          void *(*run)(void *), void *arg)
 {
-    REAL_INIT(int, pthread_create, pthread_t *thread,
-              const pthread_attr_t *attr, void *(*run)(void *), void *arg);
-
     trampoline_t *t;
 
     t  = mempool_alloc(sizeof(trampoline_t));
@@ -63,10 +58,8 @@ pthread_create(pthread_t *thread, const pthread_attr_t *attr,
     return ret;
 }
 
-int
-pthread_join(pthread_t thread, void **ptr)
+INTERPOSE(int, pthread_join, pthread_t thread, void **ptr)
 {
-    REAL_INIT(int, pthread_join, pthread_t thread, void **ptr);
     intercept_before(EVENT_THREAD_JOIN, 0, 0);
     int ret = REAL(pthread_join, thread, ptr);
     intercept_after(EVENT_THREAD_JOIN, 0, 0);

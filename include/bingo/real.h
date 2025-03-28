@@ -5,36 +5,41 @@
 #ifndef BINGO_REAL_H
 #define BINGO_REAL_H
 
-// NOLINTBEGIN(clang-diagnostic-unused-variable)
-
 #include <dlfcn.h>
 #include <stddef.h>
 #include <stdio.h>
 
 #include <bingo/module.h>
 
-static inline void *
-real_func(const char *fname, const char *lib)
-{
-    return dlsym(RTLD_NEXT, fname);
-}
+#if defined(__linux__) || defined(__NetBSD__)
+    #include <dlfcn.h>
 
-#define REAL_STR(name)          #name
-#define REAL_NAME(x)            __real_##x
-#define REAL_DECL(T, func, ...) static T (*REAL_NAME(func))(__VA_ARGS__)
-#define REAL(func, ...)         REAL_NAME(func)(__VA_ARGS__)
+    #define REAL(F, ...)                                                       \
+        ((REAL_NAME(F) == NULL ? (REAL_NAME(F) = dlsym(RTLD_NEXT, #F)) : 0),   \
+         REAL_NAME(F)(__VA_ARGS__))
+    #define REAL_NAME(F) __tilt_real_##F
 
-#define REAL_APPLY(A, ...) REAL_##A(__VA_ARGS__)
-#define REAL_LIB_INIT(LIB, T, F, ...)                                          \
-    REAL_APPLY(DECL, T, F, ##__VA_ARGS__);                                     \
-    if (REAL_APPLY(NAME, F) == NULL) {                                         \
-        REAL_APPLY(NAME, F) = real_func(REAL_APPLY(STR, F), LIB);              \
-    }                                                                          \
-    do {                                                                       \
-    } while (0)
+    #define INTERPOSE(T, F, ...)                                               \
+        T F(__VA_ARGS__);                                                      \
+        static T (*REAL_NAME(F))(__VA_ARGS__);                                 \
+        T F(__VA_ARGS__)
 
-#define REAL_INIT(T, F, ...) REAL_LIB_INIT(0, T, F, ##__VA_ARGS__)
+#elif defined(__APPLE__)
 
-// NOLINTEND(clang-diagnostic-unused-variable)
+    #define REAL(F, ...) F(__VA_ARGS__)
+    #define FAKE_NAME(F) __tilt_fake_##F
+
+    #define INTERPOSE(T, F, ...)                                               \
+        T FAKE_NAME(F)(__VA_ARGS__);                                           \
+        static struct {                                                        \
+            const void *fake;                                                  \
+            const void *real;                                                  \
+        } _tilt_interpose_##F                                                  \
+            __attribute__((used, section("__DATA,__interpose"))) = {           \
+                (const void *)&FAKE_NAME(F), (const void *)&F};                \
+        T FAKE_NAME(F)(__VA_ARGS__)
+#else
+    #error Unsupported platform
+#endif
 
 #endif /* BINGO_REAL_H */

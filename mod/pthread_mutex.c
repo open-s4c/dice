@@ -10,20 +10,16 @@
 #include <bingo/mempool.h>
 #include <bingo/real.h>
 
-int
-pthread_mutex_lock(pthread_mutex_t *mutex)
+INTERPOSE(int, pthread_mutex_lock, pthread_mutex_t *mutex)
 {
-    REAL_INIT(int, pthread_mutex_lock, pthread_mutex_t *mutex);
     intercept_before(EVENT_MUTEX_LOCK, 0, 0);
     int ret = REAL(pthread_mutex_lock, mutex);
     intercept_after(EVENT_MUTEX_LOCK, 0, 0);
     return ret;
 }
 
-int
-pthread_mutex_unlock(pthread_mutex_t *mutex)
+INTERPOSE(int, pthread_mutex_unlock, pthread_mutex_t *mutex)
 {
-    REAL_INIT(int, pthread_mutex_unlock, pthread_mutex_t *mutex);
     intercept_before(EVENT_MUTEX_UNLOCK, 0, 0);
     int ret = REAL(pthread_mutex_unlock, mutex);
     intercept_after(EVENT_MUTEX_UNLOCK, 0, 0);
