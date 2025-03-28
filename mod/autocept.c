@@ -2,7 +2,9 @@
  * Copyright (C) Huawei Technologies Co., Ltd. 2025. All rights reserved.
  * SPDX-License-Identifier: MIT
  */
-#include <dlfcn.h>
+#if !defined(__APPLE__)
+    #include <dlfcn.h>
+#endif
 
 #include "autocept.h"
 #include "defs.h"
@@ -18,7 +20,11 @@ autocept_before(const char *name)
 {
     autocept_event_t ev = {.fname = name};
     intercept_before(EVENT_AUTOCEPT, &ev, 0);
+#if defined(__APPLE__)
+    return 0;
+#else
     return dlsym(RTLD_NEXT, name);
+#endif
 }
 
 void
