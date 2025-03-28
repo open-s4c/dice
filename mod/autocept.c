@@ -2,11 +2,12 @@
  * Copyright (C) Huawei Technologies Co., Ltd. 2025. All rights reserved.
  * SPDX-License-Identifier: MIT
  */
+#include <dlfcn.h>
+
 #include "autocept.h"
 #include "defs.h"
 #include <bingo/intercept.h>
 #include <bingo/module.h>
-#include <bingo/real.h>
 
 BINGO_MODULE_INIT()
 
@@ -17,7 +18,7 @@ autocept_before(const char *name)
 {
     autocept_event_t ev = {.fname = name};
     intercept_before(EVENT_AUTOCEPT, &ev, 0);
-    return real_func(name, 0);
+    return dlsym(RTLD_NEXT, name);
 }
 
 void
