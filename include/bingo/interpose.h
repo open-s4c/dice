@@ -2,8 +2,8 @@
  * Copyright (C) Huawei Technologies Co., Ltd. 2023-2025. All rights reserved.
  * SPDX-License-Identifier: MIT
  */
-#ifndef BINGO_REAL_H
-#define BINGO_REAL_H
+#ifndef BINGO_INTERPOSE_H
+#define BINGO_INTERPOSE_H
 
 #include <dlfcn.h>
 #include <stddef.h>
@@ -42,4 +42,4 @@
     #error Unsupported platform
 #endif
 
-#endif /* BINGO_REAL_H */
+#endif /* BINGO_INTERPOSE_H */

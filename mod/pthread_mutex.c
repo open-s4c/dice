@@ -7,8 +7,8 @@
 
 #include "defs.h"
 #include <bingo/intercept.h>
+#include <bingo/interpose.h>
 #include <bingo/mempool.h>
-#include <bingo/real.h>
 
 INTERPOSE(int, pthread_mutex_lock, pthread_mutex_t *mutex)
 {
