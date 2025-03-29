@@ -8,9 +8,9 @@
 
 #include "defs.h"
 #include <bingo/intercept.h>
+#include <bingo/interpose.h>
 #include <bingo/mempool.h>
 #include <bingo/module.h>
-#include <bingo/real.h>
 #include <bingo/self.h>
 
 typedef struct {
