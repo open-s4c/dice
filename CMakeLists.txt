@@ -37,4 +37,4 @@ add_subdirectory(mod)
 add_subdirectory(tsano)
 add_subdirectory(test)
 
-install(TARGETS bingo bingo.a bingo.h EXPORT ${PROJECT_TARGETS})
+install(TARGETS bingo bingo.a bingo.h bingo-core EXPORT ${PROJECT_TARGETS})

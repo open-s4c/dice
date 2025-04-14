@@ -20,9 +20,10 @@ set(SRCS
     # it is actively used by some module.
     switcher.c)
 
-add_library(bingo SHARED ${SRCS})
-target_link_libraries(bingo PUBLIC pthread bingo.h)
-install(TARGETS bingo DESTINATION lib)
+add_library(bingo-core SHARED ${SRCS})
+target_link_libraries(bingo-core PUBLIC bingo.h)
+target_link_libraries(bingo-core PRIVATE pthread)
+install(TARGETS bingo-core DESTINATION lib)
 
 set(MODS
     # pthread library
@@ -39,13 +40,20 @@ set(MODS
     ../mod/tsan.c
     ../mod/stacktrace.c)
 
-add_library(bingo.a OBJECT ${SRCS} ${MODS})
-target_compile_options(bingo.a PRIVATE -fPIC)
+add_library(bingo.a STATIC ${SRCS} ${MODS})
 target_link_libraries(bingo.a PUBLIC bingo.h)
-set_property(TARGET bingo.a PROPERTY INTERPROCEDURAL_OPTIMIZATION TRUE)
-install(TARGETS bingo.a DESTINATION lib)
+set_property(TARGET bingo.a PROPERTY SUFFIX "")
+install(TARGETS bingo.a DESTINATION lib/bingo)
 
-add_library(bingon SHARED ${SRCS} ${MODS})
-target_link_libraries(bingon PUBLIC bingo.h pthread)
-set_property(TARGET bingon PROPERTY INTERPROCEDURAL_OPTIMIZATION TRUE)
-install(TARGETS bingon DESTINATION lib)
+add_library(bingo SHARED ${SRCS} ${MODS})
+target_link_libraries(bingo PUBLIC bingo.h)
+target_link_libraries(bingo PRIVATE pthread)
+install(TARGETS bingo DESTINATION lib)
+
+if(${CMAKE_SYSTEM_NAME} STREQUAL "Darwin")
+  set_property(TARGET bingo PROPERTY INTERPROCEDURAL_OPTIMIZATION TRUE)
+  set_property(TARGET bingo.a PROPERTY INTERPROCEDURAL_OPTIMIZATION TRUE)
+else()
+  target_compile_options(bingo PRIVATE -fPIC -flto -ffat-lto-objects)
+  target_compile_options(bingo.a PRIVATE -fPIC -flto -ffat-lto-objects)
+endif()

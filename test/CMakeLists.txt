@@ -1,5 +1,6 @@
 add_compile_options(-DVATOMIC_BUILTINS)
 set(TSAN_mp on)
+set(TSAN_simple-tsan on)
 set(BINGO_simple on)
 
 file(GLOB SRCS *.c)
@@ -15,6 +16,7 @@ foreach(SRC ${SRCS})
 
   if(TSAN_${TARGET})
     target_compile_options(${TARGET} PRIVATE -fsanitize=thread)
+    target_link_options(${TARGET} PRIVATE -fsanitize=thread)
     target_link_libraries(${TARGET} PRIVATE tsan)
   endif()
 endforeach()
