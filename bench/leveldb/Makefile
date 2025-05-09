@@ -7,7 +7,8 @@
 ROOT!=		pwd
 DBDIR=		/tmp/bench.db
 COMMAND=	./db_bench --db=$(DBDIR)
-CONFIGURE=	cmake -S ../../leveldb -DCMAKE_BUILD_TYPE=Release
+CONFIGURE=	cmake -S ../../leveldb -DCMAKE_BUILD_TYPE=Release \
+			-DHAVE_STD_REGEX=ON -DRUN_HAVE_STD_REGEX=1
 BUILD= 		$(MAKE)
 PREPARE= 	rm -rf $(DBDIR) && $(COMMAND) --threads=1 --benchmarks=fillseq
 RUNCMD= 	$(COMMAND) --threads=1 --benchmarks=readrandom --duration=10
