@@ -11,6 +11,7 @@
  ******************************************************************************/
 #include <stdint.h>
 
+
 /* empty tsan initialization */
 void
 __tsan_init()
@@ -502,4 +503,226 @@ __tsan_atomic_signal_fence(int mo)
 {
     (void)mo;
     __atomic_signal_fence(__ATOMIC_SEQ_CST);
+}
+
+void
+AnnotateHappensBefore(char *f, int l, void *addr)
+{
+}
+
+void
+AnnotateHappensAfter(char *f, int l, void *addr)
+{
+}
+
+void
+AnnotateCondVarSignal(char *f, int l, void *cv)
+{
+}
+
+void
+AnnotateCondVarSignalAll(char *f, int l, void *cv)
+{
+}
+
+void
+AnnotateMutexIsNotPHB(char *f, int l, void *mu)
+{
+}
+
+void
+AnnotateCondVarWait(char *f, int l, void *cv, void *lock)
+{
+}
+
+void
+AnnotateRWLockCreate(char *f, int l, void *m)
+{
+}
+
+void
+AnnotateRWLockCreateStatic(char *f, int l, void *m)
+{
+}
+
+void
+AnnotateRWLockDestroy(char *f, int l, void *m)
+{
+}
+
+void
+AnnotateRWLockAcquired(char *f, int l, void *m, void *is_w)
+{
+}
+
+void
+AnnotateRWLockReleased(char *f, int l, void *m, void *is_w)
+{
+}
+
+void
+AnnotateTraceMemory(char *f, int l, void *mem)
+{
+}
+
+void
+AnnotateFlushState(char *f, int l)
+{
+}
+
+void
+AnnotateNewMemory(char *f, int l, void *mem, void *size)
+{
+}
+
+void
+AnnotateNoOp(char *f, int l, void *mem)
+{
+}
+
+void
+AnnotateFlushExpectedRaces(char *f, int l)
+{
+}
+
+void
+AnnotateEnableRaceDetection(char *f, int l, int enable)
+{
+}
+
+void
+AnnotateMutexIsUsedAsCondVar(char *f, int l, void *mu)
+{
+}
+
+void
+AnnotatePCQGet(char *f, int l, void *pcq)
+{
+}
+
+void
+AnnotatePCQPut(char *f, int l, void *pcq)
+{
+}
+
+void
+AnnotatePCQDestroy(char *f, int l, void *pcq)
+{
+}
+
+void
+AnnotatePCQCreate(char *f, int l, void *pcq)
+{
+}
+
+void
+AnnotateExpectRace(char *f, int l, void *mem, char *desc)
+{
+}
+
+void
+AnnotateBenignRaceSized(char *f, int l, void *mem, void *size, char *desc)
+{
+}
+
+void
+AnnotateBenignRace(char *f, int l, void *mem, char *desc)
+{
+}
+
+void
+AnnotateIgnoreReadsBegin(char *f, int l)
+{
+}
+
+void
+AnnotateIgnoreReadsEnd(char *f, int l)
+{
+}
+
+void
+AnnotateIgnoreWritesBegin(char *f, int l)
+{
+}
+
+void
+AnnotateIgnoreWritesEnd(char *f, int l)
+{
+}
+
+void
+AnnotateIgnoreSyncBegin(char *f, int l)
+{
+}
+
+void
+AnnotateIgnoreSyncEnd(char *f, int l)
+{
+}
+
+void
+AnnotatePublishMemoryRange(char *f, int l, void *addr, void *size)
+{
+}
+
+void
+AnnotateUnpublishMemoryRange(char *f, int l, void *addr, void *size)
+{
+}
+
+void
+AnnotateThreadName(char *f, int l, char *name)
+{
+}
+
+void
+WTFAnnotateHappensBefore(char *f, int l, void *addr)
+{
+}
+
+void
+WTFAnnotateHappensAfter(char *f, int l, void *addr)
+{
+}
+
+void
+WTFAnnotateBenignRaceSized(char *f, int l, void *mem, void *sz, char *desc)
+{
+}
+
+void
+AnnotateMemoryIsInitialized(char *f, int l, void *mem, void *sz)
+{
+}
+
+void
+AnnotateMemoryIsUninitialized(char *f, int l, void *mem, void *sz)
+{
+}
+
+void *
+__tsan_get_current_fiber(void)
+{
+    return (void *)0;
+}
+
+void *
+__tsan_create_fiber(unsigned flags)
+{
+    return (void *)0;
+}
+
+void
+__tsan_destroy_fiber(void *fiber)
+{
+}
+
+void
+__tsan_switch_to_fiber(void *fiber, unsigned flags)
+{
+}
+
+void
+__tsan_set_fiber_name(void *fiber, const char *name)
+{
 }
