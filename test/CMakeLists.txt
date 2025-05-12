@@ -27,3 +27,9 @@ foreach(SRC ${SRCS})
     endif()
   endif()
 endforeach()
+
+add_executable(simple-bingo simple-tsan.c)
+target_compile_options(simple-bingo PRIVATE -fsanitize=thread)
+target_link_libraries(simple-bingo PRIVATE bingo tsano pthread)
+
+# target_link_libraries(${TARGET} PRIVATE bingo tsano)

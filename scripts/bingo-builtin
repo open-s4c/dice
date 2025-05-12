@@ -17,13 +17,10 @@ else
 fi
 #echo "BINGO: $BINGO_PREFIX"
 
-PRELOAD="$BINGO_PREFIX/lib/libbingo.$SO"
+PRELOAD="$BINGO_PREFIX/lib/libbingo-builtin.$SO"
 args=""
 while [ "$#" != "0" ]; do
     case "$1" in
-        -autocept)
-            PRELOAD="$PRELOAD:$MOD_DIR/autocept.$SO"
-        ;;
         *)
             args="${args} $1"
         ;;

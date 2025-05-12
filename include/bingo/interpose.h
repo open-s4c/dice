@@ -63,5 +63,6 @@
     #error Unsupported platform
 #endif
 
+#define REAL_DECL(T, F, ...) static T (*REAL_NAME(F))(__VA_ARGS__);
 
 #endif /* BINGO_INTERPOSE_H */

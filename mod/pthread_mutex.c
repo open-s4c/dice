@@ -3,18 +3,19 @@
  * SPDX-License-Identifier: MIT
  */
 #include <assert.h>
-#include <bingo/capture/pthread.h>
-#include <bingo/interpose.h>
 #include <pthread.h>
+
+#include <bingo/intercept/pthread.h>
+#include <bingo/interpose.h>
 
 INTERPOSE(int, pthread_mutex_lock, pthread_mutex_t *mutex)
 {
     struct pthread_mutex_event ev = {.mutex = mutex, .pc = INTERPOSE_PC};
 
-    int err = capture_before(EVENT_MUTEX_LOCK, &ev);
-    ev.ret  = REAL(pthread_mutex_lock, mutex);
-    if (err != PS_DROP)
-        capture_after(EVENT_MUTEX_LOCK, &ev);
+    metadata_t md = {0};
+    PS_PUBLISH(INTERCEPT_BEFORE, EVENT_MUTEX_LOCK, &ev, &md);
+    ev.ret = REAL(pthread_mutex_lock, mutex);
+    PS_PUBLISH(INTERCEPT_AFTER, EVENT_MUTEX_LOCK, &ev, &md);
     return ev.ret;
 }
 
@@ -27,10 +28,10 @@ INTERPOSE(int, pthread_mutex_timedlock, pthread_mutex_t *mutex,
         .abstime = abstime,
     };
 
-    int err = capture_before(EVENT_MUTEX_TIMEDLOCK, &ev);
-    ev.ret  = REAL(pthread_mutex_timedlock, mutex, abstime);
-    if (err != PS_DROP)
-        capture_after(EVENT_MUTEX_TIMEDLOCK, &ev);
+    metadata_t md = {0};
+    PS_PUBLISH(INTERCEPT_BEFORE, EVENT_MUTEX_TIMEDLOCK, &ev, &md);
+    ev.ret = REAL(pthread_mutex_timedlock, mutex, abstime);
+    PS_PUBLISH(INTERCEPT_AFTER, EVENT_MUTEX_TIMEDLOCK, &ev, &md);
     return ev.ret;
 }
 
@@ -38,10 +39,10 @@ INTERPOSE(int, pthread_mutex_trylock, pthread_mutex_t *mutex)
 {
     struct pthread_mutex_event ev = {.mutex = mutex, .pc = INTERPOSE_PC};
 
-    int err = capture_before(EVENT_MUTEX_TRYLOCK, &ev);
-    ev.ret  = REAL(pthread_mutex_trylock, mutex);
-    if (err != PS_DROP)
-        capture_after(EVENT_MUTEX_TRYLOCK, &ev);
+    metadata_t md = {0};
+    PS_PUBLISH(INTERCEPT_BEFORE, EVENT_MUTEX_TRYLOCK, &ev, &md);
+    ev.ret = REAL(pthread_mutex_trylock, mutex);
+    PS_PUBLISH(INTERCEPT_AFTER, EVENT_MUTEX_TRYLOCK, &ev, &md);
     return ev.ret;
 }
 
@@ -49,10 +50,10 @@ INTERPOSE(int, pthread_mutex_unlock, pthread_mutex_t *mutex)
 {
     struct pthread_mutex_event ev = {.mutex = mutex, .pc = INTERPOSE_PC};
 
-    int err = capture_before(EVENT_MUTEX_UNLOCK, &ev);
-    ev.ret  = REAL(pthread_mutex_unlock, mutex);
-    if (err != PS_DROP)
-        capture_after(EVENT_MUTEX_UNLOCK, &ev);
+    metadata_t md = {0};
+    PS_PUBLISH(INTERCEPT_BEFORE, EVENT_MUTEX_UNLOCK, &ev, &md);
+    ev.ret = REAL(pthread_mutex_unlock, mutex);
+    PS_PUBLISH(INTERCEPT_AFTER, EVENT_MUTEX_UNLOCK, &ev, &md);
     return ev.ret;
 }
 

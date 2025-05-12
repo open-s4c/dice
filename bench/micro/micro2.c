@@ -7,8 +7,8 @@
 #include <stdio.h>
 #include <unistd.h>
 
-#include <bingo/capture.h>
-#include <bingo/capture/memaccess.h>
+#include <bingo/intercept.h>
+#include <bingo/intercept/memaccess.h>
 #include <bingo/log.h>
 #include <bingo/now.h>
 #include <bingo/self.h>
@@ -19,19 +19,20 @@ vatomic32_t start;
 vatomic64_t count;
 
 int x = 0;
-REGISTER_CALLBACK(CAPTURE_EVENT, EVENT_MA_AWRITE, {
-    memaccess_t *ma = (memaccess_t *)event; // self_event(event);
+PS_SUBSCRIBE(CAPTURE_EVENT, EVENT_MA_AWRITE, {
+    memaccess_t *ma = EVENT_PAYLOAD(ma);
     x += ma->argu64;
 })
 
 void *
 run_time(void *_)
 {
+    (void)_;
     while (!vatomic_read_rlx(&start)) {}
     memaccess_t ma = {0};
     while (!vatomic_read_rlx(&stop)) {
         ma.argu64++;
-        capture_event(EVENT_MA_AWRITE, &ma);
+        PS_PUBLISH(INTERCEPT_EVENT, EVENT_MA_AWRITE, &ma, 0);
         vatomic_inc_rlx(&count);
     }
 
@@ -41,10 +42,11 @@ run_time(void *_)
 void *
 run_count(void *_)
 {
+    (void)_;
     while (!vatomic_read_rlx(&start)) {}
     for (size_t i = 0; i < 1000000000; i++) {
         memaccess_t ma = {.argu64 = i};
-        capture_event(EVENT_MA_AWRITE, &ma);
+        PS_PUBLISH(INTERCEPT_EVENT, EVENT_MA_AWRITE, &ma, 0);
         vatomic_inc_rlx(&count);
     }
 

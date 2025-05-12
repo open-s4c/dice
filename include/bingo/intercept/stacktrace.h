@@ -5,14 +5,10 @@
 #ifndef BINGO_STACKTRACE_H
 #define BINGO_STACKTRACE_H
 
-#include <bingo/capture.h>
+#include <bingo/intercept.h>
 
-#define _EVENT_START 40
-enum stacktrace_events {
-    EVENT_STACKTRACE_ENTER = 0 + _EVENT_START,
-    EVENT_STACKTRACE_EXIT  = 1 + _EVENT_START,
-};
-#undef _EVENT_START
+#define EVENT_STACKTRACE_ENTER 40
+#define EVENT_STACKTRACE_EXIT  41
 
 typedef struct {
     const void *pc;

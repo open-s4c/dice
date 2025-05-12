@@ -2,8 +2,8 @@
  * Copyright (C) Huawei Technologies Co., Ltd. 2025. All rights reserved.
  * SPDX-License-Identifier: MIT
  */
-#include "rbtree.h"
 #include <bingo/compiler.h>
+#include <bingo/rbtree.h>
 
 #define LEFT  0
 #define RIGHT 1

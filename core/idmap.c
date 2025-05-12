@@ -6,14 +6,14 @@
 #include <stdbool.h>
 #include <string.h>
 
-#include "idmap.h"
 #include <bingo/compiler.h>
+#include <bingo/idmap.h>
 #include <bingo/log.h>
 #include <bingo/mempool.h>
 
 #define IDMAP_INIT_SIZE 4
 
-BINGO_HIDE void
+void
 idmap_init_cap(idmap_t *idmap, size_t cap)
 {
     assert(idmap);
@@ -24,13 +24,13 @@ idmap_init_cap(idmap_t *idmap, size_t cap)
     };
 }
 
-BINGO_HIDE void
+void
 idmap_init(idmap_t *idmap)
 {
     idmap_init_cap(idmap, IDMAP_INIT_SIZE);
 }
 
-BINGO_HIDE void
+void
 idmap_fini(idmap_t *idmap)
 {
     assert(idmap);
@@ -39,7 +39,7 @@ idmap_fini(idmap_t *idmap)
     memset(idmap, 0, sizeof(idmap_t));
 }
 
-BINGO_HIDE size_t
+size_t
 idmap_size(idmap_t *idmap)
 {
     return idmap->size;
@@ -62,14 +62,14 @@ _idmap_find(idmap_t *idmap, uint64_t id, size_t *empty)
     return idmap->size;
 }
 
-BINGO_HIDE size_t
+size_t
 idmap_find(idmap_t *idmap, uint64_t id)
 {
     return _idmap_find(idmap, id, 0);
 }
 
 
-BINGO_HIDE size_t
+size_t
 idmap_insert(idmap_t *idmap, uint64_t id)
 {
     size_t next;
@@ -86,7 +86,7 @@ idmap_insert(idmap_t *idmap, uint64_t id)
     return idmap->size++;
 }
 
-BINGO_HIDE size_t
+size_t
 idmap_remove(idmap_t *idmap, uint64_t id)
 {
     size_t idx = idmap_find(idmap, id);

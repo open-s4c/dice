@@ -8,12 +8,16 @@ if [ "$(uname)" = "Darwin" ]; then
 fi
 
 # if not installed, fall back to repo/build prefix
-BINGO_PREFIX="@CMAKE_INSTALL_PREFIX@"
-if [ ! -d "$BINGO_PREFIX" ]; then
-    BINGO_PREFIX=$(readlink -f $(dirname $(readlink -f $0))/../build)
+if [ -z $BINGO_PREFIX ]; then
+    BINGO_PREFIX="/usr/local"
+fi
+if [ -d "$BINGO_PREFIX/lib/tsano" ]; then
+    TSANO_DIR=$BINGO_PREFIX/lib/tsano
+elif [ -d "$BINGO_PREFIX/tsano" ]; then
     TSANO_DIR=$BINGO_PREFIX/tsano
 else
-    TSANO_DIR=$BINGO_PREFIX/lib/bingo
+    BINGO_PREFIX=$(readlink -f $(dirname $(readlink -f $0))/../build)
+    TSANO_DIR=$BINGO_PREFIX/tsano
 fi
 
 #echo "TSANO: $TSANO_DIR"

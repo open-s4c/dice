@@ -5,15 +5,11 @@
 #ifndef BINGO_CXA_H
 #define BINGO_CXA_H
 
-#include <bingo/capture.h>
+#include <bingo/intercept.h>
 
-#define _EVENT_START 60
-enum cxa_events {
-    EVENT_CXA_GUARD_ACQUIRE = 0 + _EVENT_START,
-    EVENT_CXA_GUARD_RELEASE = 1 + _EVENT_START,
-    EVENT_CXA_GUARD_ABORT   = 2 + _EVENT_START,
-};
-#undef _EVENT_START
+#define EVENT_CXA_GUARD_ACQUIRE 60
+#define EVENT_CXA_GUARD_RELEASE 61
+#define EVENT_CXA_GUARD_ABORT   62
 
 struct cxa_event {
     const void *pc;
