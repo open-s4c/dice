@@ -36,16 +36,12 @@ DIR.patch=	leveldb
 CFG.patch=	git checkout .
 BLD.patch=	git apply $(ROOT)/patches/01-leveldb
 
-TARGET+=	lib
-CFG.lib=	cmake -S$(ROOT)/../.. -B. -DCMAKE_BUILD_TYPE=Release
-BLD.lib=	$(MAKE) -C lib && $(MAKE) -C mod
-
 # ------------------------------------------------------------------------------
 # Variants
 # ------------------------------------------------------------------------------
 
 TARGET+=	baseline
-DEP.baseline=	.lib.bld .patch.bld
+DEP.baseline=	.patch.bld
 DIR.baseline=	build/leveldb
 CFG.baseline= 	$(CONFIGURE)
 BLD.baseline=	$(BUILD)
@@ -75,6 +71,12 @@ DEP.bingo=	.tsan.bld
 DIR.bingo=	$(DIR.tsan)
 RUN.bingo=	$(ROOT)/../../scripts/bingo $(RUNCMD)
 PRO.bingo=	$(PARSE)
+
+TARGET+=	builtin
+DEP.builtin=	.tsan.bld
+DIR.builtin=	$(DIR.tsan)
+RUN.builtin=	$(ROOT)/../../scripts/bingo-builtin $(RUNCMD)
+PRO.builtin=	$(PARSE)
 
 # ------------------------------------------------------------------------------
 include ../bench.mk

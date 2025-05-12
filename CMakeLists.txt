@@ -1,3 +1,6 @@
+# Copyright (C) Huawei Technologies Co., Ltd. 2025. All rights reserved.
+# SPDX-License-Identifier: MIT
+
 cmake_minimum_required(VERSION 3.20)
 project(
   bingo
@@ -5,19 +8,9 @@ project(
   VERSION 0.2)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+set(CMAKE_INTERPROCEDURAL_OPTIMIZATION on)
 
-add_compile_options(
-  -Werror
-  -Wall
-  -Wextra
-  -Wno-unused-variable
-  -Wno-missing-braces
-  -Wno-switch
-  -Wno-unused-parameter
-  -Wno-unused-variable
-  -Wno-missing-field-initializers
-  -Wno-unused-command-line-argument
-  $<$<COMPILE_LANGUAGE:C>:-Wno-override-init>)
+add_compile_options(-Wall -Wextra -Werror -g3)
 
 if(CMAKE_SYSTEM_NAME MATCHES "NetBSD")
   add_compile_options(-D_XOPEN_SOURCE=700)
@@ -33,13 +26,16 @@ include(CheckSymbolExists)
 include(cmake/export.cmake)
 
 enable_testing()
+add_subdirectory(scripts)
 add_subdirectory(deps/tmplr)
 add_subdirectory(include)
-add_subdirectory(lib)
-add_subdirectory(mod)
 add_subdirectory(tsano)
+add_subdirectory(core)
+add_subdirectory(mod)
+add_subdirectory(fastch)
+add_subdirectory(lib)
 add_subdirectory(test)
-add_subdirectory(scripts)
 add_subdirectory(bench/micro)
 
-install(TARGETS bingo bingo.h bingo-core EXPORT ${PROJECT_TARGETS})
+# install(TARGETS bingo bingo.h bingo-core EXPORT ${PROJECT_TARGETS})
+install(TARGETS bingo.h EXPORT ${PROJECT_TARGETS})

@@ -6,7 +6,8 @@
 #include <pthread.h>
 #include <stdio.h>
 
-#include <bingo/capture/memaccess.h>
+#include <bingo/intercept/memaccess.h>
+#include <bingo/pubsub.h>
 #include <vsync/atomic.h>
 
 int data;
@@ -15,7 +16,8 @@ vatomic32_t ready;
 void *
 run0(void *_)
 {
-    capture_event(EVENT_MA_AWRITE, 0);
+    (void)_;
+    PS_PUBLISH(INTERCEPT_EVENT, EVENT_MA_AWRITE, 0, 0);
     vatomic32_write(&ready, 1);
     data = 1;
     return 0;
@@ -23,9 +25,10 @@ run0(void *_)
 void *
 run1(void *_)
 {
+    (void)_;
     printf("here\n");
 
-    int err = capture_before(EVENT_MA_AREAD, 0);
+    PS_PUBLISH(INTERCEPT_EVENT, EVENT_MA_AREAD, 0, 0);
     if (vatomic32_read(&ready) == 1)
         assert(data == 1);
     printf("there\n");

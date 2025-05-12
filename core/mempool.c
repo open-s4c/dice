@@ -8,8 +8,10 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <bingo/compiler.h>
+#define BINGO_XTOR_PRIO 197
+#include <bingo/interpose.h>
 #include <bingo/mempool.h>
+#include <bingo/module.h>
 #include <vsync/spinlock/caslock.h>
 
 static size_t _sizes[] = {32,
@@ -22,6 +24,8 @@ static size_t _sizes[] = {32,
                           4 * 1024 * 1024,
                           8 * 1024 * 1024};
 #define NSTACKS (sizeof(_sizes) / sizeof(size_t))
+
+#define MEMPOOL_SIZE (1024 * 1024 * 200)
 
 static unsigned int
 _bucketize(size_t size)
@@ -54,25 +58,22 @@ typedef struct mempool {
 
 static mempool_t _mp;
 
+/* bypass malloc interceptor */
+REAL_DECL(void *, malloc, size_t);
+
 BINGO_HIDE void
 mempool_init(size_t cap)
 {
     _mp.allocated = 0;
     memset(&_mp.stack, 0, sizeof(entry_t *) * NSTACKS);
-    _mp.pool.memory = malloc(cap);
+    _mp.pool.memory = REAL(malloc, cap);
     assert(_mp.pool.memory);
     memset(_mp.pool.memory, 0, cap);
     _mp.pool.capacity = cap;
     _mp.pool.next     = 0;
     caslock_init(&_mp.lock);
 }
-
-BINGO_HIDE void
-mempool_fini()
-{
-    if (_mp.pool.memory)
-        free(_mp.pool.memory);
-}
+BINGO_MODULE_INIT({ mempool_init(MEMPOOL_SIZE); })
 
 BINGO_HIDE void *
 mempool_alloc(size_t n)

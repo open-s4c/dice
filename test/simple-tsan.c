@@ -14,6 +14,7 @@ vatomic32_t ready;
 void *
 run0(void *_)
 {
+    (void)_;
     vatomic32_write(&ready, 1);
     data = 1;
     return 0;
@@ -22,6 +23,7 @@ run0(void *_)
 void *
 run1(void *_)
 {
+    (void)_;
     printf("here\n");
     if (vatomic32_read(&ready) == 1)
         assert(data == 1);

@@ -2,14 +2,14 @@
  * Copyright (C) Huawei Technologies Co., Ltd. 2025. All rights reserved.
  * SPDX-License-Identifier: MIT
  */
-#include <bingo/capture/memaccess.h>
+#include <bingo/intercept/memaccess.h>
 #include <bingo/log.h>
 #include <bingo/module.h>
 #include <bingo/self.h>
 #include <bingo/switcher.h>
 
-REGISTER_CALLBACK(CAPTURE_EVENT, ANY_TYPE, {
-    switch (chain.type) {
+PS_SUBSCRIBE(CAPTURE_EVENT, ANY_TYPE, {
+    switch (type) {
         case EVENT_THREAD_FINI:
             switcher_wake(ANY_THREAD, 0);
             break;
@@ -20,17 +20,17 @@ REGISTER_CALLBACK(CAPTURE_EVENT, ANY_TYPE, {
         default:
             break;
     }
-    return PS_STOP;
+    return false;
 })
 
-REGISTER_CALLBACK(CAPTURE_BEFORE, ANY_TYPE, {
+PS_SUBSCRIBE(CAPTURE_BEFORE, ANY_TYPE, {
     switcher_wake(ANY_THREAD, 0);
-    return PS_STOP;
+    return false;
 })
 
-REGISTER_CALLBACK(CAPTURE_AFTER, ANY_TYPE, {
+PS_SUBSCRIBE(CAPTURE_AFTER, ANY_TYPE, {
     switcher_yield(self_id(md), true);
-    return PS_STOP;
+    return false;
 })
 
 BINGO_MODULE_INIT()

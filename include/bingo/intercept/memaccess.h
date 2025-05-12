@@ -9,21 +9,17 @@
 #include <stddef.h>
 #include <stdint.h>
 
-#include <bingo/capture.h>
+#include <bingo/intercept.h>
 
-#define _EVENT_START 30
-enum memaccess_events {
-    EVENT_MA_READ         = 0 + _EVENT_START,
-    EVENT_MA_WRITE        = 1 + _EVENT_START,
-    EVENT_MA_AREAD        = 2 + _EVENT_START,
-    EVENT_MA_AWRITE       = 3 + _EVENT_START,
-    EVENT_MA_RMW          = 4 + _EVENT_START,
-    EVENT_MA_XCHG         = 5 + _EVENT_START,
-    EVENT_MA_CMPXCHG      = 6 + _EVENT_START,
-    EVENT_MA_CMPXCHG_WEAK = 7 + _EVENT_START,
-    EVENT_MA_FENCE        = 8 + _EVENT_START,
-};
-#undef _EVENT_START
+#define EVENT_MA_READ         30
+#define EVENT_MA_WRITE        31
+#define EVENT_MA_AREAD        32
+#define EVENT_MA_AWRITE       33
+#define EVENT_MA_RMW          34
+#define EVENT_MA_XCHG         35
+#define EVENT_MA_CMPXCHG      36
+#define EVENT_MA_CMPXCHG_WEAK 37
+#define EVENT_MA_FENCE        38
 
 typedef struct memaccess {
     const void *pc;

@@ -10,9 +10,10 @@
  */
 #ifndef BINGO_SELF_H
 #define BINGO_SELF_H
+#include <stddef.h>
+
 #include <bingo/pubsub.h>
 #include <bingo/thread_id.h>
-#include <stddef.h>
 
 /* Get unique thread id */
 thread_id self_id(metadata_t *self);
@@ -33,11 +34,9 @@ void *self_tls(metadata_t *self, const void *global, size_t size);
                                     sizeof(*(global_ptr))))
 
 
-/* Standard capture hooks. */
-enum capture_self_hooks {
-    CAPTURE_EVENT  = 4,
-    CAPTURE_BEFORE = 5,
-    CAPTURE_AFTER  = 6,
-};
+/* Standard capture chains. */
+#define CAPTURE_EVENT  4
+#define CAPTURE_BEFORE 5
+#define CAPTURE_AFTER  6
 
 #endif /* BINGO_SELF_H */

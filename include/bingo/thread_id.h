@@ -12,11 +12,7 @@ typedef uint64_t thread_id;
 #define ANY_THREAD  (~NO_THREAD)
 #define MAIN_THREAD 1
 
-#define _EVENT_START 1
-enum thread_events {
-    EVENT_THREAD_INIT = 0 + _EVENT_START,
-    EVENT_THREAD_FINI = 1 + _EVENT_START,
-};
-#undef _EVENT_START
+#define EVENT_THREAD_INIT 1
+#define EVENT_THREAD_FINI 2
 
 #endif /* BINGO_THREAD_ID_H */

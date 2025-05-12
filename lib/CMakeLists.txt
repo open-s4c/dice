@@ -1,66 +1,45 @@
 # Copyright (C) Huawei Technologies Co., Ltd. 2025. All rights reserved.
 # SPDX-License-Identifier: MIT
 
-add_executable(rbtree_test rbtree_test.c rbtree.c)
-target_link_libraries(rbtree_test PUBLIC bingo.h)
-add_test(rbtree_test rbtree_test)
-
-set(SRCS
-    # Stateless components
-    core.c
-    idmap.c
-    rbtree.c
-    capture.c
-    # Stateful components
-    mempool.c
-    # pubsub component must be the last core component to be initialized. it
-    # guarantees no event is published before the previous components are ready.
-    pubsub.c
-    # the first module subscribing to all events from pubsub. It implements TLS
-    # management with the memory from mempool. It blocks any messages of a
-    # thread before they publish an TASK_INIT event. It blocks any messages sent
-    # by a thread after it sends a TASK_FINI event.
-    self.c
-    # switcher is an optional module. It does not influence the execution unless
-    # it is actively used by some module.
-    switcher.c)
-
-add_library(bingo-core SHARED ${SRCS})
-target_link_libraries(bingo-core PUBLIC bingo.h)
-target_link_libraries(bingo-core PRIVATE pthread)
-install(TARGETS bingo-core DESTINATION lib)
+# add_library(bingo-core SHARED) target_link_libraries(bingo-core PRIVATE
+# bingo-core.o bingo-base.o pthread) install(TARGETS bingo-core DESTINATION lib)
 
 set(MODS
+    self.o
     # pthread library
-    ../mod/pthread_create.c
-    ../mod/pthread_mutex.c
-    ../mod/pthread_rwlock.c
-    ../mod/pthread_cond.c
+    pthread_create.o
+    pthread_mutex.o
+    pthread_rwlock.o
+    pthread_cond.o
     # malloc free and friends
-    ../mod/malloc.c
+    malloc.o
     # semaphore
-    ../mod/sem.c
+    sem.o
     # cxa guards
-    ../mod/cxa.cpp
-    # tsan and tsan func-entry/exit
-    ../mod/tsan.c
-    ../mod/stacktrace.c)
+    cxa.o
+    # tsan instrumented calls
+    tsan.o
+    stacktrace.o)
 
-add_library(bingo.lto OBJECT ${SRCS} ${MODS})
-target_compile_options(bingo.lto PUBLIC -fPIC -DBINGO_PS_EXTERNAL
-                                        -DBINGO_HIDE_INTERFACE)
-target_link_libraries(bingo.lto PUBLIC bingo.h)
+set(PRIO_self 201)
 
-add_library(bingo SHARED ${SRCS} ${MODS})
+set(OBJS ${MODS} bingo-fastch.o)
+foreach(TARGET ${OBJS})
+  get_filename_component(MOD ${TARGET} NAME_WLE)
+  if(PRIO_${MOD})
+    target_compile_options(${TARGET} PRIVATE -DBINGO_XTOR_PRIO=${PRIO_${MOD}})
+  endif()
+  target_compile_options(${TARGET} PRIVATE -fPIC)
+endforeach()
+
+add_library(bingo SHARED)
 target_link_libraries(bingo PUBLIC bingo.h)
-target_link_libraries(bingo PRIVATE pthread)
-install(TARGETS bingo DESTINATION lib)
+target_link_libraries(bingo PUBLIC ${OBJS} bingo-core-plugin.o)
 
-if(${CMAKE_SYSTEM_NAME} STREQUAL "NetBSD")
-  target_compile_options(bingo PRIVATE -fPIC -flto -ffat-lto-objects)
-  target_compile_options(bingo.lto PUBLIC -fPIC -flto -ffat-lto-objects)
-else()
-  # this should work for Linux, macOS and OHOS
-  set_property(TARGET bingo PROPERTY INTERPROCEDURAL_OPTIMIZATION TRUE)
-  set_property(TARGET bingo.lto PROPERTY INTERPROCEDURAL_OPTIMIZATION TRUE)
-endif()
+# for testing only
+add_library(bingo-builtin SHARED)
+target_link_libraries(bingo-builtin PUBLIC bingo.h)
+target_link_libraries(bingo-builtin PUBLIC ${OBJS} bingo-core.o)
+
+# install(TARGETS bingo DESTINATION lib) target_link_options(bingo PRIVATE
+# -flto)

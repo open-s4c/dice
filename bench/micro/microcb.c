@@ -9,30 +9,26 @@
 #include <bingo/intercept.h>
 #include <bingo/intercept/memaccess.h>
 #include <bingo/log.h>
+#include <bingo/module.h>
 #include <bingo/now.h>
+#include <bingo/pubsub.h>
 #include <bingo/self.h>
 #include <vsync/atomic.h>
 
-vatomic32_t stop;
-vatomic32_t start;
-vatomic64_t count;
-
-#define EXPECTED 128
-
-bool received = 0;
+int x = 0;
+int y = 0;
 PS_SUBSCRIBE(CAPTURE_EVENT, EVENT_MA_AWRITE, {
-    memaccess_t *ma = (memaccess_t *)event;
-    if (ma->argu64 != EXPECTED)
-        abort();
-    received = 1;
+    memaccess_t *ma = EVENT_PAYLOAD(ma);
+    x += ma->argu64;
+    y++;
+    return PS_CB_STOP;
 })
 
-int
-main(void)
+void
+intercept(const chain_id chain, const type_id type, void *event, metadata_t *md)
 {
-    memaccess_t ma = {.argu64 = EXPECTED};
-    PS_PUBLISH(INTERCEPT_EVENT, EVENT_MA_AWRITE, &ma, 0);
-
-    assert(received);
-    return 0;
+    PS_PUBLISH(chain, type, event, md);
 }
+
+BINGO_MODULE_INIT()
+BINGO_MODULE_FINI({ log_printf("count: %d\tsum: %d\n", y, x); })

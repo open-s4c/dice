@@ -5,22 +5,21 @@
 #ifndef BINGO_COMPILER_H
 #define BINGO_COMPILER_H
 
+#include <vsync/atomic.h>
+
 #ifndef BINGO_XTOR_PRIO
     #define BINGO_XTOR_PRIO
 #endif
+
 #define BINGO_CTOR  __attribute__((constructor(BINGO_XTOR_PRIO)))
 #define BINGO_DTOR  __attribute__((destructor(BINGO_XTOR_PRIO)))
 #define BINGO_WEAK  __attribute__((weak))
 #define BINGO_NORET _Noreturn
 
-#ifndef BINGO_HIDE
+#ifndef BINGO_NOHIDE
     #define BINGO_HIDE __attribute__((visibility("hidden")))
-#endif
-
-#ifdef BINGO_HIDE_INTERFACE
-    #define BINGO_HIDE_IF __attribute__((visibility("hidden")))
 #else
-    #define BINGO_HIDE_IF
+    #define BINGO_HIDE
 #endif
 
 #ifndef likely

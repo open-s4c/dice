@@ -17,9 +17,12 @@
 #include <vsync/thread/cond.h>
 // clang-format on
 
+#define BINGO_XTOR_PRIO 198
 #include <bingo/log.h>
 #include <bingo/module.h>
 #include <bingo/switcher.h>
+
+BINGO_MODULE_INIT()
 
 #ifndef SWITCHER_LOG
     #undef log_debugf
@@ -40,12 +43,12 @@ typedef struct {
 
 static switcher_t _switcher;
 
-BINGO_HIDE_IF void
+void
 _switcher_resuming(void)
 {
 }
 
-BINGO_HIDE_IF int
+int
 switcher_yield(thread_id id, bool any)
 {
     thread_id prev, next;
@@ -105,7 +108,7 @@ switcher_yield(thread_id id, bool any)
     return status;
 }
 
-BINGO_HIDE_IF void
+void
 switcher_wake(thread_id id, nanosec_t slack)
 {
     log_debugf("\t\t\t\tWAKE   thread %" PRIu64 "\n", id);
@@ -130,7 +133,7 @@ switcher_wake(thread_id id, nanosec_t slack)
     vmutex_release(&_switcher.mutex);
 }
 
-BINGO_HIDE_IF void
+void
 switcher_abort()
 {
     log_debugf("ABORT called\n");

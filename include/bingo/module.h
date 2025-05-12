@@ -18,13 +18,16 @@
 #include <bingo/compiler.h>
 #include <bingo/log.h>
 
+#define Y(V) #V
+#define X(V) Y(V)
+
 #define BINGO_MODULE_INIT(CODE)                                                \
     static BINGO_CTOR void _module_init()                                      \
     {                                                                          \
         if (1) {                                                               \
             CODE                                                               \
         }                                                                      \
-        log_printf("LOADED %s\n", __FILE__);                                   \
+        log_printf("LOADED[" X(BINGO_XTOR_PRIO) "] %s\n", __FILE__);           \
     }
 
 #define BINGO_MODULE_FINI(CODE)                                                \

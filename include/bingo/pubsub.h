@@ -9,10 +9,8 @@
  * chain (aka topic), handlers are called back in the order of subscription.
  * Each handler has the option of interruping the chain by returning false.
  *
- * Events are have a type (`type_id`) and have an argument `arg`. A chain is a
- * pair given by a `hook_id` and a `type_id`. This pubsub uses the concept of
- * chains. To publish to a chain, you first have to retrieve a chain for the
- * chain. A chain might be exlusive, making other publishers to fail in runtime.
+ * Events are have a type (`type_id`) and have a payload `payload`. A chain is
+ * identified by a `chain_id`.
  *
  * ## Naming
  *
@@ -27,6 +25,11 @@
 #include <stdbool.h>
 #include <stdint.h>
 
+#include <bingo/compiler.h>
+#include <bingo/log.h>
+#include <vsync/atomic.h>
+#include <vsync/atomic/internal/macros.h>
+
 /* type_id represents the type of an event. */
 typedef uint16_t type_id;
 
@@ -36,79 +39,131 @@ typedef uint16_t type_id;
 /* ANY_TYPE indicates any event type. */
 #define ANY_TYPE 0
 
-/* hook_id identifies a subscriber group ordered by the subscription time. */
-typedef uint16_t hook_id;
+/* chain_id identifies a subscriber group ordered by the subscription time. */
+typedef uint16_t chain_id;
 
-/* MAX_HOOKS determines the maximum number of hooks */
-#define MAX_HOOKS 16
+/* MAX_CHAINS determines the maximum number of chains */
+#define MAX_CHAINS 16
 
-/* ANY_HOOK indicates any hook. */
-#define ANY_HOOK 0
-
-typedef struct self self_t;
-
-/* chain_t is a pair of hook and type and works as a pubsub topic. */
-typedef struct chain {
-    hook_id hook;
-    type_id type;
-} chain_t;
-
-/* Initializes a chain object */
-static inline chain_t
-as_chain(hook_id hook, type_id type)
-{
-    return (chain_t){
-        .hook = hook,
-        .type = type,
-    };
-}
-
-/* Context/self opaque metadata */
-typedef struct self self_t;
-
+/* Metadata passed to callbacks. It is used to mark events to be dropped by can
+ * be extended with type embedding. */
 typedef struct metadata {
-    hook_id hook;
     bool drop;
-} metadata_t;
+} __attribute__((aligned(8))) metadata_t;
 
-#define PS_SUCCESS 0
-#define PS_STOP    1
-#define PS_DROP    2
-/* Errors start at 8. Further details are set in higher bits */
-#define PS_ERROR   8
-#define PS_INVALID (PS_ERROR | (PS_ERROR << 1))
+/* Return values of ps_publish. */
+enum ps_err {
+    PS_OK      = 0,
+    PS_DROP    = -2,
+    PS_INVALID = -4,
+    PS_ERROR   = -5,
+};
+
+/* Return values of callbacks. */
+enum ps_cb_err {
+    PS_CB_OK   = 1,
+    PS_CB_OFF  = 0,
+    PS_CB_STOP = -1,
+    PS_CB_DROP = -2,
+};
+
+/* Return values of ps_dispatch. */
+struct ps_dispatched {
+    enum ps_cb_err err;
+    uint8_t count;
+};
 
 /* ps_callback_f is the subscriber interface.
  *
  * Callbacks can return the following codes:
- * - PS_SUCCESS: event handled successfully
+ * - PS_OK: event handled successfully
  * - PS_STOP: event handled successfully, but chain should be interrupted
- * - PS_DROP: interrupt chain, discard event
- * - PS_ERROR: error occurred, abort system
+ * - PS_OFF: callback disabled
  */
-typedef int (*ps_callback_f)(chain_t chain, void *event, metadata_t *md);
+typedef enum ps_cb_err (*ps_cb_f)(const chain_id, const type_id, void *event,
+                                  metadata_t *md);
 
 /* ps_publish publishes (ie, dispatches) an event to a chain.
  *
- * The chain is identified by a hook and a event type. The type of the event is
- * given by `event`. Arguments `arg` and `ret` are input and output arguments,
- * respectively. They can be set to NULL. It is thread of the subscribing
- * handler to test for NULL and to cast `arg` and `ret` to correct types based
- * on `event`.
+ * The chain is identified by a chain and a event type. The type of the
+ * event is given by `event`. Arguments `arg` and `ret` are input and output
+ * arguments, respectively. They can be set to NULL. It is thread of the
+ * subscribing handler to test for NULL and to cast `arg` and `ret` to
+ * correct types based on `event`.
  *
  * Returns one of the PS_ error codes above.
  */
-int ps_publish(chain_t chain, void *event, metadata_t *md);
+enum ps_err ps_publish(const chain_id chain, const type_id type, void *event,
+                       metadata_t *md);
+
+#define PS_PUBLISH(chain, type, event, md)                                     \
+    do {                                                                       \
+        metadata_t __md = {0};                                                 \
+        metadata_t *_md = (md) != NULL ? (metadata_t *)(md) : &__md;           \
+        if (_md->drop)                                                         \
+            break;                                                             \
+        enum ps_err err = ps_publish(chain, type, event, md);                  \
+        if (err == PS_DROP)                                                    \
+            _md->drop = true;                                                  \
+        if (err != PS_OK && err != PS_DROP)                                    \
+            log_fatalf("could not publish\n");                                 \
+    } while (0)
 
 /* ps_subscribe subscribes a callback in a chain for an event.
  *
- * The call order of `ps_subscribe` determines the relative order in which the
- * callbacks are called with published events.
+ * The call order of `ps_subscribe` determines the relative order in which
+ * the callbacks are called with published events.
  *
- * Note: ps_subscribe should only be called during initialization of the system.
+ * Note: ps_subscribe should only be called during initialization of the
+ * system.
  *
  * Returns 0 if success, otherwise non-zero.
  */
-int ps_subscribe(hook_id hook, type_id type, ps_callback_f cb);
+int ps_subscribe(chain_id chain, type_id type, ps_cb_f cb);
+
+#define PS_CBNAME(X, Y, Z)                                                     \
+    V_JOIN(V_JOIN(ps_callback, V_JOIN(X, V_JOIN(Y, Z))), )
+
+/* PS_SUBSCRIBE macro creates a callback handler and subscribes to a
+ * chain.
+ *
+ * On load time, a constructor function registers the handler to the
+ * chain. The order in which modules are loaded must be considered when
+ * planning for the relation between handlers. The order is either given
+ * by linking order (if compilation units are linked together) or by the
+ * order of shared libraries in LD_PRELOAD.
+ */
+#define PS_SUBSCRIBE(CHAIN, TYPE, CALLBACK)                                    \
+    static inline enum ps_cb_err _ps_callback_##CHAIN##_##TYPE(                \
+        const chain_id chain, const type_id type, void *event, metadata_t *md) \
+    {                                                                          \
+        /* Parameters are marked as unused to silence warnings. */             \
+        /* Nevertheless, the callback can use parameters without issues. */    \
+        (void)chain;                                                           \
+        (void)type;                                                            \
+        (void)event;                                                           \
+        (void)md;                                                              \
+                                                                               \
+        CALLBACK;                                                              \
+                                                                               \
+        /* By default, callbacks return OK to continue chain publishing. */    \
+        return PS_CB_OK;                                                       \
+    }                                                                          \
+    BINGO_HIDE enum ps_cb_err PS_CBNAME(CHAIN, TYPE, BINGO_XTOR_PRIO)(         \
+        const chain_id chain, const type_id type, void *event, metadata_t *md) \
+    {                                                                          \
+        return _ps_callback_##CHAIN##_##TYPE(chain, type, event, md);          \
+    }                                                                          \
+    static enum ps_cb_err V_JOIN(V_JOIN(_ps_callback, CHAIN), TYPE)(           \
+        const chain_id chain, const type_id type, void *event, metadata_t *md) \
+    {                                                                          \
+        return _ps_callback_##CHAIN##_##TYPE(chain, type, event, md);          \
+    }                                                                          \
+    static void BINGO_CTOR _ps_subscribe_##CHAIN##_##TYPE(void)                \
+    {                                                                          \
+        if (ps_subscribe(CHAIN, TYPE,                                          \
+                         V_JOIN(V_JOIN(_ps_callback, CHAIN), TYPE)) != 0)      \
+            log_fatalf("could not subscribe to %s:%s\n", #CHAIN, #TYPE);       \
+    }
 
 #endif /* BINGO_PUBSUB_H */

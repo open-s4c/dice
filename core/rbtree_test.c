@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "rbtree.h"
+#include <bingo/rbtree.h>
 
 struct file_entry {
     struct rbnode path_node;

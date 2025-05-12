@@ -5,7 +5,7 @@
 #include <pthread.h>
 #include <stdlib.h>
 
-#include <bingo/capture/pthread.h>
+#include <bingo/intercept/pthread.h>
 #include <bingo/interpose.h>
 #include <bingo/mempool.h>
 #include <bingo/module.h>
@@ -16,14 +16,13 @@ typedef struct {
     void *arg;
 } trampoline_t;
 
-
 /* On NetBSD pthread_exit is a macro mapping to __libc_thread_exit. However, we
- * have to capture the real pthread_exit, hence, we undefine it. */
+ * have to intercept the real pthread_exit, hence, we undefine it. */
 #undef pthread_exit
 BINGO_NORET
 INTERPOSE(void, pthread_exit, void *ptr)
 {
-    capture_event(EVENT_THREAD_FINI, 0);
+    PS_PUBLISH(INTERCEPT_EVENT, EVENT_THREAD_FINI, 0, 0);
     REAL(pthread_exit, ptr);
     exit(1); // unreachable
 }
@@ -36,9 +35,9 @@ _trampoline(void *targ)
     void *(*run)(void *) = t->run;
     mempool_free(t);
 
-    capture_event(EVENT_THREAD_INIT, 0);
+    PS_PUBLISH(INTERCEPT_EVENT, EVENT_THREAD_INIT, 0, 0);
     void *ret = run(arg);
-    capture_event(EVENT_THREAD_FINI, 0);
+    PS_PUBLISH(INTERCEPT_EVENT, EVENT_THREAD_FINI, 0, 0);
     return ret;
 }
 
@@ -52,11 +51,10 @@ INTERPOSE(int, pthread_create, pthread_t *thread, const pthread_attr_t *attr,
 
     struct pthread_create_event ev = {.thread = thread, .pc = INTERPOSE_PC};
 
-
-    int err = capture_before(EVENT_THREAD_CREATE, &ev);
-    ev.ret  = REAL(pthread_create, thread, attr, _trampoline, t);
-    if (err != PS_DROP)
-        capture_after(EVENT_THREAD_CREATE, &ev);
+    metadata_t md = {0};
+    PS_PUBLISH(INTERCEPT_BEFORE, EVENT_THREAD_CREATE, &ev, &md);
+    ev.ret = REAL(pthread_create, thread, attr, _trampoline, t);
+    PS_PUBLISH(INTERCEPT_AFTER, EVENT_THREAD_CREATE, &ev, &md);
     return ev.ret;
 }
 
@@ -64,11 +62,10 @@ INTERPOSE(int, pthread_join, pthread_t thread, void **ptr)
 {
     struct pthread_join_event ev = {.thread = thread, .pc = INTERPOSE_PC};
 
-
-    int err = capture_before(EVENT_THREAD_JOIN, &ev);
-    ev.ret  = REAL(pthread_join, thread, ptr);
-    if (err != PS_DROP)
-        capture_after(EVENT_THREAD_JOIN, &ev);
+    metadata_t md = {0};
+    PS_PUBLISH(INTERCEPT_BEFORE, EVENT_THREAD_JOIN, &ev, &md);
+    ev.ret = REAL(pthread_join, thread, ptr);
+    PS_PUBLISH(INTERCEPT_AFTER, EVENT_THREAD_JOIN, &ev, &md);
 
     return ev.ret;
 }

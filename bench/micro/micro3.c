@@ -7,21 +7,28 @@
 #include <stdio.h>
 #include <unistd.h>
 
+#include <bingo/intercept.h>
 #include <bingo/intercept/memaccess.h>
+#include <bingo/log.h>
 #include <bingo/now.h>
+#include <bingo/self.h>
 #include <vsync/atomic.h>
 
 vatomic32_t stop;
 vatomic32_t start;
 vatomic64_t count;
+void intercept(const chain_id chain, const type_id type, void *event,
+             metadata_t *md);
 
 void *
 run_time(void *_)
 {
     (void)_;
     while (!vatomic_read_rlx(&start)) {}
+    memaccess_t ma = {0};
     while (!vatomic_read_rlx(&stop)) {
-        PS_PUBLISH(INTERCEPT_EVENT, EVENT_MA_AWRITE, 0, 0);
+        ma.argu64++;
+        intercept(INTERCEPT_EVENT, EVENT_MA_AWRITE, &ma, 0);
         vatomic_inc_rlx(&count);
     }
 
@@ -34,7 +41,8 @@ run_count(void *_)
     (void)_;
     while (!vatomic_read_rlx(&start)) {}
     for (size_t i = 0; i < 1000000000; i++) {
-        PS_PUBLISH(INTERCEPT_EVENT, EVENT_MA_AWRITE, 0, 0);
+        memaccess_t ma = {.argu64 = i};
+        intercept(INTERCEPT_EVENT, EVENT_MA_AWRITE, &ma, 0);
         vatomic_inc_rlx(&count);
     }
 
