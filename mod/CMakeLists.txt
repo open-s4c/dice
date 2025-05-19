@@ -2,8 +2,8 @@
 # SPDX-License-Identifier: MIT
 
 add_custom_target(
-  tsan.c COMMAND env tmplr ${CMAKE_CURRENT_SOURCE_DIR}/tsan.c.in >
-                 ${CMAKE_CURRENT_SOURCE_DIR}/tsan.c)
+  tsan.c COMMAND env $<TARGET_FILE:tmplr> ${CMAKE_CURRENT_SOURCE_DIR}/tsan.c.in
+                 > ${CMAKE_CURRENT_SOURCE_DIR}/tsan.c)
 
 file(GLOB SRCS *.c *.cpp)
 foreach(SRC ${SRCS})

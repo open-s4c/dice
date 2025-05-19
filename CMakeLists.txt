@@ -33,6 +33,7 @@ include(CheckSymbolExists)
 include(cmake/export.cmake)
 
 enable_testing()
+add_subdirectory(deps/tmplr)
 add_subdirectory(include)
 add_subdirectory(lib)
 add_subdirectory(mod)
