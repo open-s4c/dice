@@ -1,8 +1,10 @@
 # Copyright (C) Huawei Technologies Co., Ltd. 2025. All rights reserved.
 # SPDX-License-Identifier: MIT
 
-# add_library(bingo-core SHARED) target_link_libraries(bingo-core PRIVATE
-# bingo-core.o bingo-base.o pthread) install(TARGETS bingo-core DESTINATION lib)
+add_subdirectory(core)
+add_subdirectory(mod)
+add_subdirectory(fastch)
+add_subdirectory(tsano)
 
 set(MODS
     self.o
