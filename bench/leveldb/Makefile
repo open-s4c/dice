@@ -19,7 +19,7 @@ PARSE=		cat $(ROOT)/$*.run.log  \
 		| tee -a $(ROOT)/results.csv
 
 # ------------------------------------------------------------------------------
-# clone level, apply patches, build bingo
+# clone level, apply patches, build dice
 # ------------------------------------------------------------------------------
 
 URL=		https://github.com/google/leveldb.git
@@ -66,16 +66,16 @@ DIR.tsano=	$(DIR.tsan)
 RUN.tsano=	$(ROOT)/../../scripts/tsano $(RUNCMD)
 PRO.tsano=	$(PARSE)
 
-TARGET+=	bingo
-DEP.bingo=	.tsan.bld
-DIR.bingo=	$(DIR.tsan)
-RUN.bingo=	$(ROOT)/../../scripts/bingo $(RUNCMD)
-PRO.bingo=	$(PARSE)
+TARGET+=	dice
+DEP.dice=	.tsan.bld
+DIR.dice=	$(DIR.tsan)
+RUN.dice=	$(ROOT)/../../scripts/dice $(RUNCMD)
+PRO.dice=	$(PARSE)
 
 TARGET+=	builtin
 DEP.builtin=	.tsan.bld
 DIR.builtin=	$(DIR.tsan)
-RUN.builtin=	$(ROOT)/../../scripts/bingo-builtin $(RUNCMD)
+RUN.builtin=	$(ROOT)/../../scripts/dice-builtin $(RUNCMD)
 PRO.builtin=	$(PARSE)
 
 # ------------------------------------------------------------------------------

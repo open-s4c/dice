@@ -12,11 +12,11 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <bingo/intercept/memaccess.h>
-#include <bingo/interpose.h>
-#include <bingo/module.h>
+#include <dice/intercept/memaccess.h>
+#include <dice/interpose.h>
+#include <dice/module.h>
 
-BINGO_MODULE_INIT()
+DICE_MODULE_INIT()
 
 #define _tmpl_mute // ----------- simple empty macros to make clangd happy -----
 #define _tmpl_map(...)

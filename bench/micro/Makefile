@@ -6,7 +6,7 @@ WORK=		$(ROOT)/work
 BINGO=		$(ROOT)/../..
 
 # ------------------------------------------------------------------------------
-# build bingo
+# build dice
 # ------------------------------------------------------------------------------
 
 TARGET+=	lib
@@ -19,12 +19,12 @@ BLD.lib=	$(MAKE) install
 # variants
 # ------------------------------------------------------------------------------
 
-LIBPATH=	$(WORK)/lib:$(WORK)/lib/bingo
+LIBPATH=	$(WORK)/lib:$(WORK)/lib/dice
 
 TARGET+=	baseline
 DEP.baseline=	.lib.bld
 BLD.baseline=	$(CC) -o micro $(ROOT)/micro.c \
-			-L$(WORK)/lib -I$(WORK)/include -lbingo -lpthread
+			-L$(WORK)/lib -I$(WORK)/include -ldice -lpthread
 RUN.baseline=   env LD_LIBRARY_PATH=$(LIBPATH) ./micro
 
 # ------------------------------------------------------------------------------

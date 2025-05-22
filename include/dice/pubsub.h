@@ -20,13 +20,13 @@
  * each aspect such that no name seem to perfectly match it.
  *
  */
-#ifndef BINGO_PUBSUB_H
-#define BINGO_PUBSUB_H
+#ifndef DICE_PUBSUB_H
+#define DICE_PUBSUB_H
 #include <stdbool.h>
 #include <stdint.h>
 
-#include <bingo/compiler.h>
-#include <bingo/log.h>
+#include <dice/compiler.h>
+#include <dice/log.h>
 #include <vsync/atomic.h>
 #include <vsync/atomic/internal/macros.h>
 
@@ -149,7 +149,7 @@ int ps_subscribe(chain_id chain, type_id type, ps_cb_f cb);
         /* By default, callbacks return OK to continue chain publishing. */    \
         return PS_CB_OK;                                                       \
     }                                                                          \
-    BINGO_HIDE enum ps_cb_err PS_CBNAME(CHAIN, TYPE, BINGO_XTOR_PRIO)(         \
+    DICE_HIDE enum ps_cb_err PS_CBNAME(CHAIN, TYPE, DICE_XTOR_PRIO)(         \
         const chain_id chain, const type_id type, void *event, metadata_t *md) \
     {                                                                          \
         return _ps_callback_##CHAIN##_##TYPE(chain, type, event, md);          \
@@ -159,11 +159,11 @@ int ps_subscribe(chain_id chain, type_id type, ps_cb_f cb);
     {                                                                          \
         return _ps_callback_##CHAIN##_##TYPE(chain, type, event, md);          \
     }                                                                          \
-    static void BINGO_CTOR _ps_subscribe_##CHAIN##_##TYPE(void)                \
+    static void DICE_CTOR _ps_subscribe_##CHAIN##_##TYPE(void)                \
     {                                                                          \
         if (ps_subscribe(CHAIN, TYPE,                                          \
                          V_JOIN(V_JOIN(_ps_callback, CHAIN), TYPE)) != 0)      \
             log_fatalf("could not subscribe to %s:%s\n", #CHAIN, #TYPE);       \
     }
 
-#endif /* BINGO_PUBSUB_H */
+#endif /* DICE_PUBSUB_H */

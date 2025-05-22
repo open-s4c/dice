@@ -6,11 +6,11 @@
 #include <pthread.h>
 #include <unistd.h>
 
-#include <bingo/intercept.h>
-#include <bingo/intercept/memaccess.h>
-#include <bingo/log.h>
-#include <bingo/now.h>
-#include <bingo/self.h>
+#include <dice/intercept.h>
+#include <dice/intercept/memaccess.h>
+#include <dice/log.h>
+#include <dice/now.h>
+#include <dice/self.h>
 #include <vsync/atomic.h>
 
 vatomic32_t stop;

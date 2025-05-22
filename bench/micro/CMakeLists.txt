@@ -2,13 +2,13 @@
 # SPDX-License-Identifier: MIT
 
 add_executable(micro micro.c)
-target_link_libraries(micro bingo pthread)
+target_link_libraries(micro dice pthread)
 
 add_executable(micro2 micro2.c)
-target_link_libraries(micro2 bingo pthread)
+target_link_libraries(micro2 dice pthread)
 
 add_library(microcb.o OBJECT microcb.c)
-target_link_libraries(microcb.o bingo.h)
+target_link_libraries(microcb.o dice.h)
 
 set(MODS
     self.o
@@ -31,17 +31,17 @@ set(MODS
 set(PRIO_self 201)
 set(PRIO_microcb 202)
 
-set(OBJS ${MODS} bingo-fastch.o bingo-core.o)
+set(OBJS ${MODS} dice-fastch.o dice-core.o)
 foreach(TARGET ${OBJS})
   get_filename_component(MOD ${TARGET} NAME_WLE)
   if(PRIO_${MOD})
-    target_compile_options(${TARGET} PRIVATE -DBINGO_XTOR_PRIO=${PRIO_${MOD}})
+    target_compile_options(${TARGET} PRIVATE -DDICE_XTOR_PRIO=${PRIO_${MOD}})
   endif()
   target_compile_options(${TARGET} PRIVATE -fPIC)
 endforeach()
 
-add_library(micro-bingo SHARED)
-target_link_libraries(micro-bingo PUBLIC ${OBJS})
+add_library(micro-dice SHARED)
+target_link_libraries(micro-dice PUBLIC ${OBJS})
 
 add_executable(micro3 micro3.c)
-target_link_libraries(micro3 micro-bingo pthread)
+target_link_libraries(micro3 micro-dice pthread)

@@ -5,11 +5,11 @@
  * @file intercept.h
  * @brief Standard intercept chains and helpers.
  */
-#ifndef BINGO_INTERCEPT_H
-#define BINGO_INTERCEPT_H
+#ifndef DICE_INTERCEPT_H
+#define DICE_INTERCEPT_H
 
-#include <bingo/compiler.h>
-#include <bingo/pubsub.h>
+#include <dice/compiler.h>
+#include <dice/pubsub.h>
 
 /* INTERCEPT_EVENT can be used to implement annotations, inform callbacks about
  * the execution, or replace system functions. */
@@ -42,4 +42,4 @@
 #define INTERPOSE_PC                                                           \
     (__builtin_extract_return_addr(__builtin_return_address(0)))
 
-#endif /* BINGO_INTERCEPT_H */
+#endif /* DICE_INTERCEPT_H */

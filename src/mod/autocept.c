@@ -8,10 +8,10 @@
 
 #include "autocept.h"
 #include "defs.h"
-#include <bingo/intercept.h>
-#include <bingo/module.h>
+#include <dice/intercept.h>
+#include <dice/module.h>
 
-BINGO_MODULE_INIT()
+DICE_MODULE_INIT()
 
 // TODO: add function cache
 

@@ -2,8 +2,8 @@
  * Copyright (C) Huawei Technologies Co., Ltd. 2025. All rights reserved.
  * SPDX-License-Identifier: MIT
  */
-#ifndef BINGO_THREAD_ID_H
-#define BINGO_THREAD_ID_H
+#ifndef DICE_THREAD_ID_H
+#define DICE_THREAD_ID_H
 
 #include <stdint.h>
 
@@ -15,4 +15,4 @@ typedef uint64_t thread_id;
 #define EVENT_THREAD_INIT 1
 #define EVENT_THREAD_FINI 2
 
-#endif /* BINGO_THREAD_ID_H */
+#endif /* DICE_THREAD_ID_H */

@@ -9,11 +9,11 @@
  ******************************************************************************/
 #include <stdint.h>
 
-#include <bingo/intercept/stacktrace.h>
-#include <bingo/interpose.h>
-#include <bingo/module.h>
+#include <dice/intercept/stacktrace.h>
+#include <dice/interpose.h>
+#include <dice/module.h>
 
-BINGO_MODULE_INIT()
+DICE_MODULE_INIT()
 
 void
 __tsan_func_entry(void *caller)

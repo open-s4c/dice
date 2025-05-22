@@ -8,10 +8,10 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define BINGO_XTOR_PRIO 197
-#include <bingo/interpose.h>
-#include <bingo/mempool.h>
-#include <bingo/module.h>
+#define DICE_XTOR_PRIO 197
+#include <dice/interpose.h>
+#include <dice/mempool.h>
+#include <dice/module.h>
 #include <vsync/spinlock/caslock.h>
 
 static size_t _sizes[] = {32,
@@ -61,7 +61,7 @@ static mempool_t _mp;
 /* bypass malloc interceptor */
 REAL_DECL(void *, malloc, size_t);
 
-BINGO_HIDE void
+DICE_HIDE void
 mempool_init(size_t cap)
 {
     _mp.allocated = 0;
@@ -73,9 +73,9 @@ mempool_init(size_t cap)
     _mp.pool.next     = 0;
     caslock_init(&_mp.lock);
 }
-BINGO_MODULE_INIT({ mempool_init(MEMPOOL_SIZE); })
+DICE_MODULE_INIT({ mempool_init(MEMPOOL_SIZE); })
 
-BINGO_HIDE void *
+DICE_HIDE void *
 mempool_alloc(size_t n)
 {
     mempool_t *mp   = &_mp;
@@ -107,7 +107,7 @@ mempool_alloc(size_t n)
     return e ? e->data : NULL;
 }
 
-BINGO_HIDE void *
+DICE_HIDE void *
 mempool_realloc(void *ptr, size_t size)
 {
     void *p = mempool_alloc(size);
@@ -120,7 +120,7 @@ mempool_realloc(void *ptr, size_t size)
     return p;
 }
 
-BINGO_HIDE void
+DICE_HIDE void
 mempool_free(void *ptr)
 {
     mempool_t *mp = &_mp;

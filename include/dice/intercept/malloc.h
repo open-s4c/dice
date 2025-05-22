@@ -2,10 +2,10 @@
  * Copyright (C) Huawei Technologies Co., Ltd. 2025. All rights reserved.
  * SPDX-License-Identifier: MIT
  */
-#ifndef BINGO_MALLOC_H
-#define BINGO_MALLOC_H
+#ifndef DICE_MALLOC_H
+#define DICE_MALLOC_H
 
-#include <bingo/intercept.h>
+#include <dice/intercept.h>
 
 #define EVENT_MALLOC         50
 #define EVENT_CALLOC         51
@@ -21,4 +21,4 @@ struct malloc_event {
     int ret;
 };
 
-#endif /* BINGO_MALLOC_H */
+#endif /* DICE_MALLOC_H */

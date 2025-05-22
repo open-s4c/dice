@@ -2,10 +2,10 @@
  * Copyright (C) Huawei Technologies Co., Ltd. 2025. All rights reserved.
  * SPDX-License-Identifier: MIT
  */
-#ifndef BINGO_SEM_H
-#define BINGO_SEM_H
+#ifndef DICE_SEM_H
+#define DICE_SEM_H
 
-#include <bingo/intercept.h>
+#include <dice/intercept.h>
 
 #define EVENT_SEM_POST      70
 #define EVENT_SEM_WAIT      71
@@ -18,4 +18,4 @@ struct sem_event {
     int ret;
 };
 
-#endif /* BINGO_SEM_H */
+#endif /* DICE_SEM_H */

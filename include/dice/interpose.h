@@ -22,13 +22,13 @@
  *
  * See `mod/malloc.c` for a detailed example.
  */
-#ifndef BINGO_INTERPOSE_H
-#define BINGO_INTERPOSE_H
+#ifndef DICE_INTERPOSE_H
+#define DICE_INTERPOSE_H
 #include <dlfcn.h>
 #include <stddef.h>
 #include <stdio.h>
 
-#include <bingo/module.h>
+#include <dice/module.h>
 
 #if defined(__linux__) || defined(__NetBSD__)
     #include <dlfcn.h>
@@ -38,7 +38,7 @@
               (REAL_NAME(F) = (__typeof(REAL_NAME(F)))dlsym(RTLD_NEXT, #F)) :  \
               0),                                                              \
          REAL_NAME(F)(__VA_ARGS__))
-    #define REAL_NAME(F) _bingo_real_##F
+    #define REAL_NAME(F) _dice_real_##F
 
     #define INTERPOSE(T, F, ...)                                               \
         T F(__VA_ARGS__);                                                      \
@@ -48,14 +48,14 @@
 #elif defined(__APPLE__)
 
     #define REAL(F, ...) F(__VA_ARGS__)
-    #define FAKE_NAME(F) _bingo_fake_##F
+    #define FAKE_NAME(F) _dice_fake_##F
 
     #define INTERPOSE(T, F, ...)                                               \
         T FAKE_NAME(F)(__VA_ARGS__);                                           \
         static struct {                                                        \
             const void *fake;                                                  \
             const void *real;                                                  \
-        } _bingo_interpose_##F                                                 \
+        } _dice_interpose_##F                                                 \
             __attribute__((used, section("__DATA,__interpose"))) = {           \
                 (const void *)&FAKE_NAME(F), (const void *)&F};                \
         T FAKE_NAME(F)(__VA_ARGS__)
@@ -65,4 +65,4 @@
 
 #define REAL_DECL(T, F, ...) static T (*REAL_NAME(F))(__VA_ARGS__);
 
-#endif /* BINGO_INTERPOSE_H */
+#endif /* DICE_INTERPOSE_H */

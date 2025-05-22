@@ -2,8 +2,8 @@
  * Copyright (C) Huawei Technologies Co., Ltd. 2025. All rights reserved.
  * SPDX-License-Identifier: MIT
  */
-#include <bingo/compiler.h>
-#include <bingo/rbtree.h>
+#include <dice/compiler.h>
+#include <dice/rbtree.h>
 
 #define LEFT  0
 #define RIGHT 1
@@ -63,14 +63,14 @@ _insert_fixup(struct rbtree *tree, struct rbnode *z)
     tree->root->color = RB_BLACK;
 }
 
-BINGO_HIDE void
+DICE_HIDE void
 rbtree_init(struct rbtree *tree, rbcmp_f cmp)
 {
     tree->root = NULL;
     tree->cmp  = cmp;
 }
 
-BINGO_HIDE void
+DICE_HIDE void
 rbtree_insert(struct rbtree *tree, struct rbnode *z)
 {
     struct rbnode **p = &tree->root, *parent = NULL;
@@ -164,7 +164,7 @@ _remove_fixup(struct rbtree *tree, struct rbnode *x, struct rbnode *x_parent)
         x->color = RB_BLACK;
 }
 
-BINGO_HIDE void
+DICE_HIDE void
 rbtree_remove(struct rbtree *tree, struct rbnode *z)
 {
     struct rbnode *y = z;
@@ -200,7 +200,7 @@ rbtree_remove(struct rbtree *tree, struct rbnode *z)
         _remove_fixup(tree, x, x_parent);
 }
 
-BINGO_HIDE struct rbnode *
+DICE_HIDE struct rbnode *
 rbtree_find(const struct rbtree *tree, const struct rbnode *key)
 {
     struct rbnode *node = tree->root;
@@ -213,13 +213,13 @@ rbtree_find(const struct rbtree *tree, const struct rbnode *key)
     return NULL;
 }
 
-BINGO_HIDE struct rbnode *
+DICE_HIDE struct rbnode *
 rbtree_min(const struct rbtree *tree)
 {
     return _minimum(tree->root);
 }
 
-BINGO_HIDE struct rbnode *
+DICE_HIDE struct rbnode *
 rbtree_max(const struct rbtree *tree)
 {
     struct rbnode *node = tree->root;
@@ -228,7 +228,7 @@ rbtree_max(const struct rbtree *tree)
     return node;
 }
 
-BINGO_HIDE struct rbnode *
+DICE_HIDE struct rbnode *
 rbtree_next(const struct rbnode *node)
 {
     if (node->right) {
@@ -246,7 +246,7 @@ rbtree_next(const struct rbnode *node)
     return p;
 }
 
-BINGO_HIDE struct rbnode *
+DICE_HIDE struct rbnode *
 rbtree_prev(const struct rbnode *node)
 {
     if (node->left) {

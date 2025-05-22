@@ -1,8 +1,8 @@
-# Bingo
+# Dice
 
-**Bingo** is a lightweight, extensible C framework for capturing and
+**Dice** is a lightweight, extensible C framework for capturing and
 distributing execution events in multithreaded programs. Designed for low
-overhead and high flexibility, Bingo enables powerful tooling for runtime
+overhead and high flexibility, Dice enables powerful tooling for runtime
 monitoring, concurrency testing, and deterministic replay using a modular
 publish-subscribe (pubsub) architecture.
 
@@ -17,12 +17,12 @@ publish-subscribe (pubsub) architecture.
 
 ## Getting Started
 
-To use Bingo:
+To use Dice:
 
-1. **Build Bingo and its modules**
+1. **Build Dice and its modules**
 2. **Set environment variable**:
    ```sh
-   export LD_PRELOAD=/path/to/libbingo.so:/path/to/module.so:...
+   export LD_PRELOAD=/path/to/libdice.so:/path/to/module.so:...
    ```
 3. **Run your program**
    ```sh
@@ -35,7 +35,7 @@ Subscribers and modules will now intercept and handle events during execution.
 
 ## Architecture Overview
 
-Bingo is composed of:
+Dice is composed of:
 
 - **Core Modules**: `mempool`, `self`, and `pubsub` provide foundational
   services.
@@ -77,8 +77,8 @@ Bingo is composed of:
 ## Building and Installation
 
 ```sh
-git clone https://your.repo/bingo.git
-cd bingo
+git clone https://your.repo/dice.git
+cd dice
 make
 ```
 
@@ -90,10 +90,10 @@ Modules are compiled as shared libraries. Ensure they are available in your
 
 ## Usage
 
-Example: Run an application with Bingo intercepting memory and threading events:
+Example: Run an application with Dice intercepting memory and threading events:
 
 ```sh
-export LD_PRELOAD=/path/to/libbingo.so:/path/to/libbingo-malloc.so
+export LD_PRELOAD=/path/to/libdice.so:/path/to/libdice-malloc.so
 ./your_program
 ```
 
@@ -110,8 +110,8 @@ You can add your own subscriber module and load it the same way to process event
 
 ```c
 #include <stdio.h>
-#include <bingo/capture.h>
-#include <bingo/module.h>
+#include <dice/capture.h>
+#include <dice/module.h>
 
 static bool log_callback(token_t token, const void *data, self_t *self) {
     fprintf(stderr, "[logger] Event received: chain=%d, event_id=%d, data=%p\n",
@@ -126,12 +126,12 @@ REGISTER_CALLBACK(ANY_CHAIN, ANY_EVENT, {
 
 **Compile:**
 ```sh
-gcc -fPIC -shared -o libbingo-logger.so logger.c -I/path/to/bingo/include
+gcc -fPIC -shared -o libdice-logger.so logger.c -I/path/to/dice/include
 ```
 
 **Run:**
 ```sh
-env LD_PRELOAD=./libbingo.so:./libbingo-logger.so ./your_program
+env LD_PRELOAD=./libdice.so:./libdice-logger.so ./your_program
 ```
 
 ---
