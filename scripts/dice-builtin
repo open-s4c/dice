@@ -8,16 +8,16 @@ fi
 
 SCRIPT_DIR=$(dirname $(readlink -f $0))
 # if not installed, fall back to repo/build prefix
-BINGO_PREFIX="/usr/local"
-if [ ! -d "$BINGO_PREFIX/lib/dice" ]; then
-    BINGO_PREFIX=$(readlink -f $SCRIPT_DIR/../build)
-    MOD_DIR=$BINGO_PREFIX/mod
+DICE_PREFIX="/usr/local"
+if [ ! -d "$DICE_PREFIX/lib/dice" ]; then
+    DICE_PREFIX=$(readlink -f $SCRIPT_DIR/../build)
+    MOD_DIR=$DICE_PREFIX/mod
 else
-    MOD_DIR=$BINGO_PREFIX/lib/dice
+    MOD_DIR=$DICE_PREFIX/lib/dice
 fi
-#echo "BINGO: $BINGO_PREFIX"
+#echo "DICE: $DICE_PREFIX"
 
-PRELOAD="$BINGO_PREFIX/lib/libdice-builtin.$SO"
+PRELOAD="$DICE_PREFIX/lib/libdice-builtin.$SO"
 args=""
 while [ "$#" != "0" ]; do
     case "$1" in

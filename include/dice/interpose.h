@@ -18,7 +18,7 @@
  *     }
  *
  * This header used in several modules in `mod/` in combination with the
- * publishing functions provided by `capture.h`.
+ * publishing functions provided by `intercept.h`.
  *
  * See `mod/malloc.c` for a detailed example.
  */

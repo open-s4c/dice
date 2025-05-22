@@ -110,7 +110,7 @@ You can add your own subscriber module and load it the same way to process event
 
 ```c
 #include <stdio.h>
-#include <dice/capture.h>
+#include <dice/intercept.h>
 #include <dice/module.h>
 
 static bool log_callback(token_t token, const void *data, self_t *self) {
