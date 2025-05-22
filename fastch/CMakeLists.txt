@@ -30,7 +30,7 @@ endforeach()
 
 # entry
 add_custom_command(
-  OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/dispatch.c
+  OUTPUT dispatch.c
   COMMAND
     cat ${CMAKE_CURRENT_SOURCE_DIR}/dispatch.c.in | #
     $<TARGET_FILE:tmplr> -i #
@@ -39,9 +39,9 @@ add_custom_command(
     "-DCCC=${CCC}" "-DEEE=${EEE}" "-DSSS=${SSS}" -P_tmpl2 | #
     $<TARGET_FILE:tmplr> -i #
     "-DCCC=${CCC}" "-DEEE=${EEE}" "-DSSS=${SSS}" -P_tmpl3 #
-    > ${CMAKE_CURRENT_SOURCE_DIR}/dispatch.c
+    > dispatch.c
   DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/dispatch.c.in)
-add_custom_target(dispatch.c DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/dispatch.c)
+add_custom_target(dispatch.c DEPENDS dispatch.c)
 
 set(SRC dispatch.c)
 set(TARGET bingo-fastch)
