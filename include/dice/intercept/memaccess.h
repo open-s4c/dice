@@ -2,14 +2,14 @@
  * Copyright (C) Huawei Technologies Co., Ltd. 2025. All rights reserved.
  * SPDX-License-Identifier: MIT
  */
-#ifndef BINGO_MEMACCESS_H
-#define BINGO_MEMACCESS_H
+#ifndef DICE_MEMACCESS_H
+#define DICE_MEMACCESS_H
 
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
 
-#include <bingo/intercept.h>
+#include <dice/intercept.h>
 
 #define EVENT_MA_READ         30
 #define EVENT_MA_WRITE        31
@@ -36,4 +36,4 @@ typedef struct memaccess {
     bool failed; // optional argument to indicate operation failed
 } memaccess_t;
 
-#endif /* BINGO_MEMACCESS_H */
+#endif /* DICE_MEMACCESS_H */

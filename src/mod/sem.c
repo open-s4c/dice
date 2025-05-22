@@ -4,8 +4,8 @@
  */
 #include <semaphore.h>
 
-#include <bingo/intercept/semaphore.h>
-#include <bingo/interpose.h>
+#include <dice/intercept/semaphore.h>
+#include <dice/interpose.h>
 
 INTERPOSE(int, sem_post, sem_t *sem)
 {
@@ -53,4 +53,4 @@ INTERPOSE(int, sem_timedwait, sem_t *sem, const struct timespec *timeout)
 }
 #endif
 
-BINGO_MODULE_INIT()
+DICE_MODULE_INIT()

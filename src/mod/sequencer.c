@@ -2,11 +2,11 @@
  * Copyright (C) Huawei Technologies Co., Ltd. 2025. All rights reserved.
  * SPDX-License-Identifier: MIT
  */
-#include <bingo/intercept/memaccess.h>
-#include <bingo/log.h>
-#include <bingo/module.h>
-#include <bingo/self.h>
-#include <bingo/switcher.h>
+#include <dice/intercept/memaccess.h>
+#include <dice/log.h>
+#include <dice/module.h>
+#include <dice/self.h>
+#include <dice/switcher.h>
 
 PS_SUBSCRIBE(CAPTURE_EVENT, ANY_TYPE, {
     switch (type) {
@@ -33,4 +33,4 @@ PS_SUBSCRIBE(CAPTURE_AFTER, ANY_TYPE, {
     return false;
 })
 
-BINGO_MODULE_INIT()
+DICE_MODULE_INIT()

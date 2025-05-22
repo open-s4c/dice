@@ -2,7 +2,7 @@
  * Copyright (C) Huawei Technologies Co., Ltd. 2025. All rights reserved.
  * SPDX-License-Identifier: MIT
  */
-#include <bingo/pubsub.h>
+#include <dice/pubsub.h>
 #define _tmpl_mute
 #define _tmpl_begin(...)
 #define _tmpl_map(...)
@@ -16,7 +16,7 @@
 #define SSS 0
 #define _tmpl_unmute
 _tmpl_begin(CCC = CHAINS, SSS = SLOTS);
-BINGO_WEAK BINGO_HIDE enum ps_cb_err
+DICE_WEAK DICE_HIDE enum ps_cb_err
 ps_callback_CCC_0_SSS_(const chain_id chain, const type_id type, void *event,
                        metadata_t *md)
 {
@@ -29,7 +29,7 @@ ps_callback_CCC_0_SSS_(const chain_id chain, const type_id type, void *event,
 _tmpl_end();
 
 _tmpl_begin(CCC = CHAINS, EEE = EVENTS, SSS = SLOTS);
-BINGO_WEAK BINGO_HIDE enum ps_cb_err
+DICE_WEAK DICE_HIDE enum ps_cb_err
 ps_callback_CCC_EEE_SSS_(const chain_id chain, const type_id type, void *event,
                          metadata_t *md)
 {
@@ -86,7 +86,7 @@ ps_dispatch_CCC_(const chain_id chain, const type_id type, void *event,
 _tmpl_end();
 
 /* main dispatcher */
-BINGO_HIDE struct ps_dispatched
+DICE_HIDE struct ps_dispatched
 ps_dispatch_(const chain_id chain, const type_id type, void *event,
              metadata_t *md)
 {

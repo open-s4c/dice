@@ -44,8 +44,8 @@ add_custom_command(
 add_custom_target(dispatch.c DEPENDS dispatch.c)
 
 set(SRC dispatch.c)
-set(TARGET bingo-fastch)
+set(TARGET dice-fastch)
 add_library(${TARGET}.o OBJECT ${SRC})
 add_dependencies(${TARGET}.o ${SRC})
-target_link_libraries(${TARGET}.o PRIVATE bingo.h)
+target_link_libraries(${TARGET}.o PRIVATE dice.h)
 target_compile_options(${TARGET}.o PRIVATE -fPIC)

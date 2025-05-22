@@ -6,10 +6,10 @@
 #include <stdbool.h>
 #include <string.h>
 
-#include <bingo/compiler.h>
-#include <bingo/idmap.h>
-#include <bingo/log.h>
-#include <bingo/mempool.h>
+#include <dice/compiler.h>
+#include <dice/idmap.h>
+#include <dice/log.h>
+#include <dice/mempool.h>
 
 #define IDMAP_INIT_SIZE 4
 

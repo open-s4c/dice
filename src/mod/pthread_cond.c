@@ -5,8 +5,8 @@
 #include <assert.h>
 #include <pthread.h>
 
-#include <bingo/intercept/pthread.h>
-#include <bingo/interpose.h>
+#include <dice/intercept/pthread.h>
+#include <dice/interpose.h>
 
 INTERPOSE(int, pthread_cond_wait, pthread_cond_t *cond, pthread_mutex_t *mutex)
 {
@@ -58,4 +58,4 @@ INTERPOSE(int, pthread_cond_broadcast, pthread_cond_t *cond)
     return ev.ret;
 }
 
-BINGO_MODULE_INIT()
+DICE_MODULE_INIT()

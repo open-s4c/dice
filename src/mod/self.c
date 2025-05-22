@@ -21,18 +21,18 @@
 #include <stdio.h>
 #include <string.h>
 
-#ifndef BINGO_XTOR_PRIO
-    #define BINGO_XTOR_PRIO 201
+#ifndef DICE_XTOR_PRIO
+    #define DICE_XTOR_PRIO 201
 #endif
 
-#include <bingo/intercept.h>
-#include <bingo/log.h>
-#include <bingo/mempool.h>
-#include <bingo/module.h>
-#include <bingo/pubsub.h>
-#include <bingo/rbtree.h>
-#include <bingo/self.h>
-#include <bingo/thread_id.h>
+#include <dice/intercept.h>
+#include <dice/log.h>
+#include <dice/mempool.h>
+#include <dice/module.h>
+#include <dice/pubsub.h>
+#include <dice/rbtree.h>
+#include <dice/self.h>
+#include <dice/thread_id.h>
 #include <vsync/atomic.h>
 
 typedef struct thread_data {
@@ -49,15 +49,15 @@ struct tls_item {
     char data[];
 };
 
-BINGO_HIDE vatomic64_t _thread_count = VATOMIC_INIT(0);
+DICE_HIDE vatomic64_t _thread_count = VATOMIC_INIT(0);
 
-BINGO_HIDE void _self_destruct(void *);
-BINGO_HIDE void _tls_init(thrdata_t *td);
+DICE_HIDE void _self_destruct(void *);
+DICE_HIDE void _tls_init(thrdata_t *td);
 
 // -----------------------------------------------------------------------------
 // tls items
 // -----------------------------------------------------------------------------
-BINGO_HIDE int
+DICE_HIDE int
 _tls_cmp(const struct rbnode *a, const struct rbnode *b)
 {
     const struct tls_item *ea = container_of(a, struct tls_item, node);
@@ -65,13 +65,13 @@ _tls_cmp(const struct rbnode *a, const struct rbnode *b)
     return (ea->key > eb->key);
 }
 
-BINGO_HIDE void
+DICE_HIDE void
 _tls_init(thrdata_t *td)
 {
     rbtree_init(&td->tree, _tls_cmp);
 }
 
-BINGO_HIDE void
+DICE_HIDE void
 _tls_fini(thrdata_t *td)
 {
     // TODO: iterate over all items and mempool_free them
@@ -94,12 +94,12 @@ _thrmap_fini(void)
 {
 }
 
-BINGO_HIDE thrdata_t *
+DICE_HIDE thrdata_t *
 _thrdata_get(void)
 {
     return (thrdata_t *)pthread_getspecific(_key);
 }
-BINGO_HIDE thrdata_t *
+DICE_HIDE thrdata_t *
 _thrdata_new()
 {
     thrdata_t *td = mempool_alloc(sizeof(thrdata_t));
@@ -124,14 +124,14 @@ _thrdata_del(thrdata_t *td)
 // -----------------------------------------------------------------------------
 // public interface
 // -----------------------------------------------------------------------------
-BINGO_HIDE thread_id
+DICE_HIDE thread_id
 self_id(metadata_t *md)
 {
     thrdata_t *td = (thrdata_t *)md;
     return td ? td->tid : NO_THREAD;
 }
 
-BINGO_HIDE void *
+DICE_HIDE void *
 self_tls(metadata_t *md, const void *global, size_t size)
 {
     uintptr_t item_key = (uintptr_t)global;
@@ -161,7 +161,7 @@ self_tls(metadata_t *md, const void *global, size_t size)
 // self destructor
 // -----------------------------------------------------------------------------
 
-BINGO_HIDE void
+DICE_HIDE void
 _self_destruct(void *arg)
 {
     // In some systems (eg, NetBSD) threads still call interceptors while
@@ -191,7 +191,7 @@ _self_destruct(void *arg)
         td->guard--;                                                           \
     } while (0)
 
-BINGO_HIDE enum ps_cb_err
+DICE_HIDE enum ps_cb_err
 _self_handle_before(const chain_id chain, const type_id type, void *event,
                     metadata_t *md)
 {
@@ -207,7 +207,7 @@ _self_handle_before(const chain_id chain, const type_id type, void *event,
     return PS_CB_STOP;
 }
 
-BINGO_HIDE enum ps_cb_err
+DICE_HIDE enum ps_cb_err
 _self_handle_after(const chain_id chain, const type_id type, void *event,
                    metadata_t *md)
 {
@@ -223,7 +223,7 @@ _self_handle_after(const chain_id chain, const type_id type, void *event,
     return PS_CB_STOP;
 }
 
-BINGO_HIDE enum ps_cb_err
+DICE_HIDE enum ps_cb_err
 _self_handle_event(const chain_id chain, const type_id type, void *event,
                    metadata_t *md)
 {
@@ -277,7 +277,7 @@ PS_SUBSCRIBE(INTERCEPT_AFTER, ANY_TYPE,
 // init, fini and registration
 // -----------------------------------------------------------------------------
 
-BINGO_MODULE_INIT({
+DICE_MODULE_INIT({
     // First, prepare the map for TLS
     _thrmap_init();
 
@@ -287,7 +287,7 @@ BINGO_MODULE_INIT({
     (void)_thrdata_new();
 })
 
-BINGO_MODULE_FINI({
+DICE_MODULE_FINI({
     thrdata_t *td = _thrdata_get();
     PS_PUBLISH(CAPTURE_EVENT, EVENT_THREAD_FINI, 0, &td->md);
     _thrmap_fini();

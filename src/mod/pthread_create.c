@@ -5,11 +5,11 @@
 #include <pthread.h>
 #include <stdlib.h>
 
-#include <bingo/intercept/pthread.h>
-#include <bingo/interpose.h>
-#include <bingo/mempool.h>
-#include <bingo/module.h>
-#include <bingo/self.h>
+#include <dice/intercept/pthread.h>
+#include <dice/interpose.h>
+#include <dice/mempool.h>
+#include <dice/module.h>
+#include <dice/self.h>
 
 typedef struct {
     void *(*run)(void *);
@@ -19,7 +19,7 @@ typedef struct {
 /* On NetBSD pthread_exit is a macro mapping to __libc_thread_exit. However, we
  * have to intercept the real pthread_exit, hence, we undefine it. */
 #undef pthread_exit
-BINGO_NORET
+DICE_NORET
 INTERPOSE(void, pthread_exit, void *ptr)
 {
     PS_PUBLISH(INTERCEPT_EVENT, EVENT_THREAD_FINI, 0, 0);
@@ -70,4 +70,4 @@ INTERPOSE(int, pthread_join, pthread_t thread, void **ptr)
     return ev.ret;
 }
 
-BINGO_MODULE_INIT()
+DICE_MODULE_INIT()

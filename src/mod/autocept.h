@@ -2,11 +2,11 @@
  * Copyright (C) Huawei Technologies Co., Ltd. 2025. All rights reserved.
  * SPDX-License-Identifier: MIT
  */
-#ifndef BINGO_AUTOCEPT_H
-#define BINGO_AUTOCEPT_H
+#ifndef DICE_AUTOCEPT_H
+#define DICE_AUTOCEPT_H
 
 typedef struct {
     const char *fname;
 } autocept_event_t;
 
-#endif /* BINGO_AUTOCEPT_H */
+#endif /* DICE_AUTOCEPT_H */

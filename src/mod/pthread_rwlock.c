@@ -5,8 +5,8 @@ ap* Copyright (C) Huawei Technologies Co., Ltd. 2025. All rights reserved.
 #include <assert.h>
 #include <pthread.h>
 
-#include <bingo/intercept/pthread.h>
-#include <bingo/interpose.h>
+#include <dice/intercept/pthread.h>
+#include <dice/interpose.h>
 
 INTERPOSE(int, pthread_rwlock_rdlock, pthread_rwlock_t *rwlock)
 {
@@ -95,4 +95,4 @@ INTERPOSE(int, pthread_rwlock_unlock, pthread_rwlock_t *rwlock)
     return ev.ret;
 }
 
-BINGO_MODULE_INIT()
+DICE_MODULE_INIT()

@@ -2,8 +2,8 @@
  * Copyright (C) Huawei Technologies Co., Ltd. 2025. All rights reserved.
  * SPDX-License-Identifier: MIT
  */
-#ifndef BINGO_IDMAP_H
-#define BINGO_IDMAP_H
+#ifndef DICE_IDMAP_H
+#define DICE_IDMAP_H
 
 #include <stddef.h>
 #include <stdint.h>
@@ -22,4 +22,4 @@ size_t idmap_find(idmap_t *idmap, uint64_t id);
 size_t idmap_insert(idmap_t *idmap, uint64_t id);
 size_t idmap_remove(idmap_t *idmap, uint64_t id);
 
-#endif /* BINGO_IDMAP_H */
+#endif /* DICE_IDMAP_H */

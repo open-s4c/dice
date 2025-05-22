@@ -7,8 +7,8 @@
 #include <stdio.h>
 #include <unistd.h>
 
-#include <bingo/intercept/memaccess.h>
-#include <bingo/now.h>
+#include <dice/intercept/memaccess.h>
+#include <dice/now.h>
 #include <vsync/atomic.h>
 
 vatomic32_t stop;

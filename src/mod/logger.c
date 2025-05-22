@@ -4,12 +4,12 @@
  */
 #include <pthread.h>
 
-// #define BINGO_XTOR_PRIO 300
-#include <bingo/intercept.h>
-#include <bingo/log.h>
-#include <bingo/module.h>
-#include <bingo/pubsub.h>
-#include <bingo/self.h>
+// #define DICE_XTOR_PRIO 300
+#include <dice/intercept.h>
+#include <dice/log.h>
+#include <dice/module.h>
+#include <dice/pubsub.h>
+#include <dice/self.h>
 
 PS_SUBSCRIBE(
     CAPTURE_EVENT, ANY_TYPE,
@@ -31,4 +31,4 @@ PS_SUBSCRIBE(
     })
 
 
-BINGO_MODULE_INIT()
+DICE_MODULE_INIT()

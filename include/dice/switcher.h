@@ -2,13 +2,13 @@
  * Copyright (C) Huawei Technologies Co., Ltd. 2023-2025. All rights reserved.
  * SPDX-License-Identifier: MIT
  */
-#ifndef BINGO_SWITCHER_H
-#define BINGO_SWITCHER_H
+#ifndef DICE_SWITCHER_H
+#define DICE_SWITCHER_H
 
 #include <stdbool.h>
 
-#include <bingo/now.h>
-#include <bingo/thread_id.h>
+#include <dice/now.h>
+#include <dice/thread_id.h>
 
 #ifndef SWITCHER_NBUCKETS
     #define SWITCHER_NBUCKETS 128
@@ -22,4 +22,4 @@ void switcher_abort(void);
 #define SWITCHER_CHANGED  1
 #define SWITCHER_ABORTED  2
 
-#endif /* BINGO_SWITCHER_H */
+#endif /* DICE_SWITCHER_H */

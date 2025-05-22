@@ -2,8 +2,8 @@
  * Copyright (C) Huawei Technologies Co., Ltd. 2025. All rights reserved.
  * SPDX-License-Identifier: MIT
  */
-#include <bingo/intercept/malloc.h>
-#include <bingo/interpose.h>
+#include <dice/intercept/malloc.h>
+#include <dice/interpose.h>
 
 INTERPOSE(void *, malloc, size_t n)
 {
@@ -72,4 +72,4 @@ INTERPOSE(void *, aligned_alloc, size_t alignment, size_t size)
     return ev.ptr;
 }
 
-BINGO_MODULE_INIT()
+DICE_MODULE_INIT()

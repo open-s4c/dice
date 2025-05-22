@@ -3,7 +3,7 @@
 
 cmake_minimum_required(VERSION 3.20)
 project(
-  bingo
+  dice
   LANGUAGES C CXX ASM
   VERSION 0.2)
 
@@ -33,5 +33,5 @@ add_subdirectory(src)
 add_subdirectory(test)
 add_subdirectory(bench/micro)
 
-# install(TARGETS bingo bingo.h bingo-core EXPORT ${PROJECT_TARGETS})
-install(TARGETS bingo.h EXPORT ${PROJECT_TARGETS})
+# install(TARGETS dice dice.h dice-core EXPORT ${PROJECT_TARGETS})
+install(TARGETS dice.h EXPORT ${PROJECT_TARGETS})

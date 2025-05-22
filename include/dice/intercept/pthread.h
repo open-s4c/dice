@@ -2,12 +2,12 @@
  * Copyright (C) Huawei Technologies Co., Ltd. 2025. All rights reserved.
  * SPDX-License-Identifier: MIT
  */
-#ifndef BINGO_PTHREAD_H
-#define BINGO_PTHREAD_H
+#ifndef DICE_PTHREAD_H
+#define DICE_PTHREAD_H
 
 #include <pthread.h>
 
-#include <bingo/intercept.h>
+#include <dice/intercept.h>
 
 #define EVENT_THREAD_CREATE      10
 #define EVENT_THREAD_JOIN        11
@@ -61,4 +61,4 @@ struct pthread_rwlock_event {
     int ret;
 };
 
-#endif /* BINGO_PTHREAD_H */
+#endif /* DICE_PTHREAD_H */

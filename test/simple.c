@@ -6,8 +6,8 @@
 #include <pthread.h>
 #include <stdio.h>
 
-#include <bingo/intercept/memaccess.h>
-#include <bingo/pubsub.h>
+#include <dice/intercept/memaccess.h>
+#include <dice/pubsub.h>
 #include <vsync/atomic.h>
 
 int data;

@@ -5,9 +5,9 @@
 #include <assert.h>
 #include <stdio.h>
 
-#define BINGO_XTOR_PRIO 199
-#include <bingo/module.h>
-#include <bingo/pubsub.h>
+#define DICE_XTOR_PRIO 199
+#include <dice/module.h>
+#include <dice/pubsub.h>
 
 #define MAX_SUBSCRIPTIONS 255
 
@@ -96,7 +96,7 @@ _ps_publish(const chain_id chain, const type_id type, void *event,
     return PS_OK;
 }
 
-BINGO_WEAK BINGO_HIDE struct ps_dispatched
+DICE_WEAK DICE_HIDE struct ps_dispatched
 ps_dispatch_(const chain_id chain, const type_id type, void *event,
              metadata_t *md)
 {
@@ -128,4 +128,4 @@ ps_publish(const chain_id chain, const type_id type, void *event,
 // init
 // -----------------------------------------------------------------------------
 
-BINGO_MODULE_INIT({ _initd = true; })
+DICE_MODULE_INIT({ _initd = true; })

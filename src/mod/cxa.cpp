@@ -4,9 +4,9 @@
  */
 
 extern "C" {
-#include <bingo/intercept/cxa.h>
-#include <bingo/interpose.h>
-#include <bingo/pubsub.h>
+#include <dice/intercept/cxa.h>
+#include <dice/interpose.h>
+#include <dice/pubsub.h>
 
 int __cxa_guard_acquire(void *addr);
 int __cxa_guard_release(void *addr);
@@ -42,4 +42,4 @@ INTERPOSE(void, __cxa_guard_abort, void *addr)
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_CXA_GUARD_ABORT, &ev, &md);
 }
 
-BINGO_MODULE_INIT()
+DICE_MODULE_INIT()

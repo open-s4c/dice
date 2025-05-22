@@ -25,23 +25,23 @@ set(MODS
 
 set(PRIO_self 201)
 
-set(OBJS ${MODS} bingo-fastch.o)
+set(OBJS ${MODS} dice-fastch.o)
 foreach(TARGET ${OBJS})
   get_filename_component(MOD ${TARGET} NAME_WLE)
   if(PRIO_${MOD})
-    target_compile_options(${TARGET} PRIVATE -DBINGO_XTOR_PRIO=${PRIO_${MOD}})
+    target_compile_options(${TARGET} PRIVATE -DDICE_XTOR_PRIO=${PRIO_${MOD}})
   endif()
   target_compile_options(${TARGET} PRIVATE -fPIC)
 endforeach()
 
-add_library(bingo SHARED)
-target_link_libraries(bingo PUBLIC bingo.h)
-target_link_libraries(bingo PUBLIC ${OBJS} bingo-core-plugin.o)
+add_library(dice SHARED)
+target_link_libraries(dice PUBLIC dice.h)
+target_link_libraries(dice PUBLIC ${OBJS} dice-core-plugin.o)
 
 # for testing only
-add_library(bingo-builtin SHARED)
-target_link_libraries(bingo-builtin PUBLIC bingo.h)
-target_link_libraries(bingo-builtin PUBLIC ${OBJS} bingo-core.o)
+add_library(dice-builtin SHARED)
+target_link_libraries(dice-builtin PUBLIC dice.h)
+target_link_libraries(dice-builtin PUBLIC ${OBJS} dice-core.o)
 
-# install(TARGETS bingo DESTINATION lib) target_link_options(bingo PRIVATE
+# install(TARGETS dice DESTINATION lib) target_link_options(dice PRIVATE
 # -flto)

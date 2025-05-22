@@ -2,8 +2,8 @@
  * Copyright (C) Huawei Technologies Co., Ltd. 2025. All rights reserved.
  * SPDX-License-Identifier: MIT
  */
-#ifndef BINGO_LOG_H
-#define BINGO_LOG_H
+#ifndef DICE_LOG_H
+#define DICE_LOG_H
 
 #include <inttypes.h>
 #include <stdio.h>
@@ -28,4 +28,4 @@
         abort();                                                               \
     }
 
-#endif /* BINGO_LOG_H */
+#endif /* DICE_LOG_H */

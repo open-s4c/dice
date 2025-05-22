@@ -17,12 +17,12 @@
 #include <vsync/thread/cond.h>
 // clang-format on
 
-#define BINGO_XTOR_PRIO 198
-#include <bingo/log.h>
-#include <bingo/module.h>
-#include <bingo/switcher.h>
+#define DICE_XTOR_PRIO 198
+#include <dice/log.h>
+#include <dice/module.h>
+#include <dice/switcher.h>
 
-BINGO_MODULE_INIT()
+DICE_MODULE_INIT()
 
 #ifndef SWITCHER_LOG
     #undef log_debugf
