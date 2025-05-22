@@ -3,14 +3,14 @@
 
 ROOT!=		pwd
 WORK=		$(ROOT)/work
-BINGO=		$(ROOT)/../..
+DICE=		$(ROOT)/../..
 
 # ------------------------------------------------------------------------------
 # build dice
 # ------------------------------------------------------------------------------
 
 TARGET+=	lib
-CFG.lib=	cmake $(BINGO) \
+CFG.lib=	cmake $(DICE) \
 		-DCMAKE_BUILD_TYPE=Release \
 		-DCMAKE_INSTALL_PREFIX=$(WORK)
 BLD.lib=	$(MAKE) install
