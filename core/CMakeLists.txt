@@ -8,7 +8,7 @@ add_executable(rbtree_test rbtree_test.c rbtree.c)
 target_link_libraries(rbtree_test PUBLIC bingo.h)
 add_test(rbtree_test rbtree_test)
 
-set(SRCS mempool.c core.c switcher.c rbtree.c idmap.c)
+set(SRCS mempool.c switcher.c rbtree.c idmap.c)
 add_library(bingo-core.o OBJECT ps_builtin.c ${SRCS})
 target_link_libraries(bingo-core.o PRIVATE pthread bingo.h)
 
