@@ -20,7 +20,7 @@ endif()
 
 find_package(libvsync 4.2 CONFIG)
 if(NOT libvsync_DIR)
-  set(CMAKE_FIND_ROOT_PATH ${CMAKE_CURRENT_SOURCE_PATH}/deps/libvsync)
+  set(CMAKE_FIND_ROOT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/deps/libvsync)
   find_package(libvsync 4.2 CONFIG REQUIRED)
 endif()
 message(STATUS "Using libvsync_DIR: ${libvsync_DIR}")
