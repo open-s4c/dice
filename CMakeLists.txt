@@ -18,7 +18,12 @@ else()
   add_compile_options(-D_GNU_SOURCE)
 endif()
 
-find_package(libvsync 4.2 CONFIG REQUIRED)
+find_package(libvsync 4.2 CONFIG)
+if(NOT libvsync_DIR)
+  set(CMAKE_FIND_ROOT_PATH deps/libvsync)
+  find_package(libvsync 4.2 CONFIG REQUIRED)
+endif()
+message(STATUS "Using libvsync_DIR: ${libvsync_DIR}")
 link_libraries(libvsync::vsync)
 
 include(GNUInstallDirs)
