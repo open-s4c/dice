@@ -30,15 +30,18 @@
 
 #include <dice/module.h>
 
-#if defined(__linux__) || defined(__NetBSD__)
-    #include <dlfcn.h>
-
-    #define REAL(F, ...)                                                       \
+#define REAL_NAME(F) _dice_real_##F
+#define REAL_DECL(T, F, ...) static T (*REAL_NAME(F))(__VA_ARGS__);
+#define REAL_CALL(F, ...)                                                      \
         ((REAL_NAME(F) == NULL ?                                               \
               (REAL_NAME(F) = (__typeof(REAL_NAME(F)))dlsym(RTLD_NEXT, #F)) :  \
               0),                                                              \
          REAL_NAME(F)(__VA_ARGS__))
-    #define REAL_NAME(F) _dice_real_##F
+
+#if defined(__linux__) || defined(__NetBSD__)
+    #include <dlfcn.h>
+
+    #define REAL(F, ...) REAL_CALL(F, ##__VA_ARGS__)
 
     #define INTERPOSE(T, F, ...)                                               \
         T F(__VA_ARGS__);                                                      \
@@ -55,14 +58,12 @@
         static struct {                                                        \
             const void *fake;                                                  \
             const void *real;                                                  \
-        } _dice_interpose_##F                                                 \
+        } _dice_interpose_##F                                                  \
             __attribute__((used, section("__DATA,__interpose"))) = {           \
                 (const void *)&FAKE_NAME(F), (const void *)&F};                \
         T FAKE_NAME(F)(__VA_ARGS__)
 #else
     #error Unsupported platform
 #endif
-
-#define REAL_DECL(T, F, ...) static T (*REAL_NAME(F))(__VA_ARGS__);
 
 #endif /* DICE_INTERPOSE_H */

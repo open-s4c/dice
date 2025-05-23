@@ -124,14 +124,14 @@ _thrdata_del(thrdata_t *td)
 // -----------------------------------------------------------------------------
 // public interface
 // -----------------------------------------------------------------------------
-DICE_HIDE thread_id
+DICE_HIDE_IF thread_id
 self_id(metadata_t *md)
 {
     thrdata_t *td = (thrdata_t *)md;
     return td ? td->tid : NO_THREAD;
 }
 
-DICE_HIDE void *
+DICE_HIDE_IF void *
 self_tls(metadata_t *md, const void *global, size_t size)
 {
     uintptr_t item_key = (uintptr_t)global;

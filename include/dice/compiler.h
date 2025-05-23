@@ -22,6 +22,12 @@
     #define DICE_HIDE
 #endif
 
+#ifdef DICE_HIDE_ALL
+    #define DICE_HIDE_IF __attribute__((visibility("hidden")))
+#else
+    #define DICE_HIDE_IF
+#endif
+
 #ifndef likely
     #define likely(x) __builtin_expect(!!(x), 1)
 #endif
