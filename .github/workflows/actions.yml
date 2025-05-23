@@ -1,0 +1,51 @@
+name: dice build and test
+on: [push]
+env:
+  REGISTRY: ghcr.io
+
+jobs:
+  test-linux:
+    strategy:
+      matrix:
+        os: [ubuntu-24.04, ubuntu-22.04]
+        cfg:
+        - cc: gcc
+          cxx: g++
+        - cc: clang
+          cxx: clang++
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Configure
+        run: cmake -S. -Bbuild
+             -DCMAKE_INSTALL_PREFIX=/tmp/target
+             -DCMAKE_C_COMPILER=${{ matrix.cfg.cc }}
+             -DCMAKE_CXX_COMPILER=${{ matrix.cfg.cxx }}
+      - name: Build
+        run: cmake --build build
+      - name: Test
+        run: ctest --test-dir build --output-on-failure
+      - name: Install
+        run: cmake --install build
+
+  test-netbsd:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Configure, Build, Install
+        id: test
+        uses: vmactions/netbsd-vm@v1
+        with:
+          release: "10.1"
+          usesh: true
+          prepare: /usr/sbin/pkg_add cmake
+          run: |
+              rm -rf /tmp/target
+              cmake -S. -Bbuild -DCMAKE_INSTALL_PREFIX=/tmp/target
+              cmake --build build
+              ctest --test-dir build --output-on-failure
+              cmake --install build
