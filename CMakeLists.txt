@@ -32,7 +32,7 @@ include(cmake/export.cmake)
 
 enable_testing()
 add_subdirectory(scripts)
-add_subdirectory(deps/tmplr)
+add_subdirectory(deps)
 add_subdirectory(include)
 add_subdirectory(src)
 add_subdirectory(test)

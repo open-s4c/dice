@@ -1,28 +1,43 @@
 #!/bin/sh
+# Copyright (C) Huawei Technologies Co., Ltd. 2025. All rights reserved.
+# SPDX-License-Identifier: MIT
 
-SO=so
 if [ "$(uname)" = "Darwin" ]; then
     SO=dylib
-    DYLD=yes
-fi
-
-SCRIPT_DIR=$(dirname $(readlink -f $0))
-# if not installed, fall back to repo/build prefix
-DICE_PREFIX="/usr/local"
-if [ ! -d "$DICE_PREFIX/lib/dice" ]; then
-    DICE_PREFIX=$(readlink -f $SCRIPT_DIR/../build)
-    MOD_DIR=$DICE_PREFIX/mod
 else
-    MOD_DIR=$DICE_PREFIX/lib/dice
+    SO=so
 fi
-#echo "DICE: $DICE_PREFIX"
 
-PRELOAD="$DICE_PREFIX/lib/libdice.$SO"
+# find libdice
+PARDIR=$(readlink -f $(dirname "$0")/..)
+LIBDIR=$(readlink -f "$PARDIR")/lib
+
+if [ -f "$LIBDIR/libdice.$SO" ]; then
+    LIBDICE="$LIBDIR/libdice.$SO"
+    DICE_DIR="$LIBDIR/dice"
+    TSANO=$(which tsano)
+elif [ -f "$PARDIR/build/src/dice/libdice.$SO" ]; then
+    LIBDICE="$PARDIR/build/src/dice/libdice.$SO"
+    DICE_DIR="$PARDIR/build/src/mod"
+    TSANO="$PARDIR/deps/tsano/tsano"
+    TSANO_LIBDIR="$PARDIR/build/deps/tsano"
+else
+    echo "could not find libdice.$SO"
+    exit 1
+fi
+
+if [ ! -f "$TSANO" ]; then
+    echo "could not find tsano"
+    exit 1
+fi
+
+# prepare preload
+PRELOAD="$LIBDICE"
 args=""
 while [ "$#" != "0" ]; do
     case "$1" in
         -autocept)
-            PRELOAD="$PRELOAD:$MOD_DIR/autocept.$SO"
+            PRELOAD="$PRELOAD:$DICE_DIR/mod-autocept.$SO"
         ;;
         *)
             args="${args} $1"
@@ -31,4 +46,12 @@ while [ "$#" != "0" ]; do
     shift
 done
 
-exec $SCRIPT_DIR/tsano env LD_PRELOAD=$PRELOAD $args
+# prefix tsano's libdir if necessary
+TSANO="env TSANO_LIBDIR=$TSANO_LIBDIR $TSANO"
+
+# execute command
+if [ $SO = "dylib" ]; then
+    exec $TSANO env DYLD_INSERT_LIBRARIES=$PRELOAD $args
+else
+    exec $TSANO env LD_PRELOAD=$PRELOAD $args
+fi
