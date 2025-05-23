@@ -1,0 +1,57 @@
+#!/bin/sh
+# Copyright (C) Huawei Technologies Co., Ltd. 2025. All rights reserved.
+# SPDX-License-Identifier: MIT
+
+if [ "$(uname)" = "Darwin" ]; then
+    SO=dylib
+else
+    SO=so
+fi
+
+# find libtsano
+CURDIR=$(readlink -f $(dirname "$0"))
+LIBDIR=$(readlink -f "$CURDIR/..")/lib
+
+# if set TSANO_LIBDIR overwrite LIBDIR
+if [ ! -z "${TSANO_LIBDIR}" ]; then
+    LIBDIR=$(readlink -f "${TSANO_LIBDIR}")
+fi
+
+# find libtsano
+if [ -f "$LIBDIR/libtsano.$SO" ]; then
+    LIBTSANO="$LIBDIR/libtsano.$SO"
+elif [ -f "$CURDIR/build/libtsano.$SO" ]; then
+    LIBTSANO="$CURDIR/build/libtsano.$SO"
+else
+    echo "could not find libtsano.$SO"
+    exit 1
+fi
+
+# prepare temporary library path
+TSANO_DIR=/tmp/tsano
+mkdir -p "$TSANO_DIR"
+
+# symlink tsano to possible tsan libraries
+(
+    cd "$TSANO_DIR"
+    ln -sf $LIBTSANO libtsan.$SO.0
+    ln -sf $LIBTSANO libtsan.$SO.1
+    ln -sf $LIBTSANO libtsan.$SO.2
+    ln -sf $LIBTSANO libclang_rt.tsan-x86_64.$SO
+    if [ $SO = "dylib" ]; then
+        ln -sf $LIBTSANO libclang_rt.tsan_osx_dynamic.dylib
+    fi
+)
+
+# prepare LD_LIBRARY_PATH
+LDPATH="$TSANO_DIR"
+if [ -z "$LD_LIBRARY_PATH" ]; then
+    LDPATH="$TSANO_DIR:$LD_LIBRARY_PATH"
+fi
+
+# execute command
+if [ $SO = "dylib" ]; then
+    exec env DYLD_LIBRARY_PATH=$LDPATH $@
+else
+    exec env LD_LIBRARY_PATH=$LDPATH $@
+fi
