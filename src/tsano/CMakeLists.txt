@@ -9,4 +9,4 @@ add_custom_command(
 add_custom_target(tsano.c DEPENDS tsano.c)
 
 add_library(tsano SHARED tsano.c)
-install(TARGETS tsano DESTINATION lib/dice)
+install(TARGETS tsano DESTINATION lib/tsano)

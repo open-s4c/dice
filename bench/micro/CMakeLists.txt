@@ -11,27 +11,27 @@ add_library(microcb.o OBJECT microcb.c)
 target_link_libraries(microcb.o dice.h)
 
 set(MODS
-    self.o
     microcb.o
+    mod-self.o
     # pthread library
-    pthread_create.o
-    pthread_mutex.o
-    pthread_rwlock.o
-    pthread_cond.o
+    mod-pthread_create.o
+    mod-pthread_mutex.o
+    mod-pthread_rwlock.o
+    mod-pthread_cond.o
     # malloc free and friends
-    malloc.o
+    mod-malloc.o
     # semaphore
-    sem.o
+    mod-sem.o
     # cxa guards
-    cxa.o
+    mod-cxa.o
     # tsan instrumented calls
-    tsan.o
-    stacktrace.o)
+    mod-tsan.o
+    mod-stacktrace.o)
 
-set(PRIO_self 201)
-set(PRIO_microcb 202)
+set(PRIO_mod-self 201)
+set(PRIO_mod-microcb 202)
 
-set(OBJS ${MODS} dice-fastch.o dice-core.o)
+set(OBJS ${MODS} dice-fastch.o dice.o)
 foreach(TARGET ${OBJS})
   get_filename_component(MOD ${TARGET} NAME_WLE)
   if(PRIO_${MOD})
