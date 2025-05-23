@@ -19,6 +19,7 @@ INTERPOSE(int, pthread_rwlock_rdlock, pthread_rwlock_t *rwlock)
     return ev.ret;
 }
 
+#if !defined(__APPLE__)
 INTERPOSE(int, pthread_rwlock_timedrdlock, pthread_rwlock_t *rwlock,
           const struct timespec *abstime)
 {
@@ -34,6 +35,7 @@ INTERPOSE(int, pthread_rwlock_timedrdlock, pthread_rwlock_t *rwlock,
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_RWLOCK_TIMEDRDLOCK, &ev, &md);
     return ev.ret;
 }
+#endif
 
 INTERPOSE(int, pthread_rwlock_tryrdlock, pthread_rwlock_t *rwlock)
 {
@@ -57,6 +59,7 @@ INTERPOSE(int, pthread_rwlock_wrlock, pthread_rwlock_t *rwlock)
     return ev.ret;
 }
 
+#if !defined(__APPLE__)
 INTERPOSE(int, pthread_rwlock_timedwrlock, pthread_rwlock_t *rwlock,
           const struct timespec *abstime)
 {
@@ -72,6 +75,7 @@ INTERPOSE(int, pthread_rwlock_timedwrlock, pthread_rwlock_t *rwlock,
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_RWLOCK_TIMEDWRLOCK, &ev, &md);
     return ev.ret;
 }
+#endif
 
 INTERPOSE(int, pthread_rwlock_trywrlock, pthread_rwlock_t *rwlock)
 {

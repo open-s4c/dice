@@ -44,4 +44,4 @@ add_library(micro-dice SHARED)
 target_link_libraries(micro-dice PUBLIC ${OBJS})
 
 add_executable(micro3 micro3.c)
-target_link_libraries(micro3 micro-dice pthread)
+target_link_libraries(micro3 PUBLIC micro-dice)

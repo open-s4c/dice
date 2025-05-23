@@ -59,14 +59,14 @@ typedef struct mempool {
 static mempool_t _mp;
 
 /* bypass malloc interceptor */
-REAL_DECL(void *, malloc, size_t);
+REAL_DECL(void *, malloc, size_t n);
 
 DICE_HIDE void
 mempool_init(size_t cap)
 {
     _mp.allocated = 0;
     memset(&_mp.stack, 0, sizeof(entry_t *) * NSTACKS);
-    _mp.pool.memory = REAL(malloc, cap);
+    _mp.pool.memory = REAL_CALL(malloc, cap);
     assert(_mp.pool.memory);
     memset(_mp.pool.memory, 0, cap);
     _mp.pool.capacity = cap;
@@ -75,7 +75,7 @@ mempool_init(size_t cap)
 }
 DICE_MODULE_INIT({ mempool_init(MEMPOOL_SIZE); })
 
-DICE_HIDE void *
+DICE_HIDE_IF void *
 mempool_alloc(size_t n)
 {
     mempool_t *mp   = &_mp;
@@ -107,7 +107,7 @@ mempool_alloc(size_t n)
     return e ? e->data : NULL;
 }
 
-DICE_HIDE void *
+DICE_HIDE_IF void *
 mempool_realloc(void *ptr, size_t size)
 {
     void *p = mempool_alloc(size);
@@ -120,7 +120,7 @@ mempool_realloc(void *ptr, size_t size)
     return p;
 }
 
-DICE_HIDE void
+DICE_HIDE_IF void
 mempool_free(void *ptr)
 {
     mempool_t *mp = &_mp;

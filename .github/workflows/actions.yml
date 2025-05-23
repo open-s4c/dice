@@ -30,6 +30,22 @@ jobs:
       - name: Install
         run: cmake --install build
 
+  test-macos:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Configure
+        run: cmake -S. -Bbuild
+             -DCMAKE_INSTALL_PREFIX=/tmp/target
+      - name: Build
+        run: cmake --build build
+      - name: Test
+        run: ctest --test-dir build --output-on-failure
+      - name: Install
+        run: cmake --install build
+
   test-netbsd:
     runs-on: ubuntu-latest
     steps:

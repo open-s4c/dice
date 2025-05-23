@@ -4,7 +4,8 @@
 set(SRCS mempool.c switcher.c rbtree.c)
 
 add_library(dice SHARED ps_plugin.c ${SRCS})
-target_link_libraries(dice PUBLIC pthread dice.h)
+target_link_libraries(dice PUBLIC dice.h)
+target_link_libraries(dice PRIVATE pthread)
 install(TARGETS dice DESTINATION lib)
 
 add_library(dice.o OBJECT ps_builtin.c ${SRCS})

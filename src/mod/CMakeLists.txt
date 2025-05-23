@@ -14,7 +14,7 @@ foreach(SRC ${SRCS})
   get_filename_component(MODULE ${SRC} NAME_WLE)
   set(TARGET mod-${MODULE})
   add_library(${TARGET} SHARED ${SRC})
-  target_link_libraries(${TARGET} PRIVATE dice.h)
+  target_link_libraries(${TARGET} PRIVATE dice dice.h)
   set_target_properties(${TARGET} PROPERTIES PREFIX "")
   install(TARGETS ${TARGET} DESTINATION lib/dice)
 
@@ -23,3 +23,4 @@ foreach(SRC ${SRCS})
 endforeach()
 
 target_sources(mod-autocept PRIVATE autocept_list.S)
+target_link_libraries(mod-sequencer PRIVATE mod-self)
