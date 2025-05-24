@@ -65,3 +65,24 @@ jobs:
               cmake --build build
               ctest --test-dir build --output-on-failure
               cmake --install build
+
+  test-qemu:
+    strategy:
+      matrix:
+        build_type: [ "Debug", "Release" ]
+        toolchain: [ "arm64" ]
+    runs-on: ubuntu-latest
+    container: ghcr.io/open-s4c/dice/qemu-ci:latest
+    steps:
+      - name: Check out to run with the tests
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Configure
+        run: cmake -S . -Bbuild
+             -DCMAKE_BUILD_TYPE="-${{ matrix.build_type }}"
+             -DCMAKE_TOOLCHAIN_FILE=".github/toolchains/${{ matrix.toolchain }}.cmake"
+      - name: Build
+        run: cmake --build build
+      - name: Test
+        run: ctest --test-dir build --output-on-failure
