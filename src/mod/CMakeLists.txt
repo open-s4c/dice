@@ -3,8 +3,8 @@
 
 add_custom_command(
   OUTPUT tsan.c
-  COMMAND env $<TARGET_FILE:tmplr> ${CMAKE_CURRENT_SOURCE_DIR}/tsan.c.in >
-          tsan.c
+  COMMAND mktemp | xargs bash -c '$<TARGET_FILE:tmplr>
+    ${CMAKE_CURRENT_SOURCE_DIR}/tsan.c.in > $$0 && mv $$0 tsan.c'
   DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/tsan.c.in)
 add_custom_target(tsan.c DEPENDS tsan.c)
 
