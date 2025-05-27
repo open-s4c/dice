@@ -1,6 +1,9 @@
 # Copyright (C) Huawei Technologies Co., Ltd. 2025. All rights reserved.
 # SPDX-License-Identifier: MIT
 
+# TODO: when build is done in parallel, this target is reached by more
+# than two runners, this command is executed multiple times making
+# safe parallelism necessary (> tmp, mv tmp tsan.c instead of > tsan.c)
 add_custom_command(
   OUTPUT tsan.c
   COMMAND mktemp | xargs bash -c '$<TARGET_FILE:tmplr>
