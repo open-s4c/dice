@@ -30,13 +30,13 @@
 
 #include <dice/module.h>
 
-#define REAL_NAME(F) _dice_real_##F
+#define REAL_NAME(F)         _dice_real_##F
 #define REAL_DECL(T, F, ...) static T (*REAL_NAME(F))(__VA_ARGS__);
 #define REAL_CALL(F, ...)                                                      \
-        ((REAL_NAME(F) == NULL ?                                               \
-              (REAL_NAME(F) = (__typeof(REAL_NAME(F)))dlsym(RTLD_NEXT, #F)) :  \
-              0),                                                              \
-         REAL_NAME(F)(__VA_ARGS__))
+    ((REAL_NAME(F) == NULL ?                                                   \
+          (REAL_NAME(F) = (__typeof(REAL_NAME(F)))dlsym(RTLD_NEXT, #F)) :      \
+          0),                                                                  \
+     REAL_NAME(F)(__VA_ARGS__))
 
 #if defined(__linux__) || defined(__NetBSD__)
     #include <dlfcn.h>
@@ -66,4 +66,20 @@
     #error Unsupported platform
 #endif
 
+#if defined(__linux__)
+    #define REAL_CALL_VERSION(F, V, ...)                                       \
+        ((REAL_NAME(F) == NULL ?                                               \
+              (REAL_NAME(F) =                                                  \
+                   (__typeof(REAL_NAME(F)))dlvsym(RTLD_NEXT, #F, V)) :         \
+              0),                                                              \
+         REAL_NAME(F)(__VA_ARGS__))
+    /* Fix for glibc pthread_cond version issues. We assume that the SUT expects
+     * glibc 2.3.2 or above. For more information see
+     * https://blog.fesnel.com/blog/2009/08/25/preloading-with-multiple-symbol-versions/
+     * or issue #36
+     */
+    #define REALP(F, ...) REAL_CALL_VERSION(F, "GLIBC_2.3.2", __VA_ARGS__)
+#else
+    #define REALP(...) REAL(__VA_ARGS__)
+#endif
 #endif /* DICE_INTERPOSE_H */
