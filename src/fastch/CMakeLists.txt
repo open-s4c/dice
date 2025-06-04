@@ -41,11 +41,9 @@ add_custom_command(
     "-DCCC=${CCC}" "-DEEE=${EEE}" "-DSSS=${SSS}" -P_tmpl3 #
     > dispatch.c
   DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/dispatch.c.in)
-add_custom_target(dispatch.c DEPENDS dispatch.c)
 
 set(SRC dispatch.c)
 set(TARGET dice-fastch)
 add_library(${TARGET}.o OBJECT ${SRC})
-add_dependencies(${TARGET}.o ${SRC})
 target_link_libraries(${TARGET}.o PRIVATE dice.h)
 target_compile_options(${TARGET}.o PRIVATE -fPIC)
