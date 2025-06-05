@@ -43,15 +43,17 @@ mkdir -p "$TSANO_DIR"
     fi
 )
 
-# prepare LD_LIBRARY_PATH
-LDPATH="$TSANO_DIR"
-if [ -z "$LD_LIBRARY_PATH" ]; then
-    LDPATH="$TSANO_DIR:$LD_LIBRARY_PATH"
-fi
-
 # execute command
 if [ $SO = "dylib" ]; then
-    exec env DYLD_LIBRARY_PATH=$LDPATH $@
+    if [ -z "$DYLD_LIBRARY_PATH" ]; then
+        exec env DYLD_LIBRARY_PATH=$TSANO_DIR $@
+    else
+        exec env DYLD_LIBRARY_PATH=$TSANO_DIR:$DYLD_LIBRARY_PATH $@
+    fi
 else
-    exec env LD_LIBRARY_PATH=$LDPATH $@
+    if [ -z "$LD_LIBRARY_PATH" ]; then
+        exec env LD_LIBRARY_PATH=$TSANO_DIR $@
+    else
+        exec env LD_LIBRARY_PATH=$TSANO_DIR:$LD_LIBRARY_PATH $@
+    fi
 fi
