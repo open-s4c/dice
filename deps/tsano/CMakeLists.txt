@@ -13,14 +13,12 @@ add_compile_options(-Wall -Werror -Wextra)
 
 set(TSANO_C ${CMAKE_CURRENT_SOURCE_DIR}/tsano.c)
 
-add_custom_command(
-  OUTPUT ${TSANO_C}
+add_custom_target(
+  tsano.c
   COMMAND env tmplr ${TSANO_C}.in > ${TSANO_C}
   DEPENDS ${TSANO_C}.in)
-add_custom_target(update-tsano DEPENDS ${TSANO_C})
 
-add_library(tsano SHARED ${TSANO_C} syscall.c)
-add_dependencies(tsano update-tsano)
+add_library(tsano SHARED tsano.c syscall.c)
 
 install(TARGETS tsano DESTINATION lib)
 install(
