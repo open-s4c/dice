@@ -16,9 +16,6 @@ typedef struct {
     void *arg;
 } trampoline_t;
 
-/* On NetBSD pthread_exit is a macro mapping to __libc_thread_exit. However, we
- * have to intercept the real pthread_exit, hence, we undefine it. */
-#undef pthread_exit
 DICE_NORET
 INTERPOSE(void, pthread_exit, void *ptr)
 {
