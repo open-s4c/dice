@@ -150,9 +150,9 @@ The Pubsub system introduces several key advantages:
     metadata to the subscribers. Actual type defined by `chain`.
 
 2. **Publishing**: Publishers (such as intercept modules or the Self module)
-   publish events by calling `PS_PUBLISH(chain_id, type_id, void*, metadata_t*)`. The
-   publisher specifies the chain, event type, event payload, and a potentially
-   `NULL` metadata object.
+   publish events by calling `PS_PUBLISH(chain_id, type_id, void*,
+   metadata_t*)`. The publisher specifies the chain, event type, event payload,
+   and a potentially `NULL` metadata object.
 
 3. **Callback Handling**: The callback function is where the action happens for
    the subscriber. Upon receiving an event, the callback can inspect and process
@@ -403,3 +403,153 @@ on a per-thread basis. Each thread can store its own file descriptor in its TLS
 space, ensuring that threads do not interfere with each other’s file operations.
 A subscriber could intercept system calls like open or close, logging the event
 and associating file descriptors with the correct thread’s TLS.
+
+
+# 5. Interpose Modules
+
+In addition to the core Dice components, several interpose modules are provided
+with Dice. These modules are designed to intercept and modify the behavior of
+various system functions, allowing for detailed monitoring, testing, and
+debugging. Interposition is a powerful technique that allows developers to hook
+into existing system calls and modify their behavior or capture specific events.
+
+
+## 5.1. What is Interposition?
+
+Interposition refers to the technique of intercepting calls to system functions
+or library functions and inserting custom behavior. In Dice, this technique is
+applied to various system functions using shared libraries and dynamic linking
+mechanisms like `LD_PRELOAD`.
+
+By using interposition, Dice can intercept functions like `pthread_create`,
+`malloc`, `free`, and other system-level functions without modifying the source
+code of the application.
+
+
+## 5.2. How Interposition Works with `LD_PRELOAD`
+
+The `LD_PRELOAD` environment variable is a mechanism in Unix-like systems that
+allows users to load shared libraries before others. When an application is run,
+the dynamic linker checks the `LD_PRELOAD` variable and loads any libraries
+listed in it before the default system libraries. This allows Dice to interpose
+on functions without modifying the application’s code or the system libraries
+themselves.
+
+Each interpose module in Dice targets a specific set of functions. For example,
+`mod-pthread_create` module intercepts calls to `pthread_create` and
+`pthread_exit`, while the `mod-malloc` intercepts memory allocation functions
+like `malloc`, `free`, `calloc`, and `realloc`.
+
+When an application calls an intercepted function, the corresponding interpose
+module is triggered. For example, when `pthread_create` is called, the interpose
+module publishes events using the Pubsub system. For example, when
+`pthread_create` is intercepted, the event `EVENT_THREAD_CREATE` is published.
+Via a trampoline function, passed to the readl `pthread_create`, the new thread
+also publishes a `EVENT_THREAD_INIT` event.  Similarly, events like
+`EVENT_MUTEX_LOCK`, `EVENT_MUTEX_UNLOCK`, `EVENT_MALLOC`, and `EVENT_FREE` can
+be intercepted and published to the appropriate chains.
+
+Notes that on macOS the environment variable to control library preloading is
+called `DYLD_INSERT_LIBRARIES`.
+
+## 5.3. Interpose Modules in Dice
+
+- `mod-pthread_create`: Intercepts the `pthread_create` and `pthread_join`
+  functions to manage thread initialization and finalization.
+
+- `mod-pthread_mutex`: Intercepts mutex functions like `pthread_mutex_lock`,
+  `pthread_mutex_unlock`, `pthread_mutex_trylock`, etc to monitor thread
+  synchronization events via mutexes.
+
+- `mod-pthread_cond`: Intercepts condition variable functions like
+  `pthread_cond_wait`, `pthread_cond_signal`, etc to track thread
+  synchronization on condition variables.
+
+- `mod-malloc`: Intercepts memory allocation functions like `malloc`, `free`,
+  `calloc`, and others to track memory usage and detect leaks or abnormal memory
+  access.
+
+- `mod-cxa`: Intercepts functions related to exception handling, such as
+  `__cxa_guard_acquire`, `__cxa_guard_release`, and other related functions.
+
+- `mod-sem`: Intercepts semaphore functions like `sem_wait`, `sem_post`, etc to
+  monitor semaphore operations.
+
+- `mod-tsan`: Intercepts all functions exposed by `libtsan.so` to enable
+  fine-grained thread safety analysis.
+
+By using these interpose modules, Dice can gather detailed execution data,
+track thread behavior, monitor memory usage, and enable advanced testing and
+debugging features.
+
+
+# 6. Loading Modules
+
+Dice is designed to be loaded as a shared library with `LD_PRELOAD`.
+The core library in Dice has only the Pubsub and the Mempool modules inside.
+Addtional modules can be loaded in two ways.
+
+
+## 6.1. Shared Library Modules
+
+Consider a multithreaded application `foo`. To run `foo` with Dice the user
+simply starts it with the following command:
+
+```
+env LD_PRELOAD=/path/to/libdice.so foo <arg1>
+```
+
+Additional modules can be loaded with the `LD_PRELOAD` variable as well:
+
+```
+env LD_PRELOAD=/path/to/libdice.so:/path/to/mod-pthread_create.so:... foo <arg1>
+```
+
+Subscription callbacks are internally kept as lists of function pointers. The
+corresponding indirection cost has to be considered when deploying Dice in this
+way.
+
+### Subscription Order
+
+One has to be careful in which order the constructors of the modules are
+executed.  On NetBSD the constructors are executed left-to-right. Given a list
+of libraries `LD_PRELOAD=libdice.so:mod1.so:mod2.so`, the subscribers in
+`mod1.so` will be registered earlier than subscribers in `mod2.so`; therefore,
+callbacks in `mod1.so` will be called first.  On Linux, the constructors are
+executed right-to-left. So the opposite subscription order will result.
+
+In general, the user has to figure out the order the constructors are called by
+the linker and order the shared libraries accordingly.
+
+## 6.2. Monolithic Shared Library
+
+Modules in Dice can also linked together with the core components in a single
+shared library. In this configuration, each module is a compilation unit, i.e.,
+a `.o` file.  When compiling each of these files, the user should specify a
+priority for the subscription order by passing `-DDICE_XTOR_PRIO=VAL` to the
+compiler. `VAL` should be a number between 200 and 1000. The lower the value,
+the higher the priority when subscribing chains.
+
+Assume the user creates a library `libmydice.so` containing `pubsub.o`,
+`mempool.o`, `mod-pthread_create.o` and a user-defined module `mymod.o`. To load
+this bundle, the user simply uses `LD_PRELOAD`:
+
+```
+env LD_PRELOAD=/path/to/libmydice.so foo <arg1>
+```
+
+If the user compiles all modules with LTO option, the resulting library can be
+much faster than relying on the approach of section 6.1. Nevertheless, without
+further steps, the resulting library above will use function pointers when
+executing the callbacks of the subscribers.
+
+### Fast-Chain Module
+
+Dice provides a auto-generated module called Fast-Chain module or `fastch.o`,
+which directly call the subscriber callbacks without relying on function
+pointers. To do that, the Fast-Chain module employs large switch cases on the
+`chain_id`, `type_id` and priority values.  However, the ranges of these three
+dimensions has to be limited to keep the size of the generated code manageable.
+
+For instructions on how to use Fast-Chain, see the `CMakeLists.txt` inside
+`src/fastch`.
