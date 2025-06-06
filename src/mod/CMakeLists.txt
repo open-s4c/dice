@@ -1,17 +1,14 @@
 # Copyright (C) Huawei Technologies Co., Ltd. 2025. All rights reserved.
 # SPDX-License-Identifier: MIT
 
-# TODO: when build is done in parallel, this target is reached by more
-# than two runners, this command is executed multiple times making
-# safe parallelism necessary (> tmp, mv tmp tsan.c instead of > tsan.c)
-add_custom_command(
-  OUTPUT tsan.c
-  COMMAND mktemp | xargs bash -c '$<TARGET_FILE:tmplr>
-    ${CMAKE_CURRENT_SOURCE_DIR}/tsan.c.in > $$0 && mv $$0 tsan.c'
+add_custom_target(
+  tsan.c
+  COMMAND $<TARGET_FILE:tmplr> ${CMAKE_CURRENT_SOURCE_DIR}/tsan.c.in >
+          ${CMAKE_CURRENT_SOURCE_DIR}/tsan.c
   DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/tsan.c.in)
+add_dependencies(tsan.c tmplr)
 
 file(GLOB SRCS *.c *.cpp)
-list(APPEND SRCS tsan.c)
 foreach(SRC ${SRCS})
   get_filename_component(MODULE ${SRC} NAME_WLE)
   set(TARGET mod-${MODULE})
