@@ -80,7 +80,7 @@ jobs:
           fetch-depth: 0
       - name: Configure
         run: cmake -S . -Bbuild
-             -DCMAKE_BUILD_TYPE="-${{ matrix.build_type }}"
+             -DCMAKE_BUILD_TYPE="${{ matrix.build_type }}"
              -DCMAKE_TOOLCHAIN_FILE=".github/toolchains/${{ matrix.toolchain }}.cmake"
       - name: Build
         run: cmake --build build
