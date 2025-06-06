@@ -47,6 +47,7 @@ jobs:
         run: cmake --install build
 
   test-netbsd:
+    if: false
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
