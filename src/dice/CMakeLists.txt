@@ -14,5 +14,4 @@ target_link_libraries(dice.o PRIVATE pthread dice.h)
 add_executable(rbtree_test rbtree_test.c rbtree.c)
 target_link_libraries(rbtree_test PUBLIC dice.h)
 
-# TODO: remove CMAKE_CROSSCOMPILING_EMULATOR
-add_test(rbtree_test ${CMAKE_CROSSCOMPILING_EMULATOR} rbtree_test)
+add_test(NAME rbtree_test COMMAND rbtree_test)
