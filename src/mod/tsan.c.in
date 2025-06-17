@@ -29,15 +29,19 @@ DICE_MODULE_INIT()
 #define UPCASE
 #define SZ 0
 #define FUNC
-#define BITS         0
-#define _tmpl_unmute // --------------------------------------------------------
+#define BITS          0
+#define uBITS         u8
+#define ma_FUNC_event ma_read_event
+#define _tmpl_unmute  // --------------------------------------------------------
 _tmpl_map(nix, );
 _tmpl_map(UPCASE, _tmpl_upcase);
 _tmpl_map(EV_TYPE, EVENT_MA_UPCASE);
 _tmpl_map(PARAM_strong, 0);
 _tmpl_map(PARAM_weak, 1);
 
-/* empty tsan initialization */
+/* -----------------------------------------------------------------------------
+ * empty tsan functions
+ * -------------------------------------------------------------------------- */
 void
 __tsan_init()
 {
@@ -128,26 +132,29 @@ __tsan_memcpy(void *dst, const void *src, size_t len)
 {
     return memcpy(dst, src, len);
 }
-/* plain reads and writes */
+
+/* -----------------------------------------------------------------------------
+ * plain reads and writes
+ * -------------------------------------------------------------------------- */
 _tmpl_begin(PFX = [[nix; unaligned_]], FUNC = [[read; write]],
             SZ = [[1; 2; 4; 8; 16]]);
 void
 __tsan_PFXFUNCSZ(void *a)
 {
-    memaccess_t ma = {
-        .pc      = (INTERPOSE_PC),
-        .func    = "PFXFUNCSZ",
-        .addr    = (uintptr_t)a,
-        .size    = SZ,
-        .argu128 = 0,
-        .failed  = false,
+    struct ma_FUNC_event ev = {
+        .pc   = (INTERPOSE_PC),
+        .func = "PFXFUNCSZ",
+        .addr = (void *)a,
+        .size = SZ,
     };
 
-    PS_PUBLISH(INTERCEPT_EVENT, EV_TYPE(FUNC), &ma, 0);
+    PS_PUBLISH(INTERCEPT_EVENT, EV_TYPE(FUNC), &ev, 0);
 }
 _tmpl_end();
 
-/* plain reads and writes 2 values */
+/* -----------------------------------------------------------------------------
+ * plain reads and writes 2 values
+ * -------------------------------------------------------------------------- */
 _tmpl_begin(FUNC = [[read; write]], SZ = [[1; 2; 4; 8; 16]]);
 void
 __tsan_FUNCSZ_pc(void *a, void *b)
@@ -158,175 +165,191 @@ __tsan_FUNCSZ_pc(void *a, void *b)
 }
 _tmpl_end();
 
-/* atomic loads */
+/* -----------------------------------------------------------------------------
+ * atomic loads
+ * -------------------------------------------------------------------------- */
 _tmpl_begin(BITS = [[8; 16; 32; 64]]);
 uintBITS_t
 __tsan_atomicBITS_load(const volatile uintBITS_t *a, int mo)
 {
-    (void)mo;
-    memaccess_t ma = {
+    struct ma_aread_event ev = {
         .pc      = (INTERPOSE_PC),
         .func    = "atomicBITS_load",
-        .addr    = (uintptr_t)a,
+        .addr    = (void *)a,
         .size    = (BITS >> 3),
-        .argu128 = 0,
-        .failed  = false,
+        .mo      = mo,
+        .val.u64 = 0,
     };
 
     metadata_t md = {0};
-    PS_PUBLISH(INTERCEPT_BEFORE, EV_TYPE(AREAD), &ma, &md);
-    uintBITS_t r = __atomic_load_n(a, __ATOMIC_SEQ_CST);
-    ma.argu128   = (__uint128_t)r;
-    PS_PUBLISH(INTERCEPT_AFTER, EV_TYPE(AREAD), &ma, &md);
-    return r;
+    PS_PUBLISH(INTERCEPT_BEFORE, EV_TYPE(AREAD), &ev, &md);
+    ev.val.uBITS = __atomic_load_n(a, __ATOMIC_SEQ_CST);
+    PS_PUBLISH(INTERCEPT_AFTER, EV_TYPE(AREAD), &ev, &md);
+    return ev.val.uBITS;
 }
 _tmpl_end();
 
-/* atomic stores */
+/* -----------------------------------------------------------------------------
+ * atomic stores
+ * -------------------------------------------------------------------------- */
 _tmpl_begin(BITS = [[8; 16; 32; 64]]);
 void
 __tsan_atomicBITS_store(volatile uintBITS_t *a, uintBITS_t v, int mo)
 {
-    (void)mo;
-    memaccess_t ma = {
-        .pc      = INTERPOSE_PC,
-        .func    = "atomicBITS_store",
-        .addr    = (uintptr_t)a,
-        .size    = (BITS >> 3),
-        .argu128 = (__uint128_t)v,
-        .failed  = false,
+    struct ma_awrite_event ev = {
+        .pc        = INTERPOSE_PC,
+        .func      = "atomicBITS_store",
+        .addr      = (void *)a,
+        .size      = (BITS >> 3),
+        .mo        = mo,
+        .val.uBITS = v,
     };
 
     metadata_t md = {0};
-    PS_PUBLISH(INTERCEPT_BEFORE, EV_TYPE(AWRITE), &ma, &md);
+    PS_PUBLISH(INTERCEPT_BEFORE, EV_TYPE(AWRITE), &ev, &md);
     __atomic_store_n(a, v, __ATOMIC_SEQ_CST);
-    PS_PUBLISH(INTERCEPT_AFTER, EV_TYPE(AWRITE), &ma, &md);
+    PS_PUBLISH(INTERCEPT_AFTER, EV_TYPE(AWRITE), &ev, &md);
 }
 _tmpl_end();
 
-
-/* xchg */
+/* -----------------------------------------------------------------------------
+ * xchg
+ * -------------------------------------------------------------------------- */
 _tmpl_begin(BITS = [[8; 16; 32; 64]]);
 uintBITS_t
 __tsan_atomicBITS_exchange(volatile uintBITS_t *a, uintBITS_t v, int mo)
 {
-    (void)mo;
-    memaccess_t ma = {
-        .pc      = INTERPOSE_PC,
-        .func    = "atomicBITS_exchange",
-        .addr    = (uintptr_t)a,
-        .size    = (BITS >> 3),
-        .argu128 = (__uint128_t)v,
-        .failed  = false,
+    struct ma_xchg_event ev = {
+        .pc        = INTERPOSE_PC,
+        .func      = "atomicBITS_exchange",
+        .addr      = (void *)a,
+        .size      = (BITS >> 3),
+        .mo        = mo,
+        .val.uBITS = v,
+        .old.u64   = 0,
     };
 
     metadata_t md = {0};
-    PS_PUBLISH(INTERCEPT_BEFORE, EV_TYPE(XCHG), &ma, &md);
-    uintBITS_t r = __atomic_exchange_n(a, v, __ATOMIC_SEQ_CST);
-    ma.argu128   = (__uint128_t)r;
-    PS_PUBLISH(INTERCEPT_AFTER, EV_TYPE(XCHG), &ma, &md);
-    return r;
+    PS_PUBLISH(INTERCEPT_BEFORE, EV_TYPE(XCHG), &ev, &md);
+    ev.old.uBITS = __atomic_exchange_n(a, v, __ATOMIC_SEQ_CST);
+    PS_PUBLISH(INTERCEPT_AFTER, EV_TYPE(XCHG), &ev, &md);
+    return ev.old.uBITS;
 }
 _tmpl_end();
 
-/* fetch_RMW */
+/* -----------------------------------------------------------------------------
+ * fetch_RMW
+ * -------------------------------------------------------------------------- */
 _tmpl_begin(Op = [[add; sub; and; or ; xor; nand]], BITS = [[8; 16; 32; 64]]);
 uintBITS_t
 __tsan_atomicBITS_fetch_Op(volatile uintBITS_t *a, uintBITS_t v, int mo)
 {
-    (void)mo;
-    memaccess_t ma = {
-        .pc      = INTERPOSE_PC,
-        .func    = "atomicBITS_fetch_Op",
-        .addr    = (uintptr_t)a,
-        .size    = (BITS >> 3),
-        .argu128 = (__uint128_t)v,
-        .failed  = false,
+    struct ma_rmw_event ev = {
+        .pc        = INTERPOSE_PC,
+        .func      = "atomicBITS_fetch_Op",
+        .addr      = (void *)a,
+        .size      = (BITS >> 3),
+        .mo        = mo,
+        .val.uBITS = v,
+        .old.u64   = 0,
     };
 
     metadata_t md = {0};
-    PS_PUBLISH(INTERCEPT_BEFORE, EV_TYPE(RMW), &ma, &md);
-    uintBITS_t r = __atomic_fetch_Op(a, v, __ATOMIC_SEQ_CST);
-    ma.argu128   = (__uint128_t)r;
-    PS_PUBLISH(INTERCEPT_AFTER, EV_TYPE(RMW), &ma, &md);
-    return r;
+    PS_PUBLISH(INTERCEPT_BEFORE, EV_TYPE(RMW), &ev, &md);
+    ev.old.uBITS = __atomic_fetch_Op(a, v, __ATOMIC_SEQ_CST);
+    PS_PUBLISH(INTERCEPT_AFTER, EV_TYPE(RMW), &ev, &md);
+    return ev.old.uBITS;
 }
 _tmpl_end();
 
-
-/* compare_exchange_{strong,weak} */
+/* -----------------------------------------------------------------------------
+ * compare_exchange_{strong,weak}
+ * -------------------------------------------------------------------------- */
 _tmpl_begin(SUF = [[strong; weak]], BITS = [[8; 16; 32; 64]]);
 int
 __tsan_atomicBITS_compare_exchange_SUF(volatile uintBITS_t *a, uintBITS_t *c,
                                        uintBITS_t v, int mo)
 {
-    (void)mo;
-    memaccess_t ma = {
-        .pc      = INTERPOSE_PC,
-        .func    = "atomicBITS_compare_exchange_SUF",
-        .addr    = (uintptr_t)a,
-        .size    = (BITS >> 3),
-        .argu128 = (__uint128_t)v,
-        .failed  = false,
+    struct ma_cmpxchg_event ev = {
+        .pc        = INTERPOSE_PC,
+        .func      = "atomicBITS_compare_exchange_SUF",
+        .addr      = (void *)a,
+        .size      = (BITS >> 3),
+        .mo        = mo,
+        .val.uBITS = v,
+        .cmp.uBITS = *c,
+        .old.u64   = 0,
+        .ok        = 0,
     };
 
     metadata_t md = {0};
-    PS_PUBLISH(INTERCEPT_BEFORE, EV_TYPE(CMPXCHG), &ma, &md);
-    int r = __atomic_compare_exchange_n(a, c, v, PARAM_SUF, __ATOMIC_SEQ_CST,
+    PS_PUBLISH(INTERCEPT_BEFORE, EV_TYPE(CMPXCHG), &ev, &md);
+    ev.ok = __atomic_compare_exchange_n(a, c, v, PARAM_SUF, __ATOMIC_SEQ_CST,
                                         __ATOMIC_SEQ_CST);
-    assert(r == 0 || r == 1);
-    ma.failed = r == 0;
-    PS_PUBLISH(INTERCEPT_AFTER, EV_TYPE(CMPXCHG), &ma, &md);
-    return r;
+    ev.old.uBITS = *c;
+    PS_PUBLISH(INTERCEPT_AFTER, EV_TYPE(CMPXCHG), &ev, &md);
+    return ev.ok;
 }
 _tmpl_end();
 
-/* compare_exchange_val */
+/* -----------------------------------------------------------------------------
+ * compare_exchange_val
+ * -------------------------------------------------------------------------- */
 _tmpl_begin(BITS = [[8; 16; 32; 64]]);
 uintBITS_t
 __tsan_atomicBITS_compare_exchange_val(volatile uintBITS_t *a, uintBITS_t c,
                                        uintBITS_t v, int mo)
 {
-    (void)mo;
-    memaccess_t ma = {
-        .pc      = INTERPOSE_PC,
-        .func    = "atomicBITS_compare_exchange_val",
-        .addr    = (uintptr_t)a,
-        .size    = (BITS >> 3),
-        .argu128 = (__uint128_t)v,
-        .failed  = false,
+    struct ma_cmpxchg_event ev = {
+        .pc        = INTERPOSE_PC,
+        .func      = "atomicBITS_compare_exchange_val",
+        .addr      = (void *)a,
+        .size      = (BITS >> 3),
+        .mo        = mo,
+        .val.uBITS = v,
+        .cmp.uBITS = c,
+        .old.u64   = 0,
+        .ok        = 0,
     };
-
     metadata_t md = {0};
-    PS_PUBLISH(INTERCEPT_BEFORE, EV_TYPE(CMPXCHG), &ma, &md);
-    int r = __atomic_compare_exchange_n(a, &c, v, 0, __ATOMIC_SEQ_CST,
-                                        __ATOMIC_SEQ_CST);
-    assert(r == 0 || r == 1);
-    ma.failed = r == 0;
-    PS_PUBLISH(INTERCEPT_AFTER, EV_TYPE(CMPXCHG), &ma, &md);
-    return c;
+    PS_PUBLISH(INTERCEPT_BEFORE, EV_TYPE(CMPXCHG), &ev, &md);
+    ev.ok        = __atomic_compare_exchange_n(a, &c, v, 0, __ATOMIC_SEQ_CST,
+                                               __ATOMIC_SEQ_CST);
+    ev.old.uBITS = c;
+    PS_PUBLISH(INTERCEPT_AFTER, EV_TYPE(CMPXCHG), &ev, &md);
+    return ev.old.uBITS;
 }
 _tmpl_end();
 
-/* atomic fences */
+/* -----------------------------------------------------------------------------
+ * atomic fences
+ * -------------------------------------------------------------------------- */
 void
 __tsan_atomic_thread_fence(int mo)
 {
-    (void)mo;
+    struct ma_fence_event ev = {
+        .pc   = INTERPOSE_PC,
+        .func = "atomic_thread_fence",
+        .mo   = mo,
+    };
 
     metadata_t md = {0};
-    PS_PUBLISH(INTERCEPT_BEFORE, EVENT_MA_FENCE, 0, &md);
+    PS_PUBLISH(INTERCEPT_BEFORE, EVENT_MA_FENCE, &ev, &md);
     __atomic_thread_fence(__ATOMIC_SEQ_CST);
-    PS_PUBLISH(INTERCEPT_AFTER, EVENT_MA_FENCE, 0, &md);
+    PS_PUBLISH(INTERCEPT_AFTER, EVENT_MA_FENCE, &ev, &md);
 }
 
 void
 __tsan_atomic_signal_fence(int mo)
 {
-    (void)mo;
+    struct ma_fence_event ev = {
+        .pc   = INTERPOSE_PC,
+        .func = "atomic_signal_fence",
+        .mo   = mo,
+    };
 
     metadata_t md = {0};
-    PS_PUBLISH(INTERCEPT_BEFORE, EVENT_MA_FENCE, 0, &md);
+    PS_PUBLISH(INTERCEPT_BEFORE, EVENT_MA_FENCE, &ev, &md);
     __atomic_signal_fence(__ATOMIC_SEQ_CST);
-    PS_PUBLISH(INTERCEPT_AFTER, EVENT_MA_FENCE, 0, &md);
+    PS_PUBLISH(INTERCEPT_AFTER, EVENT_MA_FENCE, &ev, &md);
 }

@@ -36,4 +36,119 @@ typedef struct memaccess {
     bool failed; // optional argument to indicate operation failed
 } memaccess_t;
 
+struct ma_read_event {
+    const void *pc;
+    const char *func;
+    void *addr;
+    size_t size;
+};
+
+struct ma_write_event {
+    const void *pc;
+    const char *func;
+    void *addr;
+    size_t size;
+};
+
+struct ma_aread_event {
+    const void *pc;
+    const char *func;
+    void *addr;
+    size_t size;
+    int mo;
+    union {
+        uint8_t u8;
+        uint16_t u16;
+        uint32_t u32;
+        uint64_t u64;
+    } val;
+};
+
+struct ma_awrite_event {
+    const void *pc;
+    const char *func;
+    void *addr;
+    size_t size;
+    int mo;
+    union {
+        uint8_t u8;
+        uint16_t u16;
+        uint32_t u32;
+        uint64_t u64;
+    } val;
+};
+
+struct ma_xchg_event {
+    const void *pc;
+    const char *func;
+    void *addr;
+    size_t size;
+    int mo;
+    union {
+        uint8_t u8;
+        uint16_t u16;
+        uint32_t u32;
+        uint64_t u64;
+    } val;
+    union {
+        uint8_t u8;
+        uint16_t u16;
+        uint32_t u32;
+        uint64_t u64;
+    } old;
+};
+
+struct ma_rmw_event {
+    const void *pc;
+    const char *func;
+    void *addr;
+    size_t size;
+    int mo;
+    union {
+        uint8_t u8;
+        uint16_t u16;
+        uint32_t u32;
+        uint64_t u64;
+    } val;
+    union {
+        uint8_t u8;
+        uint16_t u16;
+        uint32_t u32;
+        uint64_t u64;
+    } old;
+};
+
+struct ma_cmpxchg_event {
+    const void *pc;
+    const char *func;
+    void *addr;
+    size_t size;
+    int mo;
+    union {
+        uint8_t u8;
+        uint16_t u16;
+        uint32_t u32;
+        uint64_t u64;
+    } val;
+    union {
+        uint8_t u8;
+        uint16_t u16;
+        uint32_t u32;
+        uint64_t u64;
+    } cmp;
+    union {
+        uint8_t u8;
+        uint16_t u16;
+        uint32_t u32;
+        uint64_t u64;
+    } old;
+    int ok;
+};
+
+struct ma_fence_event {
+    const void *pc;
+    const char *func;
+    int mo;
+};
+
 #endif /* DICE_MEMACCESS_H */
