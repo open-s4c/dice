@@ -1,0 +1,547 @@
+/*
+ * Copyright (C) Huawei Technologies Co., Ltd. 2025. All rights reserved.
+ * SPDX-License-Identifier: MIT
+ */
+#include <assert.h>
+#include <stdint.h>
+#include <stdlib.h>
+#include <string.h>
+
+#include <dice/intercept.h>
+#include <dice/intercept/memaccess.h>
+#include <dice/interpose.h>
+#include <dice/log.h>
+#include <dice/module.h>
+#include <dice/pubsub.h>
+
+
+#define _tmpl_mute // ----------- simple empty macros to make clangd happy -----
+#define _tmpl_map(...)
+#define _tmpl_begin(...)
+#define _tmpl_end(...)
+#define __atomic_fetch_Op __atomic_exchange_n
+#define uintBITS_t        int
+#define PARAM_SUF         0
+#define EV_TYPE(...)      EVENT_MA_READ
+#define UPCASE
+#define SZ 0
+#define FUNC
+#define BITS  0
+#define uBITS u8
+#define MM_Op +
+#define MP_Op
+#define _tmpl_unmute // --------------------------------------------------------
+_tmpl_map(nix, );
+_tmpl_map(UPCASE, _tmpl_upcase);
+_tmpl_map(EV_TYPE, EVENT_MA_UPCASE);
+_tmpl_map(PARAM_strong, 0);
+_tmpl_map(PARAM_weak, 1);
+
+#define ensure(COND)                                                           \
+    {                                                                          \
+        if (!(COND)) {                                                         \
+            log_fatalf("error: %s\n", #COND);                                  \
+        }                                                                      \
+    }
+
+typedef void (*test_f)(void);
+
+static size_t test_count;
+static test_f tests[4096];
+
+static void
+init_event(void *ptr, size_t n)
+{
+    char *buf = ptr;
+    for (size_t i = 0; i < n; i++)
+        buf[i] = rand() % 256;
+}
+
+/* -----------------------------------------------------------------------------
+ * plain reads
+ * -------------------------------------------------------------------------- */
+static struct ma_read_event _exp_read;
+
+_tmpl_begin(PFX = [[nix; unaligned_]], SZ = [[1; 2; 4; 8; 16]]);
+void __tsan_PFXreadSZ(void *a);
+static void
+test_PFXreadSZ(void)
+{
+    log_printf("Testing PFXreadSZ\n");
+    init_event(&_exp_read, sizeof(struct ma_read_event));
+    __tsan_PFXreadSZ(_exp_read.addr);
+}
+static DICE_CTOR void
+register_PFXreadSZ(void)
+{
+    tests[test_count++] = test_PFXreadSZ;
+}
+_tmpl_end();
+
+PS_SUBSCRIBE(INTERCEPT_EVENT, EVENT_MA_READ, {
+    struct ma_read_event *ev = EVENT_PAYLOAD(ev);
+    _tmpl_begin(PFX = [[nix; unaligned_]], SZ = [[1; 2; 4; 8; 16]]);
+    if (strcmp(ev->func, "PFXreadSZ") == 0) {
+        ensure(ev->addr == _exp_read.addr);
+        ensure(ev->size == SZ);
+    } else
+        _tmpl_end();
+    ensure(false && "unexpected");
+});
+
+/* -----------------------------------------------------------------------------
+ * plain writes
+ * -------------------------------------------------------------------------- */
+static struct ma_write_event _exp_write;
+
+_tmpl_begin(PFX = [[nix; unaligned_]], SZ = [[1; 2; 4; 8; 16]]);
+void __tsan_PFXwriteSZ(void *a);
+static void
+test_PFXwriteSZ(void)
+{
+    log_printf("Testing PFXwriteSZ\n");
+    init_event(&_exp_write, sizeof(struct ma_write_event));
+    __tsan_PFXwriteSZ(_exp_write.addr);
+}
+static DICE_CTOR void
+register_PFXwriteSZ(void)
+{
+    tests[test_count++] = test_PFXwriteSZ;
+}
+_tmpl_end();
+
+PS_SUBSCRIBE(INTERCEPT_EVENT, EVENT_MA_WRITE, {
+    struct ma_read_event *ev = EVENT_PAYLOAD(ev);
+    _tmpl_begin(PFX = [[nix; unaligned_]], SZ = [[1; 2; 4; 8; 16]]);
+    if (strcmp(ev->func, "PFXwriteSZ") == 0) {
+        ensure(ev->addr == _exp_write.addr);
+        ensure(ev->size == SZ);
+    } else
+        _tmpl_end();
+    ensure(false && "unexpected");
+});
+
+/* -----------------------------------------------------------------------------
+ * plain double reads and writes
+ * -------------------------------------------------------------------------- */
+_tmpl_mute;
+#if 0
+/* plain reads and writes 2 values */
+_tmpl_begin(FUNC = [[read; write]], SZ = [[1; 2; 4; 8; 16]]);
+void
+__tsan_FUNCSZ_pc(void *a, void *b)
+{
+    (void)a;
+    (void)b;
+    PS_PUBLISH(INTERCEPT_EVENT, EV_TYPE(FUNC), 0, 0);
+}
+_tmpl_end();
+#endif
+_tmpl_unmute;
+
+/* -----------------------------------------------------------------------------
+ * atomic loads
+ * -------------------------------------------------------------------------- */
+static struct ma_aread_event _exp_aread;
+
+_tmpl_begin(BITS = [[8; 16; 32; 64]]);
+uintBITS_t __tsan_atomicBITS_load(const volatile uintBITS_t *a, int mo);
+
+
+static void
+test_atomicBITS_load(void)
+{
+    log_printf("Testing atomicBITS_load\n");
+    init_event(&_exp_aread, sizeof(struct ma_aread_event));
+    uintBITS_t val  = _exp_aread.val.uBITS;
+    _exp_aread.addr = (void *)&val;
+
+    uintBITS_t ret = __tsan_atomicBITS_load(&val, _exp_aread.mo);
+    ensure(ret == _exp_aread.val.uBITS);
+}
+static DICE_CTOR void
+register_atomicBITS_load(void)
+{
+    tests[test_count++] = test_atomicBITS_load;
+}
+_tmpl_end();
+
+PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_MA_AREAD, {
+    struct ma_aread_event *ev = EVENT_PAYLOAD(ev);
+    _tmpl_begin(BITS = [[8; 16; 32; 64]]);
+    if (strcmp(ev->func, "atomicBITS_load") == 0) {
+        ensure(ev->addr == _exp_aread.addr);
+        ensure(ev->size == (BITS >> 3));
+        ensure(ev->mo == _exp_aread.mo);
+    } else
+        _tmpl_end();
+    ensure(false && "unexpected");
+});
+
+PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_MA_AREAD, {
+    struct ma_aread_event *ev = EVENT_PAYLOAD(ev);
+    _tmpl_begin(BITS = [[8; 16; 32; 64]]);
+    if (strcmp(ev->func, "atomicBITS_load") == 0) {
+        ensure(ev->addr == _exp_aread.addr);
+        ensure(ev->size == (BITS >> 3));
+        ensure(ev->mo == _exp_aread.mo);
+        ensure(ev->val.uBITS == _exp_aread.val.uBITS);
+    } else
+        _tmpl_end();
+    ensure(false && "unexpected");
+});
+
+/* -----------------------------------------------------------------------------
+ * atomic stores
+ * -------------------------------------------------------------------------- */
+static struct ma_awrite_event _exp_awrite;
+
+_tmpl_begin(BITS = [[8; 16; 32; 64]]);
+void __tsan_atomicBITS_store(volatile uintBITS_t *a, uintBITS_t v, int mo);
+
+static void
+test_atomicBITS_store(void)
+{
+    log_printf("Testing atomicBITS_store\n");
+    init_event(&_exp_awrite, sizeof(struct ma_awrite_event));
+    uintBITS_t val   = ~_exp_awrite.val.uBITS;
+    _exp_awrite.addr = (void *)&val;
+    __tsan_atomicBITS_store(&val, _exp_awrite.val.uBITS, _exp_awrite.mo);
+    ensure(val == _exp_awrite.val.uBITS);
+}
+static DICE_CTOR void
+register_atomicBITS_store(void)
+{
+    tests[test_count++] = test_atomicBITS_store;
+}
+_tmpl_end();
+
+PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_MA_AWRITE, {
+    struct ma_awrite_event *ev = EVENT_PAYLOAD(ev);
+    _tmpl_begin(BITS = [[8; 16; 32; 64]]);
+    if (strcmp(ev->func, "atomicBITS_store") == 0) {
+        ensure(ev->addr == _exp_awrite.addr);
+        ensure(ev->size == (BITS >> 3));
+        ensure(ev->mo == _exp_awrite.mo);
+        ensure(ev->val.uBITS == _exp_awrite.val.uBITS);
+    } else
+        _tmpl_end();
+    ensure(false && "unexpected");
+});
+
+PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_MA_AWRITE, {
+    struct ma_awrite_event *ev = EVENT_PAYLOAD(ev);
+    _tmpl_begin(BITS = [[8; 16; 32; 64]]);
+    if (strcmp(ev->func, "atomicBITS_store") == 0) {
+        ensure(ev->addr == _exp_awrite.addr);
+        ensure(ev->size == (BITS >> 3));
+        ensure(ev->mo == _exp_awrite.mo);
+        ensure(ev->val.uBITS == _exp_awrite.val.uBITS);
+    } else
+        _tmpl_end();
+    ensure(false && "unexpected");
+});
+
+/* -----------------------------------------------------------------------------
+ * xchg
+ * -------------------------------------------------------------------------- */
+struct ma_xchg_event _exp_xchg;
+
+_tmpl_begin(BITS = [[8; 16; 32; 64]]);
+uintBITS_t __tsan_atomicBITS_exchange(volatile uintBITS_t *a, uintBITS_t v,
+                                      int mo);
+
+static void
+test_atomicBITS_exchange(void)
+{
+    log_printf("Testing atomicBITS_exchange\n");
+    init_event(&_exp_xchg, sizeof(struct ma_xchg_event));
+    uintBITS_t val = _exp_xchg.old.uBITS;
+    _exp_xchg.addr = (void *)&val;
+    uintBITS_t ret =
+        __tsan_atomicBITS_exchange(&val, _exp_xchg.val.uBITS, _exp_xchg.mo);
+    ensure(val == _exp_xchg.val.uBITS);
+    ensure(ret == _exp_xchg.old.uBITS);
+}
+static DICE_CTOR void
+register_atomicBITS_xchg(void)
+{
+    tests[test_count++] = test_atomicBITS_exchange;
+}
+_tmpl_end();
+
+PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_MA_XCHG, {
+    struct ma_xchg_event *ev = EVENT_PAYLOAD(ev);
+    _tmpl_begin(BITS = [[8; 16; 32; 64]]);
+    if (strcmp(ev->func, "atomicBITS_exchange") == 0) {
+        ensure(ev->addr == _exp_xchg.addr);
+        ensure(ev->size == (BITS >> 3));
+        ensure(ev->mo == _exp_xchg.mo);
+        ensure(ev->val.uBITS == _exp_xchg.val.uBITS);
+        ensure(ev->old.uBITS == 0);
+    } else
+        _tmpl_end();
+    ensure(false && "unexpected");
+});
+
+PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_MA_XCHG, {
+    struct ma_xchg_event *ev = EVENT_PAYLOAD(ev);
+    _tmpl_begin(BITS = [[8; 16; 32; 64]]);
+    if (strcmp(ev->func, "atomicBITS_exchange") == 0) {
+        ensure(ev->addr == _exp_xchg.addr);
+        ensure(ev->size == (BITS >> 3));
+        ensure(ev->mo == _exp_xchg.mo);
+        ensure(ev->val.uBITS == _exp_xchg.val.uBITS);
+        ensure(ev->old.uBITS == _exp_xchg.old.uBITS);
+    } else
+        _tmpl_end();
+    ensure(false && "unexpected");
+});
+
+/* -----------------------------------------------------------------------------
+ * fetch_RMW
+ * -------------------------------------------------------------------------- */
+struct ma_rmw_event _exp_rmw;
+
+_tmpl_map(MM_add, +);
+_tmpl_map(MM_sub, -);
+_tmpl_map(MM_and, &);
+_tmpl_map(MM_or, |);
+_tmpl_map(MM_xor, ^);
+_tmpl_map(MM_nand, &);
+_tmpl_map(MP_add, );
+_tmpl_map(MP_sub, );
+_tmpl_map(MP_and, );
+_tmpl_map(MP_or, );
+_tmpl_map(MP_xor, );
+_tmpl_map(MP_nand, ~);
+
+_tmpl_begin(Op = [[add; sub; and; or ; xor; nand]], BITS = [[8; 16; 32; 64]]);
+uintBITS_t __tsan_atomicBITS_fetch_Op(volatile uintBITS_t *a, uintBITS_t v,
+                                      int mo);
+static void
+test_atomicBITS_fetch_Op(void)
+{
+    log_printf("Testing atomicBITS_fetch_Op\n");
+    init_event(&_exp_rmw, sizeof(struct ma_rmw_event));
+    uintBITS_t val = _exp_rmw.old.uBITS;
+    _exp_rmw.addr  = (void *)&val;
+    uintBITS_t ret =
+        __tsan_atomicBITS_fetch_Op(&val, _exp_rmw.val.uBITS, _exp_rmw.mo);
+    uintBITS_t exp = MP_Op(_exp_rmw.old.uBITS MM_Op _exp_rmw.val.uBITS);
+    ensure(val == exp && "after return");
+    ensure(ret == _exp_rmw.old.uBITS);
+}
+static DICE_CTOR void
+register_atomicBITS_fetch_Op(void)
+{
+    tests[test_count++] = test_atomicBITS_fetch_Op;
+}
+_tmpl_end();
+
+PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_MA_RMW, {
+    struct ma_rmw_event *ev = EVENT_PAYLOAD(ev);
+    _tmpl_begin(Op   = [[add; sub; and; or ; xor; nand]],
+                BITS = [[8; 16; 32; 64]]);
+    if (strcmp(ev->func, "atomicBITS_fetch_Op") == 0) {
+        ensure(ev->addr == _exp_rmw.addr);
+        ensure(ev->size == (BITS >> 3));
+        ensure(ev->mo == _exp_rmw.mo);
+        ensure(ev->val.uBITS == _exp_rmw.val.uBITS && "INTERCEPT_BEFORE");
+        ensure(ev->old.uBITS == 0);
+    } else
+        _tmpl_end();
+    ensure(false && "unexpected");
+});
+
+PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_MA_RMW, {
+    struct ma_rmw_event *ev = EVENT_PAYLOAD(ev);
+    _tmpl_begin(Op   = [[add; sub; and; or ; xor; nand]],
+                BITS = [[8; 16; 32; 64]]);
+    if (strcmp(ev->func, "atomicBITS_fetch_Op") == 0) {
+        ensure(ev->addr == _exp_rmw.addr);
+        ensure(ev->size == (BITS >> 3));
+        ensure(ev->mo == _exp_rmw.mo);
+        ensure(ev->val.uBITS == _exp_rmw.val.uBITS && "INTERCEPT_AFTER");
+        ensure(ev->old.uBITS == _exp_rmw.old.uBITS && "INTERCEPT_AFTER");
+    } else
+        _tmpl_end();
+    ensure(false && "unexpected");
+});
+
+/* -----------------------------------------------------------------------------
+ * compare_exchange_{strong,weak}
+ * -------------------------------------------------------------------------- */
+struct ma_cmpxchg_event _exp_cmpxchg;
+
+_tmpl_begin(SUF = [[strong; weak]], BITS = [[8; 16; 32; 64]]);
+int __tsan_atomicBITS_compare_exchange_SUF(volatile uintBITS_t *a,
+                                           uintBITS_t *c, uintBITS_t v, int mo);
+static void
+test_atomicBITS_compare_exchange_SUF(void)
+{
+    int ret;
+
+    log_printf("Testing atomicBITS_compare_exchange_SUF sucess\n");
+    init_event(&_exp_cmpxchg, sizeof(struct ma_cmpxchg_event));
+    uintBITS_t var         = _exp_cmpxchg.old.uBITS;
+    _exp_cmpxchg.addr      = (void *)&var;
+    _exp_cmpxchg.ok        = 1;
+    _exp_cmpxchg.cmp.uBITS = _exp_cmpxchg.old.uBITS;
+    uintBITS_t cmp         = _exp_cmpxchg.cmp.uBITS;
+
+    ret = __tsan_atomicBITS_compare_exchange_SUF(
+        &var, &cmp, _exp_cmpxchg.val.uBITS, _exp_cmpxchg.mo);
+
+    ensure(ret == 1);
+    ensure(cmp == _exp_cmpxchg.old.uBITS);
+    ensure(var == _exp_cmpxchg.val.uBITS);
+
+    log_printf("Testing atomicBITS_compare_exchange_SUF failure\n");
+    init_event(&_exp_cmpxchg, sizeof(struct ma_cmpxchg_event));
+    var                    = _exp_cmpxchg.old.uBITS;
+    _exp_cmpxchg.addr      = (void *)&var;
+    _exp_cmpxchg.ok        = 0;
+    _exp_cmpxchg.cmp.uBITS = ~_exp_cmpxchg.old.uBITS;
+    cmp                    = _exp_cmpxchg.cmp.uBITS;
+
+    ret = __tsan_atomicBITS_compare_exchange_SUF(
+        &var, &cmp, _exp_cmpxchg.val.uBITS, _exp_cmpxchg.mo);
+
+    ensure(ret == 0);
+    ensure(cmp == _exp_cmpxchg.old.uBITS);
+    ensure(var == _exp_cmpxchg.old.uBITS);
+}
+
+static DICE_CTOR void
+register_atomicBITS_compare_exchange_SUF(void)
+{
+    tests[test_count++] = test_atomicBITS_compare_exchange_SUF;
+}
+_tmpl_end();
+
+_tmpl_begin(BITS = [[8; 16; 32; 64]]);
+uintBITS_t __tsan_atomicBITS_compare_exchange_val(volatile uintBITS_t *a,
+                                                  uintBITS_t c, uintBITS_t v,
+                                                  int mo);
+static void
+test_atomicBITS_compare_exchange_val(void)
+{
+    uintBITS_t ret;
+
+    log_printf("Testing atomicBITS_compare_exchange_val sucess\n");
+    init_event(&_exp_cmpxchg, sizeof(struct ma_cmpxchg_event));
+    uintBITS_t var         = _exp_cmpxchg.old.uBITS;
+    _exp_cmpxchg.addr      = (void *)&var;
+    _exp_cmpxchg.ok        = 1;
+    _exp_cmpxchg.cmp.uBITS = _exp_cmpxchg.old.uBITS;
+
+    ret = __tsan_atomicBITS_compare_exchange_val(
+        &var, _exp_cmpxchg.cmp.uBITS, _exp_cmpxchg.val.uBITS, _exp_cmpxchg.mo);
+
+    ensure(ret == _exp_cmpxchg.old.uBITS);
+    ensure(ret == _exp_cmpxchg.cmp.uBITS);
+    ensure(_exp_cmpxchg.ok);
+    ensure(var == _exp_cmpxchg.val.uBITS);
+
+    log_printf("Testing atomicBITS_compare_exchange_val failure\n");
+    init_event(&_exp_cmpxchg, sizeof(struct ma_cmpxchg_event));
+    var                    = _exp_cmpxchg.old.uBITS;
+    _exp_cmpxchg.addr      = (void *)&var;
+    _exp_cmpxchg.ok        = 0;
+    _exp_cmpxchg.cmp.uBITS = ~_exp_cmpxchg.old.uBITS;
+
+    ret = __tsan_atomicBITS_compare_exchange_val(
+        &var, _exp_cmpxchg.cmp.uBITS, _exp_cmpxchg.val.uBITS, _exp_cmpxchg.mo);
+
+    ensure(ret == _exp_cmpxchg.old.uBITS);
+    ensure(var == _exp_cmpxchg.old.uBITS);
+    ensure(ret != _exp_cmpxchg.cmp.uBITS);
+    ensure(!_exp_cmpxchg.ok);
+}
+
+static DICE_CTOR void
+register_atomicBITS_compare_exchange_val(void)
+{
+    tests[test_count++] = test_atomicBITS_compare_exchange_val;
+}
+_tmpl_end();
+PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_MA_CMPXCHG, {
+    struct ma_cmpxchg_event *ev = EVENT_PAYLOAD(ev);
+    _tmpl_begin(SUF = [[strong; weak; val]], BITS = [[8; 16; 32; 64]]);
+    if (strcmp(ev->func, "atomicBITS_compare_exchange_SUF") == 0) {
+        ensure(ev->addr == _exp_cmpxchg.addr);
+        ensure(ev->size == (BITS >> 3));
+        ensure(ev->mo == _exp_cmpxchg.mo);
+        ensure(ev->val.uBITS == _exp_cmpxchg.val.uBITS && "INTERCEPT_BEFORE");
+        ensure(ev->old.uBITS == 0);
+        ensure(ev->ok == 0);
+    } else
+        _tmpl_end();
+    ensure(false && "unexpected");
+});
+
+PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_MA_CMPXCHG, {
+    struct ma_cmpxchg_event *ev = EVENT_PAYLOAD(ev);
+    _tmpl_begin(SUF = [[strong; weak; val]], BITS = [[8; 16; 32; 64]]);
+    if (strcmp(ev->func, "atomicBITS_compare_exchange_SUF") == 0) {
+        ensure(ev->addr == _exp_cmpxchg.addr);
+        ensure(ev->size == (BITS >> 3));
+        ensure(ev->mo == _exp_cmpxchg.mo);
+        ensure(ev->val.uBITS == _exp_cmpxchg.val.uBITS && "INTERCEPT_AFTER");
+        ensure(ev->old.uBITS == _exp_cmpxchg.old.uBITS && "INTERCEPT_AFTER");
+        ensure(ev->ok == _exp_cmpxchg.ok);
+    } else
+        _tmpl_end();
+    ensure(false && "unexpected");
+});
+
+/* -----------------------------------------------------------------------------
+ * atomic fences
+ * -------------------------------------------------------------------------- */
+struct ma_fence_event _exp_fence;
+
+_tmpl_begin(FENCE = [[thread; signal]]);
+void __tsan_atomic_FENCE_fence(int mo);
+void
+test_atomic_FENCE_fence(void)
+{
+    log_printf("Testing atomic_FENCE_fence\n");
+    init_event(&_exp_fence, sizeof(struct ma_fence_event));
+    __tsan_atomic_FENCE_fence(_exp_fence.mo);
+}
+static DICE_CTOR void
+register_atomic_FENCE_fence(void)
+{
+    tests[test_count++] = test_atomic_FENCE_fence;
+}
+_tmpl_end();
+
+PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_MA_FENCE, {
+    struct ma_fence_event *ev = EVENT_PAYLOAD(ev);
+    _tmpl_begin(FENCE = [[thread; signal]]);
+    if (strcmp(ev->func, "atomic_FENCE_fence") == 0) {
+        ensure(ev->mo == _exp_fence.mo);
+    } else
+        _tmpl_end();
+    ensure(false && "unexpected");
+});
+
+PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_MA_FENCE, {
+    struct ma_fence_event *ev = EVENT_PAYLOAD(ev);
+    _tmpl_begin(FENCE = [[thread; signal]]);
+    if (strcmp(ev->func, "atomic_FENCE_fence") == 0) {
+        ensure(ev->mo == _exp_fence.mo);
+    } else
+        _tmpl_end();
+    ensure(false && "unexpected");
+});
+
+
+int
+main(void)
+{
+    for (size_t i = test_count; i > 0; i--)
+        tests[i - 1]();
+    return 0;
+}

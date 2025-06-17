@@ -46,3 +46,4 @@ foreach(SRC ${SRCS})
 endforeach()
 
 add_subdirectory(interpose)
+add_subdirectory(tsan)
