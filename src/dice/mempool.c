@@ -8,7 +8,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define DICE_XTOR_PRIO 197
+#define DICE_MODULE_PRIO 0
 #include <dice/interpose.h>
 #include <dice/mempool.h>
 #include <dice/module.h>
@@ -73,6 +73,7 @@ mempool_init(size_t cap)
     _mp.pool.next     = 0;
     caslock_init(&_mp.lock);
 }
+
 DICE_MODULE_INIT({ mempool_init(MEMPOOL_SIZE); })
 
 DICE_HIDE_IF void *

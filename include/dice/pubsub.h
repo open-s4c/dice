@@ -67,12 +67,6 @@ enum ps_cb_err {
     PS_CB_DROP = -2,
 };
 
-/* Return values of ps_dispatch. */
-struct ps_dispatched {
-    enum ps_cb_err err;
-    uint8_t count;
-};
-
 /* ps_callback_f is the subscriber interface.
  *
  * Callbacks can return the following codes:
@@ -118,54 +112,11 @@ enum ps_err ps_publish(const chain_id chain, const type_id type, void *event,
  * system.
  *
  * Returns 0 if success, otherwise non-zero.
+ *
+ * Note: Instead of directly using this function, use `PS_SUBSCRIBE()` macro
+ * defined in `dice/module.h` header file.
  */
 int ps_subscribe(chain_id chain, type_id type, ps_cb_f cb, int prio);
-
-#define PS_CBNAME(X, Y, Z)                                                     \
-    V_JOIN(V_JOIN(ps_callback, V_JOIN(X, V_JOIN(Y, Z))), )
-
-/* PS_SUBSCRIBE macro creates a callback handler and subscribes to a
- * chain.
- *
- * On load time, a constructor function registers the handler to the
- * chain. The order in which modules are loaded must be considered when
- * planning for the relation between handlers. The order is either given
- * by linking order (if compilation units are linked together) or by the
- * order of shared libraries in LD_PRELOAD.
- */
-#define PS_SUBSCRIBE(CHAIN, TYPE, CALLBACK)                                    \
-    static inline enum ps_cb_err _ps_callback_##CHAIN##_##TYPE(                \
-        const chain_id chain, const type_id type, void *event, metadata_t *md) \
-    {                                                                          \
-        /* Parameters are marked as unused to silence warnings. */             \
-        /* Nevertheless, the callback can use parameters without issues. */    \
-        (void)chain;                                                           \
-        (void)type;                                                            \
-        (void)event;                                                           \
-        (void)md;                                                              \
-                                                                               \
-        CALLBACK;                                                              \
-                                                                               \
-        /* By default, callbacks return OK to continue chain publishing. */    \
-        return PS_CB_OK;                                                       \
-    }                                                                          \
-    DICE_HIDE enum ps_cb_err PS_CBNAME(CHAIN, TYPE, DICE_XTOR_PRIO)(           \
-        const chain_id chain, const type_id type, void *event, metadata_t *md) \
-    {                                                                          \
-        return _ps_callback_##CHAIN##_##TYPE(chain, type, event, md);          \
-    }                                                                          \
-    static enum ps_cb_err V_JOIN(V_JOIN(_ps_callback, CHAIN), TYPE)(           \
-        const chain_id chain, const type_id type, void *event, metadata_t *md) \
-    {                                                                          \
-        return _ps_callback_##CHAIN##_##TYPE(chain, type, event, md);          \
-    }                                                                          \
-    static void DICE_CTOR _ps_subscribe_##CHAIN##_##TYPE(void)                 \
-    {                                                                          \
-        if (ps_subscribe(CHAIN, TYPE,                                          \
-                         V_JOIN(V_JOIN(_ps_callback, CHAIN), TYPE),            \
-                         (DICE_XTOR_PRIO - 1)) != 0)                           \
-            log_fatalf("could not subscribe to %s:%s\n", #CHAIN, #TYPE);       \
-    }
 
 /* EVENT_PAYLOAD casts the event argument `event` to type of the given
  * variable.

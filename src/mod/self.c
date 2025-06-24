@@ -21,10 +21,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#ifndef DICE_XTOR_PRIO
-    #define DICE_XTOR_PRIO 201
-#endif
-
+#define DICE_MODULE_PRIO 4
 #include <dice/chains/intercept.h>
 #include <dice/log.h>
 #include <dice/mempool.h>
@@ -230,7 +227,6 @@ _self_handle_event(const chain_id chain, const type_id type, void *event,
     (void)chain;
     (void)md;
     thrdata_t *td = _thrdata_get();
-
 
     if (unlikely(td == NULL))
         return PS_CB_STOP;

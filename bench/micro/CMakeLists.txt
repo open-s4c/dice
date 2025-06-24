@@ -28,14 +28,14 @@ set(MODS
     mod-tsan.o
     mod-stacktrace.o)
 
-set(PRIO_mod-self 201)
-set(PRIO_mod-microcb 202)
+set(PRIO_mod-self 4)
+set(PRIO_mod-microcb 5)
 
-set(OBJS ${MODS} dice-fastch.o dice.o)
+set(OBJS ${MODS} dice.o)
 foreach(TARGET ${OBJS})
   get_filename_component(MOD ${TARGET} NAME_WLE)
   if(PRIO_${MOD})
-    target_compile_options(${TARGET} PRIVATE -DDICE_XTOR_PRIO=${PRIO_${MOD}})
+    target_compile_options(${TARGET} PRIVATE -DDICE_MODULE_PRIO=${PRIO_${MOD}})
   endif()
   target_compile_options(${TARGET} PRIVATE -fPIC)
 endforeach()

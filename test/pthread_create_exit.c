@@ -8,6 +8,7 @@
 #include <dice/chains/intercept.h>
 #include <dice/events/pthread.h>
 #include <dice/events/thread.h>
+#include <dice/module.h>
 #include <dice/pubsub.h>
 
 int init_called;

@@ -1,6 +1,6 @@
 #include "defs.h"
 
-void
+DICE_WEAK void
 publish(struct event *ev)
 {
     (void)ev;

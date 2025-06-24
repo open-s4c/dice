@@ -1,0 +1,68 @@
+/*
+ * Copyright (C) Huawei Technologies Co., Ltd. 2025. All rights reserved.
+ * SPDX-License-Identifier: MIT
+ */
+#include <dice/pubsub.h>
+#define _tmpl_mute
+#define _tmpl_begin(...)
+#define _tmpl_map(...)
+#define _tmpl_end()
+#define _tmpl2_begin(...)
+#define _tmpl2_end()
+#define _tmpl3_begin(...)
+#define _tmpl3_end()
+#define CCC 0
+#define EEE 0
+#define SSS 0
+#define _tmpl_unmute
+
+/* chain dispatcher prototypes */
+_tmpl_begin(CCC = CHAINS);
+DICE_WEAK DICE_HIDE enum ps_cb_err
+ps_dispatch_CCC_(const chain_id chain, const type_id type, void *event,
+                 metadata_t *md)
+{
+    (void)chain;
+    (void)type;
+    (void)event;
+    (void)md;
+    return PS_CB_OFF;
+}
+_tmpl_end();
+
+/* main dispatcher */
+DICE_HIDE enum ps_cb_err
+ps_dispatch_(const chain_id chain, const type_id type, void *event,
+             metadata_t *md)
+{
+    switch (chain) {
+        default:
+            return PS_CB_OFF;
+            _tmpl_begin(CCC = CHAINS);
+        case CCC:
+            return ps_dispatch_CCC_(chain, type, event, md);
+            _tmpl_end();
+    }
+}
+
+
+_tmpl_begin(SSS = SLOTS);
+DICE_WEAK DICE_HIDE bool
+ps_dispatch_SSS_on_(void)
+{
+    return false;
+}
+_tmpl_end();
+
+DICE_HIDE
+int
+ps_dispatch_max(void)
+{
+    int max = -1;
+    _tmpl_begin(SSS = SLOTS);
+    if (ps_dispatch_SSS_on_())
+        max = max < SSS ? SSS : max;
+    _tmpl_end();
+
+    return max;
+}
