@@ -223,6 +223,7 @@ _self_handle_after(const chain_id chain, const type_id type, void *event,
     return PS_CB_STOP;
 }
 
+static bool _ready;
 DICE_HIDE enum ps_cb_err
 _self_handle_event(const chain_id chain, const type_id type, void *event,
                    metadata_t *md)
@@ -231,6 +232,11 @@ _self_handle_event(const chain_id chain, const type_id type, void *event,
     (void)md;
     thrdata_t *td = _thrdata_get();
 
+    if (!_ready) {
+        td     = _thrdata_new();
+        _ready = true;
+        // must be main thread
+    }
 
     if (unlikely(td == NULL))
         return PS_CB_STOP;
