@@ -3,4 +3,3 @@
 
 add_subdirectory(dice)
 add_subdirectory(mod)
-add_subdirectory(fastch)
