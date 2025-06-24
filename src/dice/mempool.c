@@ -73,7 +73,18 @@ mempool_init(size_t cap)
     _mp.pool.next     = 0;
     caslock_init(&_mp.lock);
 }
-DICE_MODULE_INIT({ mempool_init(MEMPOOL_SIZE); })
+
+DICE_HIDE void
+mempool_init_once(void)
+{
+    caslock_acquire(&_mp.lock);
+    if (_mp.pool.memory)
+        goto out;
+    mempool_init(MEMPOOL_SIZE);
+out:
+    caslock_release(&_mp.lock);
+}
+DICE_MODULE_INIT({ mempool_init_once(); })
 
 DICE_HIDE_IF void *
 mempool_alloc(size_t n)
