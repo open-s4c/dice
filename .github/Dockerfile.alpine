@@ -1,0 +1,9 @@
+FROM alpine:latest
+
+# If behind firewall proxy
+#ENV http_proxy=http://127.0.0.1:3128
+#ENV https_proxy=http://127.0.0.1:3128
+#ENV APK="apk --no-check-certificate"
+ENV APK="apk"
+
+RUN $APK update && $APK add cmake gcc g++ make
