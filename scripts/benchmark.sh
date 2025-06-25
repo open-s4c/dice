@@ -11,9 +11,10 @@ OPTION_RUN_MICRO=yes
 OPTION_SUM_MICRO=yes
 OPTION_RUN_LEVELDB=yes
 OPTION_SUM_LEVELDB=yes
-OPTION_WIKI=yes
+OPTION_PULL_WIKI=yes
+OPTION_MVTO_WIKI=yes
 WIKI_URL="ssh://git@github.com/open-s4c/dice.wiki.git"
-FORCE_SUMMARY=
+FORCE_SUMMARY=no
 MAKE=make
 
 enabled() {
@@ -63,8 +64,11 @@ output "# Dice Benchmarks"
 output
 output "- Host: $HOST"
 output "- Date: $DATE"
-output "- Tag:  $(git rev-parse --short HEAD)"
-output "> $(uname -a)"
+output "- Tag:  $(git rev-parse --short HEAD) ($(git branch --show-current))"
+output
+output '```'
+output "$(uname -a | fmt -w 70)"
+output '```'
 
 if enabled $OPTION_SUM_MICRO; then
     $MAKE -sC bench/micro process FORCE=$FORCE_SUMMARY
@@ -83,11 +87,9 @@ if enabled $OPTION_SUM_LEVELDB; then
     | mlr --icsv --ifs=\; --omd cat >> $SUMMARY
 fi
 
+# PULL WIKI
 
-# CLONE WIKI
-
-if enabled $OPTION_WIKI; then
-
+if enabled $OPTION_PULL_WIKI; then
     if [ ! -d dice.wiki ]; then
         git clone $WIKI_URL
     fi
@@ -95,8 +97,11 @@ if enabled $OPTION_WIKI; then
     if [ -d dice.wiki ]; then
         (cd dice.wiki && git pull)
     fi
+fi
 
+# MOVE REPORT TO WIKI
+
+if enabled $OPTION_MVTO_WIKI; then
     mv $SUMMARY dice.wiki/bench
-
 fi
 
