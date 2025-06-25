@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: MIT
  */
 #include <assert.h>
-
 #include <dice/module.h>
 #include <dice/pubsub.h>
 
@@ -44,7 +43,7 @@ ps_callback_0_99_199_(const chain_id chain, const type_id type, void *event,
     return PS_CB_OK;
 }
 
-struct ps_dispatched
+DICE_WEAK struct ps_dispatched
 ps_dispatch_(const chain_id chain, const type_id type, void *event,
              metadata_t *md)
 {
