@@ -231,7 +231,6 @@ _self_handle_event(const chain_id chain, const type_id type, void *event,
     (void)md;
     thrdata_t *td = _thrdata_get();
 
-
     if (unlikely(td == NULL))
         return PS_CB_STOP;
 

@@ -8,6 +8,7 @@
 #define DICE_XTOR_PRIO 199
 #include <dice/module.h>
 #include <dice/pubsub.h>
+bool ps_initd_(void);
 
 #define MAX_SUBSCRIPTIONS 255
 
@@ -26,7 +27,6 @@ struct chain {
     struct type types[MAX_TYPES];
 };
 
-static bool _initd;
 static struct chain _chains[MAX_CHAINS];
 
 // -----------------------------------------------------------------------------
@@ -56,7 +56,9 @@ _ps_subscribe_type(chain_id chain, type_id type, ps_cb_f cb)
 int
 ps_subscribe(chain_id chain, type_id type, ps_cb_f cb)
 {
-    if (chain == 0 || chain > MAX_CHAINS)
+    if (chain == CHAIN_CONTROL)
+        return PS_OK;
+    if (chain > MAX_CHAINS)
         return PS_INVALID;
     if (type != ANY_TYPE)
         return _ps_subscribe_type(chain, type, cb);
@@ -111,7 +113,7 @@ enum ps_err
 ps_publish(const chain_id chain, const type_id type, void *event,
            metadata_t *md)
 {
-    if (unlikely(!_initd))
+    if (unlikely(!ps_initd_()))
         return PS_DROP;
 
     struct ps_dispatched ret = ps_dispatch_(chain, type, event, md);
@@ -124,8 +126,4 @@ ps_publish(const chain_id chain, const type_id type, void *event,
     return _ps_publish(chain, type, event, md, ret.count);
 }
 
-// -----------------------------------------------------------------------------
-// init
-// -----------------------------------------------------------------------------
-
-DICE_MODULE_INIT({ _initd = true; })
+DICE_MODULE_INIT({ (void)ps_initd_(); })

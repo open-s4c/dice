@@ -16,29 +16,45 @@
 #ifndef DICE_MODULE_H
 #define DICE_MODULE_H
 #include <dice/compiler.h>
+#include <dice/events/dice.h>
 #include <dice/log.h>
+#include <dice/pubsub.h>
 
 #define Y(V) #V
 #define X(V) Y(V)
 
-#define DICE_MODULE_INIT(CODE)                                                \
-    static DICE_CTOR void _module_init()                                      \
+#define CHAIN_CONTROL 0
+
+#define DICE_MODULE_INIT(CODE)                                                 \
+    static bool _module_init()                                                 \
+    {                                                                          \
+        static bool _done = false;                                             \
+        if (!_done) {                                                          \
+            _done = true;                                                      \
+            do {                                                               \
+                CODE                                                           \
+            } while (0);                                                       \
+            return true;                                                       \
+        }                                                                      \
+        return false;                                                          \
+    }                                                                          \
+    static DICE_CTOR void _module_ctr()                                        \
+    {                                                                          \
+        if (_module_init())                                                    \
+            log_printf("LOADED[" X(DICE_XTOR_PRIO) "] %s\n", __FILE__);        \
+    }                                                                          \
+    PS_SUBSCRIBO(CHAIN_CONTROL, EVENT_DICE_INIT, {                             \
+        if (_module_init())                                                    \
+            log_printf("FORCE LOADED[" X(DICE_XTOR_PRIO) "] %s\n", __FILE__);  \
+    })
+
+
+#define DICE_MODULE_FINI(CODE)                                                 \
+    static DICE_DTOR void _module_fini()                                       \
     {                                                                          \
         if (1) {                                                               \
             CODE                                                               \
         }                                                                      \
-        log_printf("LOADED[" X(DICE_XTOR_PRIO) "] %s\n", __FILE__);           \
     }
-
-#define DICE_MODULE_FINI(CODE)                                                \
-    static DICE_DTOR void _module_fini()                                      \
-    {                                                                          \
-        if (1) {                                                               \
-            CODE                                                               \
-        }                                                                      \
-    }
-
-void dice_init(void);
-void dice_fini(void);
 
 #endif /* DICE_MODULE_H */

@@ -8,7 +8,7 @@
 #include <dice/module.h>
 #include <dice/pubsub.h>
 
-static bool _initd;
+bool ps_initd_(void);
 
 DICE_HIDE int
 ps_subscribe(chain_id chain, type_id type, ps_cb_f cb)
@@ -34,6 +34,9 @@ DICE_HIDE enum ps_err
 ps_publish(const chain_id chain, const type_id type, void *event,
            metadata_t *md)
 {
+    if (unlikely(!ps_initd_()))
+        return PS_DROP;
+
     struct ps_dispatched ret = ps_dispatch_(chain, type, event, md);
     if (likely(ret.err == PS_CB_STOP))
         return PS_OK;
@@ -44,8 +47,4 @@ ps_publish(const chain_id chain, const type_id type, void *event,
     return PS_OK;
 }
 
-// -----------------------------------------------------------------------------
-// init
-// -----------------------------------------------------------------------------
-
-DICE_MODULE_INIT({ _initd = true; })
+DICE_MODULE_INIT({ (void)ps_initd_(); })
