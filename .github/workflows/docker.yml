@@ -20,6 +20,8 @@ jobs:
         container:
           - name: "qemu-ci"
             path: ".github/Dockerfile.qemu"
+          - name: "alpine-ci"
+            path: ".github/Dockerfile.alpine"
 
     steps:
       - name: Checkout repository
