@@ -166,6 +166,28 @@ int ps_subscribe(chain_id chain, type_id type, ps_cb_f cb);
             log_fatalf("could not subscribe to %s:%s\n", #CHAIN, #TYPE);       \
     }
 
+#define PS_SUBSCRIBO(CHAIN, TYPE, CALLBACK)                                    \
+    static inline enum ps_cb_err _ps_callback_##CHAIN##_##TYPE(                \
+        const chain_id chain, const type_id type, void *event, metadata_t *md) \
+    {                                                                          \
+        /* Parameters are marked as unused to silence warnings. */             \
+        /* Nevertheless, the callback can use parameters without issues. */    \
+        (void)chain;                                                           \
+        (void)type;                                                            \
+        (void)event;                                                           \
+        (void)md;                                                              \
+                                                                               \
+        CALLBACK;                                                              \
+                                                                               \
+        /* By default, callbacks return OK to continue chain publishing. */    \
+        return PS_CB_OK;                                                       \
+    }                                                                          \
+    enum ps_cb_err PS_CBNAME(CHAIN, TYPE, DICE_XTOR_PRIO)(                     \
+        const chain_id chain, const type_id type, void *event, metadata_t *md) \
+    {                                                                          \
+        return _ps_callback_##CHAIN##_##TYPE(chain, type, event, md);          \
+    }
+
 /* EVENT_PAYLOAD casts the event argument `event` to type of the given
  * variable.
  *

@@ -1,7 +1,7 @@
 # Copyright (C) Huawei Technologies Co., Ltd. 2025. All rights reserved.
 # SPDX-License-Identifier: MIT
 
-set(SRCS mempool.c switcher.c rbtree.c)
+set(SRCS mempool.c switcher.c rbtree.c ps_control.c ps_subs.c)
 
 add_library(dice SHARED ps_plugin.c ${SRCS})
 target_link_libraries(dice PUBLIC dice.h)

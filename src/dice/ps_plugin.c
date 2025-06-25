@@ -8,6 +8,7 @@
 #define DICE_XTOR_PRIO 199
 #include <dice/module.h>
 #include <dice/pubsub.h>
+bool ps_initd_(void);
 
 #define MAX_SUBSCRIPTIONS 255
 
@@ -25,12 +26,6 @@ struct type {
 struct chain {
     struct type types[MAX_TYPES];
 };
-
-static enum {
-    UNINITED,
-    STARTING,
-    READY,
-} _state;
 
 static struct chain _chains[MAX_CHAINS];
 
@@ -61,7 +56,9 @@ _ps_subscribe_type(chain_id chain, type_id type, ps_cb_f cb)
 int
 ps_subscribe(chain_id chain, type_id type, ps_cb_f cb)
 {
-    if (chain == 0 || chain > MAX_CHAINS)
+    if (chain == CHAIN_CONTROL)
+        return PS_OK;
+    if (chain > MAX_CHAINS)
         return PS_INVALID;
     if (type != ANY_TYPE)
         return _ps_subscribe_type(chain, type, cb);
@@ -112,13 +109,11 @@ ps_dispatch_(const chain_id chain, const type_id type, void *event,
     return (struct ps_dispatched){.err = PS_CB_OFF};
 }
 
-static bool _initd(void);
-
 enum ps_err
 ps_publish(const chain_id chain, const type_id type, void *event,
            metadata_t *md)
 {
-    if (unlikely(!_initd()))
+    if (unlikely(!ps_initd_()))
         return PS_DROP;
 
     struct ps_dispatched ret = ps_dispatch_(chain, type, event, md);
@@ -131,29 +126,4 @@ ps_publish(const chain_id chain, const type_id type, void *event,
     return _ps_publish(chain, type, event, md, ret.count);
 }
 
-// -----------------------------------------------------------------------------
-// init
-// -----------------------------------------------------------------------------
-
-void mempool_init_once(void);
-
-static bool
-_initd(void)
-{
-    switch (_state) {
-        case UNINITED:
-            // This must be the main thread, at latest the thread creation
-            _state = STARTING;
-            mempool_init_once();
-            _state = READY;
-            break;
-        case STARTING:
-            // We are already initializing above, so we have
-            return false;
-        default:
-            break;
-    }
-    return true;
-}
-
-DICE_MODULE_INIT({ (void)_initd(); })
+DICE_MODULE_INIT({ (void)ps_initd_(); })
