@@ -49,6 +49,12 @@ while [ "$#" != "0" ]; do
             PRELOAD="$PRELOAD:$DICE_DIR/mod-pthread_cond.$SO"
             PRELOAD="$PRELOAD:$DICE_DIR/mod-pthread_rwlock.$SO"
         ;;
+        -malloc)
+            PRELOAD="$PRELOAD:$DICE_DIR/mod-malloc.$SO"
+        ;;
+        -cxa)
+            PRELOAD="$PRELOAD:$DICE_DIR/mod-cxa.$SO"
+        ;;
         -autocept)
             PRELOAD="$PRELOAD:$DICE_DIR/mod-autocept.$SO"
         ;;
