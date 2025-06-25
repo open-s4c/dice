@@ -20,7 +20,7 @@ foreach(SRC ${SRCS})
 
   if(TSAN_${TARGET})
     target_compile_options(${TARGET} PRIVATE -fsanitize=thread)
-    target_link_options(${TARGET} PRIVATE -fsanitize=thread)
+    target_link_libraries(${TARGET} PRIVATE tsano)
     if(CMAKE_C_COMPILER_ID STREQUAL "Clang")
       target_compile_options(${TARGET} PRIVATE -shared-libsan)
       target_link_options(${TARGET} PRIVATE -shared-libsan)
