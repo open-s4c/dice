@@ -49,3 +49,4 @@ add_custom_target(expand-tests)
 
 add_subdirectory(interpose)
 add_subdirectory(tsan)
+add_subdirectory(order)
