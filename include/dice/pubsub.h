@@ -111,15 +111,15 @@ enum ps_err ps_publish(const chain_id chain, const type_id type, void *event,
 
 /* ps_subscribe subscribes a callback in a chain for an event.
  *
- * The call order of `ps_subscribe` determines the relative order in which
- * the callbacks are called with published events.
+ * `prio` determines the relative order in which the callbacks are called with
+ * published events.
  *
  * Note: ps_subscribe should only be called during initialization of the
  * system.
  *
  * Returns 0 if success, otherwise non-zero.
  */
-int ps_subscribe(chain_id chain, type_id type, ps_cb_f cb);
+int ps_subscribe(chain_id chain, type_id type, ps_cb_f cb, int prio);
 
 #define PS_CBNAME(X, Y, Z)                                                     \
     V_JOIN(V_JOIN(ps_callback, V_JOIN(X, V_JOIN(Y, Z))), )
@@ -162,7 +162,8 @@ int ps_subscribe(chain_id chain, type_id type, ps_cb_f cb);
     static void DICE_CTOR _ps_subscribe_##CHAIN##_##TYPE(void)                 \
     {                                                                          \
         if (ps_subscribe(CHAIN, TYPE,                                          \
-                         V_JOIN(V_JOIN(_ps_callback, CHAIN), TYPE)) != 0)      \
+                         V_JOIN(V_JOIN(_ps_callback, CHAIN), TYPE),            \
+                         (DICE_XTOR_PRIO - 1)) != 0)                           \
             log_fatalf("could not subscribe to %s:%s\n", #CHAIN, #TYPE);       \
     }
 

@@ -6,6 +6,7 @@
 #include <stdio.h>
 
 #define DICE_XTOR_PRIO 199
+#include <dice/mempool.h>
 #include <dice/module.h>
 #include <dice/pubsub.h>
 
@@ -15,11 +16,13 @@ struct sub {
     chain_id chain;
     chain_id type;
     ps_cb_f cb;
+    int prio;
+    struct sub *next;
 };
 
 struct type {
     size_t count;
-    struct sub subs[MAX_SUBSCRIPTIONS + 1];
+    struct sub *head;
 };
 
 struct chain {
@@ -33,37 +36,61 @@ static struct chain _chains[MAX_CHAINS];
 // subscribe interface
 // -----------------------------------------------------------------------------
 
-static int
-_ps_subscribe_type(chain_id chain, type_id type, ps_cb_f cb)
+static void
+_ps_subscribe_sorted(struct sub **cur, chain_id chain, type_id type, ps_cb_f cb,
+                     int prio)
 {
+    struct sub *sub;
+    struct sub *next = NULL;
+
+    if (*cur == NULL || (*cur)->prio > prio) {
+        next = *cur;
+        goto insert;
+    } else {
+        _ps_subscribe_sorted(&(*cur)->next, chain, type, cb, prio);
+        return;
+    }
+
+insert:
+    // create and add
+    sub  = (struct sub *)mempool_alloc(sizeof(struct sub));
+    *sub = (struct sub){.chain = chain,
+                        .type  = type,
+                        .cb    = cb,
+                        .prio  = prio,
+                        .next  = next};
+    *cur = sub;
+}
+
+static int
+_ps_subscribe_type(chain_id chain, type_id type, ps_cb_f cb, int prio)
+{
+    (void)prio;
     if (type > MAX_TYPES)
         return PS_INVALID;
 
     struct type *ev = &_chains[chain].types[type];
-    size_t subs_idx = ev->count;
-    if (subs_idx >= MAX_SUBSCRIPTIONS)
-        return PS_INVALID;
 
     // increment the idx of next subscription
     ev->count++;
 
     // register subscription
-    ev->subs[subs_idx] = (struct sub){.chain = chain, .type = type, .cb = cb};
+    _ps_subscribe_sorted(&ev->head, chain, type, cb, prio);
 
     return 0;
 }
 
 int
-ps_subscribe(chain_id chain, type_id type, ps_cb_f cb)
+ps_subscribe(chain_id chain, type_id type, ps_cb_f cb, int prio)
 {
     if (chain == 0 || chain > MAX_CHAINS)
         return PS_INVALID;
     if (type != ANY_TYPE)
-        return _ps_subscribe_type(chain, type, cb);
+        return _ps_subscribe_type(chain, type, cb, prio);
 
     int err;
     for (size_t i = 1; i < MAX_TYPES; i++)
-        if ((err = _ps_subscribe_type(chain, i, cb)) != 0)
+        if ((err = _ps_subscribe_type(chain, i, cb, prio)) != 0)
             return err;
 
     return 0;
@@ -83,15 +110,20 @@ _ps_publish(const chain_id chain, const type_id type, void *event,
         return PS_INVALID;
 
     struct type *ev = &_chains[chain].types[type];
-    for (size_t idx = start; idx < ev->count; idx++) {
-        struct sub *subs = &ev->subs[idx];
+    struct sub *cur = ev->head;
+    for (size_t idx = 0; cur; idx++) {
+        if (idx < start) {
+            cur = cur->next;
+            continue;
+        }
         // now we call the callback and abort the chain if the subscriber
         // "censors" the type by returning PS_CB_STOP.
-        enum ps_cb_err err = subs->cb(chain, type, event, md);
+        enum ps_cb_err err = cur->cb(chain, type, event, md);
         if (err == PS_CB_STOP)
             break;
         if (err == PS_CB_DROP)
             return PS_DROP;
+        cur = cur->next;
     }
     return PS_OK;
 }

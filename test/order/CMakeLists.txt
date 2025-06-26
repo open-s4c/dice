@@ -34,15 +34,21 @@ target_link_libraries(empty_publisher PRIVATE dice.h)
 add_executable(order_test order_test.c)
 target_link_libraries(order_test PRIVATE dice.h empty_publisher)
 
-# add_test( NAME preload-1-then-2-test COMMAND env LD_LIBRARY_PATH=.
-# LD_PRELOAD=libpublisher.so:libsubscriber1.so:libsubscriber2.so ./publisher 2)
-
 set(DICESO ${CMAKE_CURRENT_BINARY_DIR}/../../src/dice/libdice.so)
+
+add_test(
+  NAME preload-1-then-2-test
+  COMMAND
+    env #
+    LD_LIBRARY_PATH=${CMAKE_CURRENT_BINARY_DIR}
+    LD_PRELOAD=${DICESO}:libpublisher.so:libsubscriber1.so:libsubscriber2.so #
+    ./order_test 2)
+
 add_test(
   NAME preload-2-then-1-test
   COMMAND
     env #
-    LD_LIBRARY_PATH=.
+    LD_LIBRARY_PATH=${CMAKE_CURRENT_BINARY_DIR}
     LD_PRELOAD=${DICESO}:libpublisher.so:libsubscriber2.so:libsubscriber1.so #
     ./order_test 2)
 

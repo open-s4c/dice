@@ -11,11 +11,12 @@
 static bool _initd;
 
 DICE_HIDE int
-ps_subscribe(chain_id chain, type_id type, ps_cb_f cb)
+ps_subscribe(chain_id chain, type_id type, ps_cb_f cb, int prio)
 {
     (void)chain;
     (void)type;
     (void)cb;
+    (void)prio;
     return 0;
 }
 
