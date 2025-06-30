@@ -62,6 +62,11 @@ struct pthread_join_event {
     int ret;
 };
 
+struct pthread_exit_event {
+    const void *pc;
+    void *ptr;
+};
+
 struct pthread_mutex_lock_event {
     const void *pc;
     pthread_mutex_t *mutex;

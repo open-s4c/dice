@@ -25,9 +25,10 @@ INTERPOSE(void *, malloc, size_t size)
 INTERPOSE(void *, calloc, size_t number, size_t size)
 {
     struct calloc_event ev = {
-        .pc   = INTERPOSE_PC,
-        .size = number * size,
-        .ret  = 0,
+        .pc     = INTERPOSE_PC,
+        .number = number,
+        .size   = size,
+        .ret    = 0,
     };
 
     metadata_t md = {0};

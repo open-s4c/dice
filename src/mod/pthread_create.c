@@ -21,7 +21,8 @@ typedef struct {
 DICE_NORET
 INTERPOSE(void, pthread_exit, void *ptr)
 {
-    PS_PUBLISH(INTERCEPT_EVENT, EVENT_THREAD_FINI, 0, 0);
+    struct pthread_exit_event ev = {.pc = INTERPOSE_PC, .ptr = ptr};
+    PS_PUBLISH(INTERCEPT_EVENT, EVENT_THREAD_FINI, &ev, 0);
     REAL(pthread_exit, ptr);
     exit(1); // unreachable
 }
@@ -48,7 +49,11 @@ INTERPOSE(int, pthread_create, pthread_t *thread, const pthread_attr_t *attr,
     t  = mempool_alloc(sizeof(trampoline_t));
     *t = (trampoline_t){.arg = arg, .run = run};
 
-    struct pthread_create_event ev = {.thread = thread, .pc = INTERPOSE_PC};
+    struct pthread_create_event ev = {.pc     = INTERPOSE_PC,
+                                      .thread = thread,
+                                      .attr   = attr,
+                                      .run    = run,
+                                      .arg    = arg};
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_THREAD_CREATE, &ev, &md);
@@ -59,7 +64,9 @@ INTERPOSE(int, pthread_create, pthread_t *thread, const pthread_attr_t *attr,
 
 INTERPOSE(int, pthread_join, pthread_t thread, void **ptr)
 {
-    struct pthread_join_event ev = {.thread = thread, .pc = INTERPOSE_PC};
+    struct pthread_join_event ev = {.pc     = INTERPOSE_PC,
+                                    .thread = thread,
+                                    .ptr    = ptr};
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_THREAD_JOIN, &ev, &md);
