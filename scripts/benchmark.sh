@@ -11,10 +11,13 @@ OPTION_RUN_MICRO=yes
 OPTION_SUM_MICRO=yes
 OPTION_RUN_LEVELDB=yes
 OPTION_SUM_LEVELDB=yes
-OPTION_PULL_WIKI=yes
+
+OPTION_FORCE_RUN=no
+OPTION_FORCE_SUM=no
+
+OPTION_PULL_WIKI=no
 OPTION_MVTO_WIKI=yes
 WIKI_URL="ssh://git@github.com/open-s4c/dice.wiki.git"
-FORCE_SUMMARY=no
 MAKE=make
 
 enabled() {
@@ -39,13 +42,17 @@ if enabled $OPTION_BUILD; then
 fi
 
 # RUN BENCHMARKS
+F=
+if enabled $OPTION_FORCE_RUN; then
+    F="FORCE=1"
+fi
 
 if enabled $OPTION_RUN_MICRO; then
-    $MAKE -sC bench/micro run
+    $MAKE -sC bench/micro run $F
 fi
 
 if enabled $OPTION_RUN_LEVELDB; then
-    $MAKE -sC bench/leveldb run
+    $MAKE -sC bench/leveldb run $F
 fi
 
 # SUMMARY
@@ -53,6 +60,10 @@ fi
 DATE=$(date "+%Y-%m-%d")
 HOST=$(hostname -s)
 SUMMARY=bench-$HOST-$DATE.md
+F=
+if enabled $OPTION_FORCE_SUM; then
+    F="FORCE=1"
+fi
 
 rm -f $SUMMARY
 
@@ -71,7 +82,7 @@ output "$(uname -a | fmt -w 70)"
 output '```'
 
 if enabled $OPTION_SUM_MICRO; then
-    $MAKE -sC bench/micro process FORCE=$FORCE_SUMMARY
+    $MAKE -sC bench/micro process $F
 
     output
     output "## Microbenchmarks"
@@ -79,7 +90,7 @@ if enabled $OPTION_SUM_MICRO; then
 fi
 
 if enabled $OPTION_SUM_LEVELDB; then
-    $MAKE -sC bench/leveldb process FORCE=$FORCE_SUMMARY
+    $MAKE -sC bench/leveldb process $F
 
     output
     output "## LevelDB"
