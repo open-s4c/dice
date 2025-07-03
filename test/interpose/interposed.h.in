@@ -25,6 +25,15 @@ $_map(MM_RETURN_aligned_alloc, void *);
 $_map(MM_PARAMS_aligned_alloc, size_t alignment, size_t size);
 $_map(MM_ARGS_aligned_alloc, alignment, size);
 $_dl; // -----------------------------------------------------------------------
+$_dl; // mman
+$_dl; // -----------------------------------------------------------------------
+$_map(MM_RETURN_mmap, void *);
+$_map(MM_PARAMS_mmap, void *addr, size_t length, int prot, int flags, int fd, off_t offset);
+$_map(MM_ARGS_mmap, addr, length, prot, flags, fd, offset);
+$_map(MM_RETURN_munmap, int);
+$_map(MM_PARAMS_munmap, void *addr, size_t length);
+$_map(MM_ARGS_munmap, addr, length);
+$_dl; // -----------------------------------------------------------------------
 $_dl; // pthread_create
 $_dl; // -----------------------------------------------------------------------
 $_map(MM_RETURN_pthread_exit, void);
