@@ -6,7 +6,7 @@
     #error Define POSITION when compiling this file
 #endif
 
-#define DICE_XTOR_PRIO POSITION
+#define DICE_MODULE_PRIO POSITION
 #include "defs.h"
 #include <dice/module.h>
 #include <dice/pubsub.h>

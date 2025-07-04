@@ -17,7 +17,6 @@
 #include <vsync/thread/cond.h>
 // clang-format on
 
-#define DICE_XTOR_PRIO 198
 #include <dice/log.h>
 #include <dice/module.h>
 #include <dice/switcher.h>

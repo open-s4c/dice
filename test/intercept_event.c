@@ -9,6 +9,7 @@
 #include <dice/chains/intercept.h>
 #include <dice/events/memaccess.h>
 #include <dice/log.h>
+#include <dice/module.h>
 #include <dice/now.h>
 #include <dice/pubsub.h>
 #include <dice/self.h>

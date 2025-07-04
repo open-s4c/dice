@@ -42,41 +42,35 @@ ps_callback_CCC_EEE_SSS_(const chain_id chain, const type_id type, void *event,
 _tmpl_end();
 
 _tmpl_begin(CCC = CHAINS, EEE = EVENTS);
-static struct ps_dispatched
+static enum ps_cb_err
 ps_dispatch_CCC_EEE_(const chain_id chain, const type_id type, void *event,
                      metadata_t *md)
 {
     enum ps_cb_err err;
-    int total = 0;
     _tmpl2_begin(SSS = SLOTS);
     {
         err = ps_callback_CCC_EEE_SSS_(chain, type, event, md);
         if (err == PS_CB_STOP)
-            return (struct ps_dispatched){.err = PS_CB_STOP, .count = 0};
-        if (err == PS_CB_OK)
-            total++;
+            return PS_CB_STOP;
 
         err = ps_callback_CCC_0_SSS_(chain, type, event, md);
         if (err == PS_CB_STOP)
-            return (struct ps_dispatched){.err = PS_CB_STOP, .count = 0};
-        if (err == PS_CB_OK)
-            total++;
+            return PS_CB_STOP;
     }
     _tmpl2_end();
-    return (struct ps_dispatched){.err   = (total == 0) ? PS_CB_OFF : PS_CB_OK,
-                                  .count = total};
+    return PS_CB_OK;
 }
 _tmpl_end();
 
 /* chain dispatcher prototypes */
 _tmpl_begin(CCC = CHAINS);
-static struct ps_dispatched
+DICE_HIDE enum ps_cb_err
 ps_dispatch_CCC_(const chain_id chain, const type_id type, void *event,
                  metadata_t *md)
 {
     switch (type) {
         default:
-            return (struct ps_dispatched){.err = PS_CB_OFF, .count = 0};
+            return PS_CB_OFF;
             _tmpl2_begin(EEE = EVENTS);
         case EEE:
             return ps_dispatch_CCC_EEE_(chain, type, event, md);
@@ -84,18 +78,3 @@ ps_dispatch_CCC_(const chain_id chain, const type_id type, void *event,
     }
 }
 _tmpl_end();
-
-/* main dispatcher */
-DICE_HIDE struct ps_dispatched
-ps_dispatch_(const chain_id chain, const type_id type, void *event,
-             metadata_t *md)
-{
-    switch (chain) {
-        default:
-            return (struct ps_dispatched){.err = PS_CB_OFF, .count = 0};
-            _tmpl_begin(CCC = CHAINS);
-        case CCC:
-            return ps_dispatch_CCC_(chain, type, event, md);
-            _tmpl_end();
-    }
-}
