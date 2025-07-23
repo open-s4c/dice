@@ -110,7 +110,7 @@ void *real_sym(const char *, const char *);
 static inline void *
 _real_sym(const char *name, const char *ver)
 {
-#if defined(__glibc__)
+#if defined(__GLIBC__)
     if (ver != NULL)
         return dlvsym(RTLD_NEXT, name, ver);
 #endif
