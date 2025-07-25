@@ -50,6 +50,8 @@ PS_SUBSCRIBE(CHAIN_CONTROL, EVENT_DICE_INIT, {
 
         char *path = strtok(plugins, ":");
         assert(path);
+        // skip first
+        path = strtok(NULL, ":");
         while (path != NULL) {
             _load_plugin(path);
             path = strtok(NULL, ":");
