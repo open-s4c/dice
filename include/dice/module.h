@@ -15,30 +15,83 @@
  */
 #ifndef DICE_MODULE_H
 #define DICE_MODULE_H
+#include <dice/callback.h>
 #include <dice/compiler.h>
+#include <dice/dispatch.h>
+#include <dice/events/dice.h>
 #include <dice/log.h>
+#include <dice/pubsub.h>
 
-#define Y(V) #V
-#define X(V) Y(V)
+#define CHAIN_CONTROL 0
 
-#define DICE_MODULE_INIT(CODE)                                                \
-    static DICE_CTOR void _module_init()                                      \
+#ifndef DICE_MODULE_PRIO
+    #define DICE_MODULE_PRIO 9999
+#else
+DICE_HIDE bool
+V_JOIN(V_JOIN(ps_dispatch, DICE_MODULE_PRIO), on_)(void)
+{
+    return true;
+}
+#endif
+
+#if DICE_MODULE_PRIO < 16 && !defined(DICE_BUILTIN)
+    #define DICE_BUILTIN
+#elif DICE_MODULE_PRIO >= 16 && defined(DICE_BUILTIN)
+    #error "Cannot use DICE_BUILTIN with PRIO >= 16"
+#endif
+
+#define DICE_MODULE_INIT(CODE)                                                 \
+    static bool _module_init()                                                 \
+    {                                                                          \
+        static bool _done = false;                                             \
+        if (!_done) {                                                          \
+            _done = true;                                                      \
+            do {                                                               \
+                CODE                                                           \
+            } while (0);                                                       \
+            return true;                                                       \
+        }                                                                      \
+        return false;                                                          \
+    }                                                                          \
+    static DICE_CTOR void _module_ctr()                                        \
+    {                                                                          \
+        if (_module_init())                                                    \
+            log_printf("[%4d] INIT: %s\n", DICE_MODULE_PRIO, __FILE__);        \
+    }                                                                          \
+    PS_SUBSCRIBE(CHAIN_CONTROL, EVENT_DICE_INIT, {                             \
+        if (_module_init())                                                    \
+            log_printf("[%4d] INIT! %s\n", DICE_MODULE_PRIO, __FILE__);        \
+    })
+
+
+#define DICE_MODULE_FINI(CODE)                                                 \
+    static DICE_DTOR void _module_fini()                                       \
     {                                                                          \
         if (1) {                                                               \
             CODE                                                               \
         }                                                                      \
-        log_printf("LOADED[" X(DICE_XTOR_PRIO) "] %s\n", __FILE__);           \
     }
 
-#define DICE_MODULE_FINI(CODE)                                                \
-    static DICE_DTOR void _module_fini()                                      \
+/* PS_SUBSCRIBE macro creates a callback handler and subscribes to a
+ * chain.
+ *
+ * On load time, a constructor function registers the handler to the
+ * chain. The order in which modules are loaded must be considered when
+ * planning for the relation between handlers. The order is either given
+ * by linking order (if compilation units are linked together) or by the
+ * order of shared libraries in LD_PRELOAD.
+ */
+#define PS_SUBSCRIBE_SLOT(CHAIN, TYPE, SLOT, CALLBACK)                         \
+    PS_CALLBACK_DECL(CHAIN, TYPE, SLOT, CALLBACK)                              \
+    PS_DISPATCH_DECL(CHAIN, TYPE, SLOT)                                        \
+    static void DICE_CTOR _ps_subscribe_##CHAIN##_##TYPE(void)                 \
     {                                                                          \
-        if (1) {                                                               \
-            CODE                                                               \
-        }                                                                      \
+        if (!ps_subscribe(CHAIN, TYPE, PS_CALLBACK(CHAIN, TYPE, SLOT), SLOT))  \
+            log_fatalf("could not subscribe to %s:%s:%u\n", #CHAIN, #TYPE,     \
+                       SLOT);                                                  \
     }
 
-void dice_init(void);
-void dice_fini(void);
+#define PS_SUBSCRIBE(CHAIN, TYPE, CALLBACK)                                    \
+    PS_SUBSCRIBE_SLOT(CHAIN, TYPE, DICE_MODULE_PRIO, CALLBACK)
 
 #endif /* DICE_MODULE_H */

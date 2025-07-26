@@ -16,7 +16,7 @@ target_link_libraries(publisher PRIVATE publisher.o dice)
 
 add_library(subscriber1.o OBJECT subscriber.c)
 target_link_libraries(subscriber1.o PRIVATE dice.h)
-target_compile_options(subscriber1.o PRIVATE -DPOSITION=201)
+target_compile_options(subscriber1.o PRIVATE -DPOSITION=101)
 
 add_library(subscriber1 SHARED)
 target_link_libraries(subscriber1 PRIVATE subscriber1.o dice)
@@ -42,7 +42,7 @@ add_test(
     env #
     LD_LIBRARY_PATH=${CMAKE_CURRENT_BINARY_DIR}
     LD_PRELOAD=${DICESO}:libpublisher.so:libsubscriber1.so:libsubscriber2.so #
-    ./order_test 2)
+    ./order_test 2 202)
 
 add_test(
   NAME preload-2-then-1-test
@@ -50,7 +50,7 @@ add_test(
     env #
     LD_LIBRARY_PATH=${CMAKE_CURRENT_BINARY_DIR}
     LD_PRELOAD=${DICESO}:libpublisher.so:libsubscriber2.so:libsubscriber1.so #
-    ./order_test 2)
+    ./order_test 2 202)
 
 add_library(subscriber12 SHARED)
 target_link_libraries(subscriber12 PRIVATE publisher.o subscriber1.o
@@ -62,16 +62,28 @@ target_link_libraries(subscriber21 PRIVATE publisher.o subscriber2.o
 
 add_test(NAME preload-12-test
          COMMAND env LD_LIBRARY_PATH=. LD_PRELOAD=${DICESO}:libsubscriber12.so
-                 ./order_test 2)
+                 ./order_test 2 202)
 
 add_test(NAME preload-21-test
          COMMAND env LD_LIBRARY_PATH=. LD_PRELOAD=${DICESO}:libsubscriber21.so
-                 ./order_test 2)
+                 ./order_test 2 202)
 
 add_library(subscriber21f SHARED)
 target_link_libraries(subscriber21f PRIVATE publisher.o subscriber2.o
-                                            subscriber1.o dice-fastch.o dice.o)
+                                            subscriber1.o dice.o)
 
 add_test(NAME preload-21f-test
          COMMAND env LD_LIBRARY_PATH=. LD_PRELOAD=libsubscriber21f.so
-                 ./order_test 2)
+                 ./order_test 2 202)
+
+add_library(subscriber3.o OBJECT subscriber.c)
+target_link_libraries(subscriber3.o PRIVATE dice.h)
+target_compile_options(subscriber3.o PRIVATE -DPOSITION=303)
+
+add_library(subscriber3 SHARED)
+target_link_libraries(subscriber3 PRIVATE subscriber3.o subscriber21f)
+
+add_test(
+  NAME preload-3-and-21f-test
+  COMMAND env LD_LIBRARY_PATH=.
+          LD_PRELOAD=libsubscriber3.so:libsubscriber21f.so ./order_test 3 303)

@@ -37,12 +37,12 @@ Possible intercepted events are:
 - TSan event: Published on every events related to thread sanitizer functions
   such are `__tsan_read8`, `__tsan_exchange`, etc.
 
-Within a chain, events are delivered to the callbacks in the subscription order.
-Callbacks can has keep state and have side effect. They can also change the
-event content such that following callabacks receive an updated event.  This
-mechanism allows subscribers to track resource states, detect concurrency
-issues, and create complex runtime monitoring systems, including state machines
-and deterministic replay systems.
+Within a chain, events are delivered to the callbacks in the subscription
+priority order.  Callbacks can has keep state and have side effect. They
+can also change the event content such that following callabacks receive an
+updated event.  This mechanism allows subscribers to track resource states,
+detect concurrency issues, and create complex runtime monitoring systems,
+including state machines and deterministic replay systems.
 
 ## 1.2. Modules
 
@@ -170,7 +170,7 @@ design pattern) in several ways:
 
 - **Chains**: Subscribers are organized in callback chains (not topics), i.e.,
   when an event is published to a chain, the subscribers receive the event one
-  after another in the order of subscription.
+  after another in the order of given by the subscription priority.
 - **Interruptions**: Callbacks can control whether the event is further
   propagated to subsequent subscriptions by returnig `PS_CB_OK` to continue the
   chain or `PS_CB_STOP` to interrupt it.
@@ -509,16 +509,19 @@ Subscription callbacks are internally kept as lists of function pointers. The
 corresponding indirection cost has to be considered when deploying Dice in this
 way.
 
-### Subscription Order
+### Subscription Priority
 
-One has to be careful in which order the constructors of the modules are
+TODO:  The following is not really true anymore. With the the introduction of
+`DICE_MODULE_PRIO`, modules define the order when subscribing.
+
+> One has to be careful in which order the constructors of the modules are
 executed.  On NetBSD the constructors are executed left-to-right. Given a list
 of libraries `LD_PRELOAD=libdice.so:mod1.so:mod2.so`, the subscribers in
 `mod1.so` will be registered earlier than subscribers in `mod2.so`; therefore,
 callbacks in `mod1.so` will be called first.  On Linux, the constructors are
 executed right-to-left. So the opposite subscription order will result.
 
-In general, the user has to figure out the order the constructors are called by
+> In general, the user has to figure out the order the constructors are called by
 the linker and order the shared libraries accordingly.
 
 ## 6.2. Monolithic Shared Library
@@ -526,8 +529,8 @@ the linker and order the shared libraries accordingly.
 Modules in Dice can also linked together with the core components in a single
 shared library. In this configuration, each module is a compilation unit, i.e.,
 a `.o` file.  When compiling each of these files, the user should specify a
-priority for the subscription order by passing `-DDICE_XTOR_PRIO=VAL` to the
-compiler. `VAL` should be a number between 200 and 1000. The lower the value,
+priority for the subscription order by passing `-DDICE_MODULE_PRIO=VAL` to the
+compiler. `VAL` should be a number between 10 and 9999. The lower the value,
 the higher the priority when subscribing chains.
 
 Assume the user creates a library `libmydice.so` containing `pubsub.o`,
@@ -545,11 +548,16 @@ executing the callbacks of the subscribers.
 
 ### Fast-Chain Module
 
-Dice provides a auto-generated module called Fast-Chain module or `fastch.o`,
+TODO: This is outdated. Now we always have builtin and plugin modules. Builtin
+modules are compiled together with Dice and are called using fast-chain
+callbacks. Plugin modules **must have** priorities **greater than** all builtin
+modules.
+
+> Dice provides a auto-generated module called Fast-Chain module or `fastch.o`,
 which directly call the subscriber callbacks without relying on function
 pointers. To do that, the Fast-Chain module employs large switch cases on the
 `chain_id`, `type_id` and priority values.  However, the ranges of these three
 dimensions has to be limited to keep the size of the generated code manageable.
 
-For instructions on how to use Fast-Chain, see the `CMakeLists.txt` inside
+> For instructions on how to use Fast-Chain, see the `CMakeLists.txt` inside
 `src/fastch`.

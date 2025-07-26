@@ -18,7 +18,7 @@ add_library(dice-fastch SHARED)
 target_link_libraries(
   dice-fastch
   PRIVATE dice.o
-          dice-fastch.o
+          dice-box.o
           mod-self.o
           mod-pthread_create.o
           mod-pthread_mutex.o

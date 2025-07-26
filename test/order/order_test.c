@@ -3,15 +3,16 @@
  * SPDX-License-Identifier: MIT
  */
 #include "defs.h"
+
 int
 main(int argc, char *argv[])
 {
-    if (argc != 2) {
-        log_printf("usage: %s <subscribers>\n", argv[0]);
+    if (argc != 3) {
+        log_printf("usage: %s <subscribers> <final>\n", argv[0]);
         exit(1);
     }
     int count = atoi(argv[1]);
-    int final = count + 200;
+    int final = atoi(argv[2]);
 
     struct event ev = {0};
     publish(&ev);

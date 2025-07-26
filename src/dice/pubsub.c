@@ -5,12 +5,14 @@
 #include <assert.h>
 #include <stdio.h>
 
-#define DICE_XTOR_PRIO 199
+#define DICE_MODULE_PRIO 1
 #include <dice/mempool.h>
 #include <dice/module.h>
 #include <dice/pubsub.h>
 
 #define MAX_SUBSCRIPTIONS 255
+
+int ps_dispatch_max(void);
 
 struct sub {
     chain_id chain;
@@ -29,8 +31,48 @@ struct chain {
     struct type types[MAX_TYPES];
 };
 
-static bool _initd;
 static struct chain _chains[MAX_CHAINS];
+
+// -----------------------------------------------------------------------------
+// initializer
+// -----------------------------------------------------------------------------
+
+DICE_HIDE bool
+ps_initd_(void)
+{
+    static enum {
+        NONE,
+        START,
+        BLOCK,
+        READY,
+    } _state = NONE;
+
+    switch (_state) {
+        case NONE:
+            // This must be the main thread, at latest the thread creation.
+            _state = START;
+            PS_PUBLISH(CHAIN_CONTROL, EVENT_DICE_INIT, 0, 0);
+            _state = READY;
+            return true;
+        case START:
+            _state = BLOCK;
+            return true;
+        case BLOCK:
+            // The publication above is still running, drop nested publications.
+            return false;
+        default:
+            return true;
+    }
+}
+
+
+DICE_HIDE void
+ps_init_(void)
+{
+    (void)ps_initd_();
+}
+
+DICE_MODULE_INIT()
 
 // -----------------------------------------------------------------------------
 // subscribe interface
@@ -83,7 +125,15 @@ _ps_subscribe_type(chain_id chain, type_id type, ps_cb_f cb, int prio)
 int
 ps_subscribe(chain_id chain, type_id type, ps_cb_f cb, int prio)
 {
-    if (chain == 0 || chain > MAX_CHAINS)
+    ps_init_(); // ensure initialized
+
+    if (prio <= ps_dispatch_max()) {
+        log_debugf("Ignoring %u %u %d\n", chain, type, prio);
+        return PS_OK;
+    }
+    if (chain == CHAIN_CONTROL)
+        return PS_OK;
+    if (chain > MAX_CHAINS)
         return PS_INVALID;
     if (type != ANY_TYPE)
         return _ps_subscribe_type(chain, type, cb, prio);
@@ -128,7 +178,7 @@ _ps_publish(const chain_id chain, const type_id type, void *event,
     return PS_OK;
 }
 
-DICE_WEAK DICE_HIDE struct ps_dispatched
+DICE_WEAK DICE_HIDE enum ps_cb_err
 ps_dispatch_(const chain_id chain, const type_id type, void *event,
              metadata_t *md)
 {
@@ -136,28 +186,26 @@ ps_dispatch_(const chain_id chain, const type_id type, void *event,
     (void)type;
     (void)event;
     (void)md;
-    return (struct ps_dispatched){.err = PS_CB_OFF};
+    return PS_CB_OFF;
 }
 
-enum ps_err
+DICE_WEAK enum ps_err
 ps_publish(const chain_id chain, const type_id type, void *event,
            metadata_t *md)
 {
-    if (unlikely(!_initd))
-        return PS_DROP;
+    static bool ready = false;
+    if (unlikely(!ready)) {
+        if (!ps_initd_())
+            return PS_DROP;
+        ready = true;
+    }
 
-    struct ps_dispatched ret = ps_dispatch_(chain, type, event, md);
-    if (likely(ret.err == PS_CB_STOP))
+    enum ps_cb_err err = ps_dispatch_(chain, type, event, md);
+    if (likely(err == PS_CB_STOP))
         return PS_OK;
 
-    if (likely(ret.err == PS_CB_DROP))
+    if (likely(err == PS_CB_DROP))
         return PS_DROP;
 
-    return _ps_publish(chain, type, event, md, ret.count);
+    return _ps_publish(chain, type, event, md, 0);
 }
-
-// -----------------------------------------------------------------------------
-// init
-// -----------------------------------------------------------------------------
-
-DICE_MODULE_INIT({ _initd = true; })
