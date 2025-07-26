@@ -15,7 +15,9 @@
  */
 #ifndef DICE_MODULE_H
 #define DICE_MODULE_H
+#include <dice/callback.h>
 #include <dice/compiler.h>
+#include <dice/dispatch.h>
 #include <dice/events/dice.h>
 #include <dice/log.h>
 #include <dice/pubsub.h>
@@ -32,6 +34,11 @@ V_JOIN(V_JOIN(ps_dispatch, DICE_MODULE_PRIO), on_)(void)
 }
 #endif
 
+#if DICE_MODULE_PRIO < 16 && !defined(DICE_BUILTIN)
+    #define DICE_BUILTIN
+#elif DICE_MODULE_PRIO >= 16 && defined(DICE_BUILTIN)
+    #error "Cannot use DICE_BUILTIN with PRIO >= 16"
+#endif
 
 #define DICE_MODULE_INIT(CODE)                                                 \
     static bool _module_init()                                                 \
@@ -74,53 +81,17 @@ V_JOIN(V_JOIN(ps_dispatch, DICE_MODULE_PRIO), on_)(void)
  * by linking order (if compilation units are linked together) or by the
  * order of shared libraries in LD_PRELOAD.
  */
-#ifdef DICE_BUILTIN
-    #define PS_SUBSCRIBE(CHAIN, TYPE, CALLBACK)                                \
-        PS_CALLBACK_DECL(CHAIN, TYPE, CALLBACK)                                \
-        DICE_HIDE enum ps_cb_err PS_CBNAME(CHAIN, TYPE, DICE_MODULE_PRIO)(     \
-            const chain_id chain, const type_id type, void *event,             \
-            metadata_t *md)                                                    \
-        {                                                                      \
-            return PS_CALLBACK(CHAIN, TYPE)(chain, type, event, md);           \
-        }                                                                      \
-        static void DICE_CTOR _ps_subscribe_##CHAIN##_##TYPE(void)             \
-        {                                                                      \
-            if (ps_subscribe(CHAIN, TYPE, PS_CALLBACK(CHAIN, TYPE),            \
-                             DICE_MODULE_PRIO) != 0)                           \
-                log_fatalf("could not subscribe to %s:%s\n", #CHAIN, #TYPE);   \
-        }
-#else
-    #define PS_SUBSCRIBE(CHAIN, TYPE, CALLBACK)                                \
-        PS_CALLBACK_DECL(CHAIN, TYPE, CALLBACK)                                \
-        static void DICE_CTOR _ps_subscribe_##CHAIN##_##TYPE(void)             \
-        {                                                                      \
-            if (ps_subscribe(CHAIN, TYPE, PS_CALLBACK(CHAIN, TYPE),            \
-                             DICE_MODULE_PRIO) != 0)                           \
-                log_fatalf("could not subscribe to %s:%s\n", #CHAIN, #TYPE);   \
-        }
-#endif
-
-#define PS_CBNAME(X, Y, Z)                                                     \
-    V_JOIN(V_JOIN(ps_callback, V_JOIN(X, V_JOIN(Y, Z))), )
-
-#define PS_CALLBACK(CHAIN, TYPE)                                               \
-    V_JOIN(V_JOIN(V_JOIN(ps_callback, CHAIN), TYPE), DICE_MODULE_PRIO)
-
-#define PS_CALLBACK_DECL(CHAIN, TYPE, CALLBACK)                                \
-    static inline enum ps_cb_err PS_CALLBACK(CHAIN, TYPE)(                     \
-        const chain_id chain, const type_id type, void *event, metadata_t *md) \
+#define PS_SUBSCRIBE_SLOT(CHAIN, TYPE, SLOT, CALLBACK)                         \
+    PS_CALLBACK_DECL(CHAIN, TYPE, SLOT, CALLBACK)                              \
+    PS_DISPATCH_DECL(CHAIN, TYPE, SLOT)                                        \
+    static void DICE_CTOR _ps_subscribe_##CHAIN##_##TYPE(void)                 \
     {                                                                          \
-        /* Parameters are marked as unused to silence warnings. */             \
-        /* Nevertheless, the callback can use parameters without issues. */    \
-        (void)chain;                                                           \
-        (void)type;                                                            \
-        (void)event;                                                           \
-        (void)md;                                                              \
-                                                                               \
-        CALLBACK;                                                              \
-                                                                               \
-        /* By default, callbacks return OK to continue chain publishing. */    \
-        return PS_CB_OK;                                                       \
+        if (!ps_subscribe(CHAIN, TYPE, PS_CALLBACK(CHAIN, TYPE, SLOT), SLOT))  \
+            log_fatalf("could not subscribe to %s:%s:%u\n", #CHAIN, #TYPE,     \
+                       SLOT);                                                  \
     }
+
+#define PS_SUBSCRIBE(CHAIN, TYPE, CALLBACK)                                    \
+    PS_SUBSCRIBE_SLOT(CHAIN, TYPE, DICE_MODULE_PRIO, CALLBACK)
 
 #endif /* DICE_MODULE_H */
