@@ -17,7 +17,7 @@ int ps_dispatch_max(void);
 struct sub {
     chain_id chain;
     chain_id type;
-    ps_cb_f cb;
+    ps_callback_f cb;
     int prio;
     struct sub *next;
 };
@@ -79,8 +79,8 @@ DICE_MODULE_INIT()
 // -----------------------------------------------------------------------------
 
 static void
-_ps_subscribe_sorted(struct sub **cur, chain_id chain, type_id type, ps_cb_f cb,
-                     int prio)
+_ps_subscribe_sorted(struct sub **cur, chain_id chain, type_id type,
+                     ps_callback_f cb, int prio)
 {
     struct sub *sub;
     struct sub *next = NULL;
@@ -105,7 +105,7 @@ insert:
 }
 
 static int
-_ps_subscribe_type(chain_id chain, type_id type, ps_cb_f cb, int prio)
+_ps_subscribe_type(chain_id chain, type_id type, ps_callback_f cb, int prio)
 {
     (void)prio;
     if (type > MAX_TYPES)
@@ -119,11 +119,11 @@ _ps_subscribe_type(chain_id chain, type_id type, ps_cb_f cb, int prio)
     // register subscription
     _ps_subscribe_sorted(&ev->head, chain, type, cb, prio);
 
-    return 0;
+    return PS_OK;
 }
 
 int
-ps_subscribe(chain_id chain, type_id type, ps_cb_f cb, int prio)
+ps_subscribe(chain_id chain, type_id type, ps_callback_f cb, int prio)
 {
     ps_init_(); // ensure initialized
 
@@ -143,7 +143,7 @@ ps_subscribe(chain_id chain, type_id type, ps_cb_f cb, int prio)
         if ((err = _ps_subscribe_type(chain, i, cb, prio)) != 0)
             return err;
 
-    return 0;
+    return PS_OK;
 }
 
 // -----------------------------------------------------------------------------
@@ -167,18 +167,18 @@ _ps_publish(const chain_id chain, const type_id type, void *event,
             continue;
         }
         // now we call the callback and abort the chain if the subscriber
-        // "censors" the type by returning PS_CB_STOP.
-        enum ps_cb_err err = cur->cb(chain, type, event, md);
-        if (err == PS_CB_STOP)
+        // "censors" the type by returning PS_STOP_CHAIN.
+        enum ps_err err = cur->cb(chain, type, event, md);
+        if (err == PS_STOP_CHAIN)
             break;
-        if (err == PS_CB_DROP)
-            return PS_DROP;
+        if (err == PS_DROP_EVENT)
+            return PS_DROP_EVENT;
         cur = cur->next;
     }
     return PS_OK;
 }
 
-DICE_WEAK DICE_HIDE enum ps_cb_err
+DICE_WEAK DICE_HIDE enum ps_err
 ps_dispatch_(const chain_id chain, const type_id type, void *event,
              metadata_t *md)
 {
@@ -186,7 +186,7 @@ ps_dispatch_(const chain_id chain, const type_id type, void *event,
     (void)type;
     (void)event;
     (void)md;
-    return PS_CB_OFF;
+    return PS_HANDLER_OFF;
 }
 
 DICE_WEAK enum ps_err
@@ -196,16 +196,16 @@ ps_publish(const chain_id chain, const type_id type, void *event,
     static bool ready = false;
     if (unlikely(!ready)) {
         if (!ps_initd_())
-            return PS_DROP;
+            return PS_DROP_EVENT;
         ready = true;
     }
 
-    enum ps_cb_err err = ps_dispatch_(chain, type, event, md);
-    if (likely(err == PS_CB_STOP))
+    enum ps_err err = ps_dispatch_(chain, type, event, md);
+    if (likely(err == PS_STOP_CHAIN))
         return PS_OK;
 
-    if (likely(err == PS_CB_DROP))
-        return PS_DROP;
+    if (likely(err == PS_DROP_EVENT))
+        return PS_DROP_EVENT;
 
     return _ps_publish(chain, type, event, md, 0);
 }

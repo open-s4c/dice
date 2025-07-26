@@ -125,7 +125,7 @@ fake_pthread_cond_broadcast(pthread_cond_t *cond)
 
 PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_PTHREAD_COND_WAIT, {
     if (!enabled())
-        return PS_CB_STOP;
+        return PS_STOP_CHAIN;
     struct pthread_cond_wait_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E_pthread_cond_wait, cond);
     ASSERT_FIELD_EQ(&E_pthread_cond_wait, mutex);
@@ -133,7 +133,7 @@ PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_PTHREAD_COND_WAIT, {
 
 PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_PTHREAD_COND_WAIT, {
     if (!enabled())
-        return PS_CB_STOP;
+        return PS_STOP_CHAIN;
     struct pthread_cond_wait_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E_pthread_cond_wait, cond);
     ASSERT_FIELD_EQ(&E_pthread_cond_wait, mutex);
@@ -141,7 +141,7 @@ PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_PTHREAD_COND_WAIT, {
 })
 PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_PTHREAD_COND_TIMEDWAIT, {
     if (!enabled())
-        return PS_CB_STOP;
+        return PS_STOP_CHAIN;
     struct pthread_cond_timedwait_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E_pthread_cond_timedwait, cond);
     ASSERT_FIELD_EQ(&E_pthread_cond_timedwait, mutex);
@@ -150,7 +150,7 @@ PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_PTHREAD_COND_TIMEDWAIT, {
 
 PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_PTHREAD_COND_TIMEDWAIT, {
     if (!enabled())
-        return PS_CB_STOP;
+        return PS_STOP_CHAIN;
     struct pthread_cond_timedwait_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E_pthread_cond_timedwait, cond);
     ASSERT_FIELD_EQ(&E_pthread_cond_timedwait, mutex);
@@ -159,28 +159,28 @@ PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_PTHREAD_COND_TIMEDWAIT, {
 })
 PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_PTHREAD_COND_SIGNAL, {
     if (!enabled())
-        return PS_CB_STOP;
+        return PS_STOP_CHAIN;
     struct pthread_cond_signal_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E_pthread_cond_signal, cond);
 })
 
 PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_PTHREAD_COND_SIGNAL, {
     if (!enabled())
-        return PS_CB_STOP;
+        return PS_STOP_CHAIN;
     struct pthread_cond_signal_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E_pthread_cond_signal, cond);
  ASSERT_FIELD_EQ(&E_pthread_cond_signal, ret);
 })
 PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_PTHREAD_COND_BROADCAST, {
     if (!enabled())
-        return PS_CB_STOP;
+        return PS_STOP_CHAIN;
     struct pthread_cond_broadcast_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E_pthread_cond_broadcast, cond);
 })
 
 PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_PTHREAD_COND_BROADCAST, {
     if (!enabled())
-        return PS_CB_STOP;
+        return PS_STOP_CHAIN;
     struct pthread_cond_broadcast_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E_pthread_cond_broadcast, cond);
  ASSERT_FIELD_EQ(&E_pthread_cond_broadcast, ret);

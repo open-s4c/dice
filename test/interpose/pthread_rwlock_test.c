@@ -171,35 +171,35 @@ fake_pthread_rwlock_unlock(pthread_rwlock_t *lock)
 
 PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_PTHREAD_RWLOCK_RDLOCK, {
     if (!enabled())
-        return PS_CB_STOP;
+        return PS_STOP_CHAIN;
     struct pthread_rwlock_rdlock_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E_pthread_rwlock_rdlock, lock);
 })
 
 PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_PTHREAD_RWLOCK_RDLOCK, {
     if (!enabled())
-        return PS_CB_STOP;
+        return PS_STOP_CHAIN;
     struct pthread_rwlock_rdlock_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E_pthread_rwlock_rdlock, lock);
  ASSERT_FIELD_EQ(&E_pthread_rwlock_rdlock, ret);
 })
 PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_PTHREAD_RWLOCK_TRYRDLOCK, {
     if (!enabled())
-        return PS_CB_STOP;
+        return PS_STOP_CHAIN;
     struct pthread_rwlock_tryrdlock_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E_pthread_rwlock_tryrdlock, lock);
 })
 
 PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_PTHREAD_RWLOCK_TRYRDLOCK, {
     if (!enabled())
-        return PS_CB_STOP;
+        return PS_STOP_CHAIN;
     struct pthread_rwlock_tryrdlock_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E_pthread_rwlock_tryrdlock, lock);
  ASSERT_FIELD_EQ(&E_pthread_rwlock_tryrdlock, ret);
 })
 PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_PTHREAD_RWLOCK_TIMEDRDLOCK, {
     if (!enabled())
-        return PS_CB_STOP;
+        return PS_STOP_CHAIN;
     struct pthread_rwlock_timedrdlock_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E_pthread_rwlock_timedrdlock, lock);
     ASSERT_FIELD_EQ(&E_pthread_rwlock_timedrdlock, abstime);
@@ -207,7 +207,7 @@ PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_PTHREAD_RWLOCK_TIMEDRDLOCK, {
 
 PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_PTHREAD_RWLOCK_TIMEDRDLOCK, {
     if (!enabled())
-        return PS_CB_STOP;
+        return PS_STOP_CHAIN;
     struct pthread_rwlock_timedrdlock_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E_pthread_rwlock_timedrdlock, lock);
     ASSERT_FIELD_EQ(&E_pthread_rwlock_timedrdlock, abstime);
@@ -215,35 +215,35 @@ PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_PTHREAD_RWLOCK_TIMEDRDLOCK, {
 })
 PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_PTHREAD_RWLOCK_WRLOCK, {
     if (!enabled())
-        return PS_CB_STOP;
+        return PS_STOP_CHAIN;
     struct pthread_rwlock_wrlock_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E_pthread_rwlock_wrlock, lock);
 })
 
 PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_PTHREAD_RWLOCK_WRLOCK, {
     if (!enabled())
-        return PS_CB_STOP;
+        return PS_STOP_CHAIN;
     struct pthread_rwlock_wrlock_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E_pthread_rwlock_wrlock, lock);
  ASSERT_FIELD_EQ(&E_pthread_rwlock_wrlock, ret);
 })
 PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_PTHREAD_RWLOCK_TRYWRLOCK, {
     if (!enabled())
-        return PS_CB_STOP;
+        return PS_STOP_CHAIN;
     struct pthread_rwlock_trywrlock_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E_pthread_rwlock_trywrlock, lock);
 })
 
 PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_PTHREAD_RWLOCK_TRYWRLOCK, {
     if (!enabled())
-        return PS_CB_STOP;
+        return PS_STOP_CHAIN;
     struct pthread_rwlock_trywrlock_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E_pthread_rwlock_trywrlock, lock);
  ASSERT_FIELD_EQ(&E_pthread_rwlock_trywrlock, ret);
 })
 PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_PTHREAD_RWLOCK_TIMEDWRLOCK, {
     if (!enabled())
-        return PS_CB_STOP;
+        return PS_STOP_CHAIN;
     struct pthread_rwlock_timedwrlock_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E_pthread_rwlock_timedwrlock, lock);
     ASSERT_FIELD_EQ(&E_pthread_rwlock_timedwrlock, abstime);
@@ -251,7 +251,7 @@ PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_PTHREAD_RWLOCK_TIMEDWRLOCK, {
 
 PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_PTHREAD_RWLOCK_TIMEDWRLOCK, {
     if (!enabled())
-        return PS_CB_STOP;
+        return PS_STOP_CHAIN;
     struct pthread_rwlock_timedwrlock_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E_pthread_rwlock_timedwrlock, lock);
     ASSERT_FIELD_EQ(&E_pthread_rwlock_timedwrlock, abstime);
@@ -259,14 +259,14 @@ PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_PTHREAD_RWLOCK_TIMEDWRLOCK, {
 })
 PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_PTHREAD_RWLOCK_UNLOCK, {
     if (!enabled())
-        return PS_CB_STOP;
+        return PS_STOP_CHAIN;
     struct pthread_rwlock_unlock_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E_pthread_rwlock_unlock, lock);
 })
 
 PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_PTHREAD_RWLOCK_UNLOCK, {
     if (!enabled())
-        return PS_CB_STOP;
+        return PS_STOP_CHAIN;
     struct pthread_rwlock_unlock_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E_pthread_rwlock_unlock, lock);
  ASSERT_FIELD_EQ(&E_pthread_rwlock_unlock, ret);

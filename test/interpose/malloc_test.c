@@ -159,21 +159,21 @@ fake_aligned_alloc(size_t alignment, size_t size)
 
 PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_MALLOC, {
     if (!enabled())
-        return PS_CB_STOP;
+        return PS_STOP_CHAIN;
     struct malloc_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E_malloc, size);
 })
 
 PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_MALLOC, {
     if (!enabled())
-        return PS_CB_STOP;
+        return PS_STOP_CHAIN;
     struct malloc_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E_malloc, size);
  ASSERT_FIELD_EQ(&E_malloc, ret);
 })
 PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_CALLOC, {
     if (!enabled())
-        return PS_CB_STOP;
+        return PS_STOP_CHAIN;
     struct calloc_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E_calloc, number);
     ASSERT_FIELD_EQ(&E_calloc, size);
@@ -181,7 +181,7 @@ PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_CALLOC, {
 
 PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_CALLOC, {
     if (!enabled())
-        return PS_CB_STOP;
+        return PS_STOP_CHAIN;
     struct calloc_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E_calloc, number);
     ASSERT_FIELD_EQ(&E_calloc, size);
@@ -189,7 +189,7 @@ PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_CALLOC, {
 })
 PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_REALLOC, {
     if (!enabled())
-        return PS_CB_STOP;
+        return PS_STOP_CHAIN;
     struct realloc_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E_realloc, ptr);
     ASSERT_FIELD_EQ(&E_realloc, size);
@@ -197,7 +197,7 @@ PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_REALLOC, {
 
 PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_REALLOC, {
     if (!enabled())
-        return PS_CB_STOP;
+        return PS_STOP_CHAIN;
     struct realloc_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E_realloc, ptr);
     ASSERT_FIELD_EQ(&E_realloc, size);
@@ -205,20 +205,20 @@ PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_REALLOC, {
 })
 PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_FREE, {
     if (!enabled())
-        return PS_CB_STOP;
+        return PS_STOP_CHAIN;
     struct free_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E_free, ptr);
 })
 
 PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_FREE, {
     if (!enabled())
-        return PS_CB_STOP;
+        return PS_STOP_CHAIN;
     struct free_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E_free, ptr);
 })
 PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_POSIX_MEMALIGN, {
     if (!enabled())
-        return PS_CB_STOP;
+        return PS_STOP_CHAIN;
     struct posix_memalign_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E_posix_memalign, ptr);
     ASSERT_FIELD_EQ(&E_posix_memalign, alignment);
@@ -227,7 +227,7 @@ PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_POSIX_MEMALIGN, {
 
 PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_POSIX_MEMALIGN, {
     if (!enabled())
-        return PS_CB_STOP;
+        return PS_STOP_CHAIN;
     struct posix_memalign_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E_posix_memalign, ptr);
     ASSERT_FIELD_EQ(&E_posix_memalign, alignment);
@@ -236,7 +236,7 @@ PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_POSIX_MEMALIGN, {
 })
 PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_ALIGNED_ALLOC, {
     if (!enabled())
-        return PS_CB_STOP;
+        return PS_STOP_CHAIN;
     struct aligned_alloc_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E_aligned_alloc, alignment);
     ASSERT_FIELD_EQ(&E_aligned_alloc, size);
@@ -244,7 +244,7 @@ PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_ALIGNED_ALLOC, {
 
 PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_ALIGNED_ALLOC, {
     if (!enabled())
-        return PS_CB_STOP;
+        return PS_STOP_CHAIN;
     struct aligned_alloc_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E_aligned_alloc, alignment);
     ASSERT_FIELD_EQ(&E_aligned_alloc, size);

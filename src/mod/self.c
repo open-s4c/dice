@@ -188,7 +188,7 @@ _self_destruct(void *arg)
         td->guard--;                                                           \
     } while (0)
 
-DICE_HIDE enum ps_cb_err
+DICE_HIDE enum ps_err
 _self_handle_before(const chain_id chain, const type_id type, void *event,
                     metadata_t *md)
 {
@@ -196,15 +196,15 @@ _self_handle_before(const chain_id chain, const type_id type, void *event,
     (void)md;
     thrdata_t *td = _thrdata_get();
     if (unlikely(td == NULL))
-        return PS_CB_STOP;
+        return PS_STOP_CHAIN;
 
     if (likely(td->guard++ == 0))
         self_guard(CAPTURE_BEFORE, type, event, td);
 
-    return PS_CB_STOP;
+    return PS_STOP_CHAIN;
 }
 
-DICE_HIDE enum ps_cb_err
+DICE_HIDE enum ps_err
 _self_handle_after(const chain_id chain, const type_id type, void *event,
                    metadata_t *md)
 {
@@ -212,15 +212,15 @@ _self_handle_after(const chain_id chain, const type_id type, void *event,
     (void)md;
     thrdata_t *td = _thrdata_get();
     if (unlikely(td == NULL))
-        return PS_CB_STOP;
+        return PS_STOP_CHAIN;
 
     if (likely(td->guard-- == 1))
         self_guard(CAPTURE_AFTER, type, event, td);
 
-    return PS_CB_STOP;
+    return PS_STOP_CHAIN;
 }
 
-DICE_HIDE enum ps_cb_err
+DICE_HIDE enum ps_err
 _self_handle_event(const chain_id chain, const type_id type, void *event,
                    metadata_t *md)
 {
@@ -229,7 +229,7 @@ _self_handle_event(const chain_id chain, const type_id type, void *event,
     thrdata_t *td = _thrdata_get();
 
     if (unlikely(td == NULL))
-        return PS_CB_STOP;
+        return PS_STOP_CHAIN;
 
     if (unlikely(td->tid == MAIN_THREAD && td->count == 0)) {
         self_guard(CAPTURE_EVENT, EVENT_THREAD_INIT, 0, td);
@@ -238,14 +238,14 @@ _self_handle_event(const chain_id chain, const type_id type, void *event,
     if (likely(td->guard == 0))
         self_guard(CAPTURE_EVENT, type, event, td);
 
-    return PS_CB_STOP;
+    return PS_STOP_CHAIN;
 }
 
 PS_SUBSCRIBE(INTERCEPT_EVENT, EVENT_THREAD_INIT, {
     // Only initialize TLS if the event is a THREAD_INIT event.
     thrdata_t *td = _thrdata_new();
     self_guard(CAPTURE_EVENT, EVENT_THREAD_INIT, 0, td);
-    return PS_CB_STOP;
+    return PS_STOP_CHAIN;
 })
 PS_SUBSCRIBE(INTERCEPT_EVENT, EVENT_THREAD_FINI, {
     thrdata_t *td = _thrdata_get();
@@ -258,7 +258,7 @@ PS_SUBSCRIBE(INTERCEPT_EVENT, EVENT_THREAD_FINI, {
         self_guard(CAPTURE_EVENT, EVENT_THREAD_FINI, 0, td);
         _self_destruct(td);
     }
-    return PS_CB_STOP;
+    return PS_STOP_CHAIN;
 })
 
 PS_SUBSCRIBE(INTERCEPT_EVENT, ANY_TYPE,

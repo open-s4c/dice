@@ -3,6 +3,7 @@ title: Dice Design Document
 author: Diogo Behrens
 version: "0.1"
 ---
+
 # 1. Overview
 
 Dice is a lightweight, highly extensible framework designed to capture
@@ -19,11 +20,12 @@ which require runtime data processing and in-place behavior modification,
 including but not limited to systematic concurrency testing, runtime monitoring,
 deterministic replay, and data race detection.
 
+
 ## 1.1. Pubsub
 
 Dice's Pubsub organizes event subscriptions in topics called **chains**.
 Whenever an event is intercepted, it can be published to one or more chains.
-Possible intercepted events are:
+Examples of events that can be intercepted are:
 
 - Thread initialization/termination: Published when a new thread starts or
   terminates.
@@ -37,30 +39,32 @@ Possible intercepted events are:
 - TSan event: Published on every events related to thread sanitizer functions
   such are `__tsan_read8`, `__tsan_exchange`, etc.
 
-Within a chain, events are delivered to the callbacks in the subscription
-priority order.  Callbacks can has keep state and have side effect. They
-can also change the event content such that following callabacks receive an
-updated event.  This mechanism allows subscribers to track resource states,
-detect concurrency issues, and create complex runtime monitoring systems,
-including state machines and deterministic replay systems.
+Within a chain, events are delivered to the event handlers in the subscription
+priority order.  Event handlers can keep state and have side effect as well
+as change the event content such that following handlers receive an updated
+event.  This mechanism allows subscribers to track resource states, detect
+concurrency issues, and create complex runtime monitoring systems, including
+state machines and deterministic replay systems.
+
 
 ## 1.2. Modules
 
 Dice supports the loading of additional functionality via **modules**, which
-can interpose functions to publish events as well as subscribe for events to
-act upon receiving them.
+can interpose system functions functions to publish events as well as subscribe
+for events to act upon receiving them.
 
 Dice provides two core modules: the **Pubsub** module and the **Mempool**
 module.  Mempool manages memory for use by other modules, ensuring isolation of
 Dice from the application.
 
-Besides these two core modules, offers a few other modules, for example, the
-**self** module, which manages thread-local storage (TLS) for each thread,
-ensuring the correct allocation of resources and avoiding redundant TLS
+Besides these two core modules, offers a few other (optional) modules, for
+example, the **Self** module, which manages thread-local storage (TLS) for each
+thread, ensuring the correct allocation of resources and avoiding redundant TLS
 allocations in interposed functions.
 
 Modules can be loaded as shared libraries via `LD_PRELOAD` mechanism or compiled
 with core modules as a single shared library.
+
 
 ## 1.3. Example Use Cases
 
@@ -75,18 +79,19 @@ with core modules as a single shared library.
 
 - Deterministic Replay: While Dice does not provide built-in deterministic
   replay, it offers the building blocks necessary to implement such a system.
-  Using event data and the switcher (which controls thread execution order), it
-  is possible to replay specific execution scenarios by controlling the sequence
-  of events and thread execution, ensuring that the system behaves consistently
-  for debugging or testing purposes.
+  Using event data and the Switcher module (which controls thread execution
+  order), it is possible to replay specific execution scenarios by controlling
+  the sequence of events and thread execution, ensuring that the system behaves
+  consistently for debugging or testing purposes.
+
 
 # 2. Pubsub System
 
 The Pubsub (Publish-Subscribe) system is the heart of the event-driven
 architecture in Dice. It was designed to facilitate the distribution of
 execution events to subscribers in a low-overhead, flexible manner. Pubsub
-allows different modules (publishers) to send event notifications, which are
-then processed by interested subscribers.
+allows different publisher modules to send event notifications, which are
+then processed by interested subscriber modules.
 
 
 ## 2.1. What is Pubsub?
@@ -133,12 +138,32 @@ The Pubsub system introduces several key advantages:
 
 ## 2.3. How Pubsub Works
 
-1. **Subscription**: At initialization, modules (subscribers) register with the
-   Pubsub system by specifying which chains and event types they want to
-   receive. This is done by calling a function that establishes the
-   subscription. Event types can be specific or general (e.g., `ANY_EVENT`).
-   Each subscription specifies a callback function, which will be called when
-   an event is published. The callback receives four arguments:
+1. **Subscription**: A subscription specifies which chains and event types the
+   subscriber is interested and how the event is going to be handled (event
+   handler).
+
+   There are two ways how to subscribe for events in Dice. The most common
+   option is to let the subscriber module register with the Pubsub system by
+   calling `ps_subscribe` at module initialization.
+
+   Besides the chain ID and the event type ID, `ps_subscribe` takes as
+   arguments a pointer the the event handler function and a subscription
+   priority order.
+
+   The second option is to define the event handler function with a predefined
+   function name and compile it together with Dice. Refer to Section X.X for
+   more information about module composition and handler subscriptions.
+
+2. **Publishing**: Publishers (such as intercept modules or the Self module)
+   publish events by calling `PS_PUBLISH(chain_id, type_id, void*,
+   metadata_t*)`. The publisher specifies the chain, event type, event payload,
+   and a potentially `NULL` metadata object.
+
+3. **Event handlers**: The event handler function is where the action happens
+   for the subscriber. Upon receiving an event, the handler can inspect and
+   process the event payload. For example, a subscriber might log the event,
+   modify its state, or even initiate further actions based on the event.
+   In general, event handlers receive four arguments:
 
   - `chain_id chain`: The ID identifying the chain.
   - `type_id type`: The ID identifyfing the event type.
@@ -149,32 +174,22 @@ The Pubsub system introduces several key advantages:
   - `metadata_t *md`: An opaque data structure used by each chain to send
     metadata to the subscribers. Actual type defined by `chain`.
 
-2. **Publishing**: Publishers (such as intercept modules or the Self module)
-   publish events by calling `PS_PUBLISH(chain_id, type_id, void*,
-   metadata_t*)`. The publisher specifies the chain, event type, event payload,
-   and a potentially `NULL` metadata object.
-
-3. **Callback Handling**: The callback function is where the action happens for
-   the subscriber. Upon receiving an event, the callback can inspect and process
-   the event payload. For example, a subscriber might log the event, modify its
-   state, or even initiate further actions based on the event.
-
-4. **Chain Control**: The ordering of events is controlled by the subscription
-   chain. When an event is published, it travels through the chain of
-   subscribers in the order of their subscription. This order is determined by
-   the loading order of the modules (based on constructor attributes and
-   priorities). This allows for flexible control over event flow and processing.
+4. **Chain broadcast**: The ordering of delivery of events to handlers is
+   controlled by the chain. When an event is published, it travels through the
+   chain of subscribers in the order of their subscription priority. This order
+   is determined during subscription. This allows for flexible control over
+   event flow and processing.
 
 The Pusbsub system in Dice differs from the standard definition of Pubsub (GoF
 design pattern) in several ways:
 
 - **Chains**: Subscribers are organized in callback chains (not topics), i.e.,
   when an event is published to a chain, the subscribers receive the event one
-  after another in the order of given by the subscription priority.
-- **Interruptions**: Callbacks can control whether the event is further
-  propagated to subsequent subscriptions by returnig `PS_CB_OK` to continue the
-  chain or `PS_CB_STOP` to interrupt it.
-- **Synchronous**: The publisher blocks until all subscribers have handled the
+  after another in the order defined in the chain.
+- **Interruptions**: Event handlers can control whether the event is further
+  propagated to subsequent handlers by returnig `PS_OK` to continue the
+  chain or `PS_STOP_CHAIN` to interrupt it.
+- **Synchronous**: The publisher **blocks until all subscribers have handled the
   event or the chain has been interrupted.
 
 These three aspects allow Dice's Pubsub to build powerful patterns such as

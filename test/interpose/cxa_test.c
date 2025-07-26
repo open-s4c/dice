@@ -101,42 +101,42 @@ fake___cxa_guard_abort(void *addr)
 
 PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT___CXA_GUARD_ACQUIRE, {
     if (!enabled())
-        return PS_CB_STOP;
+        return PS_STOP_CHAIN;
     struct __cxa_guard_acquire_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E___cxa_guard_acquire, addr);
 })
 
 PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT___CXA_GUARD_ACQUIRE, {
     if (!enabled())
-        return PS_CB_STOP;
+        return PS_STOP_CHAIN;
     struct __cxa_guard_acquire_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E___cxa_guard_acquire, addr);
  ASSERT_FIELD_EQ(&E___cxa_guard_acquire, ret);
 })
 PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT___CXA_GUARD_RELEASE, {
     if (!enabled())
-        return PS_CB_STOP;
+        return PS_STOP_CHAIN;
     struct __cxa_guard_release_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E___cxa_guard_release, addr);
 })
 
 PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT___CXA_GUARD_RELEASE, {
     if (!enabled())
-        return PS_CB_STOP;
+        return PS_STOP_CHAIN;
     struct __cxa_guard_release_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E___cxa_guard_release, addr);
  ASSERT_FIELD_EQ(&E___cxa_guard_release, ret);
 })
 PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT___CXA_GUARD_ABORT, {
     if (!enabled())
-        return PS_CB_STOP;
+        return PS_STOP_CHAIN;
     struct __cxa_guard_abort_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E___cxa_guard_abort, addr);
 })
 
 PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT___CXA_GUARD_ABORT, {
     if (!enabled())
-        return PS_CB_STOP;
+        return PS_STOP_CHAIN;
     struct __cxa_guard_abort_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E___cxa_guard_abort, addr);
 })

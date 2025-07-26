@@ -5,7 +5,7 @@
 #include <dice/pubsub.h>
 
 /* chain dispatcher prototypes */
-DICE_WEAK DICE_HIDE enum ps_cb_err
+DICE_WEAK DICE_HIDE enum ps_err
 ps_dispatch_0_(const chain_id chain, const type_id type, void *event,
                  metadata_t *md)
 {
@@ -13,9 +13,9 @@ ps_dispatch_0_(const chain_id chain, const type_id type, void *event,
     (void)type;
     (void)event;
     (void)md;
-    return PS_CB_OFF;
+    return PS_HANDLER_OFF;
 }
-DICE_WEAK DICE_HIDE enum ps_cb_err
+DICE_WEAK DICE_HIDE enum ps_err
 ps_dispatch_1_(const chain_id chain, const type_id type, void *event,
                  metadata_t *md)
 {
@@ -23,9 +23,9 @@ ps_dispatch_1_(const chain_id chain, const type_id type, void *event,
     (void)type;
     (void)event;
     (void)md;
-    return PS_CB_OFF;
+    return PS_HANDLER_OFF;
 }
-DICE_WEAK DICE_HIDE enum ps_cb_err
+DICE_WEAK DICE_HIDE enum ps_err
 ps_dispatch_2_(const chain_id chain, const type_id type, void *event,
                  metadata_t *md)
 {
@@ -33,9 +33,9 @@ ps_dispatch_2_(const chain_id chain, const type_id type, void *event,
     (void)type;
     (void)event;
     (void)md;
-    return PS_CB_OFF;
+    return PS_HANDLER_OFF;
 }
-DICE_WEAK DICE_HIDE enum ps_cb_err
+DICE_WEAK DICE_HIDE enum ps_err
 ps_dispatch_3_(const chain_id chain, const type_id type, void *event,
                  metadata_t *md)
 {
@@ -43,9 +43,9 @@ ps_dispatch_3_(const chain_id chain, const type_id type, void *event,
     (void)type;
     (void)event;
     (void)md;
-    return PS_CB_OFF;
+    return PS_HANDLER_OFF;
 }
-DICE_WEAK DICE_HIDE enum ps_cb_err
+DICE_WEAK DICE_HIDE enum ps_err
 ps_dispatch_4_(const chain_id chain, const type_id type, void *event,
                  metadata_t *md)
 {
@@ -53,9 +53,9 @@ ps_dispatch_4_(const chain_id chain, const type_id type, void *event,
     (void)type;
     (void)event;
     (void)md;
-    return PS_CB_OFF;
+    return PS_HANDLER_OFF;
 }
-DICE_WEAK DICE_HIDE enum ps_cb_err
+DICE_WEAK DICE_HIDE enum ps_err
 ps_dispatch_5_(const chain_id chain, const type_id type, void *event,
                  metadata_t *md)
 {
@@ -63,9 +63,9 @@ ps_dispatch_5_(const chain_id chain, const type_id type, void *event,
     (void)type;
     (void)event;
     (void)md;
-    return PS_CB_OFF;
+    return PS_HANDLER_OFF;
 }
-DICE_WEAK DICE_HIDE enum ps_cb_err
+DICE_WEAK DICE_HIDE enum ps_err
 ps_dispatch_6_(const chain_id chain, const type_id type, void *event,
                  metadata_t *md)
 {
@@ -73,17 +73,17 @@ ps_dispatch_6_(const chain_id chain, const type_id type, void *event,
     (void)type;
     (void)event;
     (void)md;
-    return PS_CB_OFF;
+    return PS_HANDLER_OFF;
 }
 
 /* main dispatcher */
-DICE_HIDE enum ps_cb_err
+DICE_HIDE enum ps_err
 ps_dispatch_(const chain_id chain, const type_id type, void *event,
              metadata_t *md)
 {
     switch (chain) {
         default:
-            return PS_CB_OFF;
+            return PS_HANDLER_OFF;
         case 0:
             return ps_dispatch_0_(chain, type, event, md);
         case 1:

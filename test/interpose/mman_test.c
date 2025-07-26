@@ -99,7 +99,7 @@ fake_munmap(void *addr, size_t length)
 
 PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_MMAP, {
     if (!enabled())
-        return PS_CB_STOP;
+        return PS_STOP_CHAIN;
     struct mmap_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E_mmap, addr);
     ASSERT_FIELD_EQ(&E_mmap, length);
@@ -111,7 +111,7 @@ PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_MMAP, {
 
 PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_MMAP, {
     if (!enabled())
-        return PS_CB_STOP;
+        return PS_STOP_CHAIN;
     struct mmap_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E_mmap, addr);
     ASSERT_FIELD_EQ(&E_mmap, length);
@@ -123,7 +123,7 @@ PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_MMAP, {
 })
 PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_MUNMAP, {
     if (!enabled())
-        return PS_CB_STOP;
+        return PS_STOP_CHAIN;
     struct munmap_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E_munmap, addr);
     ASSERT_FIELD_EQ(&E_munmap, length);
@@ -131,7 +131,7 @@ PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_MUNMAP, {
 
 PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_MUNMAP, {
     if (!enabled())
-        return PS_CB_STOP;
+        return PS_STOP_CHAIN;
     struct munmap_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E_munmap, addr);
     ASSERT_FIELD_EQ(&E_munmap, length);

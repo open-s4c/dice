@@ -16,61 +16,61 @@
 #define SSS 0
 #define _tmpl_unmute
 _tmpl_begin(CCC = CHAINS, SSS = SLOTS);
-DICE_WEAK DICE_HIDE enum ps_cb_err
-ps_callback_CCC_0_SSS_(const chain_id chain, const type_id type, void *event,
+DICE_WEAK DICE_HIDE enum ps_err
+ps_dispatch_CCC_0_SSS_(const chain_id chain, const type_id type, void *event,
                        metadata_t *md)
 {
     (void)chain;
     (void)type;
     (void)event;
     (void)md;
-    return PS_CB_OFF;
+    return PS_HANDLER_OFF;
 }
 _tmpl_end();
 
 _tmpl_begin(CCC = CHAINS, EEE = EVENTS, SSS = SLOTS);
-DICE_WEAK DICE_HIDE enum ps_cb_err
-ps_callback_CCC_EEE_SSS_(const chain_id chain, const type_id type, void *event,
+DICE_WEAK DICE_HIDE enum ps_err
+ps_dispatch_CCC_EEE_SSS_(const chain_id chain, const type_id type, void *event,
                          metadata_t *md)
 {
     (void)chain;
     (void)type;
     (void)event;
     (void)md;
-    return PS_CB_OFF;
+    return PS_HANDLER_OFF;
 }
 _tmpl_end();
 
 _tmpl_begin(CCC = CHAINS, EEE = EVENTS);
-static enum ps_cb_err
+static enum ps_err
 ps_dispatch_CCC_EEE_(const chain_id chain, const type_id type, void *event,
                      metadata_t *md)
 {
-    enum ps_cb_err err;
+    enum ps_err err;
     _tmpl2_begin(SSS = SLOTS);
     {
-        err = ps_callback_CCC_EEE_SSS_(chain, type, event, md);
-        if (err == PS_CB_STOP)
-            return PS_CB_STOP;
+        err = ps_dispatch_CCC_EEE_SSS_(chain, type, event, md);
+        if (err == PS_STOP_CHAIN)
+            return PS_STOP_CHAIN;
 
-        err = ps_callback_CCC_0_SSS_(chain, type, event, md);
-        if (err == PS_CB_STOP)
-            return PS_CB_STOP;
+        err = ps_dispatch_CCC_0_SSS_(chain, type, event, md);
+        if (err == PS_STOP_CHAIN)
+            return PS_STOP_CHAIN;
     }
     _tmpl2_end();
-    return PS_CB_OK;
+    return PS_OK;
 }
 _tmpl_end();
 
 /* chain dispatcher prototypes */
 _tmpl_begin(CCC = CHAINS);
-DICE_HIDE enum ps_cb_err
+DICE_HIDE enum ps_err
 ps_dispatch_CCC_(const chain_id chain, const type_id type, void *event,
                  metadata_t *md)
 {
     switch (type) {
         default:
-            return PS_CB_OFF;
+            return PS_HANDLER_OFF;
             _tmpl2_begin(EEE = EVENTS);
         case EEE:
             return ps_dispatch_CCC_EEE_(chain, type, event, md);

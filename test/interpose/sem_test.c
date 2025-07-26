@@ -121,49 +121,49 @@ fake_sem_timedwait(sem_t *sem, const struct timespec *abstime)
 
 PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_SEM_POST, {
     if (!enabled())
-        return PS_CB_STOP;
+        return PS_STOP_CHAIN;
     struct sem_post_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E_sem_post, sem);
 })
 
 PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_SEM_POST, {
     if (!enabled())
-        return PS_CB_STOP;
+        return PS_STOP_CHAIN;
     struct sem_post_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E_sem_post, sem);
  ASSERT_FIELD_EQ(&E_sem_post, ret);
 })
 PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_SEM_WAIT, {
     if (!enabled())
-        return PS_CB_STOP;
+        return PS_STOP_CHAIN;
     struct sem_wait_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E_sem_wait, sem);
 })
 
 PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_SEM_WAIT, {
     if (!enabled())
-        return PS_CB_STOP;
+        return PS_STOP_CHAIN;
     struct sem_wait_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E_sem_wait, sem);
  ASSERT_FIELD_EQ(&E_sem_wait, ret);
 })
 PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_SEM_TRYWAIT, {
     if (!enabled())
-        return PS_CB_STOP;
+        return PS_STOP_CHAIN;
     struct sem_trywait_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E_sem_trywait, sem);
 })
 
 PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_SEM_TRYWAIT, {
     if (!enabled())
-        return PS_CB_STOP;
+        return PS_STOP_CHAIN;
     struct sem_trywait_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E_sem_trywait, sem);
  ASSERT_FIELD_EQ(&E_sem_trywait, ret);
 })
 PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_SEM_TIMEDWAIT, {
     if (!enabled())
-        return PS_CB_STOP;
+        return PS_STOP_CHAIN;
     struct sem_timedwait_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E_sem_timedwait, sem);
     ASSERT_FIELD_EQ(&E_sem_timedwait, abstime);
@@ -171,7 +171,7 @@ PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_SEM_TIMEDWAIT, {
 
 PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_SEM_TIMEDWAIT, {
     if (!enabled())
-        return PS_CB_STOP;
+        return PS_STOP_CHAIN;
     struct sem_timedwait_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E_sem_timedwait, sem);
     ASSERT_FIELD_EQ(&E_sem_timedwait, abstime);

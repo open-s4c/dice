@@ -121,49 +121,49 @@ fake_pthread_mutex_timedlock(pthread_mutex_t *mutex, const struct timespec *time
 
 PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_PTHREAD_MUTEX_LOCK, {
     if (!enabled())
-        return PS_CB_STOP;
+        return PS_STOP_CHAIN;
     struct pthread_mutex_lock_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E_pthread_mutex_lock, mutex);
 })
 
 PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_PTHREAD_MUTEX_LOCK, {
     if (!enabled())
-        return PS_CB_STOP;
+        return PS_STOP_CHAIN;
     struct pthread_mutex_lock_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E_pthread_mutex_lock, mutex);
  ASSERT_FIELD_EQ(&E_pthread_mutex_lock, ret);
 })
 PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_PTHREAD_MUTEX_UNLOCK, {
     if (!enabled())
-        return PS_CB_STOP;
+        return PS_STOP_CHAIN;
     struct pthread_mutex_unlock_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E_pthread_mutex_unlock, mutex);
 })
 
 PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_PTHREAD_MUTEX_UNLOCK, {
     if (!enabled())
-        return PS_CB_STOP;
+        return PS_STOP_CHAIN;
     struct pthread_mutex_unlock_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E_pthread_mutex_unlock, mutex);
  ASSERT_FIELD_EQ(&E_pthread_mutex_unlock, ret);
 })
 PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_PTHREAD_MUTEX_TRYLOCK, {
     if (!enabled())
-        return PS_CB_STOP;
+        return PS_STOP_CHAIN;
     struct pthread_mutex_trylock_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E_pthread_mutex_trylock, mutex);
 })
 
 PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_PTHREAD_MUTEX_TRYLOCK, {
     if (!enabled())
-        return PS_CB_STOP;
+        return PS_STOP_CHAIN;
     struct pthread_mutex_trylock_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E_pthread_mutex_trylock, mutex);
  ASSERT_FIELD_EQ(&E_pthread_mutex_trylock, ret);
 })
 PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_PTHREAD_MUTEX_TIMEDLOCK, {
     if (!enabled())
-        return PS_CB_STOP;
+        return PS_STOP_CHAIN;
     struct pthread_mutex_timedlock_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E_pthread_mutex_timedlock, mutex);
     ASSERT_FIELD_EQ(&E_pthread_mutex_timedlock, timeout);
@@ -171,7 +171,7 @@ PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_PTHREAD_MUTEX_TIMEDLOCK, {
 
 PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_PTHREAD_MUTEX_TIMEDLOCK, {
     if (!enabled())
-        return PS_CB_STOP;
+        return PS_STOP_CHAIN;
     struct pthread_mutex_timedlock_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E_pthread_mutex_timedlock, mutex);
     ASSERT_FIELD_EQ(&E_pthread_mutex_timedlock, timeout);

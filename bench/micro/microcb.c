@@ -21,7 +21,7 @@ PS_SUBSCRIBE(CAPTURE_EVENT, EVENT_MA_AWRITE, {
     struct ma_awrite_event *ev = EVENT_PAYLOAD(ev);
     x += ev->val.u64;
     y++;
-    return PS_CB_STOP;
+    return PS_STOP_CHAIN;
 })
 
 void

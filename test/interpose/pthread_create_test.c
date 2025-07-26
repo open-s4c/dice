@@ -73,7 +73,7 @@ fake_pthread_join(pthread_t thread, void **ptr)
 
 PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_PTHREAD_JOIN, {
     if (!enabled())
-        return PS_CB_STOP;
+        return PS_STOP_CHAIN;
     struct pthread_join_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E_pthread_join, thread);
     ASSERT_FIELD_EQ(&E_pthread_join, ptr);
@@ -81,7 +81,7 @@ PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_PTHREAD_JOIN, {
 
 PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_PTHREAD_JOIN, {
     if (!enabled())
-        return PS_CB_STOP;
+        return PS_STOP_CHAIN;
     struct pthread_join_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E_pthread_join, thread);
     ASSERT_FIELD_EQ(&E_pthread_join, ptr);

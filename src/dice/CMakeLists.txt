@@ -34,14 +34,11 @@ add_custom_command(
           dispatch.c
   DEPENDS dispatch.c.in
   WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
-add_custom_target(update-dispatch DEPENDS dispatch.c)
+add_custom_target(expand-dispatch DEPENDS tmplr dispatch.c)
 set(DISPATCH_SRCS dispatch.c)
 
 # CHAIN_CONTROL only has event 99
 set(EEE_0 "99")
-# INTERCEPT_EVENT and CAPTURE_EVENT only have THREAD_INIT, THREAD_FINI, ENTER
-# and EXIT functions, and plain reads and writes. TODO: remove atomic reads and
-# writes set(EEE_1 "1;2;30;31;32;33;40;41") set(EEE_4 "1;2;30;31;32;33;40;41")
 
 foreach(CHAIN ${CHAINS})
   list(APPEND DISPATCH_SRCS dispatch_${CHAIN}.c)
@@ -54,13 +51,13 @@ foreach(CHAIN ${CHAINS})
     OUTPUT dispatch_${CHAIN}.c
     COMMAND
       cat dispatch_chain.c.in | #
-      $<TARGET_FILE:tmplr> "-DCCC=${CHAIN}" "-DEEE=${eee}" "-DSSS=${SSS}" -i |
-      $<TARGET_FILE:tmplr> "-DEEE=${eee}" "-DSSS=${SSS}" -P_tmpl2 -i >
+      $<TARGET_FILE:tmplr> "-DCCC=${CHAIN}" "-DEEE='${eee}'" "-DSSS='${SSS}'" -i
+      | $<TARGET_FILE:tmplr> "-DEEE='${eee}'" "-DSSS='${SSS}'" -P_tmpl2 -i >
       dispatch_${CHAIN}.c
     DEPENDS dispatch_chain.c.in
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
-  add_custom_target(update-dispatch_${CHAIN} DEPENDS dispatch_${CHAIN}.c)
-  add_dependencies(update-dispatch update-dispatch_${CHAIN})
+  add_custom_target(expand-dispatch_${CHAIN} DEPENDS dispatch_${CHAIN}.c)
+  add_dependencies(expand-dispatch expand-dispatch_${CHAIN})
 endforeach()
 
 set(SRCS)

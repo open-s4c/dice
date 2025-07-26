@@ -6,11 +6,15 @@
  * @brief Interruptable chain-based pubsub
  *
  * This component provides a chain-based pubsub. When an event is published to a
- * chain (aka topic), handlers are called back in the order of subscription.
- * Each handler has the option of interruping the chain by returning false.
+ * chain (aka topic), handlers are called in priority order. Each handler has
+ * the option of interruping the chain by returning false.
  *
  * Events are have a type (`type_id`) and have a payload `payload`. A chain is
  * identified by a `chain_id`.
+ *
+ * There are two ways how handlers can be called:
+ * - callback function pointers registered with ps_subscribe calls, see below.
+ * - dispatch calls, having predefined name and compilation, see dispatch.h.
  *
  * ## Naming
  *
@@ -18,7 +22,6 @@
  * aspects of several GoF design patterns such as pubsub, observer, and
  * chain-of-responsibility pattern. However, it violates some requirements of
  * each aspect such that no name seem to perfectly match it.
- *
  */
 #ifndef DICE_PUBSUB_H
 #define DICE_PUBSUB_H
@@ -45,7 +48,11 @@ typedef uint16_t chain_id;
 /* MAX_CHAINS determines the maximum number of chains */
 #define MAX_CHAINS 16
 
-/* Metadata passed to callbacks. It is used to mark events to be dropped by can
+/* CHAIN_CONTROL is a chain_id reserved for internal events of the pubsub
+ * system, for example, initialization of modules. */
+#define CHAIN_CONTROL 0
+
+/* Metadata passed to handlers. It is used to mark events to be dropped by can
  * be extended with type embedding. */
 typedef struct metadata {
     bool drop;
@@ -53,43 +60,39 @@ typedef struct metadata {
 
 /* Return values of ps_publish. */
 enum ps_err {
-    PS_OK      = 0,
-    PS_DROP    = -2,
-    PS_INVALID = -4,
-    PS_ERROR   = -5,
-};
-
-/* Return values of callbacks. */
-enum ps_cb_err {
-    PS_CB_OK   = 1,
-    PS_CB_OFF  = 0,
-    PS_CB_STOP = -1,
-    PS_CB_DROP = -2,
+    PS_OK          = 0,
+    PS_STOP_CHAIN  = 1,
+    PS_DROP_EVENT  = 2,
+    PS_HANDLER_OFF = 3,
+    PS_INVALID     = -1,
+    PS_ERROR       = -2,
 };
 
 /* ps_callback_f is the subscriber interface.
  *
- * Callbacks can return the following codes:
+ * Callback handlers can return the following codes:
  * - PS_OK: event handled successfully
- * - PS_STOP: event handled successfully, but chain should be interrupted
- * - PS_OFF: callback disabled
+ * - PS_STOP_CHAIN: event handled successfully, but chain should be
+ *   interrupted
+ * - PS_DROP_EVENT: event not handled and chain should be interrupted
+ * - PS_HANDLER_OFF: handler is disabled
  */
-typedef enum ps_cb_err (*ps_cb_f)(const chain_id, const type_id, void *event,
-                                  metadata_t *md);
+typedef enum ps_err (*ps_callback_f)(const chain_id, const type_id, void *event,
+                                     metadata_t *md);
 
-/* ps_publish publishes (ie, dispatches) an event to a chain.
+/* ps_publish publishes an event to a chain.
  *
- * The chain is identified by a chain and a event type. The type of the
- * event is given by `event`. Arguments `arg` and `ret` are input and output
- * arguments, respectively. They can be set to NULL. It is thread of the
- * subscribing handler to test for NULL and to cast `arg` and `ret` to
- * correct types based on `event`.
+ * Event `type` defines the type of the `event` parameter, `chain` determines in
+ * which chain the event is published and defines the subtype of `md`. The
+ * metadata `md` can be NULL.
  *
  * Returns one of the PS_ error codes above.
  */
 enum ps_err ps_publish(const chain_id chain, const type_id type, void *event,
                        metadata_t *md);
 
+
+/* PS_PUBLISH simplifies the publication and drop mechanism of metadata. */
 #define PS_PUBLISH(chain, type, event, md)                                     \
     do {                                                                       \
         metadata_t __md = {0};                                                 \
@@ -97,9 +100,9 @@ enum ps_err ps_publish(const chain_id chain, const type_id type, void *event,
         if (_md->drop)                                                         \
             break;                                                             \
         enum ps_err err = ps_publish(chain, type, event, md);                  \
-        if (err == PS_DROP)                                                    \
+        if (err == PS_DROP_EVENT)                                              \
             _md->drop = true;                                                  \
-        if (err != PS_OK && err != PS_DROP)                                    \
+        if (err != PS_OK && err != PS_DROP_EVENT)                              \
             log_fatalf("could not publish\n");                                 \
     } while (0)
 
@@ -116,7 +119,7 @@ enum ps_err ps_publish(const chain_id chain, const type_id type, void *event,
  * Note: Instead of directly using this function, use `PS_SUBSCRIBE()` macro
  * defined in `dice/module.h` header file.
  */
-int ps_subscribe(chain_id chain, type_id type, ps_cb_f cb, int prio);
+int ps_subscribe(chain_id chain, type_id type, ps_callback_f cb, int prio);
 
 /* EVENT_PAYLOAD casts the event argument `event` to type of the given
  * variable.

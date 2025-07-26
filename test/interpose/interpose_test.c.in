@@ -117,7 +117,7 @@ $_end();
 $_begin(FOO = [[foo]]);
 PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_UPCASE, {
     if (!enabled())
-        return PS_CB_STOP;
+        return PS_STOP_CHAIN;
     struct FOO_event *ev = EVENT_PAYLOAD(ev);
     $__begin(AA = MM_ARGS_FOO);
     ASSERT_FIELD_EQ(&E_FOO, AA);
@@ -126,7 +126,7 @@ PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_UPCASE, {
 
 PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_UPCASE, {
     if (!enabled())
-        return PS_CB_STOP;
+        return PS_STOP_CHAIN;
     struct FOO_event *ev = EVENT_PAYLOAD(ev);
     $__begin(AA = MM_ARGS_FOO);
     ASSERT_FIELD_EQ(&E_FOO, AA);

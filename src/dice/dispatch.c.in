@@ -18,7 +18,7 @@
 
 /* chain dispatcher prototypes */
 _tmpl_begin(CCC = CHAINS);
-DICE_WEAK DICE_HIDE enum ps_cb_err
+DICE_WEAK DICE_HIDE enum ps_err
 ps_dispatch_CCC_(const chain_id chain, const type_id type, void *event,
                  metadata_t *md)
 {
@@ -26,18 +26,18 @@ ps_dispatch_CCC_(const chain_id chain, const type_id type, void *event,
     (void)type;
     (void)event;
     (void)md;
-    return PS_CB_OFF;
+    return PS_HANDLER_OFF;
 }
 _tmpl_end();
 
 /* main dispatcher */
-DICE_HIDE enum ps_cb_err
+DICE_HIDE enum ps_err
 ps_dispatch_(const chain_id chain, const type_id type, void *event,
              metadata_t *md)
 {
     switch (chain) {
         default:
-            return PS_CB_OFF;
+            return PS_HANDLER_OFF;
             _tmpl_begin(CCC = CHAINS);
         case CCC:
             return ps_dispatch_CCC_(chain, type, event, md);
