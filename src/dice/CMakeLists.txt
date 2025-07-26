@@ -6,36 +6,27 @@ target_link_libraries(rbtree_test PUBLIC dice.h)
 
 add_test(NAME rbtree_test COMMAND rbtree_test)
 
-# define event
-execute_process(COMMAND seq 1 128 OUTPUT_VARIABLE EVENTS)
-string(REGEX REPLACE "[ \r\n]+" ";" EVENTS ${EVENTS})
-message(STATUS "EVENTS: ${EVENTS}")
-set(EEE "")
-foreach(EVENT ${EVENTS})
-  string(CONCAT EEE "${EEE}${EVENT}\;")
-endforeach()
+# Create sequence of integers a 4th argument indicate the separator
+function(seq OUT FROM TO)
+  set(SEPARATOR " ")
+  if(${ARGC} GREATER 3)
+    set(SEPARATOR "${ARGV3}")
+  endif()
+  execute_process(COMMAND seq ${FROM} ${TO} OUTPUT_VARIABLE SEQUENCE)
+  string(REGEX REPLACE "[ \r\n]+" " " SEQUENCE ${SEQUENCE})
+  string(STRIP ${SEQUENCE} SEQUENCE)
+  string(REPLACE " " "${SEPARATOR}" SEQUENCE ${SEQUENCE})
+  set(${OUT}
+      ${SEQUENCE}
+      PARENT_SCOPE)
+endfunction()
 
-# define slots
-execute_process(COMMAND seq 0 15 OUTPUT_VARIABLE SLOTS)
-string(REGEX REPLACE "[ \r\n]+" ";" SLOTS ${SLOTS})
-message(STATUS "SLOTS: ${SLOTS}")
-set(SSS "")
-foreach(SLOT ${SLOTS})
-  string(CONCAT SSS "${SSS}${SLOT}\;")
-endforeach()
-
-# define CHAINS
-set(CHAINS
-    0
-    1
-    2
-    3
-    4
-    5
-    6)
-string(REGEX REPLACE ";" "," CCC "${CHAINS}")
-string(REGEX REPLACE ";" "," SSX "${SLOTS}")
-message(STATUS "CHAINS: ${CCC}")
+# define events, slots and chains
+seq(EEE 1 128 \;)
+seq(SSS 0 15 \;)
+seq(SSX 0 15 ,)
+seq(CHAINS 0 6 \;)
+seq(CCC 0 6 ,)
 
 add_custom_command(
   OUTPUT dispatch.c
@@ -50,9 +41,7 @@ set(DISPATCH_SRCS dispatch.c)
 set(EEE_0 "99")
 # INTERCEPT_EVENT and CAPTURE_EVENT only have THREAD_INIT, THREAD_FINI, ENTER
 # and EXIT functions, and plain reads and writes. TODO: remove atomic reads and
-# writes
-set(EEE_1 "1;2;30;31;32;33;40;41")
-set(EEE_4 "1;2;30;31;32;33;40;41")
+# writes set(EEE_1 "1;2;30;31;32;33;40;41") set(EEE_4 "1;2;30;31;32;33;40;41")
 
 foreach(CHAIN ${CHAINS})
   list(APPEND DISPATCH_SRCS dispatch_${CHAIN}.c)
