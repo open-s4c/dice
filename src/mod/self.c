@@ -108,7 +108,7 @@ _thrdata_new()
     _tls_init(td);
 
     if (pthread_setspecific(_key, td) != 0)
-        log_fatalf("could not set key");
+        log_fatal("could not set key");
     return td;
 }
 
