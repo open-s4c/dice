@@ -15,7 +15,7 @@
 #define ensure(COND)                                                           \
     {                                                                          \
         if (!(COND)) {                                                         \
-            log_fatalf("error: %s\n", #COND);                                  \
+            log_fatal("error: %s", #COND);                                     \
         }                                                                      \
     }
 

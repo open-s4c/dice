@@ -128,7 +128,7 @@ ps_subscribe(chain_id chain, type_id type, ps_callback_f cb, int prio)
     ps_init_(); // ensure initialized
 
     if (prio <= ps_dispatch_max()) {
-        log_debugf("Ignoring %u %u %d\n", chain, type, prio);
+        log_debug("Ignoring %u %u %d", chain, type, prio);
         return PS_OK;
     }
     if (chain == CHAIN_CONTROL)

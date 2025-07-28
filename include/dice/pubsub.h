@@ -103,7 +103,7 @@ enum ps_err ps_publish(const chain_id chain, const type_id type, void *event,
         if (err == PS_DROP_EVENT)                                              \
             _md->drop = true;                                                  \
         if (err != PS_OK && err != PS_DROP_EVENT)                              \
-            log_fatalf("could not publish\n");                                 \
+            log_fatal("could not publish");                                    \
     } while (0)
 
 /* ps_subscribe subscribes a callback in a chain for an event.

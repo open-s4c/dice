@@ -40,7 +40,7 @@ _tmpl_map(PARAM_weak, 1);
 #define ensure(COND)                                                           \
     {                                                                          \
         if (!(COND)) {                                                         \
-            log_fatalf("error: %s\n", #COND);                                  \
+            log_fatal("error: %s", #COND);                                     \
         }                                                                      \
     }
 

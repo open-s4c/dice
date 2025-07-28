@@ -49,11 +49,11 @@
     static DICE_CTOR void _module_ctr()                                        \
     {                                                                          \
         if (_module_init())                                                    \
-            log_printf("[%4d] INIT: %s\n", DICE_MODULE_PRIO, __FILE__);        \
+            log_debug("[%4d] INIT: %s", DICE_MODULE_PRIO, __FILE__);           \
     }                                                                          \
     PS_SUBSCRIBE(CHAIN_CONTROL, EVENT_DICE_INIT, {                             \
         if (_module_init())                                                    \
-            log_printf("[%4d] INIT! %s\n", DICE_MODULE_PRIO, __FILE__);        \
+            log_debug("[%4d] INIT! %s", DICE_MODULE_PRIO, __FILE__);           \
     })
 
 
@@ -82,8 +82,8 @@
         int err =                                                              \
             ps_subscribe(CHAIN, TYPE, PS_HANDLER(CHAIN, TYPE, SLOT), SLOT);    \
         if (err != PS_OK)                                                      \
-            log_fatalf("could not subscribe %s_%s_%u: %d\n", #CHAIN, #TYPE,    \
-                       SLOT, err);                                             \
+            log_fatal("could not subscribe %s_%s_%u: %d", #CHAIN, #TYPE, SLOT, \
+                      err);                                                    \
     }
 
 #define PS_SUBSCRIBE(CHAIN, TYPE, HANDLER)                                     \

@@ -32,18 +32,18 @@ _init()
 static void
 _load_plugin(const char *path)
 {
-    log_printf("[%4d] LOAD: %s\n", DICE_MODULE_PRIO, path);
+    log_debug("[%4d] LOAD: %s", DICE_MODULE_PRIO, path);
     void *handle = dlopen(path, RTLD_GLOBAL | RTLD_LAZY);
     char *err    = dlerror();
     if (!handle)
-        log_fatalf("could not open %s: %s\n", path, err);
+        log_fatal("could not open %s: %s", path, err);
 }
 
 PS_SUBSCRIBE(CHAIN_CONTROL, EVENT_DICE_INIT, {
-    log_printf("[%4d] INIT: %s ...\n", DICE_MODULE_PRIO, __FILE__);
+    log_debug("[%4d] INIT: %s ...", DICE_MODULE_PRIO, __FILE__);
     const char *envvar = getenv(PRELOAD);
-    log_printf("[%4d] LOAD: builtin modules: 0..%d\n", DICE_MODULE_PRIO,
-               ps_dispatch_max());
+    log_debug("[%4d] LOAD: builtin modules: 0..%d", DICE_MODULE_PRIO,
+              ps_dispatch_max());
     if (envvar != NULL) {
         char *plugins = strdup(envvar);
         assert(plugins);
@@ -58,5 +58,5 @@ PS_SUBSCRIBE(CHAIN_CONTROL, EVENT_DICE_INIT, {
         }
         free(plugins);
     }
-    log_printf("[%4d] DONE: %s\n", DICE_MODULE_PRIO, __FILE__);
+    log_debug("[%4d] DONE: %s", DICE_MODULE_PRIO, __FILE__);
 })
