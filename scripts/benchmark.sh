@@ -4,9 +4,9 @@
 #
 set -e
 
-OPTION_CLEAN=yes
-OPTION_CONFIG=yes
-OPTION_BUILD=yes
+OPTION_CLEAN=no
+OPTION_CONFIG=no
+OPTION_BUILD=no
 OPTION_RUN_MICRO=yes
 OPTION_SUM_MICRO=yes
 OPTION_RUN_LEVELDB=yes
@@ -71,7 +71,7 @@ output() {
     echo "$@" >> $SUMMARY
 }
 
-output "# Dice Benchmarks"
+output "## Environment"
 output
 output "- Host: $HOST"
 output "- Date: $DATE"

@@ -41,7 +41,7 @@ foreach(TARGET ${OBJS})
 endforeach()
 
 add_library(micro-dice SHARED)
-target_link_libraries(micro-dice PUBLIC ${OBJS})
+target_link_libraries(micro-dice PUBLIC ${OBJS} dice-box.o)
 
 add_executable(micro3 micro3.c)
 target_link_libraries(micro3 PUBLIC micro-dice)
