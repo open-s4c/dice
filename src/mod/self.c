@@ -21,7 +21,9 @@
 #include <stdio.h>
 #include <string.h>
 
-#define DICE_MODULE_PRIO 4
+#ifndef DICE_MODULE_PRIO
+    #define DICE_MODULE_PRIO 4
+#endif
 #include <dice/chains/intercept.h>
 #include <dice/log.h>
 #include <dice/mempool.h>

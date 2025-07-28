@@ -21,16 +21,17 @@
 #include <dice/log.h>
 #include <dice/pubsub.h>
 
+
 #ifndef DICE_MODULE_PRIO
     #define DICE_MODULE_PRIO 9999
 #endif
 
-#if DICE_MODULE_PRIO < 16 && !defined(DICE_BUILTIN)
-    #define DICE_BUILTIN
-#elif DICE_MODULE_PRIO >= 16 && defined(DICE_BUILTIN)
-    #error "Cannot use DICE_BUILTIN with PRIO >= 16"
+// should enable ps_dispatch?
+#if DICE_MODULE_PRIO < 16
+    #include <dice/dispatch.h>
+#else
+    #define PS_DISPATCH_DECL(CHAIN, TYPE, SLOT)
 #endif
-#include <dice/dispatch.h>
 
 #define DICE_MODULE_INIT(CODE)                                                 \
     static bool _module_init()                                                 \

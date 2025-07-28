@@ -9,7 +9,7 @@ project(
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-add_compile_options(-Wall -Wextra -Werror -g3)
+add_compile_options(-Wall -Wextra -Werror)
 
 # LTO setup
 if(CMAKE_SYSTEM_NAME MATCHES "NetBSD" AND "${CMAKE_C_COMPILER_ID}" MATCHES
@@ -44,9 +44,9 @@ add_subdirectory(include)
 add_subdirectory(src)
 
 if(PROJECT_IS_TOP_LEVEL)
-	set(TESTS_DEFAULT on)
+  set(TESTS_DEFAULT on)
 else()
-	set(TESTS_DEFAULT off)
+  set(TESTS_DEFAULT off)
 endif()
 option(DICE_TESTS "Enable Dice tests" ${TESTS_DEFAULT})
 if(${DICE_TESTS})

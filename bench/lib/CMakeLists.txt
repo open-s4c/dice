@@ -14,9 +14,9 @@ target_link_libraries(
           mod-tsan.o
           mod-stacktrace.o)
 
-add_library(dice-fastch SHARED)
+add_library(dice-bundle-box SHARED)
 target_link_libraries(
-  dice-fastch
+  dice-bundle-box
   PRIVATE dice.o
           dice-box.o
           mod-self.o

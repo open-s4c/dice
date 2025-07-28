@@ -69,7 +69,7 @@ endforeach()
 set(SRCS mempool.c rbtree.c loader.c pubsub.c ${SRCS})
 add_library(dice.o OBJECT ${SRCS})
 target_link_libraries(dice.o PUBLIC dice.h)
-target_compile_options(dice.o PRIVATE -fPIC -DDICE_BUILTIN)
+target_compile_options(dice.o PRIVATE -fPIC)
 
 add_library(dice-box.o OBJECT box.c)
 target_link_libraries(dice-box.o PUBLIC dice.h)

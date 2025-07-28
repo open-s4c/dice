@@ -22,6 +22,7 @@ PARSE=		cat $(WORKDIR)/$*.run.log  \
 		| cut -d: -f2 \
 		| xargs -n1 echo "$*"';' \
 		| tee -a $(WORKDIR)/results.csv
+BUNDLE_DIR=	$(PROJECT)/build/bench/lib/
 
 # ------------------------------------------------------------------------------
 # clone level, apply patches, build dice
@@ -104,17 +105,15 @@ TARGET+=	bundle
 DEP.bundle=	.tsan.bld
 DIR.bundle=	$(DIR.tsan)
 RUN.bundle=	$(PROJECT)/scripts/dice \
-		-with $(PROJECT)/build/bench/lib/libdice-bundle$(SOEXT) \
-		$(RUNCMD)
+		-with $(BUNDLE_DIR)/libdice-bundle$(SOEXT) $(RUNCMD)
 PRO.bundle=	$(PARSE)
 
-TARGET+=	fastch
-DEP.fastch=	.tsan.bld
-DIR.fastch=	$(DIR.tsan)
-RUN.fastch=	$(PROJECT)/scripts/dice \
-		-with $(PROJECT)/build/bench/lib/libdice-fastch$(SOEXT) \
-		$(RUNCMD)
-PRO.fastch=	$(PARSE)
+TARGET+=	box
+DEP.box=	.tsan.bld
+DIR.box=	$(DIR.tsan)
+RUN.box=	$(PROJECT)/scripts/dice \
+		-with $(BUNDLE_DIR)/libdice-bundle-box$(SOEXT) $(RUNCMD)
+PRO.box=	$(PARSE)
 
 # ------------------------------------------------------------------------------
 BENCHMK= ../bench.mk

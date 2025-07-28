@@ -8,10 +8,6 @@ add_custom_target(
   DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/tsan.c.in)
 add_dependencies(tsan.c tmplr)
 
-# BUILTIN module can be linked together with dice.o, but it requires a unique
-# DICE_MODULE_PRIO value.
-set(BUILTIN_self on)
-
 file(GLOB SRCS *.c)
 foreach(SRC ${SRCS})
   get_filename_component(MODULE ${SRC} NAME_WLE)
@@ -23,10 +19,6 @@ foreach(SRC ${SRCS})
 
   add_library(${TARGET}.o OBJECT ${SRC})
   target_link_libraries(${TARGET}.o PRIVATE dice.h)
-
-  if(${BUILTIN_${MODULE}})
-    target_compile_options(${TARGET}.o PRIVATE -DDICE_BUILTIN)
-  endif()
 
   add_library(${TARGET}_testing.o OBJECT ${SRC})
   target_link_libraries(${TARGET}_testing.o PRIVATE dice.h)
