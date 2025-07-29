@@ -25,6 +25,8 @@ foreach(SRC ${SRCS})
       target_compile_options(${TARGET} PRIVATE -shared-libsan)
       target_link_options(${TARGET} PRIVATE -shared-libsan)
     endif()
+  elseif(NOT "${DICE_SANITIZER}" STREQUAL "")
+    target_link_options(${TARGET} PRIVATE -fsanitize=${DICE_SANITIZER})
   endif()
 endforeach()
 
