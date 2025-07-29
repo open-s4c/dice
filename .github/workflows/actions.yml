@@ -30,6 +30,26 @@ jobs:
       - name: Install
         run: cmake --install build
 
+  test-sanitizer:
+    strategy:
+      matrix:
+        os: [ubuntu-24.04]
+        sanitizer: [thread, address, undefined]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Configure
+        run: cmake -S. -Bbuild
+             -DDICE_SANITIZER=${{matrix.sanitizer}}
+             -DCMAKE_C_COMPILER=gcc
+             -DCMAKE_CXX_COMPILER=g++
+      - name: Build
+        run: cmake --build build
+      - name: Test
+        run: ctest --test-dir build --output-on-failure
+
   test-alpine:
     runs-on: ubuntu-latest
     container: ghcr.io/open-s4c/dice/alpine-ci:latest

@@ -37,7 +37,6 @@ set(FUNS_cxa __cxa_guard_acquire __cxa_guard_release __cxa_guard_abort)
 set(INCL_cxa '<dice/events/cxa.h>')
 
 set(MODS
-    malloc
     mman
     pthread_create
     pthread_mutex
@@ -45,6 +44,11 @@ set(MODS
     pthread_rwlock
     sem
     cxa)
+
+if(NOT ${ENABLE_SANITIZER})
+  # malloc does not play well with the sanitizers
+  set(MODS malloc ${MODS})
+endif()
 
 # generate interpose test source
 foreach(MOD ${MODS})
@@ -66,11 +70,14 @@ endforeach()
 foreach(MOD ${MODS})
   set(TARGET ${MOD}_test)
   add_executable(${TARGET} ${CMAKE_CURRENT_SOURCE_DIR}/${TARGET}.c)
+  add_test(NAME ${TARGET} COMMAND ${TARGET})
   target_link_libraries(${TARGET} PRIVATE dice.h dice.o tsano pthread)
   target_link_libraries(${TARGET} PRIVATE mod-${MOD}_testing.o)
-  # target_compile_options(${TARGET} PRIVATE -fsanitize=address)
-  # target_compile_options(mod-${MOD}_testing.o PRIVATE -fsanitize=address)
-  # target_compile_options(dice.o PRIVATE -fsanitize=address)
   # add_dependencies(${TARGET} ${MOD}-expand)
-  add_test(NAME ${TARGET} COMMAND ${TARGET})
+
+  if(${ENABLE_SANITIZER})
+    target_compile_options(${TARGET} PRIVATE ${LIBSAN_C_FLAGS})
+    target_link_options(${TARGET} PRIVATE ${LIBSAN_LD_FLAGS})
+    target_link_libraries(${TARGET} PRIVATE ${LIBSAN_LINK})
+  endif()
 endforeach()

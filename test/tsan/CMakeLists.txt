@@ -1,3 +1,7 @@
+if(${ENABLE_SANITIZER})
+  return()
+endif()
+
 add_custom_command(
   OUTPUT tsan_test.c
   COMMAND $<TARGET_FILE:tmplr> ${CMAKE_CURRENT_SOURCE_DIR}/tsan_test.c.in >
