@@ -29,7 +29,7 @@ foreach(SRC ${SRCS})
 
   if(NOT "${MODULE}" IN_LIST TSAN_MODULES)
     if(NOT "${DICE_SANITIZER}" STREQUAL "")
-      target_compile_options(${TARGET} PRIVATE -fsanitize=${DICE_SANITIZER})
+      target_compile_options(${TARGET} PUBLIC -fsanitize=${DICE_SANITIZER})
       target_compile_options(${TARGET}.o PRIVATE -fsanitize=${DICE_SANITIZER})
       target_compile_options(${TARGET}_testing.o
                              PRIVATE -fsanitize=${DICE_SANITIZER})

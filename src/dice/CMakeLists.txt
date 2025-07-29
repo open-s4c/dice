@@ -3,7 +3,7 @@
 
 if(NOT "${DICE_SANITIZER}" STREQUAL "")
   add_compile_options(-fsanitize=${DICE_SANITIZER})
-  add_link_options(-fsanitize=${DICE_SANITIZER})
+  add_link_options(-fsanitize=${DICE_SANITIZER} ${LIBSAN_SHARED})
 endif()
 
 add_executable(rbtree_test rbtree_test.c rbtree.c)
