@@ -8,6 +8,10 @@ if(CMAKE_TOOLCHAIN_FILE)
   return()
 endif()
 
+if(NOT "${DICE_SANITIZER}" STREQUAL "")
+  return()
+endif()
+
 add_library(publisher.o OBJECT publisher.c)
 target_link_libraries(publisher.o PRIVATE dice.h)
 

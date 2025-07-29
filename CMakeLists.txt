@@ -38,6 +38,18 @@ include(GNUInstallDirs)
 include(CheckSymbolExists)
 include(cmake/export.cmake)
 
+set(DICE_SANITIZER
+    ""
+    CACHE STRING "Compiler sanitizers=thread,address")
+if(NOT "${DICE_SANITIZER}" STREQUAL "")
+  message(STATUS "Enable sanitizer: ${DICE_SANITIZER}")
+endif()
+
+set(LIBSAN_SHARED)
+if(CMAKE_C_COMPILER_ID STREQUAL "Clang")
+  set(LIBSAN_SHARED -shared-libsan)
+endif()
+
 add_subdirectory(scripts)
 add_subdirectory(deps)
 add_subdirectory(include)

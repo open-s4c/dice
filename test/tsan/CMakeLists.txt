@@ -1,3 +1,7 @@
+if(NOT "${DICE_SANITIZER}" STREQUAL "")
+  return()
+endif()
+
 add_custom_command(
   OUTPUT tsan_test.c
   COMMAND $<TARGET_FILE:tmplr> ${CMAKE_CURRENT_SOURCE_DIR}/tsan_test.c.in >
