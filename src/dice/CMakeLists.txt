@@ -3,7 +3,6 @@
 
 add_executable(rbtree_test rbtree_test.c rbtree.c)
 target_link_libraries(rbtree_test PUBLIC dice.h)
-
 add_test(NAME rbtree_test COMMAND rbtree_test)
 
 # Create sequence of integers a 4th argument indicate the separator
@@ -77,3 +76,12 @@ target_link_libraries(dice-box.o PUBLIC dice.h)
 add_library(dice SHARED ${SRCS})
 target_link_libraries(dice PUBLIC dice.h pthread)
 install(TARGETS dice DESTINATION lib)
+
+if(${ENABLE_SANITIZER})
+  set(TARGETS rbtree_test dice.o dice)
+  foreach(TARGET ${TARGETS})
+    target_compile_options(${TARGET} PRIVATE ${LIBSAN_C_FLAGS})
+    target_link_options(${TARGET} PUBLIC ${LIBSAN_LD_FLAGS})
+    target_link_libraries(${TARGET} PUBLIC ${LIBSAN_LINK})
+  endforeach()
+endif()

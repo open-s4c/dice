@@ -38,6 +38,30 @@ include(GNUInstallDirs)
 include(CheckSymbolExists)
 include(cmake/export.cmake)
 
+# TSAN on Clang requires the following flag
+set(LIBSAN_SHARED)
+if(CMAKE_C_COMPILER_ID STREQUAL "Clang")
+  set(LIBSAN_SHARED -shared-libsan)
+endif()
+
+# Sanitizers for tests
+set(DICE_SANITIZER
+    ""
+    CACHE STRING "Compiler sanitizers=thread,address,undefined")
+if(NOT "${DICE_SANITIZER}" STREQUAL "")
+  set(ENABLE_SANITIZER on)
+  set(LIBSAN_thread tsan)
+  set(LIBSAN_address asan)
+  set(LIBSAN_undefined ubsan)
+
+  message(STATUS "Enable sanitizer: ${DICE_SANITIZER}")
+  set(CMAKE_INTERPROCEDURAL_OPTIMIZATION off)
+  set(LIBSAN_C_FLAGS -fsanitize=${DICE_SANITIZER})
+  set(LIBSAN_CXX_FLAGS -fsanitize=${DICE_SANITIZER})
+  set(LIBSAN_LD_FLAGS ${LIBSAN_SHARED})
+  set(LIBSAN_LINK ${LIBSAN_${DICE_SANITIZER}})
+endif()
+
 add_subdirectory(scripts)
 add_subdirectory(deps)
 add_subdirectory(include)

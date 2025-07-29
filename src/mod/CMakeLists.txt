@@ -8,10 +8,13 @@ add_custom_target(
   DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/tsan.c.in)
 add_dependencies(tsan.c tmplr)
 
+set(TSAN_MODULES tsan stacktrace)
+
 file(GLOB SRCS *.c)
 foreach(SRC ${SRCS})
   get_filename_component(MODULE ${SRC} NAME_WLE)
   set(TARGET mod-${MODULE})
+
   add_library(${TARGET} SHARED ${SRC})
   target_link_libraries(${TARGET} PRIVATE dice dice.h)
   set_target_properties(${TARGET} PROPERTIES PREFIX "")
@@ -23,6 +26,15 @@ foreach(SRC ${SRCS})
   add_library(${TARGET}_testing.o OBJECT ${SRC})
   target_link_libraries(${TARGET}_testing.o PRIVATE dice.h)
   target_compile_options(${TARGET}_testing.o PRIVATE -DDICE_TEST_INTERPOSE)
+
+  if(NOT "${MODULE}" IN_LIST TSAN_MODULES)
+    if(NOT "${DICE_SANITIZER}" STREQUAL "")
+      target_compile_options(${TARGET} PUBLIC -fsanitize=${DICE_SANITIZER})
+      target_compile_options(${TARGET}.o PRIVATE -fsanitize=${DICE_SANITIZER})
+      target_compile_options(${TARGET}_testing.o
+                             PRIVATE -fsanitize=${DICE_SANITIZER})
+    endif()
+  endif()
 endforeach()
 
 target_sources(mod-autocept PRIVATE autocept_list.S)
