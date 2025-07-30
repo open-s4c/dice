@@ -1,5 +1,7 @@
-# compile command
-add_executable(cond_var_version cond_var_version.cpp)
-target_link_libraries(cond_var_version PRIVATE dice dice.h)
-# target_compile_options(dice PRIVATE -fsanitize=address)
-add_test(NAME cond_var_version COMMAND cond_var_version)
+# Copyright (C) Huawei Technologies Co., Ltd. 2025. All rights reserved.
+# SPDX-License-Identifier: MIT
+
+add_executable(tls_destructor tls_destructor.cpp)
+add_test(NAME tls_destructor
+         COMMAND ${DICE_SCRIPT} -pthread -malloc -self -preload
+                 $<TARGET_FILE:malloc_free_check> ./tls_destructor)
