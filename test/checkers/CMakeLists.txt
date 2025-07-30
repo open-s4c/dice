@@ -2,4 +2,10 @@
 # SPDX-License-Identifier: MIT
 
 add_library(malloc_free_check SHARED malloc_free_check.c)
-target_link_libraries(malloc_free_check dice)
+if(${ENABLE_SANITIZER})
+  target_compile_options(malloc_free_check PRIVATE ${LIBSAN_C_FLAGS})
+  target_link_options(malloc_free_check PRIVATE ${LIBSAN_LD_FLAGS})
+  target_link_libraries(malloc_free_check PRIVATE dice ${LIBSAN_LINK})
+else()
+  target_link_libraries(malloc_free_check dice)
+endif()
