@@ -32,12 +32,16 @@ add_executable(simple-dice simple-tsan.c)
 target_compile_options(simple-dice PRIVATE -fsanitize=thread)
 target_link_libraries(simple-dice PRIVATE dice tsano pthread)
 
+target_compile_options(malloc_free_count PRIVATE -femulated-tls)
+
 add_test(NAME pthread_create_exit COMMAND pthread_create_exit)
 add_test(NAME pthread_create_join COMMAND pthread_create_join)
 add_test(NAME pthread_create_detach COMMAND pthread_create_detach)
+add_test(NAME malloc_free_count COMMAND malloc_free_count)
 target_link_libraries(pthread_create_join PRIVATE mod-pthread_create dice)
 target_link_libraries(pthread_create_exit PRIVATE mod-pthread_create dice)
 target_link_libraries(pthread_create_detach PRIVATE mod-pthread_create dice)
+target_link_libraries(malloc_free_count PRIVATE dice)
 
 # pthread must be last library to link with tests
 foreach(SRC ${SRCS})
