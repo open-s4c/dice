@@ -53,6 +53,7 @@ ps_initd_(void)
             _state = START;
             PS_PUBLISH(CHAIN_CONTROL, EVENT_DICE_INIT, 0, 0);
             _state = READY;
+            PS_PUBLISH(CHAIN_CONTROL, EVENT_DICE_READY, 0, 0);
             return true;
         case START:
             _state = BLOCK;
