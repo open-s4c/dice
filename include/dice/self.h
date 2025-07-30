@@ -12,6 +12,8 @@
 #define DICE_SELF_H
 #include <stddef.h>
 
+#include <dice/chains/capture.h>
+#include <dice/events/self.h>
 #include <dice/pubsub.h>
 #include <dice/thread_id.h>
 
@@ -33,6 +35,5 @@ void *self_tls(metadata_t *self, const void *global, size_t size);
     ((__typeof(global_ptr))self_tls((self), (global_ptr),                      \
                                     sizeof(*(global_ptr))))
 
-#include <dice/chains/capture.h>
 
 #endif /* DICE_SELF_H */

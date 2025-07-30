@@ -7,8 +7,8 @@
 
 #include <pthread.h>
 
-#define EVENT_THREAD_CREATE      10
-#define EVENT_THREAD_JOIN        11
+#include <dice/events/thread.h>
+
 #define EVENT_MUTEX_LOCK         12
 #define EVENT_MUTEX_TIMEDLOCK    13
 #define EVENT_MUTEX_TRYLOCK      14
