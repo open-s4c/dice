@@ -1,6 +1,8 @@
 # Copyright (C) Huawei Technologies Co., Ltd. 2025. All rights reserved.
 # SPDX-License-Identifier: MIT
 
+add_subdirectory(checkers)
+
 add_compile_options(-DVATOMIC_BUILTINS)
 set(TSAN_mp on)
 set(TSAN_simple-tsan on)
@@ -50,3 +52,4 @@ add_custom_target(expand-tests)
 add_subdirectory(interpose)
 add_subdirectory(tsan)
 add_subdirectory(order)
+add_subdirectory(cxx)
