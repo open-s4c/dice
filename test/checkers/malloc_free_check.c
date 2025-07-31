@@ -21,10 +21,26 @@ static int captured[] = {
     [EVENT_FREE]   = 0,
 };
 
-PS_SUBSCRIBE(CAPTURE_BEFORE, EVENT_MALLOC, { captured[EVENT_MALLOC]++; })
-PS_SUBSCRIBE(CAPTURE_BEFORE, EVENT_FREE, { captured[EVENT_FREE]++; })
-PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_MALLOC, { intercepted[EVENT_MALLOC]++; })
-PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_FREE, { intercepted[EVENT_FREE]++; })
+PS_SUBSCRIBE(CAPTURE_BEFORE, ANY_TYPE, {
+    switch (type) {
+        case EVENT_MALLOC:
+        case EVENT_CALLOC:
+        case EVENT_ALIGNED_ALLOC:
+        case EVENT_POSIX_MEMALIGN:
+            captured[EVENT_MALLOC]++;
+            break;
+        case EVENT_FREE: {
+            struct free_event *ev = EVENT_PAYLOAD(ev);
+
+            // ignore frees of NULL pointers
+            if (ev->ptr != NULL)
+                captured[EVENT_FREE]++;
+            break;
+        }
+        default:
+            break;
+    }
+})
 
 #define p(a, x) log_printf("%11s[%s]   \t= %d\n", #a, #x, a[x])
 
@@ -34,9 +50,9 @@ DICE_MODULE_FINI({
     p(intercepted, EVENT_MALLOC);
     p(intercepted, EVENT_FREE);
 
-    /* Ensure the self module has been loaded. The self module interrupts the
-     * INTERCEPT chains, handles TLS and redirects the events to equivalent
-     * CAPTURE chains. */
+    /* Ensure the self module has been loaded. The self module interrupts
+     * the INTERCEPT chains, handles TLS and redirects the events to
+     * equivalent CAPTURE chains. */
     assert(intercepted[EVENT_MALLOC] == 0);
     assert(intercepted[EVENT_FREE] == 0);
 
