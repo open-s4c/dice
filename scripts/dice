@@ -39,6 +39,9 @@ while [ "$#" != "0" ]; do
         -self)
             PRELOAD="$PRELOAD:$DICE_DIR/mod-self.$SO"
         ;;
+        -malloc)
+            PRELOAD="$PRELOAD:$DICE_DIR/mod-malloc.$SO"
+        ;;
         -tsan)
             PRELOAD="$PRELOAD:$DICE_DIR/mod-tsan.$SO"
             PRELOAD="$PRELOAD:$DICE_DIR/mod-stacktrace.$SO"
@@ -51,6 +54,10 @@ while [ "$#" != "0" ]; do
         ;;
         -autocept)
             PRELOAD="$PRELOAD:$DICE_DIR/mod-autocept.$SO"
+        ;;
+        -preload)
+            shift
+            PRELOAD="$PRELOAD:$1"
         ;;
         -with)
             shift

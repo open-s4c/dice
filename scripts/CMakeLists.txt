@@ -2,7 +2,6 @@
 # SPDX-License-Identifier: MIT
 
 configure_file(dice dice)
-
 install(
   FILES ${CMAKE_CURRENT_BINARY_DIR}/dice
   DESTINATION bin
@@ -14,3 +13,8 @@ install(
     GROUP_EXECUTE
     WORLD_READ
     WORLD_EXECUTE)
+
+# for tests
+set(DICE_SCRIPT
+    ${PROJECT_SOURCE_DIR}/scripts/dice
+    PARENT_SCOPE)
