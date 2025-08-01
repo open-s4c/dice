@@ -104,7 +104,7 @@ these events.
 Each event in Dice has a type that specifies what kind of event it is.  The
 event type is identified by an integer `type_id`.  For example, the event
 corresponding to a thread being initialized is identified by
-`EVENT_THREAD_INIT`.
+`EVENT_THREAD_START`.
 
 Events are published in topics, which are called *chains* in Dice and are
 identified by an integer `chain_id`. Modules can subscribe for events published
@@ -367,18 +367,18 @@ The Self module addresses a few important needs:
 ## 4.3. How Self Works
 
 1. Thread Initialization: When a new thread is created, the Self module
-   receives an `EVENT_THREAD_INIT`. Upon receiving this event, it
+   receives an `EVENT_THREAD_START`. Upon receiving this event, it
    allocates thread-specific data (such as an array of pointers for TLS) from
    the Mempool. It also assigns a unique thread ID to the current thread, which
    is managed atomically to ensure correct synchronization.
 
 2. Thread Finalization: When a thread finishes execution, the Self module
-   receives an `EVENT_THREAD_FINI` event. It is responsible for cleaning
+   receives an `EVENT_THREAD_EXIT` event. It is responsible for cleaning
    up the TLS data associated with the thread, using mempool-free to deallocate
    memory.
 
 3. TLS Allocation: The Self module allocates TLS only when it receives a
-   `EVENT_THREAD_INIT` event. This ensures that TLS is only allocated when
+   `EVENT_THREAD_START` event. This ensures that TLS is only allocated when
    necessary and prevents redundant allocations. If no TLS data is found for a
    thread (e.g., if it has already been finalized), the Self module
    **interrupts the chain**, preventing further processing.
@@ -388,7 +388,7 @@ The Self module addresses a few important needs:
    example, if a subscriber publishes an event while processing another event,
    the system prevents an infinite loop by interrupting the chain.
 
-The events `EVENT_THREAD_INIT` and `EVENT_THREAD_FINI` are published by the
+The events `EVENT_THREAD_START` and `EVENT_THREAD_EXIT` are published by the
 `mod-pthread_create` module of Dice, or can be published by user-defined
 interceptors.
 
@@ -460,7 +460,7 @@ module is triggered. For example, when `pthread_create` is called, the interpose
 module publishes events using the Pubsub system. For example, when
 `pthread_create` is intercepted, the event `EVENT_THREAD_CREATE` is published.
 Via a trampoline function, passed to the readl `pthread_create`, the new thread
-also publishes a `EVENT_THREAD_INIT` event.  Similarly, events like
+also publishes a `EVENT_THREAD_START` event.  Similarly, events like
 `EVENT_MUTEX_LOCK`, `EVENT_MUTEX_UNLOCK`, `EVENT_MALLOC`, and `EVENT_FREE` can
 be intercepted and published to the appropriate chains.
 

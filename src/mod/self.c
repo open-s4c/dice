@@ -11,8 +11,8 @@
  * The module subscribes to all chains of the pubsub and should be
  * initialized as first module so that it is placed at the start of each
  * chain. The module blocks any events of a thread until the thread
- * publishes a THREAD_INIT event. It also blocks any event of a thread after
- * it sends a THREAD_FINI event.
+ * publishes a THREAD_START event. It also blocks any event of a thread after
+ * it sends a THREAD_EXIT event.
  *
  * This should be the first module subscribing to all events from pubsub.
  */
@@ -166,7 +166,7 @@ _self_destruct(void *arg)
     // In some systems (eg, NetBSD) threads still call interceptors while
     // terminating (inside pthread_exit). Setting _key to NULL instructs the
     // pubsub to ignore further events. No further TLS data will be
-    // (re)created because no EVENT_THREAD_INIT will be published for this
+    // (re)created because no EVENT_THREAD_START will be published for this
     // thread anymore.
     if (arg == NULL)
         return;
@@ -234,7 +234,7 @@ _self_handle_event(const chain_id chain, const type_id type, void *event,
         return PS_STOP_CHAIN;
 
     if (unlikely(td->tid == MAIN_THREAD && td->count == 0)) {
-        self_guard(CAPTURE_EVENT, EVENT_THREAD_INIT, 0, td);
+        self_guard(CAPTURE_EVENT, EVENT_THREAD_START, 0, td);
     }
 
     if (likely(td->guard == 0))
@@ -243,21 +243,21 @@ _self_handle_event(const chain_id chain, const type_id type, void *event,
     return PS_STOP_CHAIN;
 }
 
-PS_SUBSCRIBE(INTERCEPT_EVENT, EVENT_THREAD_INIT, {
-    // Only initialize TLS if the event is a THREAD_INIT event.
+PS_SUBSCRIBE(INTERCEPT_EVENT, EVENT_THREAD_START, {
+    // Only initialize TLS if the event is a THREAD_START event.
     thrdata_t *td = _thrdata_new();
-    self_guard(CAPTURE_EVENT, EVENT_THREAD_INIT, 0, td);
+    self_guard(CAPTURE_EVENT, EVENT_THREAD_START, 0, td);
     return PS_STOP_CHAIN;
 })
-PS_SUBSCRIBE(INTERCEPT_EVENT, EVENT_THREAD_FINI, {
+PS_SUBSCRIBE(INTERCEPT_EVENT, EVENT_THREAD_EXIT, {
     thrdata_t *td = _thrdata_get();
 
-    /* EVENT_THREAD_FINI could be published multiple times depending how the
+    /* EVENT_THREAD_EXIT could be published multiple times depending how the
      * pthread library implements the exit of the thread. For example, in
      * NetBSD 10.1, pthread_exit is called after the thread returns from its run
      * routine. */
     if (td) {
-        self_guard(CAPTURE_EVENT, EVENT_THREAD_FINI, 0, td);
+        self_guard(CAPTURE_EVENT, EVENT_THREAD_EXIT, 0, td);
         _self_destruct(td);
     }
     return PS_STOP_CHAIN;
@@ -281,12 +281,12 @@ DICE_MODULE_INIT({
 
     // Construct TLS for main thread, but do not publish any event yet. On the
     // first event of the main thread (handled by self's callback), we piggyback
-    // a EVENT_THREAD_INIT for the main thread.
+    // a EVENT_THREAD_START for the main thread.
     (void)_thrdata_new();
 })
 
 DICE_MODULE_FINI({
     thrdata_t *td = _thrdata_get();
-    PS_PUBLISH(CAPTURE_EVENT, EVENT_THREAD_FINI, 0, &td->md);
+    PS_PUBLISH(CAPTURE_EVENT, EVENT_THREAD_EXIT, 0, &td->md);
     _thrmap_fini();
 })
