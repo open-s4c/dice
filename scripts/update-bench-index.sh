@@ -1,7 +1,7 @@
 #!/bin/sh
 # Copyright (C) Huawei Technologies Co., Ltd. 2025. All rights reserved.
 # SPDX-License-Identifier: MIT
-#
+
 set -e
 
 # assume starting from project root and dice.wiki is cloned there

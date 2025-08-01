@@ -13,19 +13,19 @@
 #define $_include(...)
 #define MM_RETURN_FOO int
 #define MM_PARAMS_FOO
-#define EVENT_UPCASE 1
-#define PARAM        int x
-#define AA           1
-#define E_FOO(...)   1
-#define E_FOO(...)   1
+#define MAKE_UPCASE 1
+#define PARAM       int x
+#define AA          1
+#define E_FOO(...)  1
+#define E_FOO(...)  1
 int FOO(int);
 #define INCL       <stdio.h>
 #define $_unmute() // end of fake definitions
 $_dl(); // ---------------------------------------------------------------------
 $_dl(); // mapping and tmplr configuration
 $_dl(); // ---------------------------------------------------------------------
-$_dl(); // EVENT_UPCASE can be used to force FOO to be upcased in EVENT_FOO
-$_map(EVENT_UPCASE, $_upcase(EVENT_FOO));
+$_dl(); // MAKE_UPCASE can be used to force FOO to be upcased in EVENT_FOO
+$_map(MAKE_UPCASE, $_upcase(EVENT_FOO));
 $_dl(); // $_returns X $.? deletes line if X == "void", outputs nothing
 $_dl(); // $_returns X $.!? deletes line if X == "void", otherwise outputs X
 $_map($_returns void $, $_dl);
@@ -115,7 +115,7 @@ $_end();
     ensure(memcmp(&ev->field, &(E)->field, sizeof(__typeof((E)->field))) == 0);
 
 $_begin(FOO = [[foo]]);
-PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_UPCASE, {
+PS_SUBSCRIBE(INTERCEPT_BEFORE, MAKE_UPCASE, {
     if (!enabled())
         return PS_STOP_CHAIN;
     struct FOO_event *ev = EVENT_PAYLOAD(ev);
@@ -124,7 +124,7 @@ PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_UPCASE, {
     $__end();
 })
 
-PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_UPCASE, {
+PS_SUBSCRIBE(INTERCEPT_AFTER, MAKE_UPCASE, {
     if (!enabled())
         return PS_STOP_CHAIN;
     struct FOO_event *ev = EVENT_PAYLOAD(ev);
