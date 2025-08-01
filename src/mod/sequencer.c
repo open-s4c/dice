@@ -10,10 +10,10 @@
 
 PS_SUBSCRIBE(CAPTURE_EVENT, ANY_TYPE, {
     switch (type) {
-        case EVENT_THREAD_FINI:
+        case EVENT_THREAD_EXIT:
             switcher_wake(ANY_THREAD, 0);
             break;
-        case EVENT_THREAD_INIT:
+        case EVENT_THREAD_START:
             /* threads call this only ONCE (except the main thread). */
             switcher_yield(self_id(md), true);
             break;

@@ -19,8 +19,8 @@ int run_called;
 vatomic32_t done;
 vatomic32_t start;
 
-PS_SUBSCRIBE(INTERCEPT_EVENT, EVENT_THREAD_INIT, { init_called++; })
-PS_SUBSCRIBE(INTERCEPT_EVENT, EVENT_THREAD_FINI, {
+PS_SUBSCRIBE(INTERCEPT_EVENT, EVENT_THREAD_START, { init_called++; })
+PS_SUBSCRIBE(INTERCEPT_EVENT, EVENT_THREAD_EXIT, {
     fini_called++;
     vatomic_inc(&done);
 })

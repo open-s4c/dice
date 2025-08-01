@@ -22,7 +22,7 @@ DICE_NORET
 INTERPOSE(void, pthread_exit, void *ptr)
 {
     struct pthread_exit_event ev = {.pc = INTERPOSE_PC, .ptr = ptr};
-    PS_PUBLISH(INTERCEPT_EVENT, EVENT_THREAD_FINI, &ev, 0);
+    PS_PUBLISH(INTERCEPT_EVENT, EVENT_THREAD_EXIT, &ev, 0);
     REAL(pthread_exit, ptr);
     exit(1); // unreachable
 }
@@ -35,9 +35,9 @@ _trampoline(void *targ)
     void *(*run)(void *) = t->run;
     mempool_free(t);
 
-    PS_PUBLISH(INTERCEPT_EVENT, EVENT_THREAD_INIT, 0, 0);
+    PS_PUBLISH(INTERCEPT_EVENT, EVENT_THREAD_START, 0, 0);
     void *ret = run(arg);
-    PS_PUBLISH(INTERCEPT_EVENT, EVENT_THREAD_FINI, 0, 0);
+    PS_PUBLISH(INTERCEPT_EVENT, EVENT_THREAD_EXIT, 0, 0);
     return ret;
 }
 

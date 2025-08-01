@@ -15,8 +15,8 @@ int init_called;
 int fini_called;
 int run_called;
 
-PS_SUBSCRIBE(INTERCEPT_EVENT, EVENT_THREAD_INIT, { init_called++; })
-PS_SUBSCRIBE(INTERCEPT_EVENT, EVENT_THREAD_FINI, { fini_called++; })
+PS_SUBSCRIBE(INTERCEPT_EVENT, EVENT_THREAD_START, { init_called++; })
+PS_SUBSCRIBE(INTERCEPT_EVENT, EVENT_THREAD_EXIT, { fini_called++; })
 
 void *
 run()
