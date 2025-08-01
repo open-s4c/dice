@@ -308,8 +308,8 @@ _self_handle_before(const chain_id chain, const type_id type, void *event,
     if (likely(self->guard++ == 0))
         self_guard(CAPTURE_BEFORE, type, event, self);
     else {
-        log_printf(">>> [%lu:0x%lx] %u_%u: %d\n", self_id(&self->md),
-                   (uint64_t)pthread_self(), chain, type, self->guard);
+        log_info(">>> [%lu:0x%lx] %u_%u: %d\n", self_id(&self->md),
+                 (uint64_t)pthread_self(), chain, type, self->guard);
     }
 
     return PS_STOP_CHAIN;

@@ -103,36 +103,7 @@ You can add your own subscriber module and load it the same way to process event
 
 ## Examples
 
-### Logger Subscriber
-
-**`examples/logger.c`**
-*A simple subscriber that logs all events to stderr.*
-
-```c
-#include <stdio.h>
-#include <dice/intercept.h>
-#include <dice/module.h>
-
-static bool log_callback(token_t token, const void *data, self_t *self) {
-    fprintf(stderr, "[logger] Event received: chain=%d, event_id=%d, data=%p\n",
-            token->chain, token->event, data);
-    return true; // continue chain
-}
-
-REGISTER_CALLBACK(ANY_CHAIN, ANY_EVENT, {
-    log_callback(token, event, arg);
-})
-```
-
-**Compile:**
-```sh
-gcc -fPIC -shared -o libdice-logger.so logger.c -I/path/to/dice/include
-```
-
-**Run:**
-```sh
-env LD_PRELOAD=./libdice.so:./libdice-logger.so ./your_program
-```
+See examples in the `examples` directory.
 
 ---
 
