@@ -1,5 +1,6 @@
 name: dice build and test
-on: [push]
+on: #[push]
+  workflow_dispatch:
 env:
   REGISTRY: ghcr.io
 
