@@ -1,0 +1,35 @@
+FROM ubuntu:24.04
+
+# install dependencies for building and running smolBSD image
+RUN apt update           \
+&&  apt install -y       \
+        build-essential  \
+        curl             \
+	git              \
+	libarchive-tools \
+        qemu-system      \
+	rsync            \
+	uuid-runtime
+
+# get smolBSD and pkgsrc dependencies
+COPY scripts/ /scripts/
+RUN ls /scripts
+RUN mkdir -p /data
+RUN cd /data && /scripts/get_smolBSD.sh
+RUN cd /data && /scripts/get_pkgsrc.sh
+
+## get base of system
+#RUN cd smolBSD \
+#&&  ./mkimg.sh -s netbsd \
+#        -x "base.tar.xz etc.tar.xz comp.tar.xz" \
+#        -m 2048
+#
+## get cmake
+#RUN cd smolBSD \
+#&&  mount -o loop netbsd.img mnt \
+#&&  mkdir -p mnt/usr/pkg \
+#&&  for f in $(ls /packages/*.tgz); do \
+#        tar xf $f -C mnt/usr/pkg; done \
+#&&  umount mnt
+#
+## get the repo to test
