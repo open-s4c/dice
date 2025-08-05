@@ -16,10 +16,10 @@ ps_publish(const chain_id chain, const type_id type, void *event,
     if (unlikely(!ready)) {
         if (!ps_initd_())
             return PS_DROP_EVENT;
-        ready = true;
     }
 
     enum ps_err err = ps_dispatch_(chain, type, event, md);
+    ready = true;
     if (likely(err == PS_STOP_CHAIN))
         return PS_OK;
 
