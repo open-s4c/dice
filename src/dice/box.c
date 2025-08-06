@@ -12,14 +12,11 @@ DICE_HIDE enum ps_err
 ps_publish(const chain_id chain, const type_id type, void *event,
            metadata_t *md)
 {
-    static bool ready = false;
-    if (unlikely(!ready)) {
-        if (!ps_initd_())
-            return PS_DROP_EVENT;
-    }
+    if (unlikely(!ps_initd_()))
+        return PS_DROP_EVENT;
 
     enum ps_err err = ps_dispatch_(chain, type, event, md);
-    ready = true;
+
     if (likely(err == PS_STOP_CHAIN))
         return PS_OK;
 
