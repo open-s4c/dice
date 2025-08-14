@@ -24,8 +24,8 @@
 DICE_MODULE_INIT()
 
 #ifndef SWITCHER_LOG
-    #undef log_debugf
-    #define log_debugf(...)                                                    \
+    #undef log_debug
+    #define log_debug(...)                                                     \
         do {                                                                   \
         } while (0)
 #endif
@@ -51,7 +51,7 @@ int
 switcher_yield(thread_id id, bool any)
 {
     thread_id prev, next;
-    log_debugf("\t\t\t\tYIELD  thread %" PRIu64 "\n", id);
+    log_debug("\t\t\t\tYIELD  thread %" PRIu64, id);
 
     vmutex_acquire(&_switcher.mutex);
     next = _switcher.next;
@@ -102,7 +102,7 @@ switcher_yield(thread_id id, bool any)
     vmutex_release(&_switcher.mutex);
 
     _switcher_resuming();
-    log_debugf("\t\t\t\tRESUME thread %" PRIu64 "\n", id);
+    log_debug("\t\t\t\tRESUME thread %" PRIu64, id);
 
     return status;
 }
@@ -110,7 +110,7 @@ switcher_yield(thread_id id, bool any)
 void
 switcher_wake(thread_id id, nanosec_t slack)
 {
-    log_debugf("\t\t\t\tWAKE   thread %" PRIu64 "\n", id);
+    log_debug("\t\t\t\tWAKE   thread %" PRIu64, id);
 
     vmutex_acquire(&_switcher.mutex);
     assert(_switcher.next == NO_THREAD);
@@ -135,7 +135,7 @@ switcher_wake(thread_id id, nanosec_t slack)
 void
 switcher_abort()
 {
-    log_debugf("ABORT called\n");
+    log_debug("ABORT called\n");
     vmutex_acquire(&_switcher.mutex);
     _switcher.status = SWITCHER_ABORTED;
     vmutex_release(&_switcher.mutex);
