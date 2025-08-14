@@ -52,7 +52,6 @@ struct self {
     pthread_t pid;
     thread_id tid;
     struct rbtree tls;
-    uint64_t count;
     int guard;
     bool retired;
 };
@@ -98,6 +97,13 @@ self_id(metadata_t *md)
 {
     struct self *self = (struct self *)md;
     return self ? self->tid : NO_THREAD;
+}
+
+DICE_HIDE_IF bool
+self_retired(metadata_t *md)
+{
+    struct self *self = (struct self *)md;
+    return self ? self->retired : false;
 }
 
 DICE_HIDE_IF void *
@@ -177,7 +183,6 @@ _create_self()
     struct self *self;
     self        = mempool_alloc(sizeof(struct self));
     self->guard = 0;
-    self->count = 0;
     self->tid   = vatomic64_inc_get(&_threads.count);
     self->pid   = pthread_self();
     _tls_init(self);
@@ -268,15 +273,70 @@ static void _cleanup_threads(void);
 #define self_guard(chain, type, event, self)                                   \
     do {                                                                       \
         self->guard++;                                                         \
-        self->count++;                                                         \
         self->md = (metadata_t){0};                                            \
-        log_debug(">> [%lu:0x%lx] %u_%u: %d\n", self_id(&self->md),            \
+        log_debug(">> [%lu:0x%lx] %u_%u: %d", self_id(&self->md),              \
                   (uint64_t)pthread_self(), chain, type, self->guard);         \
         PS_PUBLISH(chain, type, event, &self->md);                             \
-        log_debug("<< [%lu:0x%lx] %u_%u: %d\n", self_id(&self->md),            \
+        log_debug("<< [%lu:0x%lx] %u_%u: %d", self_id(&self->md),              \
                   (uint64_t)pthread_self(), chain, type, self->guard);         \
         self->guard--;                                                         \
     } while (0)
+
+DICE_HIDE enum ps_err
+_self_handle_before(const chain_id chain, const type_id type, void *event,
+                    struct self *self)
+{
+    (void)chain;
+    assert(self);
+
+    if (likely(self->guard++ == 0))
+        self_guard(CAPTURE_BEFORE, type, event, self);
+    else {
+        log_info(">>> [%lu:0x%lx] %u_%u: %d", self_id(&self->md),
+                 (uint64_t)pthread_self(), chain, type, self->guard);
+    }
+
+    assert(self->guard >= 0);
+    return PS_STOP_CHAIN;
+}
+
+DICE_HIDE enum ps_err
+_self_handle_after(const chain_id chain, const type_id type, void *event,
+                   struct self *self)
+{
+    (void)chain;
+    assert(self);
+
+    if (likely(self->guard-- == 1)) {
+        self_guard(CAPTURE_AFTER, type, event, self);
+        if (self->tid == 1)
+            _cleanup_threads();
+    } else {
+        log_debug("<<< [%lu:0x%lx] %u_%u: %d", self_id(&self->md),
+                  (uint64_t)pthread_self(), chain, type, self->guard);
+    }
+
+    assert(self->guard >= 0);
+    return PS_STOP_CHAIN;
+}
+
+DICE_HIDE enum ps_err
+_self_handle_event(const chain_id chain, const type_id type, void *event,
+                   struct self *self)
+{
+    (void)chain;
+    assert(self);
+
+    if (likely(self->guard == 0))
+        self_guard(CAPTURE_EVENT, type, event, self);
+    else {
+        log_debug("!!! [%lu:0x%lx] %u_%u: %d", self_id(&self->md),
+                  (uint64_t)pthread_self(), chain, type, self->guard);
+    }
+
+    assert(self->guard >= 0);
+    return PS_STOP_CHAIN;
+}
 
 static struct self *
 _get_or_create_self(bool publish)
@@ -292,75 +352,19 @@ _get_or_create_self(bool publish)
     _thread_map_put(self);
 
     if (publish)
-        self_guard(CAPTURE_EVENT, EVENT_SELF_INIT, 0, self);
+        _self_handle_event(CAPTURE_EVENT, EVENT_SELF_INIT, 0, self);
     return self;
 }
 
-DICE_HIDE enum ps_err
-_self_handle_before(const chain_id chain, const type_id type, void *event,
-                    metadata_t *md)
-{
-    (void)chain;
-    (void)md;
-    struct self *self = _get_or_create_self(true);
-    assert(self);
-
-    if (likely(self->guard++ == 0))
-        self_guard(CAPTURE_BEFORE, type, event, self);
-    else {
-        log_info(">>> [%lu:0x%lx] %u_%u: %d\n", self_id(&self->md),
-                 (uint64_t)pthread_self(), chain, type, self->guard);
-    }
-
-    return PS_STOP_CHAIN;
-}
-
-DICE_HIDE enum ps_err
-_self_handle_after(const chain_id chain, const type_id type, void *event,
-                   metadata_t *md)
-{
-    (void)chain;
-    (void)md;
-    struct self *self = _get_or_create_self(true);
-    assert(self);
-
-    if (likely(self->guard-- == 1)) {
-        self_guard(CAPTURE_AFTER, type, event, self);
-        if (self->tid == 1)
-            _cleanup_threads();
-    } else {
-        log_debug("<<< [%lu:0x%lx] %u_%u: %d\n", self_id(&self->md),
-                  (uint64_t)pthread_self(), chain, type, self->guard);
-    }
-
-    return PS_STOP_CHAIN;
-}
-
-DICE_HIDE enum ps_err
-_self_handle_event(const chain_id chain, const type_id type, void *event,
-                   metadata_t *md)
-{
-    (void)chain;
-    (void)md;
-    struct self *self = _get_or_create_self(true);
-    assert(self);
-
-    if (likely(self->guard == 0))
-        self_guard(CAPTURE_EVENT, type, event, self);
-    else {
-        log_debug("!!! [%lu:0x%lx] %u_%u: %d\n", self_id(&self->md),
-                  (uint64_t)pthread_self(), chain, type, self->guard);
-    }
-
-    return PS_STOP_CHAIN;
-}
-
-PS_SUBSCRIBE(INTERCEPT_EVENT, ANY_TYPE,
-             { return _self_handle_event(chain, type, event, md); })
-PS_SUBSCRIBE(INTERCEPT_BEFORE, ANY_TYPE,
-             { return _self_handle_before(chain, type, event, md); })
-PS_SUBSCRIBE(INTERCEPT_AFTER, ANY_TYPE,
-             { return _self_handle_after(chain, type, event, md); })
+PS_SUBSCRIBE(INTERCEPT_EVENT, ANY_TYPE, {
+    return _self_handle_event(chain, type, event, _get_or_create_self(true));
+})
+PS_SUBSCRIBE(INTERCEPT_BEFORE, ANY_TYPE, {
+    return _self_handle_before(chain, type, event, _get_or_create_self(true));
+})
+PS_SUBSCRIBE(INTERCEPT_AFTER, ANY_TYPE, {
+    return _self_handle_after(chain, type, event, _get_or_create_self(true));
+})
 
 // -----------------------------------------------------------------------------
 // init, fini and registration
@@ -378,9 +382,10 @@ _cleanup_threads(void)
         struct self *self = container_of(item, struct self, retired_node);
 
         // pthread_kill with signal 0 does not do anything with the thread, but
+
         // if an error indicates the thread does not exist.
         if (pthread_kill(self->pid, 0) != 0) {
-            self_guard(CAPTURE_EVENT, EVENT_SELF_FINI, 0, self);
+            _self_handle_event(CAPTURE_EVENT, EVENT_SELF_FINI, 0, self);
             _thread_map_del(self);
             _destroy_self(self);
         } else
@@ -402,7 +407,7 @@ _cleanup_thread(pthread_t pid)
         if ((uint64_t)self->pid != (uint64_t)pid)
             quack_push(&_threads.retired, item);
         else {
-            self_guard(CAPTURE_EVENT, EVENT_SELF_FINI, 0, self);
+            _self_handle_event(CAPTURE_EVENT, EVENT_SELF_FINI, 0, self);
             _thread_map_del(self);
             _destroy_self(self);
         };
@@ -411,16 +416,17 @@ _cleanup_thread(pthread_t pid)
 
 PS_SUBSCRIBE(INTERCEPT_EVENT, EVENT_THREAD_EXIT, {
     struct self *self = _get_or_create_self(true);
+    _self_handle_event(chain, type, event, self);
     _retire_self(self);
-    self_guard(CAPTURE_EVENT, EVENT_THREAD_EXIT, event, self);
     return PS_STOP_CHAIN;
 })
 
 PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_THREAD_JOIN, {
     struct self *self             = _get_or_create_self(true);
     struct pthread_join_event *ev = EVENT_PAYLOAD(ev);
-    self_guard(CAPTURE_AFTER, EVENT_THREAD_JOIN, event, self);
+    _self_handle_after(chain, type, event, self);
     _cleanup_thread(ev->thread);
+    return PS_STOP_CHAIN;
 })
 
 DICE_MODULE_INIT({ _init_threads(); })
