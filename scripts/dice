@@ -46,6 +46,10 @@ while [ "$#" != "0" ]; do
             PRELOAD="$PRELOAD:$DICE_DIR/mod-tsan.$SO"
             PRELOAD="$PRELOAD:$DICE_DIR/mod-stacktrace.$SO"
         ;;
+        -sequencer)
+            PRELOAD="$PRELOAD:$DICE_DIR/mod-sequencer.$SO"
+            PRELOAD="$PRELOAD:$DICE_DIR/mod-switcher.$SO"
+        ;;
         -pthread)
             PRELOAD="$PRELOAD:$DICE_DIR/mod-pthread_create.$SO"
             PRELOAD="$PRELOAD:$DICE_DIR/mod-pthread_mutex.$SO"
