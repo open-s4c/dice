@@ -9,28 +9,36 @@
 #include <dice/switcher.h>
 
 PS_SUBSCRIBE(CAPTURE_EVENT, ANY_TYPE, {
+    if (self_retired(md))
+        return PS_STOP_CHAIN;
+
     switch (type) {
         case EVENT_THREAD_EXIT:
             switcher_wake(ANY_THREAD, 0);
+            // stop sequencing thread after this point (self->retired == true)
             break;
-        case EVENT_THREAD_START:
-            /* threads call this only ONCE (except the main thread). */
+        case EVENT_SELF_INIT:
+            // threads call this only ONCE (except the main thread).
+            if (self_id(md) == MAIN_THREAD)
+                break;
             switcher_yield(self_id(md), true);
             break;
         default:
+            switcher_wake(ANY_THREAD, 0);
+            switcher_yield(self_id(md), true);
             break;
     }
-    return false;
+    return PS_STOP_CHAIN;
 })
 
 PS_SUBSCRIBE(CAPTURE_BEFORE, ANY_TYPE, {
     switcher_wake(ANY_THREAD, 0);
-    return false;
+    return PS_STOP_CHAIN;
 })
 
 PS_SUBSCRIBE(CAPTURE_AFTER, ANY_TYPE, {
     switcher_yield(self_id(md), true);
-    return false;
+    return PS_STOP_CHAIN;
 })
 
 DICE_MODULE_INIT()
