@@ -20,6 +20,8 @@
 /* Get unique thread id */
 thread_id self_id(metadata_t *self);
 
+bool self_retired(metadata_t *self);
+
 /* Get or allocate a memory area in TLS.
  *
  * `global` must be a unique pointer, typically a global variable of the desired
