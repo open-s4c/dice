@@ -10,6 +10,17 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+#ifndef LOG_LOCKED
+    #define LOG_LOCK_ACQUIRE
+    #define LOG_LOCK_RELEASE
+#else
+    #include <dice/compiler.h>
+    #include <vsync/spinlock/caslock.h>
+    #define LOG_LOCK_ACQUIRE caslock_acquire(&log_lock);
+    #define LOG_LOCK_RELEASE caslock_release(&log_lock);
+DICE_WEAK caslock_t log_lock;
+#endif
+
 #define LOG_LEVEL_FATAL 0
 #define LOG_LEVEL_INFO  1
 #define LOG_LEVEL_DEBUG 2
@@ -40,9 +51,11 @@
 #if LOG_LEVEL >= LOG_LEVEL_DEBUG
     #define log_debug(fmt, ...)                                                \
         do {                                                                   \
+            LOG_LOCK_ACQUIRE;                                                  \
             log_printf(LOG_PREFIX);                                            \
             log_printf(fmt, ##__VA_ARGS__);                                    \
             log_printf(LOG_SUFFIX);                                            \
+            LOG_LOCK_RELEASE;                                                  \
         } while (0)
 #else
     #define log_debug log_none
@@ -51,9 +64,11 @@
 #if LOG_LEVEL >= LOG_LEVEL_INFO
     #define log_info(fmt, ...)                                                 \
         do {                                                                   \
+            LOG_LOCK_ACQUIRE;                                                  \
             log_printf(LOG_PREFIX);                                            \
             log_printf(fmt, ##__VA_ARGS__);                                    \
             log_printf(LOG_SUFFIX);                                            \
+            LOG_LOCK_RELEASE;                                                  \
         } while (0)
 #else
     #define log_info log_none
@@ -61,9 +76,11 @@
 
 #define log_fatal(fmt, ...)                                                    \
     do {                                                                       \
+        LOG_LOCK_ACQUIRE;                                                      \
         log_printf(LOG_PREFIX);                                                \
         log_printf(fmt, ##__VA_ARGS__);                                        \
         log_printf(LOG_SUFFIX);                                                \
+        LOG_LOCK_RELEASE;                                                      \
         abort();                                                               \
     } while (0)
 
