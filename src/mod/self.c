@@ -258,10 +258,11 @@ static void
 _retire_self(struct self *self)
 {
     assert(self);
-    assert(!self->retired);
-    self->retired = true;
-    _thread_cache_del();
-    quack_push(&_threads.retired, &self->retired_node);
+    if (!self->retired) {
+        self->retired = true;
+        _thread_cache_del();
+        quack_push(&_threads.retired, &self->retired_node);
+    }
 }
 
 static void _cleanup_threads(void);
@@ -373,6 +374,7 @@ PS_SUBSCRIBE(INTERCEPT_AFTER, ANY_TYPE, {
 static void
 _cleanup_threads(void)
 {
+    return;
     struct quack_node_s *item = quack_popall(&_threads.retired);
     struct quack_node_s *next = NULL;
 
