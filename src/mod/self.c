@@ -23,6 +23,7 @@
  * self object.
  */
 #include <assert.h>
+#include <errno.h>
 #include <pthread.h>
 #include <signal.h>
 #include <stdio.h>
@@ -49,6 +50,7 @@ struct self {
     metadata_t md;
     struct rbnode map_node;
     struct quack_node_s retired_node;
+    uint64_t oid;
     pthread_t pid;
     thread_id tid;
     struct rbtree tls;
@@ -177,6 +179,44 @@ _thread_cache_del(void)
         abort();
 }
 
+#if defined(__linux__)
+
+static uint64_t
+_thread_oid(void)
+{
+    return (uint64_t)gettid();
+}
+static bool
+_thread_dead(struct self *self)
+{
+    return kill((uint64_t)self->oid, 0) != 0;
+}
+
+#else  // !linux
+
+static uint64_t
+_thread_oid(void)
+{
+    return 0;
+}
+
+static bool
+_thread_dead(struct self *self)
+{
+    // pthread_kill with signal 0 does not do anything with the thread, but
+    // if an ESRCH error indicates the thread does not exist. See:
+    // https://pubs.opengroup.org/onlinepubs/7908799/xsh/pthread_kill.html
+    //
+    // This approach to figure out whether are thread is "gone" seems to
+    // work most of the time. However, it is not perfect. It could give
+    // false positives if the thread ID is reused by a new thread.
+    //
+    // In Linux, it causes the application to crash with segmentation fault. So
+    // there we use the gettid and kill.
+    return pthread_kill(self->pid, 0) == ESRCH;
+}
+#endif // !linux
+
 DICE_HIDE struct self *
 _create_self()
 {
@@ -185,6 +225,7 @@ _create_self()
     self->guard = 0;
     self->tid   = vatomic64_inc_get(&_threads.count);
     self->pid   = pthread_self();
+    self->oid   = _thread_oid();
     _tls_init(self);
     return self;
 }
@@ -274,11 +315,11 @@ static void _cleanup_threads(void);
     do {                                                                       \
         self->guard++;                                                         \
         self->md = (metadata_t){0};                                            \
-        log_debug(">> [%lu:0x%lx] %u_%u: %d", self_id(&self->md),              \
-                  (uint64_t)pthread_self(), chain, type, self->guard);         \
+        log_debug(">> [%lu:0x%lx:%lu] %u_%u: %d", self_id(&self->md),          \
+                  (uint64_t)self->pid, self->oid, chain, type, self->guard);   \
         PS_PUBLISH(chain, type, event, &self->md);                             \
-        log_debug("<< [%lu:0x%lx] %u_%u: %d", self_id(&self->md),              \
-                  (uint64_t)pthread_self(), chain, type, self->guard);         \
+        log_debug("<< [%lu:0x%lx:%lu] %u_%u: %d", self_id(&self->md),          \
+                  (uint64_t)self->pid, self->oid, chain, type, self->guard);   \
         self->guard--;                                                         \
     } while (0)
 
@@ -291,10 +332,9 @@ _self_handle_before(const chain_id chain, const type_id type, void *event,
 
     if (likely(self->guard++ == 0))
         self_guard(CAPTURE_BEFORE, type, event, self);
-    else {
-        log_info(">>> [%lu:0x%lx] %u_%u: %d", self_id(&self->md),
-                 (uint64_t)pthread_self(), chain, type, self->guard);
-    }
+    else
+        log_debug(">>> [%lu:0x%lx:%lu] %u_%u: %d", self_id(&self->md),
+                  (uint64_t)self->pid, self->oid, chain, type, self->guard);
 
     assert(self->guard >= 0);
     return PS_STOP_CHAIN;
@@ -307,14 +347,11 @@ _self_handle_after(const chain_id chain, const type_id type, void *event,
     (void)chain;
     assert(self);
 
-    if (likely(self->guard-- == 1)) {
+    if (likely(self->guard-- == 1))
         self_guard(CAPTURE_AFTER, type, event, self);
-        if (self->tid == 1)
-            _cleanup_threads();
-    } else {
-        log_debug("<<< [%lu:0x%lx] %u_%u: %d", self_id(&self->md),
-                  (uint64_t)pthread_self(), chain, type, self->guard);
-    }
+    else
+        log_debug("<<< [%lu:0x%lx:%lu] %u_%u: %d", self_id(&self->md),
+                  (uint64_t)self->pid, self->oid, chain, type, self->guard);
 
     assert(self->guard >= 0);
     return PS_STOP_CHAIN;
@@ -329,10 +366,12 @@ _self_handle_event(const chain_id chain, const type_id type, void *event,
 
     if (likely(self->guard == 0))
         self_guard(CAPTURE_EVENT, type, event, self);
-    else {
-        log_debug("!!! [%lu:0x%lx] %u_%u: %d", self_id(&self->md),
-                  (uint64_t)pthread_self(), chain, type, self->guard);
-    }
+    else
+        log_debug("!!! [%lu:0x%lx:0x%lx] %u_%u: %d", self_id(&self->md),
+                  (uint64_t)self->pid, self->oid, chain, type, self->guard);
+
+    if (self->tid == 1)
+        _cleanup_threads();
 
     assert(self->guard >= 0);
     return PS_STOP_CHAIN;
@@ -381,15 +420,13 @@ _cleanup_threads(void)
 
         struct self *self = container_of(item, struct self, retired_node);
 
-        // pthread_kill with signal 0 does not do anything with the thread, but
-
-        // if an error indicates the thread does not exist.
-        if (pthread_kill(self->pid, 0) != 0) {
+        if (!_thread_dead(self)) {
+            quack_push(&_threads.retired, item);
+        } else {
             _self_handle_event(CAPTURE_EVENT, EVENT_SELF_FINI, 0, self);
             _thread_map_del(self);
             _destroy_self(self);
-        } else
-            quack_push(&_threads.retired, item);
+        }
     }
 }
 
