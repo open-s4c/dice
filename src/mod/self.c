@@ -367,7 +367,7 @@ _self_handle_event(const chain_id chain, const type_id type, void *event,
     if (likely(self->guard == 0))
         self_guard(CAPTURE_EVENT, type, event, self);
     else
-        log_debug("!!! [%lu:0x%lx:0x%lx] %u_%u: %d", self_id(&self->md),
+        log_debug("!!! [%lu:0x%lx:%lu] %u_%u: %d", self_id(&self->md),
                   (uint64_t)self->pid, self->oid, chain, type, self->guard);
 
     if (self->tid == 1)
