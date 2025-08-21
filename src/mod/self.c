@@ -74,7 +74,7 @@ _tls_cmp(const struct rbnode *a, const struct rbnode *b)
 {
     const struct tls_item *ea = container_of(a, struct tls_item, node);
     const struct tls_item *eb = container_of(b, struct tls_item, node);
-    return (ea->key > eb->key);
+    return ea->key > eb->key ? 1 : ea->key < eb->key ? -1 : 0;
 }
 
 DICE_HIDE void
@@ -243,9 +243,10 @@ _self_cmp(const struct rbnode *a, const struct rbnode *b)
 {
     const struct self *ea = container_of(a, struct self, map_node);
     const struct self *eb = container_of(b, struct self, map_node);
-    if ((uint64_t)ea->pid == (uint64_t)eb->pid)
-        return 0;
-    return ((uint64_t)ea->pid <= (uint64_t)eb->pid);
+
+    uint64_t ida = (uint64_t)ea->pid;
+    uint64_t idb = (uint64_t)eb->pid;
+    return ida > idb ? 1 : ida < idb ? -1 : 0;
 }
 
 static void
