@@ -26,7 +26,7 @@ DICE_WEAK caslock_t log_lock;
 #define LOG_LEVEL_DEBUG 2
 
 #ifndef LOG_LEVEL
-    #define LOG_LEVEL LOG_LEVEL_INFO
+    #define LOG_LEVEL INFO
 #endif
 
 #ifndef LOG_PREFIX
@@ -48,7 +48,10 @@ DICE_WEAK caslock_t log_lock;
         }                                                                      \
     } while (0)
 
-#if LOG_LEVEL >= LOG_LEVEL_DEBUG
+#define LOG_PASTE(LEVEL)  LOG_LEVEL##_##LEVEL
+#define LOG_EXPAND(LEVEL) LOG_PASTE(LEVEL)
+
+#if LOG_EXPAND(LOG_LEVEL) >= LOG_LEVEL_DEBUG
     #define log_debug(fmt, ...)                                                \
         do {                                                                   \
             LOG_LOCK_ACQUIRE;                                                  \
@@ -61,7 +64,7 @@ DICE_WEAK caslock_t log_lock;
     #define log_debug log_none
 #endif
 
-#if LOG_LEVEL >= LOG_LEVEL_INFO
+#if LOG_EXPAND(LOG_LEVEL) >= LOG_LEVEL_INFO
     #define log_info(fmt, ...)                                                 \
         do {                                                                   \
             LOG_LOCK_ACQUIRE;                                                  \
