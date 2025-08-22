@@ -3,29 +3,31 @@
  * SPDX-License-Identifier: MIT
  */
 
+#include <stdbool.h>
+#include <string.h>
+
+#include <dice/ensure.h>
 #include <dice/interpose.h>
 #include <dice/log.h>
-#include <string.h>
-#include <assert.h>
-#include <stdbool.h>
 
 #define MAX_EXP 16
 static char *strings[MAX_EXP] = {0};
-static char **head = &strings[0];
-static char **tail = &strings[0];
+static char **head            = &strings[0];
+static char **tail            = &strings[0];
 
-INTERPOSE(ssize_t, write, int fd, const void *buf, size_t count) {
+INTERPOSE(ssize_t, write, int fd, const void *buf, size_t count)
+{
     static int nest = 0;
     if (nest == 1) {
         return REAL(write, fd, buf, count);
     }
-    assert(nest == 0);
+    ensure(nest == 0);
     nest++;
-    assert(*tail);
-    assert(tail < head);
-    if (strncmp((char*) buf, *tail, count) != 0) {
+    ensure(*tail);
+    ensure(tail < head);
+    if (strncmp((char *)buf, *tail, count) != 0) {
         log_printf("exp: %s\n", *tail);
-        log_printf("buf: %s\n", (char*)buf);
+        log_printf("buf: %s\n", (char *)buf);
         abort();
     }
     tail++;
@@ -33,15 +35,19 @@ INTERPOSE(ssize_t, write, int fd, const void *buf, size_t count) {
     return count;
 }
 
-static void expect(char *e) {
-    assert(head < strings + MAX_EXP);
+static void
+expect(char *e)
+{
+    ensure(head < strings + MAX_EXP);
     *head = e;
     head++;
 }
-static bool empty(void) {
+
+static bool
+empty(void)
+{
     return head == tail;
 }
-
 
 int
 main()
@@ -49,7 +55,7 @@ main()
     // this should always work
     expect("print");
     log_printf("print");
-    assert(empty());
+    ensure(empty());
 
     // this should always work, but we remove the abort to about actually
     // aborting
@@ -60,7 +66,7 @@ main()
 #define abort()
     log_fatal("fatal");
 #undef abort
-    assert(empty());
+    ensure(empty());
 
 #if LOG_LEVEL_ >= LOG_LEVEL_INFO
     printf("level >= info\n");
@@ -68,7 +74,7 @@ main()
     expect("info");
     expect("\n");
     log_info("info");
-    assert(empty());
+    ensure(empty());
 #endif
 
 #if LOG_LEVEL_ >= LOG_LEVEL_DEBUG
@@ -77,9 +83,8 @@ main()
     expect("debug");
     expect("\n");
     log_debug("debug");
-    assert(empty());
+    ensure(empty());
 #endif
-
 
     return 0;
 }
