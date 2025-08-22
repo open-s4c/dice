@@ -27,3 +27,5 @@ endforeach()
 
 target_sources(mod-autocept PRIVATE autocept_list.S)
 target_link_libraries(mod-sequencer PRIVATE mod-self mod-switcher)
+target_link_libraries(mod-self PRIVATE pthread)
+target_link_libraries(mod-self.o PUBLIC pthread)
