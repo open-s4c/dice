@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: MIT
 
 add_subdirectory(checkers)
-
+include_directories(include)
 add_compile_options(-DVATOMIC_BUILTINS)
 set(TSAN_mp on)
 set(TSAN_simple-tsan on)
