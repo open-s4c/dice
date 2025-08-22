@@ -48,7 +48,7 @@ foreach(SRC ${SRCS})
 endforeach()
 
 add_custom_target(expand-tests)
-
+add_subdirectory(self)
 add_subdirectory(interpose)
 add_subdirectory(tsan)
 add_subdirectory(order)
