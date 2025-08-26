@@ -44,7 +44,7 @@ ps_initd_(void)
         NONE,
         START,
         BLOCK,
-    } _state = NONE;
+    } _state          = NONE;
     static bool ready = false;
 
     if (likely(ready)) {
@@ -203,7 +203,7 @@ ps_publish(const chain_id chain, const type_id type, void *event,
         return PS_DROP_EVENT;
 
     enum ps_err err = ps_dispatch_(chain, type, event, md);
-    
+
     if (likely(err == PS_STOP_CHAIN))
         return PS_OK;
 
