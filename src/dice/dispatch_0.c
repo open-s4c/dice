@@ -165,6 +165,166 @@ ps_dispatch_0_0_15_(const chain_id chain, const type_id type, void *event,
 }
 
 DICE_WEAK DICE_HIDE enum ps_err
+ps_dispatch_0_98_0_(const chain_id chain, const type_id type, void *event,
+                         metadata_t *md)
+{
+    (void)chain;
+    (void)type;
+    (void)event;
+    (void)md;
+    return PS_HANDLER_OFF;
+}
+DICE_WEAK DICE_HIDE enum ps_err
+ps_dispatch_0_98_1_(const chain_id chain, const type_id type, void *event,
+                         metadata_t *md)
+{
+    (void)chain;
+    (void)type;
+    (void)event;
+    (void)md;
+    return PS_HANDLER_OFF;
+}
+DICE_WEAK DICE_HIDE enum ps_err
+ps_dispatch_0_98_2_(const chain_id chain, const type_id type, void *event,
+                         metadata_t *md)
+{
+    (void)chain;
+    (void)type;
+    (void)event;
+    (void)md;
+    return PS_HANDLER_OFF;
+}
+DICE_WEAK DICE_HIDE enum ps_err
+ps_dispatch_0_98_3_(const chain_id chain, const type_id type, void *event,
+                         metadata_t *md)
+{
+    (void)chain;
+    (void)type;
+    (void)event;
+    (void)md;
+    return PS_HANDLER_OFF;
+}
+DICE_WEAK DICE_HIDE enum ps_err
+ps_dispatch_0_98_4_(const chain_id chain, const type_id type, void *event,
+                         metadata_t *md)
+{
+    (void)chain;
+    (void)type;
+    (void)event;
+    (void)md;
+    return PS_HANDLER_OFF;
+}
+DICE_WEAK DICE_HIDE enum ps_err
+ps_dispatch_0_98_5_(const chain_id chain, const type_id type, void *event,
+                         metadata_t *md)
+{
+    (void)chain;
+    (void)type;
+    (void)event;
+    (void)md;
+    return PS_HANDLER_OFF;
+}
+DICE_WEAK DICE_HIDE enum ps_err
+ps_dispatch_0_98_6_(const chain_id chain, const type_id type, void *event,
+                         metadata_t *md)
+{
+    (void)chain;
+    (void)type;
+    (void)event;
+    (void)md;
+    return PS_HANDLER_OFF;
+}
+DICE_WEAK DICE_HIDE enum ps_err
+ps_dispatch_0_98_7_(const chain_id chain, const type_id type, void *event,
+                         metadata_t *md)
+{
+    (void)chain;
+    (void)type;
+    (void)event;
+    (void)md;
+    return PS_HANDLER_OFF;
+}
+DICE_WEAK DICE_HIDE enum ps_err
+ps_dispatch_0_98_8_(const chain_id chain, const type_id type, void *event,
+                         metadata_t *md)
+{
+    (void)chain;
+    (void)type;
+    (void)event;
+    (void)md;
+    return PS_HANDLER_OFF;
+}
+DICE_WEAK DICE_HIDE enum ps_err
+ps_dispatch_0_98_9_(const chain_id chain, const type_id type, void *event,
+                         metadata_t *md)
+{
+    (void)chain;
+    (void)type;
+    (void)event;
+    (void)md;
+    return PS_HANDLER_OFF;
+}
+DICE_WEAK DICE_HIDE enum ps_err
+ps_dispatch_0_98_10_(const chain_id chain, const type_id type, void *event,
+                         metadata_t *md)
+{
+    (void)chain;
+    (void)type;
+    (void)event;
+    (void)md;
+    return PS_HANDLER_OFF;
+}
+DICE_WEAK DICE_HIDE enum ps_err
+ps_dispatch_0_98_11_(const chain_id chain, const type_id type, void *event,
+                         metadata_t *md)
+{
+    (void)chain;
+    (void)type;
+    (void)event;
+    (void)md;
+    return PS_HANDLER_OFF;
+}
+DICE_WEAK DICE_HIDE enum ps_err
+ps_dispatch_0_98_12_(const chain_id chain, const type_id type, void *event,
+                         metadata_t *md)
+{
+    (void)chain;
+    (void)type;
+    (void)event;
+    (void)md;
+    return PS_HANDLER_OFF;
+}
+DICE_WEAK DICE_HIDE enum ps_err
+ps_dispatch_0_98_13_(const chain_id chain, const type_id type, void *event,
+                         metadata_t *md)
+{
+    (void)chain;
+    (void)type;
+    (void)event;
+    (void)md;
+    return PS_HANDLER_OFF;
+}
+DICE_WEAK DICE_HIDE enum ps_err
+ps_dispatch_0_98_14_(const chain_id chain, const type_id type, void *event,
+                         metadata_t *md)
+{
+    (void)chain;
+    (void)type;
+    (void)event;
+    (void)md;
+    return PS_HANDLER_OFF;
+}
+DICE_WEAK DICE_HIDE enum ps_err
+ps_dispatch_0_98_15_(const chain_id chain, const type_id type, void *event,
+                         metadata_t *md)
+{
+    (void)chain;
+    (void)type;
+    (void)event;
+    (void)md;
+    return PS_HANDLER_OFF;
+}
+DICE_WEAK DICE_HIDE enum ps_err
 ps_dispatch_0_99_0_(const chain_id chain, const type_id type, void *event,
                          metadata_t *md)
 {
@@ -326,6 +486,157 @@ ps_dispatch_0_99_15_(const chain_id chain, const type_id type, void *event,
 }
 
 static enum ps_err
+ps_dispatch_0_98_(const chain_id chain, const type_id type, void *event,
+                     metadata_t *md)
+{
+    enum ps_err err;
+    {
+        err = ps_dispatch_0_98_0_(chain, type, event, md);
+        if (err == PS_STOP_CHAIN)
+            return PS_STOP_CHAIN;
+
+        err = ps_dispatch_0_0_0_(chain, type, event, md);
+        if (err == PS_STOP_CHAIN)
+            return PS_STOP_CHAIN;
+    }
+    {
+        err = ps_dispatch_0_98_1_(chain, type, event, md);
+        if (err == PS_STOP_CHAIN)
+            return PS_STOP_CHAIN;
+
+        err = ps_dispatch_0_0_1_(chain, type, event, md);
+        if (err == PS_STOP_CHAIN)
+            return PS_STOP_CHAIN;
+    }
+    {
+        err = ps_dispatch_0_98_2_(chain, type, event, md);
+        if (err == PS_STOP_CHAIN)
+            return PS_STOP_CHAIN;
+
+        err = ps_dispatch_0_0_2_(chain, type, event, md);
+        if (err == PS_STOP_CHAIN)
+            return PS_STOP_CHAIN;
+    }
+    {
+        err = ps_dispatch_0_98_3_(chain, type, event, md);
+        if (err == PS_STOP_CHAIN)
+            return PS_STOP_CHAIN;
+
+        err = ps_dispatch_0_0_3_(chain, type, event, md);
+        if (err == PS_STOP_CHAIN)
+            return PS_STOP_CHAIN;
+    }
+    {
+        err = ps_dispatch_0_98_4_(chain, type, event, md);
+        if (err == PS_STOP_CHAIN)
+            return PS_STOP_CHAIN;
+
+        err = ps_dispatch_0_0_4_(chain, type, event, md);
+        if (err == PS_STOP_CHAIN)
+            return PS_STOP_CHAIN;
+    }
+    {
+        err = ps_dispatch_0_98_5_(chain, type, event, md);
+        if (err == PS_STOP_CHAIN)
+            return PS_STOP_CHAIN;
+
+        err = ps_dispatch_0_0_5_(chain, type, event, md);
+        if (err == PS_STOP_CHAIN)
+            return PS_STOP_CHAIN;
+    }
+    {
+        err = ps_dispatch_0_98_6_(chain, type, event, md);
+        if (err == PS_STOP_CHAIN)
+            return PS_STOP_CHAIN;
+
+        err = ps_dispatch_0_0_6_(chain, type, event, md);
+        if (err == PS_STOP_CHAIN)
+            return PS_STOP_CHAIN;
+    }
+    {
+        err = ps_dispatch_0_98_7_(chain, type, event, md);
+        if (err == PS_STOP_CHAIN)
+            return PS_STOP_CHAIN;
+
+        err = ps_dispatch_0_0_7_(chain, type, event, md);
+        if (err == PS_STOP_CHAIN)
+            return PS_STOP_CHAIN;
+    }
+    {
+        err = ps_dispatch_0_98_8_(chain, type, event, md);
+        if (err == PS_STOP_CHAIN)
+            return PS_STOP_CHAIN;
+
+        err = ps_dispatch_0_0_8_(chain, type, event, md);
+        if (err == PS_STOP_CHAIN)
+            return PS_STOP_CHAIN;
+    }
+    {
+        err = ps_dispatch_0_98_9_(chain, type, event, md);
+        if (err == PS_STOP_CHAIN)
+            return PS_STOP_CHAIN;
+
+        err = ps_dispatch_0_0_9_(chain, type, event, md);
+        if (err == PS_STOP_CHAIN)
+            return PS_STOP_CHAIN;
+    }
+    {
+        err = ps_dispatch_0_98_10_(chain, type, event, md);
+        if (err == PS_STOP_CHAIN)
+            return PS_STOP_CHAIN;
+
+        err = ps_dispatch_0_0_10_(chain, type, event, md);
+        if (err == PS_STOP_CHAIN)
+            return PS_STOP_CHAIN;
+    }
+    {
+        err = ps_dispatch_0_98_11_(chain, type, event, md);
+        if (err == PS_STOP_CHAIN)
+            return PS_STOP_CHAIN;
+
+        err = ps_dispatch_0_0_11_(chain, type, event, md);
+        if (err == PS_STOP_CHAIN)
+            return PS_STOP_CHAIN;
+    }
+    {
+        err = ps_dispatch_0_98_12_(chain, type, event, md);
+        if (err == PS_STOP_CHAIN)
+            return PS_STOP_CHAIN;
+
+        err = ps_dispatch_0_0_12_(chain, type, event, md);
+        if (err == PS_STOP_CHAIN)
+            return PS_STOP_CHAIN;
+    }
+    {
+        err = ps_dispatch_0_98_13_(chain, type, event, md);
+        if (err == PS_STOP_CHAIN)
+            return PS_STOP_CHAIN;
+
+        err = ps_dispatch_0_0_13_(chain, type, event, md);
+        if (err == PS_STOP_CHAIN)
+            return PS_STOP_CHAIN;
+    }
+    {
+        err = ps_dispatch_0_98_14_(chain, type, event, md);
+        if (err == PS_STOP_CHAIN)
+            return PS_STOP_CHAIN;
+
+        err = ps_dispatch_0_0_14_(chain, type, event, md);
+        if (err == PS_STOP_CHAIN)
+            return PS_STOP_CHAIN;
+    }
+    {
+        err = ps_dispatch_0_98_15_(chain, type, event, md);
+        if (err == PS_STOP_CHAIN)
+            return PS_STOP_CHAIN;
+
+        err = ps_dispatch_0_0_15_(chain, type, event, md);
+        if (err == PS_STOP_CHAIN)
+            return PS_STOP_CHAIN;
+    }
+    return PS_OK;
+}
+static enum ps_err
 ps_dispatch_0_99_(const chain_id chain, const type_id type, void *event,
                      metadata_t *md)
 {
@@ -485,6 +796,8 @@ ps_dispatch_0_(const chain_id chain, const type_id type, void *event,
     switch (type) {
         default:
             return PS_HANDLER_OFF;
+        case 98:
+            return ps_dispatch_0_98_(chain, type, event, md);
         case 99:
             return ps_dispatch_0_99_(chain, type, event, md);
     }

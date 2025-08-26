@@ -36,15 +36,14 @@ add_custom_command(
 add_custom_target(expand-dispatch DEPENDS tmplr dispatch.c)
 set(DISPATCH_SRCS dispatch.c)
 
-# CHAIN_CONTROL only has event 99
-set(EEE_0 "99")
+# CHAIN_CONTROL has only events 98..99
+set(EEE_0 98 99)
 
 foreach(CHAIN ${CHAINS})
   list(APPEND DISPATCH_SRCS dispatch_${CHAIN}.c)
   set(eee "${EEE}")
   if(EEE_${CHAIN})
     set(eee "${EEE_${CHAIN}}")
-    string(REGEX REPLACE ";" "\\\;" eee "${eee}")
   endif()
   add_custom_command(
     OUTPUT dispatch_${CHAIN}.c
