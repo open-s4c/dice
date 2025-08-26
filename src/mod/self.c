@@ -468,11 +468,4 @@ PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_THREAD_JOIN, {
 })
 
 DICE_MODULE_INIT({ _init_threads(); })
-
-PS_SUBSCRIBE(CHAIN_CONTROL, EVENT_DICE_READY, {
-    // Initialization is done, we can announce the self object of the main
-    // thread was created
-    (void)_get_or_create_self(true);
-})
-
 DICE_MODULE_FINI({ _cleanup_threads(); })
