@@ -11,16 +11,16 @@ MODS=${BUILD}/dice/libdice.so
 
 # With the malloc module, we interpose malloc calls and publish events for
 # malloc-related calls into INTERCEPT chains.
-MODS=${MODS}:${BUILD}/mod/mod-malloc.so
+MODS=${MODS}:${BUILD}/mod/dice-malloc.so
 
 # With the self module, we allow threads to have TLS state
 # the Self module subscribe INTERCEPT chains and redirect them into CAPTURE
 # chains.
-MODS=${MODS}:${BUILD}/mod/mod-self.so
+MODS=${MODS}:${BUILD}/mod/dice-self.so
 
 # With the pthread_create module, we interpose thread creation calls and allow
 # threads to register with the self module
-MODS=${MODS}:${BUILD}/mod/mod-pthread_create.so
+MODS=${MODS}:${BUILD}/mod/dice-pthread_create.so
 
 # Finally, we add our logger, which subscribes for CAPTURE_BEFORE and
 # CAPTURE_AFTER chains of EVENT_MALLOC.

@@ -18,12 +18,13 @@ foreach(SRC ${SRCS})
   target_link_libraries(${TARGET} PRIVATE dice.h)
 endforeach()
 
-target_link_libraries(simple PRIVATE mod-self.o dice.o)
-target_link_libraries(intercept_event PRIVATE mod-self.o dice.o)
+target_link_libraries(simple PRIVATE dice-self.o dice.o)
+target_link_libraries(intercept_event PRIVATE dice-self.o dice.o)
 
-target_link_libraries(pthread_create_join PRIVATE mod-pthread_create.o dice.o)
-target_link_libraries(pthread_create_exit PRIVATE mod-pthread_create.o dice.o)
-target_link_libraries(pthread_create_detach PRIVATE mod-pthread_create.o dice.o)
+target_link_libraries(pthread_create_join PRIVATE dice-pthread_create.o dice.o)
+target_link_libraries(pthread_create_exit PRIVATE dice-pthread_create.o dice.o)
+target_link_libraries(pthread_create_detach PRIVATE dice-pthread_create.o
+                                                    dice.o)
 
 # pthread must be last library to link with tests
 foreach(SRC ${SRCS})

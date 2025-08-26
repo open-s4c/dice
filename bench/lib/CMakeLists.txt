@@ -5,25 +5,25 @@ add_library(dice-bundle SHARED)
 target_link_libraries(
   dice-bundle
   PRIVATE dice.o
-          mod-self.o
-          mod-pthread_create.o
-          mod-pthread_mutex.o
-          mod-pthread_cond.o
-          mod-pthread_rwlock.o
-          mod-pthread_rwlock.o
-          mod-tsan.o
-          mod-stacktrace.o)
+          dice-self.o
+          dice-pthread_create.o
+          dice-pthread_mutex.o
+          dice-pthread_cond.o
+          dice-pthread_rwlock.o
+          dice-pthread_rwlock.o
+          dice-tsan.o
+          dice-stacktrace.o)
 
 add_library(dice-bundle-box SHARED)
 target_link_libraries(
   dice-bundle-box
   PRIVATE dice.o
           dice-box.o
-          mod-self.o
-          mod-pthread_create.o
-          mod-pthread_mutex.o
-          mod-pthread_cond.o
-          mod-pthread_rwlock.o
-          mod-pthread_rwlock.o
-          mod-tsan.o
-          mod-stacktrace.o)
+          dice-self.o
+          dice-pthread_create.o
+          dice-pthread_mutex.o
+          dice-pthread_cond.o
+          dice-pthread_rwlock.o
+          dice-pthread_rwlock.o
+          dice-tsan.o
+          dice-stacktrace.o)
