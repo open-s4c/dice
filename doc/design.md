@@ -389,7 +389,7 @@ The Self module addresses a few important needs:
    the system prevents an infinite loop by interrupting the chain.
 
 The events `EVENT_THREAD_START` and `EVENT_THREAD_EXIT` are published by the
-`mod-pthread_create` module of Dice, or can be published by user-defined
+`dice-pthread_create` module of Dice, or can be published by user-defined
 interceptors.
 
 
@@ -451,8 +451,8 @@ on functions without modifying the application’s code or the system libraries
 themselves.
 
 Each interpose module in Dice targets a specific set of functions. For example,
-`mod-pthread_create` module intercepts calls to `pthread_create` and
-`pthread_exit`, while the `mod-malloc` intercepts memory allocation functions
+`dice-pthread_create` module intercepts calls to `pthread_create` and
+`pthread_exit`, while the `dice-malloc` intercepts memory allocation functions
 like `malloc`, `free`, `calloc`, and `realloc`.
 
 When an application calls an intercepted function, the corresponding interpose
@@ -469,28 +469,28 @@ called `DYLD_INSERT_LIBRARIES`.
 
 ## 5.3. Interpose Modules in Dice
 
-- `mod-pthread_create`: Intercepts the `pthread_create` and `pthread_join`
+- `dice-pthread_create`: Intercepts the `pthread_create` and `pthread_join`
   functions to manage thread initialization and finalization.
 
-- `mod-pthread_mutex`: Intercepts mutex functions like `pthread_mutex_lock`,
+- `dice-pthread_mutex`: Intercepts mutex functions like `pthread_mutex_lock`,
   `pthread_mutex_unlock`, `pthread_mutex_trylock`, etc to monitor thread
   synchronization events via mutexes.
 
-- `mod-pthread_cond`: Intercepts condition variable functions like
+- `dice-pthread_cond`: Intercepts condition variable functions like
   `pthread_cond_wait`, `pthread_cond_signal`, etc to track thread
   synchronization on condition variables.
 
-- `mod-malloc`: Intercepts memory allocation functions like `malloc`, `free`,
+- `dice-malloc`: Intercepts memory allocation functions like `malloc`, `free`,
   `calloc`, and others to track memory usage and detect leaks or abnormal memory
   access.
 
-- `mod-cxa`: Intercepts functions related to exception handling, such as
+- `dice-cxa`: Intercepts functions related to exception handling, such as
   `__cxa_guard_acquire`, `__cxa_guard_release`, and other related functions.
 
-- `mod-sem`: Intercepts semaphore functions like `sem_wait`, `sem_post`, etc to
+- `dice-sem`: Intercepts semaphore functions like `sem_wait`, `sem_post`, etc to
   monitor semaphore operations.
 
-- `mod-tsan`: Intercepts all functions exposed by `libtsan.so` to enable
+- `dice-tsan`: Intercepts all functions exposed by `libtsan.so` to enable
   fine-grained thread safety analysis.
 
 By using these interpose modules, Dice can gather detailed execution data,
@@ -517,7 +517,7 @@ env LD_PRELOAD=/path/to/libdice.so foo <arg1>
 Additional modules can be loaded with the `LD_PRELOAD` variable as well:
 
 ```
-env LD_PRELOAD=/path/to/libdice.so:/path/to/mod-pthread_create.so:... foo <arg1>
+env LD_PRELOAD=/path/to/libdice.so:/path/to/dice-pthread_create.so:... foo <arg1>
 ```
 
 Subscription callbacks are internally kept as lists of function pointers. The
@@ -549,7 +549,7 @@ compiler. `VAL` should be a number between 10 and 9999. The lower the value,
 the higher the priority when subscribing chains.
 
 Assume the user creates a library `libmydice.so` containing `pubsub.o`,
-`mempool.o`, `mod-pthread_create.o` and a user-defined module `mymod.o`. To load
+`mempool.o`, `dice-pthread_create.o` and a user-defined module `mymod.o`. To load
 this bundle, the user simply uses `LD_PRELOAD`:
 
 ```

@@ -12,24 +12,24 @@ target_link_libraries(microcb.o dice.h)
 
 set(MODS
     microcb.o
-    mod-self.o
+    dice-self.o
     # pthread library
-    mod-pthread_create.o
-    mod-pthread_mutex.o
-    mod-pthread_rwlock.o
-    mod-pthread_cond.o
+    dice-pthread_create.o
+    dice-pthread_mutex.o
+    dice-pthread_rwlock.o
+    dice-pthread_cond.o
     # malloc free and friends
-    mod-malloc.o
+    dice-malloc.o
     # semaphore
-    mod-sem.o
+    dice-sem.o
     # cxa guards
-    mod-cxa.o
+    dice-cxa.o
     # tsan instrumented calls
-    mod-tsan.o
-    mod-stacktrace.o)
+    dice-tsan.o
+    dice-stacktrace.o)
 
-set(PRIO_mod-self 4)
-set(PRIO_mod-microcb 5)
+set(PRIO_dice-self 4)
+set(PRIO_dice-microcb 5)
 
 set(OBJS ${MODS} dice.o)
 foreach(TARGET ${OBJS})

@@ -3,5 +3,5 @@
 
 add_executable(self_unique_test self_unique_test.c)
 target_link_libraries(self_unique_test PRIVATE dice.h)
-target_link_libraries(self_unique_test PRIVATE mod-self.o dice.o)
+target_link_libraries(self_unique_test PRIVATE dice-self.o dice.o)
 add_test(NAME self-unique-test COMMAND self_unique_test)

@@ -72,7 +72,7 @@ foreach(MOD ${MODS})
   add_executable(${TARGET} ${CMAKE_CURRENT_SOURCE_DIR}/${TARGET}.c)
   add_test(NAME ${TARGET} COMMAND ${TARGET})
   target_link_libraries(${TARGET} PRIVATE dice.h dice.o tsano pthread)
-  target_link_libraries(${TARGET} PRIVATE mod-${MOD}_testing.o)
+  target_link_libraries(${TARGET} PRIVATE dice-${MOD}_testing.o)
   # add_dependencies(${TARGET} ${MOD}-expand)
 
   if(${ENABLE_SANITIZER})

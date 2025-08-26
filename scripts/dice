@@ -37,27 +37,27 @@ args=""
 while [ "$#" != "0" ]; do
     case "$1" in
         -self)
-            PRELOAD="$PRELOAD:$DICE_DIR/mod-self.$SO"
+            PRELOAD="$PRELOAD:$DICE_DIR/dice-self.$SO"
         ;;
         -malloc)
-            PRELOAD="$PRELOAD:$DICE_DIR/mod-malloc.$SO"
+            PRELOAD="$PRELOAD:$DICE_DIR/dice-malloc.$SO"
         ;;
         -tsan)
-            PRELOAD="$PRELOAD:$DICE_DIR/mod-tsan.$SO"
-            PRELOAD="$PRELOAD:$DICE_DIR/mod-stacktrace.$SO"
+            PRELOAD="$PRELOAD:$DICE_DIR/dice-tsan.$SO"
+            PRELOAD="$PRELOAD:$DICE_DIR/dice-stacktrace.$SO"
         ;;
         -sequencer)
-            PRELOAD="$PRELOAD:$DICE_DIR/mod-sequencer.$SO"
-            PRELOAD="$PRELOAD:$DICE_DIR/mod-switcher.$SO"
+            PRELOAD="$PRELOAD:$DICE_DIR/dice-sequencer.$SO"
+            PRELOAD="$PRELOAD:$DICE_DIR/dice-switcher.$SO"
         ;;
         -pthread)
-            PRELOAD="$PRELOAD:$DICE_DIR/mod-pthread_create.$SO"
-            PRELOAD="$PRELOAD:$DICE_DIR/mod-pthread_mutex.$SO"
-            PRELOAD="$PRELOAD:$DICE_DIR/mod-pthread_cond.$SO"
-            PRELOAD="$PRELOAD:$DICE_DIR/mod-pthread_rwlock.$SO"
+            PRELOAD="$PRELOAD:$DICE_DIR/dice-pthread_create.$SO"
+            PRELOAD="$PRELOAD:$DICE_DIR/dice-pthread_mutex.$SO"
+            PRELOAD="$PRELOAD:$DICE_DIR/dice-pthread_cond.$SO"
+            PRELOAD="$PRELOAD:$DICE_DIR/dice-pthread_rwlock.$SO"
         ;;
         -autocept)
-            PRELOAD="$PRELOAD:$DICE_DIR/mod-autocept.$SO"
+            PRELOAD="$PRELOAD:$DICE_DIR/dice-autocept.$SO"
         ;;
         -preload)
             shift
