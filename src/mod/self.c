@@ -306,7 +306,7 @@ _retire_self(struct self *self)
     quack_push(&_threads.retired, &self->retired_node);
 }
 
-static void _cleanup_threads(void);
+static void _cleanup_threads(pthread_t id);
 
 // -----------------------------------------------------------------------------
 //  pubsub handler
@@ -372,7 +372,7 @@ _self_handle_event(const chain_id chain, const type_id type, void *event,
                   (uint64_t)self->pid, self->oid, chain, type, self->guard);
 
     if (self->tid == 1)
-        _cleanup_threads();
+        _cleanup_threads(0);
 
     assert(self->guard >= 0);
     return PS_STOP_CHAIN;
@@ -411,28 +411,23 @@ PS_SUBSCRIBE(INTERCEPT_AFTER, ANY_TYPE, {
 // -----------------------------------------------------------------------------
 
 static void
-_cleanup_threads(void)
+_self_fini(struct self *self)
 {
-    struct quack_node_s *item = quack_popall(&_threads.retired);
-    struct quack_node_s *next = NULL;
+    if (self == NULL)
+        return;
 
-    for (; item; item = next) {
-        next = item->next;
+    // announce thread self is really over
+    _self_handle_event(CAPTURE_EVENT, EVENT_SELF_FINI, 0, self);
 
-        struct self *self = container_of(item, struct self, retired_node);
+    // remove self from thread map
+    _thread_map_del(self);
 
-        if (!_thread_dead(self)) {
-            quack_push(&_threads.retired, item);
-        } else {
-            _self_handle_event(CAPTURE_EVENT, EVENT_SELF_FINI, 0, self);
-            _thread_map_del(self);
-            _destroy_self(self);
-        }
-    }
+    // free self resources
+    _destroy_self(self);
 }
 
 static void
-_cleanup_thread(pthread_t pid)
+_cleanup_threads(pthread_t pid)
 {
     struct quack_node_s *item = quack_popall(&_threads.retired);
     struct quack_node_s *next = NULL;
@@ -442,13 +437,10 @@ _cleanup_thread(pthread_t pid)
 
         struct self *self = container_of(item, struct self, retired_node);
 
-        if ((uint64_t)self->pid != (uint64_t)pid)
+        if ((pid != 0 && self->pid == pid) || (pid == 0 && _thread_dead(self)))
+            _self_fini(self);
+        else
             quack_push(&_threads.retired, item);
-        else {
-            _self_handle_event(CAPTURE_EVENT, EVENT_SELF_FINI, 0, self);
-            _thread_map_del(self);
-            _destroy_self(self);
-        };
     }
 }
 
@@ -463,9 +455,12 @@ PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_THREAD_JOIN, {
     struct self *self             = _get_or_create_self(true);
     struct pthread_join_event *ev = EVENT_PAYLOAD(ev);
     _self_handle_after(chain, type, event, self);
-    _cleanup_thread(ev->thread);
+    _cleanup_threads(ev->thread);
     return PS_STOP_CHAIN;
 })
 
 DICE_MODULE_INIT({ _init_threads(); })
-DICE_MODULE_FINI({ _cleanup_threads(); })
+DICE_MODULE_FINI({
+    _cleanup_threads(0);
+    _self_fini(_get_self());
+})
