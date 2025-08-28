@@ -42,11 +42,17 @@ PS_SUBSCRIBE(CAPTURE_EVENT, ANY_TYPE, {
 })
 
 PS_SUBSCRIBE(CAPTURE_BEFORE, ANY_TYPE, {
+    if (self_retired(md))
+        return PS_STOP_CHAIN;
+
     switcher_wake(pick_next_thread(chain, type, event, md), 0);
     return PS_STOP_CHAIN;
 })
 
 PS_SUBSCRIBE(CAPTURE_AFTER, ANY_TYPE, {
+    if (self_retired(md))
+        return PS_STOP_CHAIN;
+
     switcher_yield(self_id(md), true);
     return PS_STOP_CHAIN;
 })
