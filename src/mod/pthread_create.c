@@ -27,6 +27,24 @@ INTERPOSE(void, pthread_exit, void *ptr)
     exit(1); // unreachable
 }
 
+DICE_NORET
+INTERPOSE(void, _exit, int status)
+{
+    struct pthread_exit_event ev = {.pc = INTERPOSE_PC, .ptr = (void *) (uint64_t) status};
+    PS_PUBLISH(INTERCEPT_EVENT, EVENT_THREAD_EXIT, &ev, 0);
+    REAL(_exit, status);
+    exit(1); // unreachable
+}
+
+DICE_NORET
+INTERPOSE(void, exit, int status)
+{
+    struct pthread_exit_event ev = {.pc = INTERPOSE_PC, .ptr = (void *) (uint64_t) status};
+    PS_PUBLISH(INTERCEPT_EVENT, EVENT_THREAD_EXIT, &ev, 0);
+    REAL(exit, status);
+    exit(1); // unreachable
+}
+
 static void *
 _trampoline(void *targ)
 {
