@@ -1,4 +1,4 @@
-name: create docker images
+name: Create Alpine and QEMU Docker images
 on:
   workflow_dispatch:
 
