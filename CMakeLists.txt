@@ -62,6 +62,11 @@ if(NOT "${DICE_SANITIZER}" STREQUAL "")
   set(LIBSAN_LINK ${LIBSAN_${DICE_SANITIZER}})
 endif()
 
+# LOG_LEVEL
+set(DICE_LOG_LEVEL
+    ""
+    CACHE STRING "Log level log_* functions (FATAL|INFO|DEBUG)")
+
 add_subdirectory(scripts)
 add_subdirectory(deps)
 add_subdirectory(include)
