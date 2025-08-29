@@ -23,7 +23,6 @@
  * self object.
  */
 #include <assert.h>
-#include <errno.h>
 #include <pthread.h>
 #include <signal.h>
 #include <stdio.h>
@@ -64,6 +63,8 @@ struct tls_item {
     struct rbnode node;
     char data[];
 };
+
+static void _cleanup_threads(pthread_t id);
 
 // -----------------------------------------------------------------------------
 // tls items
@@ -172,13 +173,6 @@ _thread_cache_get(void)
     return (struct self *)pthread_getspecific(_threads.cache_key);
 }
 
-static void
-_thread_cache_del(void)
-{
-    if (pthread_setspecific(_threads.cache_key, 0) != 0)
-        abort();
-}
-
 #if defined(__linux__)
 
 static uint64_t
@@ -189,7 +183,7 @@ _thread_oid(void)
 static bool
 _thread_dead(struct self *self)
 {
-    return kill((uint64_t)self->oid, 0) != 0;
+    return kill((pid_t)self->oid, 0) != 0;
 }
 
 #else  // !linux
@@ -221,11 +215,12 @@ DICE_HIDE struct self *
 _create_self()
 {
     struct self *self;
-    self        = mempool_alloc(sizeof(struct self));
-    self->guard = 0;
-    self->tid   = vatomic64_inc_get(&_threads.count);
-    self->pid   = pthread_self();
-    self->oid   = _thread_oid();
+    self          = mempool_alloc(sizeof(struct self));
+    self->guard   = 0;
+    self->tid     = vatomic64_inc_get(&_threads.count);
+    self->pid     = pthread_self();
+    self->oid     = _thread_oid();
+    self->retired = false;
     _tls_init(self);
     return self;
 }
@@ -244,8 +239,8 @@ _self_cmp(const struct rbnode *a, const struct rbnode *b)
     const struct self *ea = container_of(a, struct self, map_node);
     const struct self *eb = container_of(b, struct self, map_node);
 
-    uint64_t ida = (uint64_t)ea->pid;
-    uint64_t idb = (uint64_t)eb->pid;
+    uintptr_t ida = (uintptr_t)ea->pid;
+    uintptr_t idb = (uintptr_t)eb->pid;
     return ida > idb ? 1 : ida < idb ? -1 : 0;
 }
 
@@ -293,7 +288,11 @@ static struct self *
 _get_self(void)
 {
     struct self *self = _thread_cache_get();
-    return self ? self : _thread_map_find(pthread_self());
+    if (self)
+        return self;
+    self = _thread_map_find(pthread_self());
+    assert(self == NULL || !self->retired);
+    return self;
 }
 
 static void
@@ -302,11 +301,9 @@ _retire_self(struct self *self)
     assert(self);
     assert(!self->retired);
     self->retired = true;
-    _thread_cache_del();
+    _thread_map_del(self);
     quack_push(&_threads.retired, &self->retired_node);
 }
-
-static void _cleanup_threads(pthread_t id);
 
 // -----------------------------------------------------------------------------
 //  pubsub handler
@@ -371,9 +368,6 @@ _self_handle_event(const chain_id chain, const type_id type, void *event,
         log_debug("!!! [%lu:0x%lx:%lu] %u_%u: %d", self_id(&self->md),
                   (uint64_t)self->pid, self->oid, chain, type, self->guard);
 
-    if (self->tid == 1)
-        _cleanup_threads(0);
-
     assert(self->guard >= 0);
     return PS_STOP_CHAIN;
 }
@@ -400,6 +394,8 @@ PS_SUBSCRIBE(INTERCEPT_EVENT, ANY_TYPE, {
     return _self_handle_event(chain, type, event, _get_or_create_self(true));
 })
 PS_SUBSCRIBE(INTERCEPT_BEFORE, ANY_TYPE, {
+    if (type == EVENT_THREAD_CREATE)
+        _cleanup_threads(0);
     return _self_handle_before(chain, type, event, _get_or_create_self(true));
 })
 PS_SUBSCRIBE(INTERCEPT_AFTER, ANY_TYPE, {
@@ -418,9 +414,6 @@ _self_fini(struct self *self)
 
     // announce thread self is really over
     _self_handle_event(CAPTURE_EVENT, EVENT_SELF_FINI, 0, self);
-
-    // remove self from thread map
-    _thread_map_del(self);
 
     // free self resources
     _destroy_self(self);
@@ -455,7 +448,6 @@ PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_THREAD_JOIN, {
     struct self *self             = _get_or_create_self(true);
     struct pthread_join_event *ev = EVENT_PAYLOAD(ev);
     _self_handle_after(chain, type, event, self);
-    _cleanup_threads(ev->thread);
     return PS_STOP_CHAIN;
 })
 
