@@ -1,0 +1,20 @@
+FROM ubuntu:24.04
+
+# install dependencies for building and running smolBSD image
+RUN apt update           \
+&&  apt install -y       \
+        build-essential  \
+        curl             \
+        git              \
+        libarchive-tools \
+        qemu-system      \
+        rsync            \
+        uuid-runtime
+
+# add scripts and smolBSD image
+RUN mkdir -p /data
+COPY scripts/ /data/scripts/
+RUN cd /data && scripts/smolbsd/get_smolBSD.sh
+COPY smolbsd.img /data/smolBSD
+
+WORKDIR /work

@@ -1,0 +1,92 @@
+name: Create Docker container with smolBSD
+on:
+  workflow_dispatch:
+
+env:
+  REGISTRY: ghcr.io
+
+jobs:
+
+  # Create VM image with all dependencies
+  create-vm:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Install Ubuntu dependencies
+        run: |
+          sudo apt install -y \
+             build-essential  \
+             curl             \
+             git              \
+             libarchive-tools \
+             rsync            \
+             uuid-runtime
+
+      - name: Get smolBSD and sets
+        run: scripts/smolbsd/get_smolBSD.sh
+      - name: Get pkgsrc and dependency packages (eg, cmake)
+        run: scripts/smolbsd/get_pkgsrc.sh cmake
+      - name: Create image
+        run: |
+          cd smolBSD
+          sudo ADDPKGS=../pkgsrc/downloads/*.tgz       \
+              ./mkimg.sh -s base -i smolbsd.img        \
+               -x "base.tar.xz etc.tar.xz comp.tar.xz" \
+               -m 2048
+      - name: Save image
+        uses: actions/upload-artifact@v4
+        with:
+          path: smolBSD/smolbsd.img
+          name: image
+
+  # Pack VM image inside a container image
+  create-docker:
+    needs: create-vm
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      attestations: write
+      id-token: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download image
+        uses: actions/download-artifact@v5
+        with:
+          name: image
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@v3.0.0
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/open-s4c/dice/smolbsd-ci
+          tags: |
+            type=edge,branch=dev
+            type=raw,latest
+            type=sha,format=long
+
+      - name: Setup docker buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5.1.0
+        with:
+          push: true
+          context: .
+          file: .github/Dockerfile.smolbsd
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
