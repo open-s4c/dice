@@ -1,4 +1,4 @@
-name: dice build and test
+name: Build and test Dice
 on: [push]
 env:
   REGISTRY: ghcr.io
@@ -83,27 +83,6 @@ jobs:
         run: ctest --test-dir build --output-on-failure
       - name: Install
         run: cmake --install build
-
-  test-netbsd:
-    if: false
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - name: Configure, Build, Install
-        id: test
-        uses: vmactions/netbsd-vm@v1
-        with:
-          release: "10.1"
-          usesh: true
-          prepare: /usr/sbin/pkg_add cmake
-          run: |
-              rm -rf /tmp/target
-              cmake -S. -Bbuild -DCMAKE_INSTALL_PREFIX=/tmp/target
-              cmake --build build
-              ctest --test-dir build --output-on-failure
-              cmake --install build
 
   test-qemu:
     strategy:

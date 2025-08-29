@@ -1,0 +1,42 @@
+name: Build and test Dice in smolBSD VM (NetBSD)
+on: [push]
+
+env:
+  REGISTRY: ghcr.io
+
+jobs:
+  smolbsd-test:
+    if: true
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/open-s4c/dice/smolbsd-ci:latest
+      options: --privileged
+    permissions:
+      contents: read
+      packages: write
+      attestations: write
+      id-token: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Copy scripts to data
+        run: cp -r scripts /data
+
+      - name: Add code
+        run: |
+          cd /data
+          scripts/smolbsd/add2img.sh smolBSD/smolbsd.img $GITHUB_WORKSPACE
+
+      - name: Build and run
+        run: |
+          cd /data/smolBSD
+          ./startnb.sh -k netbsd-SMOL -i smolbsd.img -m 2048 -x "-no-reboot"
+
+      - name: Ensure tests passed
+        run: |
+          cd /data
+          scripts/smolbsd/get_results.sh /data/smolBSD/smolbsd.img
+
