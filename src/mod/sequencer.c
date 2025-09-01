@@ -2,59 +2,83 @@
  * Copyright (C) Huawei Technologies Co., Ltd. 2025. All rights reserved.
  * SPDX-License-Identifier: 0BSD
  */
+#include <dice/chains/sequence.h>
 #include <dice/events/memaccess.h>
 #include <dice/log.h>
 #include <dice/module.h>
 #include <dice/self.h>
 #include <dice/switcher.h>
 
-DICE_WEAK thread_id
-pick_next_thread(chain_id chain, type_id type, void *event, metadata_t *md)
+static enum ps_err
+_sequence(chain_id chain, type_id type, void *event, struct plan *plan)
 {
-    (void)chain;
-    (void)type;
-    (void)event;
-    (void)md;
-    return ANY_THREAD;
+    if (self_retired(plan->self))
+        return PS_STOP_CHAIN;
+    PS_PUBLISH(chain, type, event, &plan->_);
+    if (plan->wake)
+        switcher_wake(plan->next, 0);
+    if (plan->yield)
+        switcher_yield(self_id(plan->self), true);
+    return PS_STOP_CHAIN;
 }
 
+
 PS_SUBSCRIBE(CAPTURE_EVENT, ANY_TYPE, {
-    if (self_retired(md))
-        return PS_STOP_CHAIN;
+    struct plan plan;
+    plan._    = (struct metadata){0};
+    plan.self = md;
+    plan.from = chain;
+    plan.type = type;
+    plan.next = ANY_THREAD;
 
     switch (type) {
         case EVENT_THREAD_EXIT:
-            switcher_wake(pick_next_thread(chain, type, event, md), 0);
-            // stop sequencing thread after this point (self->retired == true)
+            plan.wake  = true;
+            plan.yield = false;
+            // stop sequencing thread after this point until SELF_FINI
+            // TODO: this must be reviewed
             break;
         case EVENT_SELF_INIT:
-            // threads call this only ONCE (except the main thread).
-            if (self_id(md) == MAIN_THREAD)
-                break;
-            switcher_yield(self_id(md), true);
+            // threads call this only ONCE except the main thread
+            plan.wake  = false;
+            plan.yield = self_id(md) != MAIN_THREAD;
             break;
         default:
-            switcher_wake(pick_next_thread(chain, type, event, md), 0);
-            switcher_yield(self_id(md), true);
+            plan.wake  = true;
+            plan.yield = true;
             break;
     }
-    return PS_STOP_CHAIN;
+    return _sequence(SEQUENCE_EVENT, type, event, &plan);
 })
 
-PS_SUBSCRIBE(CAPTURE_BEFORE, ANY_TYPE, {
-    if (self_retired(md))
-        return PS_STOP_CHAIN;
+static bool
+_is_memaccess(type_id type)
+{
+    return type >= EVENT_MA_READ && type <= EVENT_MA_FENCE;
+}
 
-    switcher_wake(pick_next_thread(chain, type, event, md), 0);
-    return PS_STOP_CHAIN;
+PS_SUBSCRIBE(CAPTURE_BEFORE, ANY_TYPE, {
+    struct plan plan;
+    plan._     = (struct metadata){0};
+    plan.self  = md;
+    plan.from  = chain;
+    plan.type  = type;
+    plan.next  = ANY_THREAD;
+    plan.wake  = true;
+    plan.yield = _is_memaccess(type);
+    return _sequence(SEQUENCE_BEFORE, type, event, &plan);
 })
 
 PS_SUBSCRIBE(CAPTURE_AFTER, ANY_TYPE, {
-    if (self_retired(md))
-        return PS_STOP_CHAIN;
-
-    switcher_yield(self_id(md), true);
-    return PS_STOP_CHAIN;
+    struct plan plan;
+    plan._     = (struct metadata){0};
+    plan.self  = md;
+    plan.from  = chain;
+    plan.type  = type;
+    plan.next  = ANY_THREAD;
+    plan.wake  = false;
+    plan.yield = !_is_memaccess(type);
+    return _sequence(SEQUENCE_AFTER, type, event, &plan);
 })
 
 DICE_MODULE_INIT()
