@@ -13,6 +13,7 @@
 #define MAX_SUBSCRIPTIONS 255
 
 int ps_dispatch_max(void);
+bool ps_dispatch_chain_on_(chain_id);
 
 struct sub {
     chain_id chain;
@@ -133,8 +134,9 @@ ps_subscribe(chain_id chain, type_id type, ps_callback_f cb, int prio)
 {
     ps_init_(); // ensure initialized
 
-    if (prio <= ps_dispatch_max()) {
-        log_debug("Ignoring %u %u %d", chain, type, prio);
+    log_debug("Subscribe %u_%u_%d", chain, type, prio);
+    if (ps_dispatch_chain_on_(chain) && prio <= ps_dispatch_max()) {
+        log_debug("Ignore subscription %u_%u_%d", chain, type, prio);
         return PS_OK;
     }
     if (chain == CHAIN_CONTROL)
@@ -202,6 +204,7 @@ ps_publish(const chain_id chain, const type_id type, void *event,
     if (unlikely(!ps_initd_()))
         return PS_DROP_EVENT;
 
+    log_debug("Publish %u_%u", chain, type);
     enum ps_err err = ps_dispatch_(chain, type, event, md);
 
     if (likely(err == PS_STOP_CHAIN))
