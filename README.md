@@ -109,5 +109,7 @@ See examples in the `examples` directory.
 
 ## License
 
-[MIT License](LICENSE)
+All code in this repository is released under [Zero-Clause BSD
+License](LICENSE) except the dependency code in `deps/` directory. Refer to the
+individual dependencies for details.
 
