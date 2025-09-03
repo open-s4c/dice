@@ -18,7 +18,7 @@
     }
 
 DICE_HIDE bool
-V_JOIN(V_JOIN(ps_dispatch, DICE_MODULE_PRIO), on_)(void)
+V_JOIN(V_JOIN(ps_dispatch_slot, DICE_MODULE_PRIO), on_)(void)
 {
     return true;
 }

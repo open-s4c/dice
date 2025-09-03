@@ -77,4 +77,9 @@ ps_dispatch_CCC_(const chain_id chain, const type_id type, void *event,
             _tmpl2_end();
     }
 }
+DICE_HIDE bool
+ps_dispatch_chain_CCC_on_(void)
+{
+    return true;
+}
 _tmpl_end();
