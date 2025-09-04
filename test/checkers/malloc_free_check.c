@@ -55,9 +55,15 @@ DICE_MODULE_FINI({
     // Ensure that at least one malloc was captured
     assert(captured[EVENT_MALLOC] > 0);
 
-    // We would like to ensure that all captured mallocs had a corresponding
-    // free. But that is quite hard. Free is also often called with 0 pointer.
-    // At the moment, the best to claim is that there are more frees than
-    // mallocs (or the same number).
+// We would like to ensure that all captured mallocs had a corresponding
+// free. But that is quite hard. Free is also often called with 0 pointer.
+// At the moment, on Linux the best to claim is that there are more frees
+// than mallocs (or the same number). On other systems, the best claim is that
+// frees are not 0.
+#if defined(__linux__)
     assert(captured[EVENT_MALLOC] <= captured[EVENT_FREE]);
+#else
+    assert(captured[EVENT_MALLOC] > 0);
+    assert(captured[EVENT_FREE] > 0);
+#endif
 })

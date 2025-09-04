@@ -27,6 +27,9 @@
 #include <signal.h>
 #include <stdio.h>
 #include <string.h>
+#if defined(__NetBSD__)
+    #include <errno.h>
+#endif
 
 #ifndef DICE_MODULE_PRIO
     #define DICE_MODULE_PRIO 4

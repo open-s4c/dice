@@ -23,9 +23,15 @@ INTERPOSE(ssize_t, write, int fd, const void *buf, size_t count)
     }
     ensure(nest == 0);
     nest++;
-    ensure(*tail);
+    if (*tail == NULL) {
+        log_printf("ERROR: *tail is NULL\n");
+        log_printf("tail == %p\n", tail);
+        log_printf("strings == %p\n", &strings[0]);
+        abort();
+    }
     ensure(tail < head);
     if (strncmp((char *)buf, *tail, count) != 0) {
+        log_printf("ERROR: unexpected entry\n");
         log_printf("exp: %s\n", *tail);
         log_printf("buf: %s\n", (char *)buf);
         abort();
@@ -59,7 +65,6 @@ main()
 
     // this should always work, but we remove the abort to about actually
     // aborting
-    printf("level >= fatal\n");
     expect("dice: ");
     expect("fatal");
     expect("\n");
@@ -69,7 +74,6 @@ main()
     ensure(empty());
 
 #if LOG_LEVEL_ >= LOG_LEVEL_INFO
-    printf("level >= info\n");
     expect("dice: ");
     expect("info");
     expect("\n");
@@ -78,7 +82,6 @@ main()
 #endif
 
 #if LOG_LEVEL_ >= LOG_LEVEL_DEBUG
-    printf("level >= debug \n");
     expect("dice: ");
     expect("debug");
     expect("\n");
