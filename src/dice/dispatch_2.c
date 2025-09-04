@@ -40240,3 +40240,8 @@ ps_dispatch_2_(const chain_id chain, const type_id type, void *event,
             return ps_dispatch_2_128_(chain, type, event, md);
     }
 }
+DICE_HIDE bool
+ps_dispatch_chain_2_on_(void)
+{
+    return true;
+}
