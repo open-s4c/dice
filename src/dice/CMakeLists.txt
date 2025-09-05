@@ -34,11 +34,11 @@ add_custom_command(
   DEPENDS dispatch.c.in
   WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 add_custom_target(expand-dispatch DEPENDS tmplr dispatch.c)
-set(DISPATCH_SRCS dispatch.c)
 
 # CHAIN_CONTROL has only events 98..99
 set(EEE_0 98 99)
 
+set(DISPATCH_SRCS loader.c)
 foreach(CHAIN ${CHAINS})
   list(APPEND DISPATCH_SRCS dispatch_${CHAIN}.c)
   set(eee "${EEE}")
@@ -58,16 +58,21 @@ foreach(CHAIN ${CHAINS})
   add_dependencies(expand-dispatch expand-dispatch_${CHAIN})
 endforeach()
 
-set(SRCS)
+set(_DSRCS)
 foreach(SRC ${DISPATCH_SRCS})
-  set(SRCS ${SRCS} ${CMAKE_CURRENT_SOURCE_DIR}/${SRC})
+  set(_DSRCS ${_DSRCS} ${CMAKE_CURRENT_SOURCE_DIR}/${SRC})
 endforeach()
+set(DISPATCH_SRCS ${_DSRCS})
 
 # dice libraries
-set(SRCS mempool.c rbtree.c loader.c pubsub.c ${SRCS})
+set(SRCS mempool.c rbtree.c pubsub.c ${CMAKE_CURRENT_SOURCE_DIR}/dispatch.c)
 add_library(dice.o OBJECT ${SRCS})
 target_link_libraries(dice.o PUBLIC dice.h)
 target_compile_options(dice.o PRIVATE -fPIC)
+
+add_library(dice-dispatch.o OBJECT ${DISPATCH_SRCS})
+target_link_libraries(dice-dispatch.o PUBLIC dice.h)
+target_compile_options(dice-dispatch.o PRIVATE -fPIC)
 
 add_library(dice-box.o OBJECT box.c)
 target_link_libraries(dice-box.o PUBLIC dice.h)

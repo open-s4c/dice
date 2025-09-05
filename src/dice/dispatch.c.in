@@ -28,7 +28,26 @@ ps_dispatch_CCC_(const chain_id chain, const type_id type, void *event,
     (void)md;
     return PS_HANDLER_OFF;
 }
+
+DICE_WEAK DICE_HIDE bool
+ps_dispatch_chain_CCC_on_(void)
+{
+    return false;
+}
 _tmpl_end();
+
+DICE_HIDE bool
+ps_dispatch_chain_on_(const chain_id chain)
+{
+    switch (chain) {
+        _tmpl_begin(CCC = CHAINS);
+        case CCC:
+            return ps_dispatch_chain_CCC_on_();
+            _tmpl_end();
+        default:
+            return false;
+    }
+}
 
 /* main dispatcher */
 DICE_HIDE enum ps_err
@@ -45,22 +64,20 @@ ps_dispatch_(const chain_id chain, const type_id type, void *event,
     }
 }
 
-
 _tmpl_begin(SSS = SLOTS);
 DICE_WEAK DICE_HIDE bool
-ps_dispatch_SSS_on_(void)
+ps_dispatch_slot_SSS_on_(void)
 {
     return false;
 }
 _tmpl_end();
 
-DICE_HIDE
-int
+DICE_HIDE int
 ps_dispatch_max(void)
 {
     int max = -1;
     _tmpl_begin(SSS = SLOTS);
-    if (ps_dispatch_SSS_on_())
+    if (ps_dispatch_slot_SSS_on_())
         max = max < SSS ? SSS : max;
     _tmpl_end();
 
