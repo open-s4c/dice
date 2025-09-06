@@ -14,13 +14,14 @@
 #define SEQUENCE_AFTER  9
 
 struct plan {
-    metadata_t _;
-    metadata_t *self;
-    chain_id from;
-    type_id type;
-    thread_id next;
-    bool wake;
-    bool yield;
+    metadata_t _;     // subtype plan from metadata
+    metadata_t *self; // link to previous metadata
+    chain_id chain;   // chain from where the event arrived
+    type_id type;     // event type
+    thread_id me;     // current thread id (cached self_id(plan.self)
+    thread_id next;   // thread id of next thread to be scheduled (if any)
+    bool wake;        // wake next thread
+    bool yield;       // yield current thread
 };
 
 #endif /* DICE_SEQUENCE_CHAIN_H */

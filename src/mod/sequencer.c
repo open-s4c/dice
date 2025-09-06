@@ -2,17 +2,25 @@
  * Copyright (C) Huawei Technologies Co., Ltd. 2025. All rights reserved.
  * SPDX-License-Identifier: MIT
  */
+#include <assert.h>
+
 #include <dice/chains/sequence.h>
 #include <dice/events/memaccess.h>
 #include <dice/log.h>
 #include <dice/module.h>
+#include <dice/pubsub.h>
 #include <dice/self.h>
 #include <dice/switcher.h>
+#include <dice/thread_id.h>
+
+static bool _started = false;
 
 static enum ps_err
 _sequence(chain_id chain, type_id type, void *event, struct plan *plan)
 {
     if (self_retired(plan->self))
+        return PS_STOP_CHAIN;
+    if (!*SELF_TLS(plan->self, &_started))
         return PS_STOP_CHAIN;
     PS_PUBLISH(chain, type, event, &plan->_);
     if (plan->wake)
@@ -22,26 +30,41 @@ _sequence(chain_id chain, type_id type, void *event, struct plan *plan)
     return PS_STOP_CHAIN;
 }
 
+#define DECL_PLAN                                                              \
+    struct plan plan = {0};                                                    \
+    plan.self        = md;                                                     \
+    plan.me          = self_id(md);                                            \
+    plan.chain       = chain;                                                  \
+    plan.type        = type;                                                   \
+    plan.next        = ANY_THREAD
 
 PS_SUBSCRIBE(CAPTURE_EVENT, ANY_TYPE, {
-    struct plan plan;
-    plan._    = (struct metadata){0};
-    plan.self = md;
-    plan.from = chain;
-    plan.type = type;
-    plan.next = ANY_THREAD;
+    DECL_PLAN;
 
     switch (type) {
+        case EVENT_SELF_INIT: {
+            // create started flag and initialize it with false (ie, 0)
+            bool *started = SELF_TLS(md, &_started);
+            // Dont sequence thread between SELF_INIT and THREAD_START, except
+            // for main thread, which has no THREAD_START
+            assert(!*started);
+            if (plan.me == MAIN_THREAD) {
+                plan.wake  = true;
+                plan.yield = true;
+                *started   = true;
+            }
+        } break;
+        case EVENT_THREAD_START:
+            // starting at this event, schedule thread
+            assert(plan.me != MAIN_THREAD);
+            *SELF_TLS(md, &_started) = true;
+            plan.wake                = true;
+            plan.yield               = true;
+            break;
         case EVENT_THREAD_EXIT:
+            // stop sequencing thread after this point until SELF_FINI
             plan.wake  = true;
             plan.yield = false;
-            // stop sequencing thread after this point until SELF_FINI
-            // TODO: this must be reviewed
-            break;
-        case EVENT_SELF_INIT:
-            // threads call this only ONCE except the main thread
-            plan.wake  = false;
-            plan.yield = self_id(md) != MAIN_THREAD;
             break;
         default:
             plan.wake  = true;
@@ -58,24 +81,14 @@ _is_memaccess(type_id type)
 }
 
 PS_SUBSCRIBE(CAPTURE_BEFORE, ANY_TYPE, {
-    struct plan plan;
-    plan._     = (struct metadata){0};
-    plan.self  = md;
-    plan.from  = chain;
-    plan.type  = type;
-    plan.next  = ANY_THREAD;
-    plan.wake  = true;
+    DECL_PLAN;
+    plan.wake  = type != EVENT_THREAD_CREATE;
     plan.yield = _is_memaccess(type);
     return _sequence(SEQUENCE_BEFORE, type, event, &plan);
 })
 
 PS_SUBSCRIBE(CAPTURE_AFTER, ANY_TYPE, {
-    struct plan plan;
-    plan._     = (struct metadata){0};
-    plan.self  = md;
-    plan.from  = chain;
-    plan.type  = type;
-    plan.next  = ANY_THREAD;
+    DECL_PLAN;
     plan.wake  = false;
     plan.yield = !_is_memaccess(type);
     return _sequence(SEQUENCE_AFTER, type, event, &plan);
