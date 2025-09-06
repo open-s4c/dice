@@ -290,11 +290,52 @@ _thread_map_del(struct self *self)
 static struct self *
 _get_self(void)
 {
+    // When a thread is created, it won't find its self object anywhere and this
+    // function will return NULL. A new self object will be created and stored
+    // in the thread map as well as in the thread cache (pthread_getspecific).
+
+    // When a thread is retired -- ie, between  THREAD_EXIT and SELF_FINI -- its
+    // self object is removed from the thread map (see _retire_self) and put
+    // into the retired stack. The object is still kept in the thread_cache.
+
+    // So when getting self an existing self, we first look in the cache. If the
+    // pthread implementation does not zero the thread specific area on exit,
+    // the thread will find its object there until the end of the thread's
+    // lifetime. However, if the pthread implementation zeros the thread
+    // specific area on exit, we need to look for the thread in the retired
+    // stack.
+
+    pthread_t pid     = pthread_self();
     struct self *self = _thread_cache_get();
     if (self)
         return self;
-    self = _thread_map_find(pthread_self());
+
+    // TODO: in theory searching the thread map is unnecessary, so this could be
+    // removed.
+    self = _thread_map_find(pid);
     assert(self == NULL || !self->retired);
+    if (self)
+        return self;
+
+    // We now search the retired stack. To avoid not seeing our self object
+    // while other threads are searching theirs, we have to ensure mutual
+    // exlusion here.
+    static caslock_t _lock = CASLOCK_INIT();
+    caslock_acquire(&_lock);
+    struct quack_node_s *item = quack_popall(&_threads.retired);
+    struct quack_node_s *next = NULL;
+
+    for (; item; item = next) {
+        next = item->next;
+
+        struct self *it = container_of(item, struct self, retired_node);
+
+        if (self == NULL && it->pid == pid)
+            self = it;
+        quack_push(&_threads.retired, item);
+    }
+    caslock_release(&_lock);
+    assert(self == NULL || self->retired);
     return self;
 }
 
