@@ -50,7 +50,6 @@
 /* self object represents each thread in the CAPTURE chains. */
 struct self {
     metadata_t md;
-    struct rbnode map_node;
     struct quack_node_s retired_node;
     uint64_t oid;
     pthread_t pid;
@@ -139,12 +138,11 @@ self_tls(metadata_t *md, const void *global, size_t size)
 }
 
 // -----------------------------------------------------------------------------
-// thread map and cache using pthread_get/setspecific
+// thread cache using pthread_get/setspecific
 // -----------------------------------------------------------------------------
 
 static struct {
     caslock_t lock;
-    struct rbtree map;
     vatomic64_t count;
     pthread_key_t cache_key;
     quack_t retired;
@@ -161,6 +159,14 @@ _thread_cache_init(void)
 {
     if (pthread_key_create(&_threads.cache_key, _thread_cache_destruct) != 0)
         abort();
+}
+
+static void
+_thread_cache_del(struct self *self)
+{
+    (void)self;
+    if (pthread_setspecific(_threads.cache_key, NULL) != 0)
+        log_fatal("could not del key");
 }
 
 static void
@@ -236,65 +242,55 @@ _destroy_self(struct self *self)
 }
 
 
-DICE_HIDE int
-_self_cmp(const struct rbnode *a, const struct rbnode *b)
-{
-    const struct self *ea = container_of(a, struct self, map_node);
-    const struct self *eb = container_of(b, struct self, map_node);
-
-    uintptr_t ida = (uintptr_t)ea->pid;
-    uintptr_t idb = (uintptr_t)eb->pid;
-    return ida > idb ? 1 : ida < idb ? -1 : 0;
-}
-
 static void
 _init_threads(void)
 {
     _thread_cache_init();
-    rbtree_init(&_threads.map, _self_cmp);
     caslock_init(&_threads.lock);
     quack_init(&_threads.retired);
 }
 
 static struct self *
-_thread_map_find(pthread_t pid)
-{
-    struct self key = {.pid = pid};
-
-    caslock_acquire(&_threads.lock);
-    struct rbnode *item = rbtree_find(&_threads.map, &key.map_node);
-    caslock_release(&_threads.lock);
-
-    struct self *self = item ? container_of(item, struct self, map_node) : NULL;
-    return self;
-}
-
-static void
-_thread_map_put(struct self *self)
-{
-    assert(self);
-
-    caslock_acquire(&_threads.lock);
-    rbtree_insert(&_threads.map, &self->map_node);
-    caslock_release(&_threads.lock);
-}
-static void
-_thread_map_del(struct self *self)
-{
-    assert(self);
-    caslock_acquire(&_threads.lock);
-    rbtree_remove(&_threads.map, &self->map_node);
-    caslock_release(&_threads.lock);
-}
-
-static struct self *
 _get_self(void)
 {
+    // When a thread is created, it won't find its self object anywhere and this
+    // function will return NULL. A new self object will be created and stored
+    // in the thread specific area (here called cache).
+
+    // When a thread is retired -- ie, between  THREAD_EXIT and SELF_FINI -- its
+    // self object is put into the retired stack. The object is still kept in
+    // the thread_cache.
+
+    // So when getting self an existing self, we first look in the cache. If the
+    // pthread implementation does not zero the thread specific area on exit,
+    // the thread will find its object there until the end of the thread's
+    // lifetime. However, if the pthread implementation zeros the thread
+    // specific area on exit, we need to look for the thread in the retired
+    // stack.
+
+    pthread_t pid     = pthread_self();
     struct self *self = _thread_cache_get();
     if (self)
         return self;
-    self = _thread_map_find(pthread_self());
-    assert(self == NULL || !self->retired);
+
+    // We now search the retired stack. To avoid not seeing our self object
+    // while other threads are searching theirs, we have to ensure mutual
+    // exlusion here.
+    caslock_acquire(&_threads.lock);
+    struct quack_node_s *item = quack_popall(&_threads.retired);
+    struct quack_node_s *next = NULL;
+
+    for (; item; item = next) {
+        next = item->next;
+
+        struct self *it = container_of(item, struct self, retired_node);
+
+        if (self == NULL && it->pid == pid)
+            self = it;
+        quack_push(&_threads.retired, item);
+    }
+    caslock_release(&_threads.lock);
+    assert(self == NULL || self->retired);
     return self;
 }
 
@@ -304,7 +300,7 @@ _retire_self(struct self *self)
     assert(self);
     assert(!self->retired);
     self->retired = true;
-    _thread_map_del(self);
+    _thread_cache_del(self);
     quack_push(&_threads.retired, &self->retired_node);
 }
 
@@ -386,7 +382,6 @@ _get_or_create_self(bool publish)
     self = _create_self();
 
     _thread_cache_set(self);
-    _thread_map_put(self);
 
     if (publish)
         _self_handle_event(CAPTURE_EVENT, EVENT_SELF_INIT, 0, self);
@@ -425,6 +420,7 @@ _self_fini(struct self *self)
 static void
 _cleanup_threads(pthread_t pid)
 {
+    caslock_acquire(&_threads.lock);
     struct quack_node_s *item = quack_popall(&_threads.retired);
     struct quack_node_s *next = NULL;
 
@@ -438,6 +434,7 @@ _cleanup_threads(pthread_t pid)
         else
             quack_push(&_threads.retired, item);
     }
+    caslock_release(&_threads.lock);
 }
 
 PS_SUBSCRIBE(INTERCEPT_EVENT, EVENT_THREAD_EXIT, {
