@@ -40,7 +40,6 @@ _sequence(chain_id chain, type_id type, void *event, struct plan *plan)
 
 PS_SUBSCRIBE(CAPTURE_EVENT, ANY_TYPE, {
     DECL_PLAN;
-
     switch (type) {
         case EVENT_SELF_INIT: {
             // create started flag and initialize it with false (ie, 0)
