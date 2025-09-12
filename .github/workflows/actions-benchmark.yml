@@ -1,0 +1,71 @@
+name: Build and run some benchmarks
+
+on:
+  workflow_dispatch:
+
+env:
+  REGISTRY: ghcr.io
+
+jobs:
+  test-linux:
+    strategy:
+      matrix:
+        os: [ubuntu-24.04]
+        cfg:
+        - cc: gcc
+          cxx: g++
+        - cc: clang
+          cxx: clang++
+    runs-on: ${{ matrix.os }}
+    permissions:
+      contents: write
+      packages: write
+      attestations: write
+      id-token: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Checkout Wiki
+        uses: actions/checkout@v4
+        with:
+          repository: ${{github.repository}}.wiki
+          path: ${{github.repository}}.wiki
+      - name: Configure
+        run: cmake -S. -Bbuild
+             -DCMAKE_INSTALL_PREFIX=/tmp/target
+             -DCMAKE_C_COMPILER=${{ matrix.cfg.cc }}
+             -DCMAKE_CXX_COMPILER=${{ matrix.cfg.cxx }}
+             -DCMAKE_BUILD_TYPE=Release
+             -DDICE_BENCHMARKS=on
+             -DDICE_TESTS=off
+      - name: Build
+        run: cmake --build build
+      - name: Run benchmarks
+        run: scripts/benchmark.sh
+             -H ${{ matrix.os }}
+             -n ${{ matrix.cfg.cc }}
+             -d results
+             # uncomment the next line to select only one benchmark
+             # -b "micro"
+      - name: Update wiki
+        run: scripts/update-wiki.sh
+             -d results
+             -w $GITHUB_WORKSPACE/${{github.repository}}.wiki
+      - name: Update Index
+        run: scripts/update-bench-index.sh
+             $GITHUB_WORKSPACE/${{github.repository}}.wiki
+      - name: Push to wiki
+        run: |
+          set -e
+          cd $GITHUB_WORKSPACE/${{github.repository}}.wiki
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add .
+          if ! git diff-index --quiet HEAD; then
+           	git commit -m "action: wiki sync"
+           	while ! git push; do
+           		git pull --rebase
+           	done
+          fi
