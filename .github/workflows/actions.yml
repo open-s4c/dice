@@ -1,5 +1,6 @@
 name: Build and test Dice
 on: [push]
+
 env:
   REGISTRY: ghcr.io
 
