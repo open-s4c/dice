@@ -1,5 +1,5 @@
 # Copyright (C) Huawei Technologies Co., Ltd. 2024-2025. All rights reserved.
-# SPDX-License-Identifier: MIT
+# SPDX-License-Identifier: 0BSD
 set(CONFIG_IN_FILE "cmake/config.cmake.in")
 
 if(NOT DEFINED PROJECT_TARGETS)

@@ -109,5 +109,5 @@ See examples in the `examples` directory.
 
 ## License
 
-[MIT License](LICENSE)
+[0BSD License](LICENSE)
 

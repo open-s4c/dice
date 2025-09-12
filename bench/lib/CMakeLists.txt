@@ -1,5 +1,5 @@
 # Copyright (C) Huawei Technologies Co., Ltd. 2025. All rights reserved.
-# SPDX-License-Identifier: MIT
+# SPDX-License-Identifier: 0BSD
 
 add_library(dice-bundle SHARED)
 target_link_libraries(

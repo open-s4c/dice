@@ -1,5 +1,5 @@
 # Copyright (C) Huawei Technologies Co., Ltd. 2025. All rights reserved.
-# SPDX-License-Identifier: MIT
+# SPDX-License-Identifier: 0BSD
 
 add_executable(micro micro.c)
 target_link_libraries(micro dice pthread)

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) Huawei Technologies Co., Ltd. 2025. All rights reserved.
- * SPDX-License-Identifier: MIT
+ * SPDX-License-Identifier: 0BSD
  */
 #define $_mute() // fake definitions to make cland and co happy (not output)
 #define $_dl()
