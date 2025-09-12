@@ -1,5 +1,5 @@
 # Copyright (C) Huawei Technologies Co., Ltd. 2025. All rights reserved.
-# SPDX-License-Identifier: MIT
+# SPDX-License-Identifier: 0BSD
 
 add_executable(rbtree_test rbtree_test.c rbtree.c)
 target_link_libraries(rbtree_test PUBLIC dice.h)

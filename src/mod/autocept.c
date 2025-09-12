@@ -1,6 +1,6 @@
 /*
  * Copyright (C) Huawei Technologies Co., Ltd. 2025. All rights reserved.
- * SPDX-License-Identifier: MIT
+ * SPDX-License-Identifier: 0BSD
  */
 #if !defined(__APPLE__)
     #include <dlfcn.h>

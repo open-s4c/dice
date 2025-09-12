@@ -1,5 +1,5 @@
 # Copyright (C) Huawei Technologies Co., Ltd. 2025. All rights reserved.
-# SPDX-License-Identifier: MIT
+# SPDX-License-Identifier: 0BSD
 
 # These tests require preloading, which is tricky when using qemu to emulate
 # other architectures. Therefore, we disable them if TOOLCHAIN_FILE is set.
