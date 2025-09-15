@@ -8,10 +8,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define DICE_MODULE_PRIO 0
 #include <dice/interpose.h>
 #include <dice/mempool.h>
-#include <dice/module.h>
 #include <vsync/spinlock/caslock.h>
 
 static size_t _sizes[] = {32,
@@ -64,17 +62,29 @@ REAL_DECL(void *, malloc, size_t n);
 DICE_HIDE void
 mempool_init(size_t cap)
 {
-    _mp.allocated = 0;
     memset(&_mp.stack, 0, sizeof(entry_t *) * NSTACKS);
-    _mp.pool.memory = REAL_CALL(malloc, 0, cap);
-    assert(_mp.pool.memory);
-    memset(_mp.pool.memory, 0, cap);
+    _mp.allocated     = 0;
     _mp.pool.capacity = cap;
     _mp.pool.next     = 0;
-    caslock_init(&_mp.lock);
+    _mp.pool.memory   = REAL_CALL(malloc, 0, cap);
+    assert(_mp.pool.memory);
+    memset(_mp.pool.memory, 0, cap);
+    // caslock already initialized with 0
 }
 
-DICE_MODULE_INIT({ mempool_init(MEMPOOL_SIZE); })
+static inline void
+mempool_ensure_initd(void)
+{
+    // assumes protected by lock
+    if (_mp.pool.memory == NULL)
+        mempool_init(MEMPOOL_SIZE);
+}
+
+DICE_MODULE_INIT({
+    caslock_acquire(&_mp.lock);
+    mempool_ensure_initd();
+    caslock_release(&_mp.lock);
+})
 
 DICE_HIDE_IF void *
 mempool_alloc(size_t n)
@@ -95,7 +105,10 @@ mempool_alloc(size_t n)
         *stack  = e->next;
         e->next = NULL;
         mp->allocated += size;
+        goto out;
     }
+
+    mempool_ensure_initd();
 
     if (e == NULL && mp->pool.capacity >= mp->pool.next + size) {
         e       = (entry_t *)(mp->pool.memory + mp->pool.next);
@@ -104,6 +117,7 @@ mempool_alloc(size_t n)
         mp->pool.next += size;
         mp->allocated += size;
     }
+out:
     caslock_release(&mp->lock);
     return e ? e->data : NULL;
 }
