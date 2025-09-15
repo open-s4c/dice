@@ -16,7 +16,7 @@ OPTION_FORCE_RUN=no
 OPTION_FORCE_SUM=no
 
 OPTION_PULL_WIKI=no
-OPTION_MVTO_WIKI=yes
+OPTION_MVTO_WIKI=no
 WIKI_URL="ssh://git@github.com/open-s4c/dice.wiki.git"
 MAKE=make
 
