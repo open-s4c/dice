@@ -12,11 +12,14 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 add_compile_options(-Wall -Wextra -Werror)
 
 # LTO setup
-if(CMAKE_SYSTEM_NAME MATCHES "NetBSD" AND "${CMAKE_C_COMPILER_ID}" MATCHES
-                                          "Clang")
-  add_compile_options(-flto -ffat-lto-objects)
-else()
-  set(CMAKE_INTERPROCEDURAL_OPTIMIZATION on)
+option(DICE_LTO "Build Dice with LTO" on)
+if(${DICE_LTO})
+  if(CMAKE_SYSTEM_NAME MATCHES "NetBSD" AND "${CMAKE_C_COMPILER_ID}" MATCHES
+                                            "Clang")
+    add_compile_options(-flto -ffat-lto-objects)
+  else()
+    set(CMAKE_INTERPROCEDURAL_OPTIMIZATION on)
+  endif()
 endif()
 
 # POSIX extensions
