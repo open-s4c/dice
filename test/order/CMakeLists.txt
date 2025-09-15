@@ -73,8 +73,9 @@ add_test(NAME preload-21-test
                  ./order_test 2 202)
 
 add_library(subscriber21f SHARED)
-target_link_libraries(subscriber21f PRIVATE publisher.o subscriber2.o
-                                            subscriber1.o dice.o)
+target_link_libraries(
+  subscriber21f PRIVATE publisher.o subscriber2.o subscriber1.o dice.o
+                        dice-dispatch.o)
 
 add_test(NAME preload-21f-test
          COMMAND env LD_LIBRARY_PATH=. LD_PRELOAD=libsubscriber21f.so
