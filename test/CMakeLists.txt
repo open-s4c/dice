@@ -16,15 +16,27 @@ set(TSAN_simple-tsan on)
 set(DICE_simple on)
 set(DICE_intercept_event on)
 
+# Test cases in these lists will be compiled but not ran with sanitizers
+set(IGNORE_address "pthread_exit_window")
+set(IGNORE_thread "pthread_exit_window")
+set(IGNORE_undefined)
+
+# Compile test and add test case to ctest
 file(GLOB SRCS *.c)
 foreach(SRC ${SRCS})
   get_filename_component(TEST ${SRC} NAME_WLE)
   set(TARGET ${TEST})
   add_executable(${TARGET} ${SRC})
-  add_test(NAME ${TARGET} COMMAND ${TARGET})
   target_link_libraries(${TARGET} PRIVATE dice.h)
+
+  if(${TARGET} IN_LIST IGNORE_${DICE_SANITIZER})
+    continue()
+  endif()
+
+  add_test(NAME ${TARGET} COMMAND ${TARGET})
 endforeach()
 
+# Additional configuration of some tests
 target_link_libraries(simple PRIVATE dice-self.o dice.o)
 target_link_libraries(intercept_event PRIVATE dice-self.o dice.o)
 
@@ -32,6 +44,9 @@ target_link_libraries(pthread_create_join PRIVATE dice-pthread_create.o dice.o)
 target_link_libraries(pthread_create_exit PRIVATE dice-pthread_create.o dice.o)
 target_link_libraries(pthread_create_detach PRIVATE dice-pthread_create.o
                                                     dice.o)
+target_link_libraries(
+  pthread_exit_window PRIVATE dice-pthread_create.o dice-malloc.o dice-self.o
+                              dice.o)
 
 # pthread must be last library to link with tests
 foreach(SRC ${SRCS})
