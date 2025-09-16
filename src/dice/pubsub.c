@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: 0BSD
  */
 #include <assert.h>
+#include <stdbool.h>
 #include <stdio.h>
 
 #define DICE_MODULE_PRIO 1
@@ -87,16 +88,20 @@ DICE_MODULE_INIT()
 
 static void
 _ps_subscribe_sorted(struct sub **cur, chain_id chain, type_id type,
-                     ps_callback_f cb, int prio)
+                     ps_callback_f cb, int prio, bool any_type)
 {
+    // any_type is set if this subscription was from ANY_TYPE
     struct sub *sub;
     struct sub *next = NULL;
 
-    if (*cur == NULL || (*cur)->prio > prio) {
+    if (*cur == NULL || prio < (*cur)->prio) {
+        next = *cur;
+        goto insert;
+    } else if (prio == (*cur)->prio && !any_type) {
         next = *cur;
         goto insert;
     } else {
-        _ps_subscribe_sorted(&(*cur)->next, chain, type, cb, prio);
+        _ps_subscribe_sorted(&(*cur)->next, chain, type, cb, prio, any_type);
         return;
     }
 
@@ -112,7 +117,8 @@ insert:
 }
 
 static int
-_ps_subscribe_type(chain_id chain, type_id type, ps_callback_f cb, int prio)
+_ps_subscribe_type(chain_id chain, type_id type, ps_callback_f cb, int prio,
+                   bool any_type)
 {
     (void)prio;
     if (type > MAX_TYPES)
@@ -124,7 +130,7 @@ _ps_subscribe_type(chain_id chain, type_id type, ps_callback_f cb, int prio)
     ev->count++;
 
     // register subscription
-    _ps_subscribe_sorted(&ev->head, chain, type, cb, prio);
+    _ps_subscribe_sorted(&ev->head, chain, type, cb, prio, any_type);
 
     return PS_OK;
 }
@@ -144,11 +150,11 @@ ps_subscribe(chain_id chain, type_id type, ps_callback_f cb, int prio)
     if (chain > MAX_CHAINS)
         return PS_INVALID;
     if (type != ANY_TYPE)
-        return _ps_subscribe_type(chain, type, cb, prio);
+        return _ps_subscribe_type(chain, type, cb, prio, false);
 
     int err;
     for (size_t i = 1; i < MAX_TYPES; i++)
-        if ((err = _ps_subscribe_type(chain, i, cb, prio)) != 0)
+        if ((err = _ps_subscribe_type(chain, i, cb, prio, true)) != 0)
             return err;
 
     return PS_OK;
@@ -160,7 +166,7 @@ ps_subscribe(chain_id chain, type_id type, ps_callback_f cb, int prio)
 
 static enum ps_err
 _ps_publish(const chain_id chain, const type_id type, void *event,
-            metadata_t *md, size_t start)
+            metadata_t *md)
 {
     if (unlikely(chain >= MAX_CHAINS))
         return PS_INVALID;
@@ -169,11 +175,7 @@ _ps_publish(const chain_id chain, const type_id type, void *event,
 
     struct type *ev = &_chains[chain].types[type];
     struct sub *cur = ev->head;
-    for (size_t idx = 0; cur; idx++) {
-        if (idx < start) {
-            cur = cur->next;
-            continue;
-        }
+    while (cur) {
         // now we call the callback and abort the chain if the subscriber
         // "censors" the type by returning PS_STOP_CHAIN.
         enum ps_err err = cur->cb(chain, type, event, md);
@@ -213,5 +215,5 @@ ps_publish(const chain_id chain, const type_id type, void *event,
     if (likely(err == PS_DROP_EVENT))
         return PS_DROP_EVENT;
 
-    return _ps_publish(chain, type, event, md, 0);
+    return _ps_publish(chain, type, event, md);
 }
