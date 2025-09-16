@@ -14,20 +14,21 @@ endif()
 
 add_library(publisher.o OBJECT publisher.c)
 target_link_libraries(publisher.o PRIVATE dice.h)
+target_compile_options(publisher.o PRIVATE -fPIC)
 
 add_library(publisher SHARED)
 target_link_libraries(publisher PRIVATE publisher.o dice)
 
 add_library(subscriber1.o OBJECT subscriber.c)
 target_link_libraries(subscriber1.o PRIVATE dice.h)
-target_compile_options(subscriber1.o PRIVATE -DPOSITION=101)
+target_compile_options(subscriber1.o PRIVATE -DPOSITION=101 -fPIC)
 
 add_library(subscriber1 SHARED)
 target_link_libraries(subscriber1 PRIVATE subscriber1.o dice)
 
 add_library(subscriber2.o OBJECT subscriber.c)
 target_link_libraries(subscriber2.o PRIVATE dice.h)
-target_compile_options(subscriber2.o PRIVATE -DPOSITION=202)
+target_compile_options(subscriber2.o PRIVATE -DPOSITION=202 -fPIC)
 
 add_library(subscriber2 SHARED)
 target_link_libraries(subscriber2 PRIVATE subscriber2.o dice)
@@ -83,7 +84,7 @@ add_test(NAME preload-21f-test
 
 add_library(subscriber3.o OBJECT subscriber.c)
 target_link_libraries(subscriber3.o PRIVATE dice.h)
-target_compile_options(subscriber3.o PRIVATE -DPOSITION=303)
+target_compile_options(subscriber3.o PRIVATE -DPOSITION=303 -fPIC)
 
 add_library(subscriber3 SHARED)
 target_link_libraries(subscriber3 PRIVATE subscriber3.o subscriber21f)
