@@ -2,7 +2,7 @@
  * Copyright (C) Huawei Technologies Co., Ltd. 2025. All rights reserved.
  * SPDX-License-Identifier: 0BSD
  */
-#include <assert.h>
+#include <dice/ensure.h>
 #include <pthread.h>
 #include <unistd.h>
 
@@ -35,6 +35,6 @@ main(void)
     struct ma_awrite_event ev = {0};
     ev.val.u64                = EXPECTED;
     PS_PUBLISH(INTERCEPT_EVENT, EVENT_MA_AWRITE, &ev, 0);
-    assert(received);
+    ensure(received);
     return 0;
 }

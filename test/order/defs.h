@@ -5,6 +5,7 @@
 #ifndef ORDER_DEFS_H
 #define ORDER_DEFS_H
 
+#include <dice/ensure.h>
 #include <dice/log.h>
 #include <dice/pubsub.h>
 #define CHAIN 1
@@ -16,12 +17,5 @@ struct event {
 };
 
 void publish(struct event *ev);
-
-#define ensure(COND)                                                           \
-    {                                                                          \
-        if (!(COND)) {                                                         \
-            log_fatal("error: %s", #COND);                                     \
-        }                                                                      \
-    }
 
 #endif /* ORDER_DEFS_H */

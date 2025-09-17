@@ -2,7 +2,7 @@
  * Copyright (C) Huawei Technologies Co., Ltd. 2025. All rights reserved.
  * SPDX-License-Identifier: 0BSD
  */
-#include <assert.h>
+#include <dice/ensure.h>
 #include <pthread.h>
 #include <stdbool.h>
 #include <stdio.h>
@@ -26,7 +26,7 @@ r1()
     switcher_wake(2, 0);
     yd = switcher_yield(tid, false);
     printf("condition true %d\n", yd == SWITCHER_CONTINUE);
-    assert(yd == SWITCHER_CONTINUE);
+    ensure(yd == SWITCHER_CONTINUE);
     return 0;
 }
 

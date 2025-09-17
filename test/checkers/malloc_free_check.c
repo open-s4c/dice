@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: 0BSD
  */
 
-#include <assert.h>
+#include <dice/ensure.h>
 #include <stdio.h>
 
 #include <dice/chains/capture.h>
@@ -49,11 +49,11 @@ DICE_MODULE_FINI({
     // Ensure the self module has been loaded. The self module interrupts
     // the INTERCEPT chains, handles TLS and redirects the events to
     // equivalent CAPTURE chains.
-    assert(intercepted[EVENT_MALLOC] == 0);
-    assert(intercepted[EVENT_FREE] == 0);
+    ensure(intercepted[EVENT_MALLOC] == 0);
+    ensure(intercepted[EVENT_FREE] == 0);
 
     // Ensure that at least one malloc was captured
-    assert(captured[EVENT_MALLOC] > 0);
+    ensure(captured[EVENT_MALLOC] > 0);
 
 // We would like to ensure that all captured mallocs had a corresponding
 // free. But that is quite hard. Free is also often called with 0 pointer.
@@ -61,9 +61,9 @@ DICE_MODULE_FINI({
 // than mallocs (or the same number). On other systems, the best claim is that
 // frees are not 0.
 #if defined(__linux__)
-    assert(captured[EVENT_MALLOC] <= captured[EVENT_FREE]);
+    ensure(captured[EVENT_MALLOC] <= captured[EVENT_FREE]);
 #else
-    assert(captured[EVENT_MALLOC] > 0);
-    assert(captured[EVENT_FREE] > 0);
+    ensure(captured[EVENT_MALLOC] > 0);
+    ensure(captured[EVENT_FREE] > 0);
 #endif
 })
