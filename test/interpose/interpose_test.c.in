@@ -39,22 +39,12 @@ $_dl(); // ---------------------------------------------------------------------
 
 #define DICE_TEST_INTERPOSE
 #include <dice/chains/intercept.h>
+#include <dice/ensure.h>
 #include <dice/interpose.h>
 #include <dice/pubsub.h>
 $_begin(INCL = [[stdio.h]]);
 #include INCL
 $_end();
-
-#define ensure(COND)                                                           \
-    {                                                                          \
-        if (!(COND)) {                                                         \
-            log_fatal("error: %s", #COND);                                     \
-        }                                                                      \
-    }
-$_mute();
-#undef ensure
-#define ensure(...)
-$_unmute();
 
 static void *symbol;
 /* we need to declare this as noinline, otherwise the optimization of the

@@ -2,7 +2,7 @@
  * Copyright (C) Huawei Technologies Co., Ltd. 2025. All rights reserved.
  * SPDX-License-Identifier: 0BSD
  */
-#include <assert.h>
+#include <dice/ensure.h>
 #include <pthread.h>
 #include <stdio.h>
 
@@ -26,7 +26,7 @@ run1(void *_)
     (void)_;
     printf("here\n");
     if (vatomic32_read(&ready) == 1)
-        assert(data == 1);
+        ensure(data == 1);
     printf("there\n");
     return 0;
 }

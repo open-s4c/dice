@@ -1,9 +1,16 @@
 # Copyright (C) Huawei Technologies Co., Ltd. 2025. All rights reserved.
 # SPDX-License-Identifier: 0BSD
 
-add_subdirectory(checkers)
+# test-specific includes such as dice/ensure.h
 include_directories(include)
+
+# to ensure tsan and other compiler passes work, use builtin atomics
 add_compile_options(-DVATOMIC_BUILTINS)
+
+# checkers used for other tests
+add_subdirectory(checkers)
+
+# test configuration
 set(TSAN_mp on)
 set(TSAN_simple-tsan on)
 set(DICE_simple on)

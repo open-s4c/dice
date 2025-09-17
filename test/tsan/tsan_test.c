@@ -2,12 +2,12 @@
  * Copyright (C) Huawei Technologies Co., Ltd. 2025. All rights reserved.
  * SPDX-License-Identifier: 0BSD
  */
-#include <assert.h>
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
 
 #include <dice/chains/intercept.h>
+#include <dice/ensure.h>
 #include <dice/events/memaccess.h>
 #include <dice/interpose.h>
 #include <dice/log.h>
@@ -15,13 +15,6 @@
 #include <dice/pubsub.h>
 
 
-
-#define ensure(COND)                                                           \
-    {                                                                          \
-        if (!(COND)) {                                                         \
-            log_fatal("error: %s", #COND);                                     \
-        }                                                                      \
-    }
 
 typedef void (*test_f)(void);
 

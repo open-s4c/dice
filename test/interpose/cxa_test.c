@@ -8,16 +8,10 @@
 
 #define DICE_TEST_INTERPOSE
 #include <dice/chains/intercept.h>
+#include <dice/ensure.h>
 #include <dice/interpose.h>
 #include <dice/pubsub.h>
 #include <dice/events/cxa.h>
-
-#define ensure(COND)                                                           \
-    {                                                                          \
-        if (!(COND)) {                                                         \
-            log_fatal("error: %s", #COND);                                     \
-        }                                                                      \
-    }
 
 static void *symbol;
 /* we need to declare this as noinline, otherwise the optimization of the

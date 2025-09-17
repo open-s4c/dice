@@ -2,12 +2,12 @@
  * Copyright (C) Huawei Technologies Co., Ltd. 2025. All rights reserved.
  * SPDX-License-Identifier: 0BSD
  */
-#include <assert.h>
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
 
 #include <dice/chains/intercept.h>
+#include <dice/ensure.h>
 #include <dice/events/memaccess.h>
 #include <dice/interpose.h>
 #include <dice/log.h>
@@ -36,13 +36,6 @@ _tmpl_map(UPCASE, _tmpl_upcase);
 _tmpl_map(EV_TYPE, EVENT_MA_UPCASE);
 _tmpl_map(PARAM_strong, 0);
 _tmpl_map(PARAM_weak, 1);
-
-#define ensure(COND)                                                           \
-    {                                                                          \
-        if (!(COND)) {                                                         \
-            log_fatal("error: %s", #COND);                                     \
-        }                                                                      \
-    }
 
 typedef void (*test_f)(void);
 

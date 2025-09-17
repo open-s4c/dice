@@ -2,7 +2,7 @@
  * Copyright (C) Huawei Technologies Co., Ltd. 2025. All rights reserved.
  * SPDX-License-Identifier: 0BSD
  */
-#include <assert.h>
+#include <dice/ensure.h>
 #include <pthread.h>
 
 #include <dice/chains/intercept.h>
@@ -35,9 +35,9 @@ main()
     pthread_create(&t, 0, run, 0);
     pthread_join(t, 0);
 
-    assert(vatomic_read(&run_called) == 1);
-    assert(vatomic_read(&init_called) == 1);
-    assert(vatomic_read(&fini_called) == 1);
+    ensure(vatomic_read(&run_called) == 1);
+    ensure(vatomic_read(&init_called) == 1);
+    ensure(vatomic_read(&fini_called) == 1);
 
     return 0;
 }
