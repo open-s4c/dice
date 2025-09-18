@@ -6,4 +6,4 @@ FROM alpine:latest
 #ENV APK="apk --no-check-certificate"
 ENV APK="apk"
 
-RUN $APK update && $APK add cmake gcc g++ make
+RUN $APK update && $APK add cmake clang make

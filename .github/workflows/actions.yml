@@ -62,6 +62,8 @@ jobs:
       - name: Configure
         run: cmake -S. -Bbuild
              -DCMAKE_INSTALL_PREFIX=/tmp/target
+             -DCMAKE_C_COMPILER=clang
+             -DCMAKE_CXX_COMPILER=clang++
       - name: Build
         run: cmake --build build
       - name: Test
