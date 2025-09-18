@@ -18,8 +18,6 @@ jobs:
       max-parallel: 1
       matrix:
         container:
-          - name: "qemu-ci"
-            path: ".github/Dockerfile.qemu"
           - name: "alpine-ci"
             path: ".github/Dockerfile.alpine"
 
