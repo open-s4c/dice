@@ -7,7 +7,8 @@ jobs:
   test-linux:
     strategy:
       matrix:
-        os: [ubuntu-24.04, ubuntu-22.04]
+        os: [ubuntu-24.04, ubuntu-22.04, ubuntu-24.04-arm, ubuntu-22.04-arm]
+        build_type: [ "Debug", "Release" ]
         cfg:
         - cc: gcc
           cxx: g++
@@ -23,6 +24,7 @@ jobs:
              -DCMAKE_INSTALL_PREFIX=/tmp/target
              -DCMAKE_C_COMPILER=${{ matrix.cfg.cc }}
              -DCMAKE_CXX_COMPILER=${{ matrix.cfg.cxx }}
+             -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
       - name: Build
         run: cmake --build build
       - name: Test
@@ -83,24 +85,3 @@ jobs:
         run: ctest --test-dir build --output-on-failure
       - name: Install
         run: cmake --install build
-
-  test-qemu:
-    strategy:
-      matrix:
-        build_type: [ "Debug", "Release" ]
-        toolchain: [ "arm64" ]
-    runs-on: ubuntu-latest
-    container: ghcr.io/open-s4c/dice/qemu-ci:latest
-    steps:
-      - name: Check out to run with the tests
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - name: Configure
-        run: cmake -S . -Bbuild
-             -DCMAKE_BUILD_TYPE="${{ matrix.build_type }}"
-             -DCMAKE_TOOLCHAIN_FILE=".github/toolchains/${{ matrix.toolchain }}.cmake"
-      - name: Build
-        run: cmake --build build
-      - name: Test
-        run: ctest --test-dir build --output-on-failure
