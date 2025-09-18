@@ -1,6 +1,6 @@
 /*
  * Copyright (C) Huawei Technologies Co., Ltd. 2025. All rights reserved.
- * SPDX-License-Identifier: MIT
+ * SPDX-License-Identifier: 0BSD
  */
 void
 __sanitizer_syscall_pre_impl_time(long tloc)
