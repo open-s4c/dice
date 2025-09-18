@@ -16,7 +16,6 @@
 #include <dice/events/memaccess.h>
 #include <dice/interpose.h>
 #include <dice/module.h>
-#include <dice/pubsub.h>
 
 DICE_MODULE_INIT()
 
@@ -28,6 +27,7 @@ void
 __tsan_init()
 {
 }
+
 void
 __tsan_write_range(void)
 {
@@ -516,11 +516,11 @@ void
 __tsan_atomic8_store(volatile uint8_t *a, uint8_t v, int mo)
 {
     struct ma_awrite_event ev = {
-        .pc     = INTERPOSE_PC,
-        .func   = "atomic8_store",
-        .addr   = (void *)a,
-        .size   = (8 >> 3),
-        .mo     = mo,
+        .pc        = INTERPOSE_PC,
+        .func      = "atomic8_store",
+        .addr      = (void *)a,
+        .size      = (8 >> 3),
+        .mo        = mo,
         .val.u8 = v,
     };
 
@@ -533,11 +533,11 @@ void
 __tsan_atomic16_store(volatile uint16_t *a, uint16_t v, int mo)
 {
     struct ma_awrite_event ev = {
-        .pc      = INTERPOSE_PC,
-        .func    = "atomic16_store",
-        .addr    = (void *)a,
-        .size    = (16 >> 3),
-        .mo      = mo,
+        .pc        = INTERPOSE_PC,
+        .func      = "atomic16_store",
+        .addr      = (void *)a,
+        .size      = (16 >> 3),
+        .mo        = mo,
         .val.u16 = v,
     };
 
@@ -550,11 +550,11 @@ void
 __tsan_atomic32_store(volatile uint32_t *a, uint32_t v, int mo)
 {
     struct ma_awrite_event ev = {
-        .pc      = INTERPOSE_PC,
-        .func    = "atomic32_store",
-        .addr    = (void *)a,
-        .size    = (32 >> 3),
-        .mo      = mo,
+        .pc        = INTERPOSE_PC,
+        .func      = "atomic32_store",
+        .addr      = (void *)a,
+        .size      = (32 >> 3),
+        .mo        = mo,
         .val.u32 = v,
     };
 
@@ -567,11 +567,11 @@ void
 __tsan_atomic64_store(volatile uint64_t *a, uint64_t v, int mo)
 {
     struct ma_awrite_event ev = {
-        .pc      = INTERPOSE_PC,
-        .func    = "atomic64_store",
-        .addr    = (void *)a,
-        .size    = (64 >> 3),
-        .mo      = mo,
+        .pc        = INTERPOSE_PC,
+        .func      = "atomic64_store",
+        .addr      = (void *)a,
+        .size      = (64 >> 3),
+        .mo        = mo,
         .val.u64 = v,
     };
 
@@ -588,13 +588,13 @@ uint8_t
 __tsan_atomic8_exchange(volatile uint8_t *a, uint8_t v, int mo)
 {
     struct ma_xchg_event ev = {
-        .pc      = INTERPOSE_PC,
-        .func    = "atomic8_exchange",
-        .addr    = (void *)a,
-        .size    = (8 >> 3),
-        .mo      = mo,
-        .val.u8  = v,
-        .old.u64 = 0,
+        .pc        = INTERPOSE_PC,
+        .func      = "atomic8_exchange",
+        .addr      = (void *)a,
+        .size      = (8 >> 3),
+        .mo        = mo,
+        .val.u8 = v,
+        .old.u64   = 0,
     };
 
     metadata_t md = {0};
@@ -607,13 +607,13 @@ uint16_t
 __tsan_atomic16_exchange(volatile uint16_t *a, uint16_t v, int mo)
 {
     struct ma_xchg_event ev = {
-        .pc      = INTERPOSE_PC,
-        .func    = "atomic16_exchange",
-        .addr    = (void *)a,
-        .size    = (16 >> 3),
-        .mo      = mo,
+        .pc        = INTERPOSE_PC,
+        .func      = "atomic16_exchange",
+        .addr      = (void *)a,
+        .size      = (16 >> 3),
+        .mo        = mo,
         .val.u16 = v,
-        .old.u64 = 0,
+        .old.u64   = 0,
     };
 
     metadata_t md = {0};
@@ -626,13 +626,13 @@ uint32_t
 __tsan_atomic32_exchange(volatile uint32_t *a, uint32_t v, int mo)
 {
     struct ma_xchg_event ev = {
-        .pc      = INTERPOSE_PC,
-        .func    = "atomic32_exchange",
-        .addr    = (void *)a,
-        .size    = (32 >> 3),
-        .mo      = mo,
+        .pc        = INTERPOSE_PC,
+        .func      = "atomic32_exchange",
+        .addr      = (void *)a,
+        .size      = (32 >> 3),
+        .mo        = mo,
         .val.u32 = v,
-        .old.u64 = 0,
+        .old.u64   = 0,
     };
 
     metadata_t md = {0};
@@ -645,13 +645,13 @@ uint64_t
 __tsan_atomic64_exchange(volatile uint64_t *a, uint64_t v, int mo)
 {
     struct ma_xchg_event ev = {
-        .pc      = INTERPOSE_PC,
-        .func    = "atomic64_exchange",
-        .addr    = (void *)a,
-        .size    = (64 >> 3),
-        .mo      = mo,
+        .pc        = INTERPOSE_PC,
+        .func      = "atomic64_exchange",
+        .addr      = (void *)a,
+        .size      = (64 >> 3),
+        .mo        = mo,
         .val.u64 = v,
-        .old.u64 = 0,
+        .old.u64   = 0,
     };
 
     metadata_t md = {0};
@@ -668,13 +668,13 @@ uint8_t
 __tsan_atomic8_fetch_add(volatile uint8_t *a, uint8_t v, int mo)
 {
     struct ma_rmw_event ev = {
-        .pc      = INTERPOSE_PC,
-        .func    = "atomic8_fetch_add",
-        .addr    = (void *)a,
-        .size    = (8 >> 3),
-        .mo      = mo,
-        .val.u8  = v,
-        .old.u64 = 0,
+        .pc        = INTERPOSE_PC,
+        .func      = "atomic8_fetch_add",
+        .addr      = (void *)a,
+        .size      = (8 >> 3),
+        .mo        = mo,
+        .val.u8 = v,
+        .old.u64   = 0,
     };
 
     metadata_t md = {0};
@@ -687,13 +687,13 @@ uint16_t
 __tsan_atomic16_fetch_add(volatile uint16_t *a, uint16_t v, int mo)
 {
     struct ma_rmw_event ev = {
-        .pc      = INTERPOSE_PC,
-        .func    = "atomic16_fetch_add",
-        .addr    = (void *)a,
-        .size    = (16 >> 3),
-        .mo      = mo,
+        .pc        = INTERPOSE_PC,
+        .func      = "atomic16_fetch_add",
+        .addr      = (void *)a,
+        .size      = (16 >> 3),
+        .mo        = mo,
         .val.u16 = v,
-        .old.u64 = 0,
+        .old.u64   = 0,
     };
 
     metadata_t md = {0};
@@ -706,13 +706,13 @@ uint32_t
 __tsan_atomic32_fetch_add(volatile uint32_t *a, uint32_t v, int mo)
 {
     struct ma_rmw_event ev = {
-        .pc      = INTERPOSE_PC,
-        .func    = "atomic32_fetch_add",
-        .addr    = (void *)a,
-        .size    = (32 >> 3),
-        .mo      = mo,
+        .pc        = INTERPOSE_PC,
+        .func      = "atomic32_fetch_add",
+        .addr      = (void *)a,
+        .size      = (32 >> 3),
+        .mo        = mo,
         .val.u32 = v,
-        .old.u64 = 0,
+        .old.u64   = 0,
     };
 
     metadata_t md = {0};
@@ -725,13 +725,13 @@ uint64_t
 __tsan_atomic64_fetch_add(volatile uint64_t *a, uint64_t v, int mo)
 {
     struct ma_rmw_event ev = {
-        .pc      = INTERPOSE_PC,
-        .func    = "atomic64_fetch_add",
-        .addr    = (void *)a,
-        .size    = (64 >> 3),
-        .mo      = mo,
+        .pc        = INTERPOSE_PC,
+        .func      = "atomic64_fetch_add",
+        .addr      = (void *)a,
+        .size      = (64 >> 3),
+        .mo        = mo,
         .val.u64 = v,
-        .old.u64 = 0,
+        .old.u64   = 0,
     };
 
     metadata_t md = {0};
@@ -744,13 +744,13 @@ uint8_t
 __tsan_atomic8_fetch_sub(volatile uint8_t *a, uint8_t v, int mo)
 {
     struct ma_rmw_event ev = {
-        .pc      = INTERPOSE_PC,
-        .func    = "atomic8_fetch_sub",
-        .addr    = (void *)a,
-        .size    = (8 >> 3),
-        .mo      = mo,
-        .val.u8  = v,
-        .old.u64 = 0,
+        .pc        = INTERPOSE_PC,
+        .func      = "atomic8_fetch_sub",
+        .addr      = (void *)a,
+        .size      = (8 >> 3),
+        .mo        = mo,
+        .val.u8 = v,
+        .old.u64   = 0,
     };
 
     metadata_t md = {0};
@@ -763,13 +763,13 @@ uint16_t
 __tsan_atomic16_fetch_sub(volatile uint16_t *a, uint16_t v, int mo)
 {
     struct ma_rmw_event ev = {
-        .pc      = INTERPOSE_PC,
-        .func    = "atomic16_fetch_sub",
-        .addr    = (void *)a,
-        .size    = (16 >> 3),
-        .mo      = mo,
+        .pc        = INTERPOSE_PC,
+        .func      = "atomic16_fetch_sub",
+        .addr      = (void *)a,
+        .size      = (16 >> 3),
+        .mo        = mo,
         .val.u16 = v,
-        .old.u64 = 0,
+        .old.u64   = 0,
     };
 
     metadata_t md = {0};
@@ -782,13 +782,13 @@ uint32_t
 __tsan_atomic32_fetch_sub(volatile uint32_t *a, uint32_t v, int mo)
 {
     struct ma_rmw_event ev = {
-        .pc      = INTERPOSE_PC,
-        .func    = "atomic32_fetch_sub",
-        .addr    = (void *)a,
-        .size    = (32 >> 3),
-        .mo      = mo,
+        .pc        = INTERPOSE_PC,
+        .func      = "atomic32_fetch_sub",
+        .addr      = (void *)a,
+        .size      = (32 >> 3),
+        .mo        = mo,
         .val.u32 = v,
-        .old.u64 = 0,
+        .old.u64   = 0,
     };
 
     metadata_t md = {0};
@@ -801,13 +801,13 @@ uint64_t
 __tsan_atomic64_fetch_sub(volatile uint64_t *a, uint64_t v, int mo)
 {
     struct ma_rmw_event ev = {
-        .pc      = INTERPOSE_PC,
-        .func    = "atomic64_fetch_sub",
-        .addr    = (void *)a,
-        .size    = (64 >> 3),
-        .mo      = mo,
+        .pc        = INTERPOSE_PC,
+        .func      = "atomic64_fetch_sub",
+        .addr      = (void *)a,
+        .size      = (64 >> 3),
+        .mo        = mo,
         .val.u64 = v,
-        .old.u64 = 0,
+        .old.u64   = 0,
     };
 
     metadata_t md = {0};
@@ -820,13 +820,13 @@ uint8_t
 __tsan_atomic8_fetch_and(volatile uint8_t *a, uint8_t v, int mo)
 {
     struct ma_rmw_event ev = {
-        .pc      = INTERPOSE_PC,
-        .func    = "atomic8_fetch_and",
-        .addr    = (void *)a,
-        .size    = (8 >> 3),
-        .mo      = mo,
-        .val.u8  = v,
-        .old.u64 = 0,
+        .pc        = INTERPOSE_PC,
+        .func      = "atomic8_fetch_and",
+        .addr      = (void *)a,
+        .size      = (8 >> 3),
+        .mo        = mo,
+        .val.u8 = v,
+        .old.u64   = 0,
     };
 
     metadata_t md = {0};
@@ -839,13 +839,13 @@ uint16_t
 __tsan_atomic16_fetch_and(volatile uint16_t *a, uint16_t v, int mo)
 {
     struct ma_rmw_event ev = {
-        .pc      = INTERPOSE_PC,
-        .func    = "atomic16_fetch_and",
-        .addr    = (void *)a,
-        .size    = (16 >> 3),
-        .mo      = mo,
+        .pc        = INTERPOSE_PC,
+        .func      = "atomic16_fetch_and",
+        .addr      = (void *)a,
+        .size      = (16 >> 3),
+        .mo        = mo,
         .val.u16 = v,
-        .old.u64 = 0,
+        .old.u64   = 0,
     };
 
     metadata_t md = {0};
@@ -858,13 +858,13 @@ uint32_t
 __tsan_atomic32_fetch_and(volatile uint32_t *a, uint32_t v, int mo)
 {
     struct ma_rmw_event ev = {
-        .pc      = INTERPOSE_PC,
-        .func    = "atomic32_fetch_and",
-        .addr    = (void *)a,
-        .size    = (32 >> 3),
-        .mo      = mo,
+        .pc        = INTERPOSE_PC,
+        .func      = "atomic32_fetch_and",
+        .addr      = (void *)a,
+        .size      = (32 >> 3),
+        .mo        = mo,
         .val.u32 = v,
-        .old.u64 = 0,
+        .old.u64   = 0,
     };
 
     metadata_t md = {0};
@@ -877,13 +877,13 @@ uint64_t
 __tsan_atomic64_fetch_and(volatile uint64_t *a, uint64_t v, int mo)
 {
     struct ma_rmw_event ev = {
-        .pc      = INTERPOSE_PC,
-        .func    = "atomic64_fetch_and",
-        .addr    = (void *)a,
-        .size    = (64 >> 3),
-        .mo      = mo,
+        .pc        = INTERPOSE_PC,
+        .func      = "atomic64_fetch_and",
+        .addr      = (void *)a,
+        .size      = (64 >> 3),
+        .mo        = mo,
         .val.u64 = v,
-        .old.u64 = 0,
+        .old.u64   = 0,
     };
 
     metadata_t md = {0};
@@ -896,13 +896,13 @@ uint8_t
 __tsan_atomic8_fetch_or(volatile uint8_t *a, uint8_t v, int mo)
 {
     struct ma_rmw_event ev = {
-        .pc      = INTERPOSE_PC,
-        .func    = "atomic8_fetch_or",
-        .addr    = (void *)a,
-        .size    = (8 >> 3),
-        .mo      = mo,
-        .val.u8  = v,
-        .old.u64 = 0,
+        .pc        = INTERPOSE_PC,
+        .func      = "atomic8_fetch_or",
+        .addr      = (void *)a,
+        .size      = (8 >> 3),
+        .mo        = mo,
+        .val.u8 = v,
+        .old.u64   = 0,
     };
 
     metadata_t md = {0};
@@ -915,13 +915,13 @@ uint16_t
 __tsan_atomic16_fetch_or(volatile uint16_t *a, uint16_t v, int mo)
 {
     struct ma_rmw_event ev = {
-        .pc      = INTERPOSE_PC,
-        .func    = "atomic16_fetch_or",
-        .addr    = (void *)a,
-        .size    = (16 >> 3),
-        .mo      = mo,
+        .pc        = INTERPOSE_PC,
+        .func      = "atomic16_fetch_or",
+        .addr      = (void *)a,
+        .size      = (16 >> 3),
+        .mo        = mo,
         .val.u16 = v,
-        .old.u64 = 0,
+        .old.u64   = 0,
     };
 
     metadata_t md = {0};
@@ -934,13 +934,13 @@ uint32_t
 __tsan_atomic32_fetch_or(volatile uint32_t *a, uint32_t v, int mo)
 {
     struct ma_rmw_event ev = {
-        .pc      = INTERPOSE_PC,
-        .func    = "atomic32_fetch_or",
-        .addr    = (void *)a,
-        .size    = (32 >> 3),
-        .mo      = mo,
+        .pc        = INTERPOSE_PC,
+        .func      = "atomic32_fetch_or",
+        .addr      = (void *)a,
+        .size      = (32 >> 3),
+        .mo        = mo,
         .val.u32 = v,
-        .old.u64 = 0,
+        .old.u64   = 0,
     };
 
     metadata_t md = {0};
@@ -953,13 +953,13 @@ uint64_t
 __tsan_atomic64_fetch_or(volatile uint64_t *a, uint64_t v, int mo)
 {
     struct ma_rmw_event ev = {
-        .pc      = INTERPOSE_PC,
-        .func    = "atomic64_fetch_or",
-        .addr    = (void *)a,
-        .size    = (64 >> 3),
-        .mo      = mo,
+        .pc        = INTERPOSE_PC,
+        .func      = "atomic64_fetch_or",
+        .addr      = (void *)a,
+        .size      = (64 >> 3),
+        .mo        = mo,
         .val.u64 = v,
-        .old.u64 = 0,
+        .old.u64   = 0,
     };
 
     metadata_t md = {0};
@@ -972,13 +972,13 @@ uint8_t
 __tsan_atomic8_fetch_xor(volatile uint8_t *a, uint8_t v, int mo)
 {
     struct ma_rmw_event ev = {
-        .pc      = INTERPOSE_PC,
-        .func    = "atomic8_fetch_xor",
-        .addr    = (void *)a,
-        .size    = (8 >> 3),
-        .mo      = mo,
-        .val.u8  = v,
-        .old.u64 = 0,
+        .pc        = INTERPOSE_PC,
+        .func      = "atomic8_fetch_xor",
+        .addr      = (void *)a,
+        .size      = (8 >> 3),
+        .mo        = mo,
+        .val.u8 = v,
+        .old.u64   = 0,
     };
 
     metadata_t md = {0};
@@ -991,13 +991,13 @@ uint16_t
 __tsan_atomic16_fetch_xor(volatile uint16_t *a, uint16_t v, int mo)
 {
     struct ma_rmw_event ev = {
-        .pc      = INTERPOSE_PC,
-        .func    = "atomic16_fetch_xor",
-        .addr    = (void *)a,
-        .size    = (16 >> 3),
-        .mo      = mo,
+        .pc        = INTERPOSE_PC,
+        .func      = "atomic16_fetch_xor",
+        .addr      = (void *)a,
+        .size      = (16 >> 3),
+        .mo        = mo,
         .val.u16 = v,
-        .old.u64 = 0,
+        .old.u64   = 0,
     };
 
     metadata_t md = {0};
@@ -1010,13 +1010,13 @@ uint32_t
 __tsan_atomic32_fetch_xor(volatile uint32_t *a, uint32_t v, int mo)
 {
     struct ma_rmw_event ev = {
-        .pc      = INTERPOSE_PC,
-        .func    = "atomic32_fetch_xor",
-        .addr    = (void *)a,
-        .size    = (32 >> 3),
-        .mo      = mo,
+        .pc        = INTERPOSE_PC,
+        .func      = "atomic32_fetch_xor",
+        .addr      = (void *)a,
+        .size      = (32 >> 3),
+        .mo        = mo,
         .val.u32 = v,
-        .old.u64 = 0,
+        .old.u64   = 0,
     };
 
     metadata_t md = {0};
@@ -1029,13 +1029,13 @@ uint64_t
 __tsan_atomic64_fetch_xor(volatile uint64_t *a, uint64_t v, int mo)
 {
     struct ma_rmw_event ev = {
-        .pc      = INTERPOSE_PC,
-        .func    = "atomic64_fetch_xor",
-        .addr    = (void *)a,
-        .size    = (64 >> 3),
-        .mo      = mo,
+        .pc        = INTERPOSE_PC,
+        .func      = "atomic64_fetch_xor",
+        .addr      = (void *)a,
+        .size      = (64 >> 3),
+        .mo        = mo,
         .val.u64 = v,
-        .old.u64 = 0,
+        .old.u64   = 0,
     };
 
     metadata_t md = {0};
@@ -1048,13 +1048,13 @@ uint8_t
 __tsan_atomic8_fetch_nand(volatile uint8_t *a, uint8_t v, int mo)
 {
     struct ma_rmw_event ev = {
-        .pc      = INTERPOSE_PC,
-        .func    = "atomic8_fetch_nand",
-        .addr    = (void *)a,
-        .size    = (8 >> 3),
-        .mo      = mo,
-        .val.u8  = v,
-        .old.u64 = 0,
+        .pc        = INTERPOSE_PC,
+        .func      = "atomic8_fetch_nand",
+        .addr      = (void *)a,
+        .size      = (8 >> 3),
+        .mo        = mo,
+        .val.u8 = v,
+        .old.u64   = 0,
     };
 
     metadata_t md = {0};
@@ -1067,13 +1067,13 @@ uint16_t
 __tsan_atomic16_fetch_nand(volatile uint16_t *a, uint16_t v, int mo)
 {
     struct ma_rmw_event ev = {
-        .pc      = INTERPOSE_PC,
-        .func    = "atomic16_fetch_nand",
-        .addr    = (void *)a,
-        .size    = (16 >> 3),
-        .mo      = mo,
+        .pc        = INTERPOSE_PC,
+        .func      = "atomic16_fetch_nand",
+        .addr      = (void *)a,
+        .size      = (16 >> 3),
+        .mo        = mo,
         .val.u16 = v,
-        .old.u64 = 0,
+        .old.u64   = 0,
     };
 
     metadata_t md = {0};
@@ -1086,13 +1086,13 @@ uint32_t
 __tsan_atomic32_fetch_nand(volatile uint32_t *a, uint32_t v, int mo)
 {
     struct ma_rmw_event ev = {
-        .pc      = INTERPOSE_PC,
-        .func    = "atomic32_fetch_nand",
-        .addr    = (void *)a,
-        .size    = (32 >> 3),
-        .mo      = mo,
+        .pc        = INTERPOSE_PC,
+        .func      = "atomic32_fetch_nand",
+        .addr      = (void *)a,
+        .size      = (32 >> 3),
+        .mo        = mo,
         .val.u32 = v,
-        .old.u64 = 0,
+        .old.u64   = 0,
     };
 
     metadata_t md = {0};
@@ -1105,13 +1105,13 @@ uint64_t
 __tsan_atomic64_fetch_nand(volatile uint64_t *a, uint64_t v, int mo)
 {
     struct ma_rmw_event ev = {
-        .pc      = INTERPOSE_PC,
-        .func    = "atomic64_fetch_nand",
-        .addr    = (void *)a,
-        .size    = (64 >> 3),
-        .mo      = mo,
+        .pc        = INTERPOSE_PC,
+        .func      = "atomic64_fetch_nand",
+        .addr      = (void *)a,
+        .size      = (64 >> 3),
+        .mo        = mo,
         .val.u64 = v,
-        .old.u64 = 0,
+        .old.u64   = 0,
     };
 
     metadata_t md = {0};
@@ -1129,189 +1129,189 @@ __tsan_atomic8_compare_exchange_strong(volatile uint8_t *a, uint8_t *c,
                                        uint8_t v, int mo)
 {
     struct ma_cmpxchg_event ev = {
-        .pc      = INTERPOSE_PC,
-        .func    = "atomic8_compare_exchange_strong",
-        .addr    = (void *)a,
-        .size    = (8 >> 3),
-        .mo      = mo,
-        .val.u8  = v,
-        .cmp.u8  = *c,
-        .old.u64 = 0,
-        .ok      = 0,
+        .pc        = INTERPOSE_PC,
+        .func      = "atomic8_compare_exchange_strong",
+        .addr      = (void *)a,
+        .size      = (8 >> 3),
+        .mo        = mo,
+        .val.u8 = v,
+        .cmp.u8 = *c,
+        .old.u64   = 0,
+        .ok        = 0,
     };
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_MA_CMPXCHG, &ev, &md);
-    ev.ok     = __atomic_compare_exchange_n(a, c, v, 0, __ATOMIC_SEQ_CST,
-                                            __ATOMIC_SEQ_CST);
+    ev.ok = __atomic_compare_exchange_n(a, c, v, 0, __ATOMIC_SEQ_CST,
+                                        __ATOMIC_SEQ_CST);
     ev.old.u8 = *c;
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_MA_CMPXCHG, &ev, &md);
     return ev.ok;
 }
 int
 __tsan_atomic16_compare_exchange_strong(volatile uint16_t *a, uint16_t *c,
-                                        uint16_t v, int mo)
+                                       uint16_t v, int mo)
 {
     struct ma_cmpxchg_event ev = {
-        .pc      = INTERPOSE_PC,
-        .func    = "atomic16_compare_exchange_strong",
-        .addr    = (void *)a,
-        .size    = (16 >> 3),
-        .mo      = mo,
+        .pc        = INTERPOSE_PC,
+        .func      = "atomic16_compare_exchange_strong",
+        .addr      = (void *)a,
+        .size      = (16 >> 3),
+        .mo        = mo,
         .val.u16 = v,
         .cmp.u16 = *c,
-        .old.u64 = 0,
-        .ok      = 0,
+        .old.u64   = 0,
+        .ok        = 0,
     };
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_MA_CMPXCHG, &ev, &md);
-    ev.ok      = __atomic_compare_exchange_n(a, c, v, 0, __ATOMIC_SEQ_CST,
-                                             __ATOMIC_SEQ_CST);
+    ev.ok = __atomic_compare_exchange_n(a, c, v, 0, __ATOMIC_SEQ_CST,
+                                        __ATOMIC_SEQ_CST);
     ev.old.u16 = *c;
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_MA_CMPXCHG, &ev, &md);
     return ev.ok;
 }
 int
 __tsan_atomic32_compare_exchange_strong(volatile uint32_t *a, uint32_t *c,
-                                        uint32_t v, int mo)
+                                       uint32_t v, int mo)
 {
     struct ma_cmpxchg_event ev = {
-        .pc      = INTERPOSE_PC,
-        .func    = "atomic32_compare_exchange_strong",
-        .addr    = (void *)a,
-        .size    = (32 >> 3),
-        .mo      = mo,
+        .pc        = INTERPOSE_PC,
+        .func      = "atomic32_compare_exchange_strong",
+        .addr      = (void *)a,
+        .size      = (32 >> 3),
+        .mo        = mo,
         .val.u32 = v,
         .cmp.u32 = *c,
-        .old.u64 = 0,
-        .ok      = 0,
+        .old.u64   = 0,
+        .ok        = 0,
     };
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_MA_CMPXCHG, &ev, &md);
-    ev.ok      = __atomic_compare_exchange_n(a, c, v, 0, __ATOMIC_SEQ_CST,
-                                             __ATOMIC_SEQ_CST);
+    ev.ok = __atomic_compare_exchange_n(a, c, v, 0, __ATOMIC_SEQ_CST,
+                                        __ATOMIC_SEQ_CST);
     ev.old.u32 = *c;
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_MA_CMPXCHG, &ev, &md);
     return ev.ok;
 }
 int
 __tsan_atomic64_compare_exchange_strong(volatile uint64_t *a, uint64_t *c,
-                                        uint64_t v, int mo)
+                                       uint64_t v, int mo)
 {
     struct ma_cmpxchg_event ev = {
-        .pc      = INTERPOSE_PC,
-        .func    = "atomic64_compare_exchange_strong",
-        .addr    = (void *)a,
-        .size    = (64 >> 3),
-        .mo      = mo,
+        .pc        = INTERPOSE_PC,
+        .func      = "atomic64_compare_exchange_strong",
+        .addr      = (void *)a,
+        .size      = (64 >> 3),
+        .mo        = mo,
         .val.u64 = v,
         .cmp.u64 = *c,
-        .old.u64 = 0,
-        .ok      = 0,
+        .old.u64   = 0,
+        .ok        = 0,
     };
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_MA_CMPXCHG, &ev, &md);
-    ev.ok      = __atomic_compare_exchange_n(a, c, v, 0, __ATOMIC_SEQ_CST,
-                                             __ATOMIC_SEQ_CST);
+    ev.ok = __atomic_compare_exchange_n(a, c, v, 0, __ATOMIC_SEQ_CST,
+                                        __ATOMIC_SEQ_CST);
     ev.old.u64 = *c;
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_MA_CMPXCHG, &ev, &md);
     return ev.ok;
 }
 int
-__tsan_atomic8_compare_exchange_weak(volatile uint8_t *a, uint8_t *c, uint8_t v,
-                                     int mo)
+__tsan_atomic8_compare_exchange_weak(volatile uint8_t *a, uint8_t *c,
+                                       uint8_t v, int mo)
 {
     struct ma_cmpxchg_event ev = {
-        .pc      = INTERPOSE_PC,
-        .func    = "atomic8_compare_exchange_weak",
-        .addr    = (void *)a,
-        .size    = (8 >> 3),
-        .mo      = mo,
-        .val.u8  = v,
-        .cmp.u8  = *c,
-        .old.u64 = 0,
-        .ok      = 0,
+        .pc        = INTERPOSE_PC,
+        .func      = "atomic8_compare_exchange_weak",
+        .addr      = (void *)a,
+        .size      = (8 >> 3),
+        .mo        = mo,
+        .val.u8 = v,
+        .cmp.u8 = *c,
+        .old.u64   = 0,
+        .ok        = 0,
     };
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_MA_CMPXCHG, &ev, &md);
-    ev.ok     = __atomic_compare_exchange_n(a, c, v, 1, __ATOMIC_SEQ_CST,
-                                            __ATOMIC_SEQ_CST);
+    ev.ok = __atomic_compare_exchange_n(a, c, v, 1, __ATOMIC_SEQ_CST,
+                                        __ATOMIC_SEQ_CST);
     ev.old.u8 = *c;
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_MA_CMPXCHG, &ev, &md);
     return ev.ok;
 }
 int
 __tsan_atomic16_compare_exchange_weak(volatile uint16_t *a, uint16_t *c,
-                                      uint16_t v, int mo)
+                                       uint16_t v, int mo)
 {
     struct ma_cmpxchg_event ev = {
-        .pc      = INTERPOSE_PC,
-        .func    = "atomic16_compare_exchange_weak",
-        .addr    = (void *)a,
-        .size    = (16 >> 3),
-        .mo      = mo,
+        .pc        = INTERPOSE_PC,
+        .func      = "atomic16_compare_exchange_weak",
+        .addr      = (void *)a,
+        .size      = (16 >> 3),
+        .mo        = mo,
         .val.u16 = v,
         .cmp.u16 = *c,
-        .old.u64 = 0,
-        .ok      = 0,
+        .old.u64   = 0,
+        .ok        = 0,
     };
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_MA_CMPXCHG, &ev, &md);
-    ev.ok      = __atomic_compare_exchange_n(a, c, v, 1, __ATOMIC_SEQ_CST,
-                                             __ATOMIC_SEQ_CST);
+    ev.ok = __atomic_compare_exchange_n(a, c, v, 1, __ATOMIC_SEQ_CST,
+                                        __ATOMIC_SEQ_CST);
     ev.old.u16 = *c;
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_MA_CMPXCHG, &ev, &md);
     return ev.ok;
 }
 int
 __tsan_atomic32_compare_exchange_weak(volatile uint32_t *a, uint32_t *c,
-                                      uint32_t v, int mo)
+                                       uint32_t v, int mo)
 {
     struct ma_cmpxchg_event ev = {
-        .pc      = INTERPOSE_PC,
-        .func    = "atomic32_compare_exchange_weak",
-        .addr    = (void *)a,
-        .size    = (32 >> 3),
-        .mo      = mo,
+        .pc        = INTERPOSE_PC,
+        .func      = "atomic32_compare_exchange_weak",
+        .addr      = (void *)a,
+        .size      = (32 >> 3),
+        .mo        = mo,
         .val.u32 = v,
         .cmp.u32 = *c,
-        .old.u64 = 0,
-        .ok      = 0,
+        .old.u64   = 0,
+        .ok        = 0,
     };
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_MA_CMPXCHG, &ev, &md);
-    ev.ok      = __atomic_compare_exchange_n(a, c, v, 1, __ATOMIC_SEQ_CST,
-                                             __ATOMIC_SEQ_CST);
+    ev.ok = __atomic_compare_exchange_n(a, c, v, 1, __ATOMIC_SEQ_CST,
+                                        __ATOMIC_SEQ_CST);
     ev.old.u32 = *c;
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_MA_CMPXCHG, &ev, &md);
     return ev.ok;
 }
 int
 __tsan_atomic64_compare_exchange_weak(volatile uint64_t *a, uint64_t *c,
-                                      uint64_t v, int mo)
+                                       uint64_t v, int mo)
 {
     struct ma_cmpxchg_event ev = {
-        .pc      = INTERPOSE_PC,
-        .func    = "atomic64_compare_exchange_weak",
-        .addr    = (void *)a,
-        .size    = (64 >> 3),
-        .mo      = mo,
+        .pc        = INTERPOSE_PC,
+        .func      = "atomic64_compare_exchange_weak",
+        .addr      = (void *)a,
+        .size      = (64 >> 3),
+        .mo        = mo,
         .val.u64 = v,
         .cmp.u64 = *c,
-        .old.u64 = 0,
-        .ok      = 0,
+        .old.u64   = 0,
+        .ok        = 0,
     };
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_MA_CMPXCHG, &ev, &md);
-    ev.ok      = __atomic_compare_exchange_n(a, c, v, 1, __ATOMIC_SEQ_CST,
-                                             __ATOMIC_SEQ_CST);
+    ev.ok = __atomic_compare_exchange_n(a, c, v, 1, __ATOMIC_SEQ_CST,
+                                        __ATOMIC_SEQ_CST);
     ev.old.u64 = *c;
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_MA_CMPXCHG, &ev, &md);
     return ev.ok;
@@ -1321,93 +1321,93 @@ __tsan_atomic64_compare_exchange_weak(volatile uint64_t *a, uint64_t *c,
  * compare_exchange_val
  * -------------------------------------------------------------------------- */
 uint8_t
-__tsan_atomic8_compare_exchange_val(volatile uint8_t *a, uint8_t c, uint8_t v,
-                                    int mo)
+__tsan_atomic8_compare_exchange_val(volatile uint8_t *a, uint8_t c,
+                                       uint8_t v, int mo)
 {
     struct ma_cmpxchg_event ev = {
-        .pc      = INTERPOSE_PC,
-        .func    = "atomic8_compare_exchange_val",
-        .addr    = (void *)a,
-        .size    = (8 >> 3),
-        .mo      = mo,
-        .val.u8  = v,
-        .cmp.u8  = c,
-        .old.u64 = 0,
-        .ok      = 0,
+        .pc        = INTERPOSE_PC,
+        .func      = "atomic8_compare_exchange_val",
+        .addr      = (void *)a,
+        .size      = (8 >> 3),
+        .mo        = mo,
+        .val.u8 = v,
+        .cmp.u8 = c,
+        .old.u64   = 0,
+        .ok        = 0,
     };
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_MA_CMPXCHG, &ev, &md);
-    ev.ok     = __atomic_compare_exchange_n(a, &c, v, 0, __ATOMIC_SEQ_CST,
-                                            __ATOMIC_SEQ_CST);
+    ev.ok        = __atomic_compare_exchange_n(a, &c, v, 0, __ATOMIC_SEQ_CST,
+                                               __ATOMIC_SEQ_CST);
     ev.old.u8 = c;
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_MA_CMPXCHG, &ev, &md);
     return ev.old.u8;
 }
 uint16_t
 __tsan_atomic16_compare_exchange_val(volatile uint16_t *a, uint16_t c,
-                                     uint16_t v, int mo)
+                                       uint16_t v, int mo)
 {
     struct ma_cmpxchg_event ev = {
-        .pc      = INTERPOSE_PC,
-        .func    = "atomic16_compare_exchange_val",
-        .addr    = (void *)a,
-        .size    = (16 >> 3),
-        .mo      = mo,
+        .pc        = INTERPOSE_PC,
+        .func      = "atomic16_compare_exchange_val",
+        .addr      = (void *)a,
+        .size      = (16 >> 3),
+        .mo        = mo,
         .val.u16 = v,
         .cmp.u16 = c,
-        .old.u64 = 0,
-        .ok      = 0,
+        .old.u64   = 0,
+        .ok        = 0,
     };
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_MA_CMPXCHG, &ev, &md);
-    ev.ok      = __atomic_compare_exchange_n(a, &c, v, 0, __ATOMIC_SEQ_CST,
-                                             __ATOMIC_SEQ_CST);
+    ev.ok        = __atomic_compare_exchange_n(a, &c, v, 0, __ATOMIC_SEQ_CST,
+                                               __ATOMIC_SEQ_CST);
     ev.old.u16 = c;
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_MA_CMPXCHG, &ev, &md);
     return ev.old.u16;
 }
 uint32_t
 __tsan_atomic32_compare_exchange_val(volatile uint32_t *a, uint32_t c,
-                                     uint32_t v, int mo)
+                                       uint32_t v, int mo)
 {
     struct ma_cmpxchg_event ev = {
-        .pc      = INTERPOSE_PC,
-        .func    = "atomic32_compare_exchange_val",
-        .addr    = (void *)a,
-        .size    = (32 >> 3),
-        .mo      = mo,
+        .pc        = INTERPOSE_PC,
+        .func      = "atomic32_compare_exchange_val",
+        .addr      = (void *)a,
+        .size      = (32 >> 3),
+        .mo        = mo,
         .val.u32 = v,
         .cmp.u32 = c,
-        .old.u64 = 0,
-        .ok      = 0,
+        .old.u64   = 0,
+        .ok        = 0,
     };
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_MA_CMPXCHG, &ev, &md);
-    ev.ok      = __atomic_compare_exchange_n(a, &c, v, 0, __ATOMIC_SEQ_CST,
-                                             __ATOMIC_SEQ_CST);
+    ev.ok        = __atomic_compare_exchange_n(a, &c, v, 0, __ATOMIC_SEQ_CST,
+                                               __ATOMIC_SEQ_CST);
     ev.old.u32 = c;
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_MA_CMPXCHG, &ev, &md);
     return ev.old.u32;
 }
 uint64_t
 __tsan_atomic64_compare_exchange_val(volatile uint64_t *a, uint64_t c,
-                                     uint64_t v, int mo)
+                                       uint64_t v, int mo)
 {
     struct ma_cmpxchg_event ev = {
-        .pc      = INTERPOSE_PC,
-        .func    = "atomic64_compare_exchange_val",
-        .addr    = (void *)a,
-        .size    = (64 >> 3),
-        .mo      = mo,
+        .pc        = INTERPOSE_PC,
+        .func      = "atomic64_compare_exchange_val",
+        .addr      = (void *)a,
+        .size      = (64 >> 3),
+        .mo        = mo,
         .val.u64 = v,
         .cmp.u64 = c,
-        .old.u64 = 0,
-        .ok      = 0,
+        .old.u64   = 0,
+        .ok        = 0,
     };
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_MA_CMPXCHG, &ev, &md);
-    ev.ok      = __atomic_compare_exchange_n(a, &c, v, 0, __ATOMIC_SEQ_CST,
-                                             __ATOMIC_SEQ_CST);
+    ev.ok        = __atomic_compare_exchange_n(a, &c, v, 0, __ATOMIC_SEQ_CST,
+                                               __ATOMIC_SEQ_CST);
     ev.old.u64 = c;
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_MA_CMPXCHG, &ev, &md);
     return ev.old.u64;

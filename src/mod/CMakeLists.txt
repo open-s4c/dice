@@ -2,11 +2,11 @@
 # SPDX-License-Identifier: 0BSD
 
 add_custom_target(
-  tsan.c
+  expand-tsan.c
   COMMAND $<TARGET_FILE:tmplr> ${CMAKE_CURRENT_SOURCE_DIR}/tsan.c.in >
           ${CMAKE_CURRENT_SOURCE_DIR}/tsan.c
   DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/tsan.c.in)
-add_dependencies(tsan.c tmplr)
+add_dependencies(expand-tsan.c tmplr)
 
 set(TSAN_MODULES tsan stacktrace)
 

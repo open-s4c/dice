@@ -12,8 +12,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <dice/chains/intercept.h>
 #include <dice/events/memaccess.h>
-#include <dice/intercept.h>
 #include <dice/interpose.h>
 #include <dice/module.h>
 
@@ -47,6 +47,7 @@ void
 __tsan_init()
 {
 }
+
 void
 __tsan_write_range(void)
 {
