@@ -61,6 +61,8 @@ _check_next(struct thread_trace *exp, chain_id chain, type_id type,
                       type, next->chain, next->type);
         } else if (mismatch) {
             exp->next++;
+            log_warn("[%" PRIu64 "] event %d:%d mismatch (go to next)", id,
+                     chain, type);
             _check_next(exp, chain, type, id);
             return;
         }
