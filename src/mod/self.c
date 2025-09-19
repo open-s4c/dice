@@ -437,6 +437,15 @@ _cleanup_threads(pthread_t pid)
     caslock_release(&_threads.lock);
 }
 
+DICE_HIDE_IF void
+self_gc(void)
+{
+    static caslock_t lock = CASLOCK_INIT();
+    caslock_acquire(&lock);
+    _cleanup_threads(0);
+    caslock_release(&lock);
+}
+
 PS_SUBSCRIBE(INTERCEPT_EVENT, EVENT_THREAD_EXIT, {
     struct self *self = _get_or_create_self(true);
     _self_handle_event(chain, type, event, self);

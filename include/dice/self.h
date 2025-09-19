@@ -37,5 +37,7 @@ void *self_tls(metadata_t *self, const void *global, size_t size);
     ((__typeof(global_ptr))self_tls((self), (global_ptr),                      \
                                     sizeof(*(global_ptr))))
 
+/* Frees the memory of retired threads that have been fully terminated. */
+void self_gc(void);
 
 #endif /* DICE_SELF_H */
