@@ -49,14 +49,26 @@ _check_next(struct thread_trace *exp, chain_id chain, type_id type,
             thread_id id)
 {
     struct expected_event *next = exp->next;
-    if (!next->set)
-        log_fatal("[%" PRIu64 "] trace ends too early: expected event %d:%d",
-                  id, chain, type);
+    if (!next->set) {
+        log_warn("[%" PRIu64 "] trace ends too early: expected event %d:%d", id,
+                 chain, type);
+        return;
+    }
     if (!next->wild) {
-        if (next->chain != chain || next->type != type)
+        bool mismatch = next->chain != chain || next->type != type;
+        if (mismatch && next->atleast > 0) {
             log_fatal("[%" PRIu64 "] event %d:%d mismatch %d:%d", id, chain,
                       type, next->chain, next->type);
+        } else if (mismatch) {
+            exp->next++;
+            _check_next(exp, chain, type, id);
+            return;
+        }
         log_warn("[%" PRIu64 "] event %d:%d match", id, chain, type);
+        if (next->atleast > 0)
+            next->atleast--;
+        if (next->atmost-- == 1)
+            exp->next++;
     } else {
         if (next->chain != chain || next->type != type) {
             log_warn("[%" PRIu64 "] event %d:%d wild match %d:%d", id, chain,
@@ -64,8 +76,10 @@ _check_next(struct thread_trace *exp, chain_id chain, type_id type,
             return;
         }
         log_warn("[%" PRIu64 "] event %d:%d match suffix", id, chain, type);
+        ensure(next->atleast == next->atmost);
+        ensure(next->atleast == 1);
+        exp->next++;
     }
-    exp->next++;
 }
 
 static void
