@@ -46,6 +46,9 @@ while [ "$#" != "0" ]; do
             PRELOAD="$PRELOAD:$DICE_DIR/dice-tsan.$SO"
             PRELOAD="$PRELOAD:$DICE_DIR/dice-stacktrace.$SO"
         ;;
+        -cxa)
+            PRELOAD="$PRELOAD:$DICE_DIR/dice-cxa.$SO"
+        ;;
         -sequencer)
             PRELOAD="$PRELOAD:$DICE_DIR/dice-sequencer.$SO"
             PRELOAD="$PRELOAD:$DICE_DIR/dice-switcher.$SO"

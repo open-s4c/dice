@@ -39,7 +39,7 @@ DICE_WEAK caslock_t log_lock;
 
 #define LOG_PASTE(LEVEL)  LOG_LEVEL##_##LEVEL
 #define LOG_EXPAND(LEVEL) LOG_PASTE(LEVEL)
-#define LOG_LEVEL_ LOG_EXPAND(LOG_LEVEL)
+#define LOG_LEVEL_        LOG_EXPAND(LOG_LEVEL)
 
 #define LOG_MAX_LEN 1024
 #define log_printf(fmt, ...)                                                   \
@@ -52,6 +52,14 @@ DICE_WEAK caslock_t log_lock;
         }                                                                      \
     } while (0)
 
+#define log_warn(fmt, ...)                                                     \
+    do {                                                                       \
+        LOG_LOCK_ACQUIRE;                                                      \
+        log_printf(LOG_PREFIX);                                                \
+        log_printf(fmt, ##__VA_ARGS__);                                        \
+        log_printf(LOG_SUFFIX);                                                \
+        LOG_LOCK_RELEASE;                                                      \
+    } while (0)
 
 #if LOG_LEVEL_ >= LOG_LEVEL_DEBUG
     #define log_debug(fmt, ...)                                                \
