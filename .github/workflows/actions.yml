@@ -5,9 +5,10 @@ env:
 
 jobs:
   test-linux:
+    if: true
     strategy:
       matrix:
-        os: [ubuntu-24.04, ubuntu-22.04, ubuntu-24.04-arm, ubuntu-22.04-arm]
+        os: [ubuntu-24.04, ubuntu-22.04]
         build_type: [ "Debug", "Release" ]
         cfg:
         - cc: gcc
@@ -32,7 +33,35 @@ jobs:
       - name: Install
         run: cmake --install build
 
+  test-linux-arm:
+    if: true
+    strategy:
+      matrix:
+        os: [ubuntu-24.04-arm, ubuntu-22.04-arm]
+        cfg:
+        - cc: gcc
+          cxx: g++
+        - cc: clang
+          cxx: clang++
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Configure
+        run: cmake -S. -Bbuild
+             -DCMAKE_INSTALL_PREFIX=/tmp/target
+             -DCMAKE_C_COMPILER=${{ matrix.cfg.cc }}
+             -DCMAKE_CXX_COMPILER=${{ matrix.cfg.cxx }}
+      - name: Build
+        run: cmake --build build
+      - name: Test
+        run: ctest --test-dir build --output-on-failure
+      - name: Install
+        run: cmake --install build
+
   test-sanitizer:
+    if: true
     strategy:
       matrix:
         os: [ubuntu-24.04]
@@ -53,6 +82,7 @@ jobs:
         run: ctest --test-dir build --output-on-failure
 
   test-alpine:
+    if: true
     runs-on: ubuntu-latest
     container: ghcr.io/open-s4c/dice/alpine-ci:latest
     steps:
