@@ -84,6 +84,15 @@ add_library(dice SHARED ${SRCS})
 target_link_libraries(dice PUBLIC dice.h pthread)
 install(TARGETS dice DESTINATION lib)
 
+if(${DICE_COVERAGE})
+  # do not involve dice-dispatch/dice-box in the coverage metrics
+  set(TARGETS dice.o dice)
+  foreach(TARGET ${TARGETS})
+    target_compile_options(${TARGET} PRIVATE --coverage)
+    target_link_options(${TARGET} PUBLIC --coverage)
+  endforeach()
+endif()
+
 if(${ENABLE_SANITIZER})
   set(TARGETS rbtree_test dice.o dice)
   foreach(TARGET ${TARGETS})
