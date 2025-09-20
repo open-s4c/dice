@@ -18,6 +18,7 @@ static int exit_called;
 // TLS key and once guard
 static pthread_key_t key;
 static pthread_once_t once;
+static void *arg_check; // keep arg in a variable to double check later
 
 // A once-initializer to make Alpine Linux happy. This is called in the second
 // thread and in the main thread but the compilation on Alpine doesn't like it.
@@ -36,7 +37,8 @@ run(void *_)
 {
     (void)_;
     pthread_once(&once, tls_init);
-    if (pthread_setspecific(key, (const void *)malloc(123)) != 0)
+    arg_check = malloc(123);
+    if (pthread_setspecific(key, (const void *)arg_check) != 0)
         abort();
     log_printf("1) tid = %p\n", (void *)pthread_self());
     return 0;
@@ -73,6 +75,10 @@ PS_SUBSCRIBE(CAPTURE_EVENT, EVENT_THREAD_EXIT, {
 // CAPTURE_BEFORE EVENT_FREE
 PS_SUBSCRIBE(CAPTURE_BEFORE, EVENT_FREE, {
     if (exit_called == 0)
+        return PS_OK;
+
+    struct free_event *ev = EVENT_PAYLOAD(ev);
+    if (ev->ptr != arg_check)
         return PS_OK;
 
     log_printf("4) tid = %p\tself = %p\n", (void *)pthread_self(), md);
