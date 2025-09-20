@@ -39,6 +39,13 @@ foreach(SRC ${SRCS})
                              PRIVATE -fsanitize=${DICE_SANITIZER})
     endif()
   endif()
+
+  if(${DICE_COVERAGE})
+    foreach(ENDING "" ".o" "_testing.o")
+      target_compile_options(${TARGET}${ENDING} PRIVATE --coverage)
+      target_link_options(${TARGET}${ENDING} PUBLIC --coverage)
+    endforeach()
+  endif()
 endforeach()
 
 target_link_libraries(dice-self PRIVATE pthread)
