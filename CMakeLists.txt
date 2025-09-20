@@ -41,6 +41,14 @@ include(GNUInstallDirs)
 include(CheckSymbolExists)
 include(cmake/export.cmake)
 
+# Coverage
+option(DICE_COVERAGE "Enable test coverage" off)
+if(${DICE_COVERAGE})
+  include(CTest)
+  add_compile_options(--coverage)
+  add_link_options(--coverage)
+endif()
+
 # TSAN on Clang requires the following flag
 set(LIBSAN_SHARED)
 if(CMAKE_C_COMPILER_ID STREQUAL "Clang")
