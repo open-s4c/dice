@@ -27,6 +27,9 @@ if [ -z "$DICE_BUILD" ]; then
 	    exit 1
 	fi
 else
+	if [ -z "$DICE_SOURCE" ]; then
+		DICE_SOURCE=$(readlink -f $DICE_BUILD/..)
+	fi
 	LIBDICE="$DICE_BUILD/src/dice/libdice.$SO"
 	DICE_DIR="$DICE_BUILD/src/mod"
 	TSANO_LIBDIR="$DICE_BUILD/deps/tsano"
