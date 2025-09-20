@@ -1,0 +1,13 @@
+diff --git a/src/TheRestOfYourLife/main.cc b/src/TheRestOfYourLife/main.cc
+index 011d942..1e90158 100644
+--- a/src/TheRestOfYourLife/main.cc
++++ b/src/TheRestOfYourLife/main.cc
+@@ -57,7 +57,7 @@ int main() {
+ 
+     cam.aspect_ratio      = 1.0;
+     cam.image_width       = 600;
+-    cam.samples_per_pixel = 100;
++    cam.samples_per_pixel = 10;
+     cam.max_depth         = 50;
+     cam.background        = color(0,0,0);
+ 

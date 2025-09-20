@@ -1,0 +1,40 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index bf8f9a7..05efd4e 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -6,8 +6,12 @@
+ 
+ cmake_minimum_required ( VERSION 3.1.0...3.27.0 )
+ 
++set(CMAKE_C_COMPILER <path_to>/clang-15)
++set(CMAKE_CXX_COMPILER <path_to>/clang++-15)
+ project ( RTWeekend LANGUAGES CXX )
+ 
++add_compile_options(-g -fno-discard-value-names)
++
+ # Set to C++11
+ set ( CMAKE_CXX_STANDARD          11 )
+ set ( CMAKE_CXX_STANDARD_REQUIRED ON )
+@@ -105,10 +109,21 @@ elseif (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+     add_compile_options(-Wunused-variable) # Variable is defined but unused
+ endif()
+ 
++find_library(LIBFREEZE NAMES freeze PATHS "<path_to_libfreeze_folder>")
++
+ # Executables
+ add_executable(inOneWeekend      ${EXTERNAL} ${SOURCE_ONE_WEEKEND})
+ add_executable(theNextWeek       ${EXTERNAL} ${SOURCE_NEXT_WEEK})
+-add_executable(theRestOfYourLife ${EXTERNAL} ${SOURCE_REST_OF_YOUR_LIFE})
++add_executable(theRestOfYourLife-vanilla ${EXTERNAL} ${SOURCE_REST_OF_YOUR_LIFE})
++
++add_executable(theRestOfYourLife-freezer ${EXTERNAL} ${SOURCE_REST_OF_YOUR_LIFE})
++target_compile_options(theRestOfYourLife-freezer PRIVATE -fsanitize=thread)
++target_link_libraries(theRestOfYourLife-freezer PRIVATE ${LIBFREEZE})
++
++add_executable(theRestOfYourLife-melter ${EXTERNAL} ${SOURCE_REST_OF_YOUR_LIFE})
++target_compile_options(theRestOfYourLife-melter PRIVATE -fpass-plugin=<path_to>/MelterPlugin.0.2.0.so)
++target_link_libraries(theRestOfYourLife-melter PRIVATE ${LIBFREEZE})
++
+ add_executable(cos_cubed         src/TheRestOfYourLife/cos_cubed.cc         )
+ add_executable(cos_density       src/TheRestOfYourLife/cos_density.cc       )
+ add_executable(integrate_x_sq    src/TheRestOfYourLife/integrate_x_sq.cc    )
