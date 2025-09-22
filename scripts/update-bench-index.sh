@@ -1,11 +1,17 @@
 #!/bin/sh
-# Copyright (C) Huawei Technologies Co., Ltd. 2025. All rights reserved.
+# Copyright (C) 2025 Huawei Technologies Co., Ltd.
 # SPDX-License-Identifier: 0BSD
 
 set -e
 
 # assume starting from project root and dice.wiki is cloned there
 WIKI_DIR=dice.wiki
+
+# or if one argument is passed, use that as directory
+if [ ! -z "$1" ]; then
+	WIKI_DIR="$1"
+fi
+
 BENCH_DIR=$WIKI_DIR/bench
 
 # create a simple header text for the benchmark README

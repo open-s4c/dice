@@ -1,4 +1,4 @@
-# Copyright (C) Huawei Technologies Co., Ltd. 2025. All rights reserved.
+# Copyright (C) 2025 Huawei Technologies Co., Ltd.
 # SPDX-License-Identifier: 0BSD
 
 configure_file(dice dice)
