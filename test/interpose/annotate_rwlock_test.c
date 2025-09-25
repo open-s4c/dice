@@ -8,9 +8,9 @@
 
 #define DICE_TEST_INTERPOSE
 #include <dice/chains/intercept.h>
+#include <dice/events/annotate_rwlock.h>
 #include <dice/interpose.h>
 #include <dice/pubsub.h>
-#include <dice/events/rw_locks.h>
 
 #define ensure(COND)                                                           \
     {                                                                          \
@@ -97,7 +97,8 @@ fake_AnnotateRWLockCreate(const char *file, int line, const volatile void *lock)
     /* return expected value */
 }
 void
-fake_AnnotateRWLockDestroy(const char *file, int line, const volatile void *lock)
+fake_AnnotateRWLockDestroy(const char *file, int line,
+                           const volatile void *lock)
 {
     /* check that every argument is as expected */
     ensure(file == E_AnnotateRWLockDestroy.file);
@@ -106,7 +107,8 @@ fake_AnnotateRWLockDestroy(const char *file, int line, const volatile void *lock
     /* return expected value */
 }
 void
-fake_AnnotateRWLockAcquired(const char *file, int line, const volatile void *lock , long is_w)
+fake_AnnotateRWLockAcquired(const char *file, int line,
+                            const volatile void *lock, long is_w)
 {
     /* check that every argument is as expected */
     ensure(file == E_AnnotateRWLockAcquired.file);
@@ -116,7 +118,8 @@ fake_AnnotateRWLockAcquired(const char *file, int line, const volatile void *loc
     /* return expected value */
 }
 void
-fake_AnnotateRWLockReleased(const char *file, int line, const volatile void *lock , long is_w)
+fake_AnnotateRWLockReleased(const char *file, int line,
+                            const volatile void *lock, long is_w)
 {
     /* check that every argument is as expected */
     ensure(file == E_AnnotateRWLockReleased.file);
@@ -217,54 +220,58 @@ static void
 test_AnnotateRWLockCreate(void)
 {
     /* initialize event with random content */
-    event_init(&E_AnnotateRWLockCreate, sizeof(struct AnnotateRWLockCreate_event));
+    event_init(&E_AnnotateRWLockCreate,
+               sizeof(struct AnnotateRWLockCreate_event));
     /* call AnnotateRWLockCreate with arguments */
     enable(fake_AnnotateRWLockCreate);
-                                 AnnotateRWLockCreate(                                    //
-                                     E_AnnotateRWLockCreate.file,                           //
-                                     E_AnnotateRWLockCreate.line,                           //
-                                     E_AnnotateRWLockCreate.lock                                  );
+    AnnotateRWLockCreate(            //
+        E_AnnotateRWLockCreate.file, //
+        E_AnnotateRWLockCreate.line, //
+        E_AnnotateRWLockCreate.lock);
     disable();
 }
 static void
 test_AnnotateRWLockDestroy(void)
 {
     /* initialize event with random content */
-    event_init(&E_AnnotateRWLockDestroy, sizeof(struct AnnotateRWLockDestroy_event));
+    event_init(&E_AnnotateRWLockDestroy,
+               sizeof(struct AnnotateRWLockDestroy_event));
     /* call AnnotateRWLockDestroy with arguments */
     enable(fake_AnnotateRWLockDestroy);
-                                 AnnotateRWLockDestroy(                                    //
-                                     E_AnnotateRWLockDestroy.file,                           //
-                                     E_AnnotateRWLockDestroy.line,                           //
-                                     E_AnnotateRWLockDestroy.lock                                  );
+    AnnotateRWLockDestroy(            //
+        E_AnnotateRWLockDestroy.file, //
+        E_AnnotateRWLockDestroy.line, //
+        E_AnnotateRWLockDestroy.lock);
     disable();
 }
 static void
 test_AnnotateRWLockAcquired(void)
 {
     /* initialize event with random content */
-    event_init(&E_AnnotateRWLockAcquired, sizeof(struct AnnotateRWLockAcquired_event));
+    event_init(&E_AnnotateRWLockAcquired,
+               sizeof(struct AnnotateRWLockAcquired_event));
     /* call AnnotateRWLockAcquired with arguments */
     enable(fake_AnnotateRWLockAcquired);
-                                 AnnotateRWLockAcquired(                                    //
-                                     E_AnnotateRWLockAcquired.file,                           //
-                                     E_AnnotateRWLockAcquired.line,                           //
-                                     E_AnnotateRWLockAcquired.lock,                           //
-                                     E_AnnotateRWLockAcquired.is_w                                  );
+    AnnotateRWLockAcquired(            //
+        E_AnnotateRWLockAcquired.file, //
+        E_AnnotateRWLockAcquired.line, //
+        E_AnnotateRWLockAcquired.lock, //
+        E_AnnotateRWLockAcquired.is_w);
     disable();
 }
 static void
 test_AnnotateRWLockReleased(void)
 {
     /* initialize event with random content */
-    event_init(&E_AnnotateRWLockReleased, sizeof(struct AnnotateRWLockReleased_event));
+    event_init(&E_AnnotateRWLockReleased,
+               sizeof(struct AnnotateRWLockReleased_event));
     /* call AnnotateRWLockReleased with arguments */
     enable(fake_AnnotateRWLockReleased);
-                                 AnnotateRWLockReleased(                                    //
-                                     E_AnnotateRWLockReleased.file,                           //
-                                     E_AnnotateRWLockReleased.line,                           //
-                                     E_AnnotateRWLockReleased.lock,                           //
-                                     E_AnnotateRWLockReleased.is_w                                  );
+    AnnotateRWLockReleased(            //
+        E_AnnotateRWLockReleased.file, //
+        E_AnnotateRWLockReleased.line, //
+        E_AnnotateRWLockReleased.lock, //
+        E_AnnotateRWLockReleased.is_w);
     disable();
 }
 
