@@ -41,7 +41,6 @@ Dice is composed of:
   services.
 - **Intercept Modules**: Use interposition to hook into key system functions.
 - **Autocept**: Automatically intercepts functions using assembly trampolines.
-- **Switcher**: Coordinates deterministic thread execution.
 
 ---
 

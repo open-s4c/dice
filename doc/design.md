@@ -78,9 +78,11 @@ with core modules as a single shared library.
   invalid state transitions.
 
 - Deterministic Replay: While Dice does not provide built-in deterministic
-  replay, it offers the building blocks necessary to implement such a system.
-  Using event data and the Switcher module (which controls thread execution
-  order), it is possible to replay specific execution scenarios by controlling
+  replay, it can be extended to implement such a system. For example,
+  a "sequencer" module can ensure that only one thread execute user code at
+  any point in time.  To replay an execution, the sequencer needs to ensure
+  scheduling decisions are deterministic or store in a replay file.  In this
+  way, it is possible to replay specific execution scenarios by controlling
   the sequence of events and thread execution, ensuring that the system behaves
   consistently for debugging or testing purposes.
 
