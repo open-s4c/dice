@@ -38,6 +38,5 @@ foreach(SRC ${SRCS})
 endforeach()
 
 target_sources(dice-autocept PRIVATE autocept_list.S)
-target_link_libraries(dice-sequencer PRIVATE dice-self dice-switcher)
 target_link_libraries(dice-self PRIVATE pthread)
 target_link_libraries(dice-self.o PUBLIC pthread)
