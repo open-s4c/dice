@@ -7,14 +7,13 @@
  * @brief Publishes func_entry and func_exit events from TSAN instrumentation.
  *
  ******************************************************************************/
-#include <stdint.h>
-
 #include <dice/chains/intercept.h>
 #include <dice/events/stacktrace.h>
 #include <dice/events/thread.h>
 #include <dice/interpose.h>
 #include <dice/module.h>
 #include <dice/pubsub.h>
+#include <stdint.h>
 
 DICE_MODULE_INIT()
 
@@ -41,6 +40,7 @@ __tsan_func_exit(void)
 /* -----------------------------------------------------------------------------
  * main thread start and exit of main() function
  * -------------------------------------------------------------------------- */
+#if !defined(DICE_MAIN_START_DISABLE)
 static void
 _main_exit()
 {
@@ -54,11 +54,20 @@ _main_start()
     PS_PUBLISH(INTERCEPT_EVENT, EVENT_THREAD_START, 0, 0);
     atexit(_main_exit);
 }
+#endif
 
 /* -----------------------------------------------------------------------------
  * find main function address and distance calculator
  * -------------------------------------------------------------------------- */
-#if defined(__NetBSD__)
+#if defined(DICE_MAIN_START_DISABLE)
+
+static inline void
+_check_main_start(void *retpc)
+{
+    (void)retpc;
+}
+
+#elif defined(__NetBSD__)
     #include <dlfcn.h>
     #include <limits.h>
     #include <link.h>
@@ -67,9 +76,8 @@ _main_start()
     #include <stdio.h>
     #include <stdlib.h>
     #include <string.h>
-    #include <unistd.h>
-
     #include <sys/stat.h>
+    #include <unistd.h>
 
 static int
 _phdr_cb(struct dl_phdr_info *info, size_t size, void *data)
@@ -146,7 +154,6 @@ typedef int (*main_f)(int, char **, char **);
     #if defined(__GLIBC__)
         #include <dlfcn.h>
         #include <stdint.h>
-        #include <stdio.h>
         #include <stdlib.h>
 
 INTERPOSE(int, __libc_start_main, main_f mainf, int argc, char **ubp_av,
