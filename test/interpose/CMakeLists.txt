@@ -30,6 +30,14 @@ set(FUNS_pthread_rwlock
     pthread_rwlock_unlock)
 set(INCL_pthread_rwlock ${INCL_pthread_create})
 
+set(FUNS_annotate_rwlock
+    AnnotateRWLockCreate
+    AnnotateRWLockDestroy
+    AnnotateRWLockAcquired
+    AnnotateRWLockReleased)
+set(INCL_annotate_rwlock '<dice/events/annotate_rwlock.h>')
+
+
 set(FUNS_sem sem_post sem_wait sem_trywait sem_timedwait)
 set(INCL_sem '<dice/events/semaphore.h>')
 
@@ -38,6 +46,7 @@ set(INCL_cxa '<dice/events/cxa.h>')
 
 set(MODS
     mman
+    annotate_rwlock
     pthread_create
     pthread_mutex
     pthread_cond
