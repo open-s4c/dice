@@ -37,6 +37,5 @@ foreach(SRC ${SRCS})
   endif()
 endforeach()
 
-target_sources(dice-autocept PRIVATE autocept_list.S)
 target_link_libraries(dice-self PRIVATE pthread)
 target_link_libraries(dice-self.o PUBLIC pthread)

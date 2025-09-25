@@ -12,7 +12,6 @@ publish-subscribe (pubsub) architecture.
 - Pubsub-based event distribution
 - Modular, pluggable architecture
 - Supports thread, memory, and synchronization tracking
-- Automatic interception via assembly macros (Autocept)
 - Thread-local storage and memory pooling for performance
 
 ## Getting Started
@@ -31,26 +30,15 @@ To use Dice:
 
 Subscribers and modules will now intercept and handle events during execution.
 
----
-
 ## Architecture Overview
 
-Dice is composed of:
-
-- **Core Modules**: `mempool`, `self`, and `pubsub` provide foundational
-  services.
-- **Intercept Modules**: Use interposition to hook into key system functions.
-- **Autocept**: Automatically intercepts functions using assembly trampolines.
-
----
-
-## Core Modules
+Dice is composed of several modules. Its core modules include
 
 - **Mempool**: Centralized memory manager for modules and threads.
 - **Pubsub**: Event routing system based on chains and event types.
 - **Self**: Manages thread-local storage and handles thread lifecycle events.
 
-## Interpose Modules
+Beside these modules, Dice provice several intercept modules such as
 
 - `pthread-create`: Hooks `pthread_create` and `pthread_join`
 - `pthread-mutex`: Hooks mutex lock/unlock operations
@@ -59,9 +47,6 @@ Dice is composed of:
 - `cxa`: Hooks C++ guard functions (`__cxa_guard_acquire`, etc.)
 - `sem`: Hooks POSIX semaphore functions
 - `tsan`: Hooks thread sanitizer calls
-- `autocept`: Generic interposition using assembly macros
-
----
 
 ## Use Cases
 
@@ -70,8 +55,6 @@ Dice is composed of:
 - **State Machine Monitoring**: Validate synchronization protocol correctness.
 - **Deterministic Replay**: Control execution to replicate bugs.
 - **Systematic Testing**: Explore thread interleavings to find concurrency bugs.
-
----
 
 ## Building and Installation
 
@@ -85,8 +68,6 @@ Modules are compiled as shared libraries. Ensure they are available in your
 `LD_LIBRARY_PATH`. Note that if you are using macOS, you have to set
 `DYLD_LIBRARY_PATH` and `DYLD_INSERT_LIBRARIES` instead.
 
----
-
 ## Usage
 
 Example: Run an application with Dice intercepting memory and threading events:
@@ -97,8 +78,6 @@ export LD_PRELOAD=/path/to/libdice.so:/path/to/libdice-malloc.so
 ```
 
 You can add your own subscriber module and load it the same way to process events.
-
----
 
 ## Examples
 
