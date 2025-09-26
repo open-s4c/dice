@@ -1,6 +1,6 @@
 /*
- * Copyright (C) Huawei Technologies Co., Ltd. 2025. All rights reserved.
- * SPDX-License-Identifier: MIT
+ * Copyright (C) 2025 Huawei Technologies Co., Ltd.
+ * SPDX-License-Identifier: 0BSD
  */
 #include <stddef.h>
 #include <stdlib.h>
