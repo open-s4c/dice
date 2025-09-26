@@ -126,3 +126,18 @@ $_map(MM_ARGS___cxa_guard_release, addr);
 $_map(MM_RETURN___cxa_guard_abort, void);
 $_map(MM_PARAMS___cxa_guard_abort, void *addr);
 $_map(MM_ARGS___cxa_guard_abort, addr);
+$_dl; // -----------------------------------------------------------------------
+$_dl; // annotate_rw_lock
+$_dl; // -----------------------------------------------------------------------
+$_map(MM_RETURN_AnnotateRWLockCreate,void);
+$_map(MM_PARAMS_AnnotateRWLockCreate, const char *file, int line, const volatile void *lock);
+$_map(MM_ARGS_AnnotateRWLockCreate,file,line,lock);
+$_map(MM_RETURN_AnnotateRWLockDestroy,void);
+$_map(MM_PARAMS_AnnotateRWLockDestroy, const char *file, int line, const volatile void *lock);
+$_map(MM_ARGS_AnnotateRWLockDestroy,file,line,lock);
+$_map(MM_RETURN_AnnotateRWLockAcquired,void);
+$_map(MM_PARAMS_AnnotateRWLockAcquired, const char *file, int line, const volatile void *lock , long is_w);
+$_map(MM_ARGS_AnnotateRWLockAcquired, file, line, lock, is_w);
+$_map(MM_RETURN_AnnotateRWLockReleased,void);
+$_map(MM_PARAMS_AnnotateRWLockReleased, const char *file, int line, const volatile void *lock , long is_w);
+$_map(MM_ARGS_AnnotateRWLockReleased, file, line, lock, is_w);
