@@ -1,12 +1,15 @@
 /*
- * Copyright (C) Huawei Technologies Co., Ltd. 2025. All rights reserved.
+ * Copyright (C) 2025 Huawei Technologies Co., Ltd.
  * SPDX-License-Identifier: 0BSD
  */
 #ifndef DICE_MEMACCESS_H
 #define DICE_MEMACCESS_H
 
+#include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
+
+#include <dice/types.h>
 
 #define EVENT_MA_READ         30
 #define EVENT_MA_WRITE        31
@@ -17,6 +20,12 @@
 #define EVENT_MA_CMPXCHG      36
 #define EVENT_MA_CMPXCHG_WEAK 37
 #define EVENT_MA_FENCE        38
+
+static inline bool
+is_memaccess(type_id type)
+{
+    return type >= EVENT_MA_READ && type <= EVENT_MA_FENCE;
+}
 
 struct ma_read_event {
     const void *pc;
