@@ -141,3 +141,21 @@ $_map(MM_ARGS_AnnotateRWLockAcquired, file, line, lock, is_w);
 $_map(MM_RETURN_AnnotateRWLockReleased,void);
 $_map(MM_PARAMS_AnnotateRWLockReleased, const char *file, int line, const volatile void *lock , long is_w);
 $_map(MM_ARGS_AnnotateRWLockReleased, file, line, lock, is_w);
+$_dl; // -----------------------------------------------------------------------
+$_dl; // memcpy
+$_dl; // -----------------------------------------------------------------------
+$_map(MM_RETURN_memcpy, void *);
+$_map(MM_PARAMS_memcpy, void *dest ,const void *src ,size_t num);
+$_map(MM_ARGS_memcpy,  dest , src , num);
+$_dl; // -----------------------------------------------------------------------
+$_dl; // memmove
+$_dl; // -----------------------------------------------------------------------
+$_map(MM_RETURN_memmove, void *);
+$_map(MM_PARAMS_memmove, void *dest ,const void *src ,size_t count);
+$_map(MM_ARGS_memmove,  dest , src , count);
+$_dl; // -----------------------------------------------------------------------
+$_dl; // memset
+$_dl; // -----------------------------------------------------------------------
+$_map(MM_RETURN_memset, void *);
+$_map(MM_PARAMS_memset, void *ptr, int value, size_t num);
+$_map(MM_ARGS_memset, ptr, value, num);
