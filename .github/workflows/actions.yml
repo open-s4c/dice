@@ -1,5 +1,7 @@
 name: Build and test Dice
-on: [push]
+on:
+  - push
+  - pull_request
 
 env:
   REGISTRY: ghcr.io
