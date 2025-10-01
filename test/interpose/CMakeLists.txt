@@ -6,6 +6,9 @@ set(INTERPOSED_IN ${CMAKE_CURRENT_SOURCE_DIR}/interposed.h.in)
 set(FUNS_malloc malloc calloc realloc free posix_memalign aligned_alloc)
 set(INCL_malloc '<dice/events/malloc.h>')
 
+set(FUNS_memcpy memcpy memmove memset)
+set(INCL_memcpy '<dice/events/memcpy.h>')
+
 set(FUNS_mman mmap munmap)
 set(INCL_mman '<dice/events/mman.h>')
 
@@ -46,6 +49,7 @@ set(INCL_cxa '<dice/events/cxa.h>')
 
 set(MODS
     mman
+    memcpy
     annotate_rwlock
     pthread_create
     pthread_mutex
