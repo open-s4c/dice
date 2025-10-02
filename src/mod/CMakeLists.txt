@@ -15,6 +15,10 @@ foreach(SRC ${SRCS})
   get_filename_component(MODULE ${SRC} NAME_WLE)
   set(TARGET dice-${MODULE})
 
+  if(${TARGET} STREQUAL "dice-memcpy" AND NOT ${DICE_INTERPOSE_MEMCPY})
+    continue()
+  endif()
+
   add_library(${TARGET} SHARED ${SRC})
   target_link_libraries(${TARGET} PRIVATE dice dice.h)
   set_target_properties(${TARGET} PROPERTIES PREFIX "")

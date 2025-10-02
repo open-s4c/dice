@@ -1,5 +1,7 @@
 name: Build and test Dice
-on: [push]
+on:
+  - push
+  - pull_request
 
 env:
   REGISTRY: ghcr.io
@@ -27,6 +29,11 @@ jobs:
              -DCMAKE_C_COMPILER=${{ matrix.cfg.cc }}
              -DCMAKE_CXX_COMPILER=${{ matrix.cfg.cxx }}
              -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
+
+      - name: Enable memcpy interposition?
+        if: ${{ matrix.cfg.cc == 'gcc' }}
+        run: cmake -S. -Bbuild -DDICE_INTERPOSE_MEMCPY=on
+
       - name: Build
         run: cmake --build build
       - name: Test
