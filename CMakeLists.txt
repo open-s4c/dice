@@ -43,6 +43,9 @@ include(GNUInstallDirs)
 include(CheckSymbolExists)
 include(cmake/export.cmake)
 
+# Coverage
+option(DICE_COVERAGE "Enable test coverage" off)
+
 # TSAN on Clang requires the following flag
 set(LIBSAN_SHARED)
 if(CMAKE_C_COMPILER_ID STREQUAL "Clang")
@@ -84,6 +87,7 @@ else()
 endif()
 option(DICE_TESTS "Enable Dice tests" ${TESTS_DEFAULT})
 if(${DICE_TESTS})
+  include(CTest)
   enable_testing()
   add_subdirectory(test)
 endif()
