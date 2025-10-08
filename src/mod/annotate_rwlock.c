@@ -59,5 +59,3 @@ INTERPOSE(void, AnnotateRWLockReleased, const char *file, int line,
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_EVENT, EVENT_ANNOTATE_RWLOCK_REL, &ev, &md);
 }
-
-DICE_MODULE_INIT()
