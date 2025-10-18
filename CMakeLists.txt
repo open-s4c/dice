@@ -94,4 +94,9 @@ if(${DICE_BENCHMARKS})
   add_subdirectory(bench/lib)
 endif()
 
+option(DICE_ALLOC_STRICT_ALIGN8 "Force 8-byte-aligned mempool allocations" OFF)
+if(${DICE_ALLOC_STRICT_ALIGN8})
+  add_compile_options(ALLOC_STRICT_ALIGN8)
+endif()
+
 install(TARGETS dice dice.h EXPORT ${PROJECT_TARGETS})
