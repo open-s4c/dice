@@ -1,5 +1,5 @@
 /*
- * Copyright (C) Huawei Technologies Co., Ltd. 2025. All rights reserved.
+ * Copyright (C) 2025 Huawei Technologies Co., Ltd.
  * SPDX-License-Identifier: 0BSD
  */
 #include <assert.h>
@@ -33,7 +33,7 @@ struct chain {
     struct type types[MAX_TYPES];
 };
 
-static struct chain _chains[MAX_CHAINS];
+static struct chain chains_[MAX_CHAINS];
 
 // -----------------------------------------------------------------------------
 // initializer
@@ -46,23 +46,23 @@ ps_initd_(void)
         NONE,
         START,
         BLOCK,
-    } _state          = NONE;
+    } state_          = NONE;
     static bool ready = false;
 
     if (likely(ready)) {
         return true;
     }
 
-    switch (_state) {
+    switch (state_) {
         case NONE:
             // This must be the main thread, at latest the thread creation.
-            _state = START;
+            state_ = START;
             PS_PUBLISH(CHAIN_CONTROL, EVENT_DICE_INIT, 0, 0);
             ready = true;
             PS_PUBLISH(CHAIN_CONTROL, EVENT_DICE_READY, 0, 0);
             return true;
         case START:
-            _state = BLOCK;
+            state_ = BLOCK;
             return true;
         case BLOCK:
             // The publication above is still running, drop nested publications.
@@ -87,7 +87,7 @@ DICE_MODULE_INIT()
 // -----------------------------------------------------------------------------
 
 static void
-_ps_subscribe_sorted(struct sub **cur, chain_id chain, type_id type,
+ps_subscribe_sorted_(struct sub **cur, chain_id chain, type_id type,
                      ps_callback_f cb, int prio, bool any_type)
 {
     // any_type is set if this subscription was from ANY_TYPE
@@ -101,7 +101,7 @@ _ps_subscribe_sorted(struct sub **cur, chain_id chain, type_id type,
         next = *cur;
         goto insert;
     } else {
-        _ps_subscribe_sorted(&(*cur)->next, chain, type, cb, prio, any_type);
+        ps_subscribe_sorted_(&(*cur)->next, chain, type, cb, prio, any_type);
         return;
     }
 
@@ -117,20 +117,20 @@ insert:
 }
 
 static int
-_ps_subscribe_type(chain_id chain, type_id type, ps_callback_f cb, int prio,
+ps_subscribe_type_(chain_id chain, type_id type, ps_callback_f cb, int prio,
                    bool any_type)
 {
     (void)prio;
     if (type > MAX_TYPES)
         return PS_INVALID;
 
-    struct type *ev = &_chains[chain].types[type];
+    struct type *ev = &chains_[chain].types[type];
 
     // increment the idx of next subscription
     ev->count++;
 
     // register subscription
-    _ps_subscribe_sorted(&ev->head, chain, type, cb, prio, any_type);
+    ps_subscribe_sorted_(&ev->head, chain, type, cb, prio, any_type);
 
     return PS_OK;
 }
@@ -150,11 +150,11 @@ ps_subscribe(chain_id chain, type_id type, ps_callback_f cb, int prio)
     if (chain > MAX_CHAINS)
         return PS_INVALID;
     if (type != ANY_TYPE)
-        return _ps_subscribe_type(chain, type, cb, prio, false);
+        return ps_subscribe_type_(chain, type, cb, prio, false);
 
     int err;
     for (size_t i = 1; i < MAX_TYPES; i++)
-        if ((err = _ps_subscribe_type(chain, i, cb, prio, true)) != 0)
+        if ((err = ps_subscribe_type_(chain, i, cb, prio, true)) != 0)
             return err;
 
     return PS_OK;
@@ -165,7 +165,7 @@ ps_subscribe(chain_id chain, type_id type, ps_callback_f cb, int prio)
 // -----------------------------------------------------------------------------
 
 static enum ps_err
-_ps_publish(const chain_id chain, const type_id type, void *event,
+ps_publish_(const chain_id chain, const type_id type, void *event,
             metadata_t *md)
 {
     if (unlikely(chain >= MAX_CHAINS))
@@ -173,7 +173,7 @@ _ps_publish(const chain_id chain, const type_id type, void *event,
     if (unlikely(type == ANY_TYPE || type >= MAX_TYPES))
         return PS_INVALID;
 
-    struct type *ev = &_chains[chain].types[type];
+    struct type *ev = &chains_[chain].types[type];
     struct sub *cur = ev->head;
     while (cur) {
         // now we call the callback and abort the chain if the subscriber
@@ -215,5 +215,5 @@ ps_publish(const chain_id chain, const type_id type, void *event,
     if (likely(err == PS_DROP_EVENT))
         return PS_DROP_EVENT;
 
-    return _ps_publish(chain, type, event, md);
+    return ps_publish_(chain, type, event, md);
 }

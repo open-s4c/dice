@@ -1,5 +1,5 @@
 /*
- * Copyright (C) Huawei Technologies Co., Ltd. 2025. All rights reserved.
+ * Copyright (C) 2025 Huawei Technologies Co., Ltd.
  * SPDX-License-Identifier: 0BSD
  */
 #include <dice/compiler.h>
@@ -9,7 +9,7 @@
 #define RIGHT 1
 
 static void
-_rotate(struct rbtree *tree, struct rbnode *x, int dir)
+rotate_(struct rbtree *tree, struct rbnode *x, int dir)
 {
     struct rbnode *y = (dir == LEFT) ? x->right : x->left;
     if (dir == LEFT) {
@@ -37,7 +37,7 @@ _rotate(struct rbtree *tree, struct rbnode *x, int dir)
 }
 
 static void
-_insert_fixup(struct rbtree *tree, struct rbnode *z)
+insert_fixup_(struct rbtree *tree, struct rbnode *z)
 {
     while (z->parent && z->parent->color == RB_RED) {
         struct rbnode *gp    = z->parent->parent;
@@ -53,11 +53,11 @@ _insert_fixup(struct rbtree *tree, struct rbnode *z)
             if ((dir == LEFT && z == z->parent->right) ||
                 (dir == RIGHT && z == z->parent->left)) {
                 z = z->parent;
-                _rotate(tree, z, dir);
+                rotate_(tree, z, dir);
             }
             z->parent->color = RB_BLACK;
             gp->color        = RB_RED;
-            _rotate(tree, gp, !dir);
+            rotate_(tree, gp, !dir);
         }
     }
     tree->root->color = RB_BLACK;
@@ -94,11 +94,11 @@ rbtree_insert(struct rbtree *tree, struct rbnode *z)
     else
         parent->right = z;
 
-    _insert_fixup(tree, z);
+    insert_fixup_(tree, z);
 }
 
 static struct rbnode *
-_minimum(struct rbnode *node)
+minimum_(struct rbnode *node)
 {
     while (node && node->left)
         node = node->left;
@@ -106,7 +106,7 @@ _minimum(struct rbnode *node)
 }
 
 static void
-_transplant(struct rbtree *tree, struct rbnode *u, struct rbnode *v)
+transplant_(struct rbtree *tree, struct rbnode *u, struct rbnode *v)
 {
     if (!u->parent)
         tree->root = v;
@@ -119,7 +119,7 @@ _transplant(struct rbtree *tree, struct rbnode *u, struct rbnode *v)
 }
 
 static void
-_remove_fixup(struct rbtree *tree, struct rbnode *x, struct rbnode *x_parent)
+remove_fixup_(struct rbtree *tree, struct rbnode *x, struct rbnode *x_parent)
 {
     while ((!x || x->color == RB_BLACK) && x != tree->root) {
         int left         = (x == x_parent->left);
@@ -128,7 +128,7 @@ _remove_fixup(struct rbtree *tree, struct rbnode *x, struct rbnode *x_parent)
         if (w->color == RB_RED) {
             w->color        = RB_BLACK;
             x_parent->color = RB_RED;
-            _rotate(tree, x_parent, left ? LEFT : RIGHT);
+            rotate_(tree, x_parent, left ? LEFT : RIGHT);
             w = left ? x_parent->right : x_parent->left;
         }
 
@@ -145,7 +145,7 @@ _remove_fixup(struct rbtree *tree, struct rbnode *x, struct rbnode *x_parent)
                 if (!left && w->right)
                     w->right->color = RB_BLACK;
                 w->color = RB_RED;
-                _rotate(tree, w, left ? RIGHT : LEFT);
+                rotate_(tree, w, left ? RIGHT : LEFT);
                 w = left ? x_parent->right : x_parent->left;
             }
 
@@ -155,7 +155,7 @@ _remove_fixup(struct rbtree *tree, struct rbnode *x, struct rbnode *x_parent)
                 w->right->color = RB_BLACK;
             if (!left && w->left)
                 w->left->color = RB_BLACK;
-            _rotate(tree, x_parent, left ? LEFT : RIGHT);
+            rotate_(tree, x_parent, left ? LEFT : RIGHT);
             x = tree->root;
         }
     }
@@ -175,29 +175,29 @@ rbtree_remove(struct rbtree *tree, struct rbnode *z)
     if (!z->left) {
         x        = z->right;
         x_parent = z->parent;
-        _transplant(tree, z, z->right);
+        transplant_(tree, z, z->right);
     } else if (!z->right) {
         x        = z->left;
         x_parent = z->parent;
-        _transplant(tree, z, z->left);
+        transplant_(tree, z, z->left);
     } else {
-        y            = _minimum(z->right);
+        y            = minimum_(z->right);
         y_color_orig = y->color;
         x            = y->right;
         x_parent     = y->parent == z ? y : y->parent;
         if (y->parent != z) {
-            _transplant(tree, y, y->right);
+            transplant_(tree, y, y->right);
             y->right         = z->right;
             y->right->parent = y;
         }
-        _transplant(tree, z, y);
+        transplant_(tree, z, y);
         y->left         = z->left;
         y->left->parent = y;
         y->color        = z->color;
     }
 
     if (y_color_orig == RB_BLACK)
-        _remove_fixup(tree, x, x_parent);
+        remove_fixup_(tree, x, x_parent);
 }
 
 DICE_HIDE_IF struct rbnode *
@@ -216,7 +216,7 @@ rbtree_find(const struct rbtree *tree, const struct rbnode *key)
 DICE_HIDE_IF struct rbnode *
 rbtree_min(const struct rbtree *tree)
 {
-    return _minimum(tree->root);
+    return minimum_(tree->root);
 }
 
 DICE_HIDE_IF struct rbnode *
