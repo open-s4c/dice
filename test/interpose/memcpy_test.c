@@ -91,7 +91,7 @@ fake_memmove(void *dest ,const void *src ,size_t count)
     ensure(dest == E_memmove.dest);
     ensure(src == E_memmove.src);
     ensure(count == E_memmove.count);
-    E_memcpy.ret = E_memcpy.dest;
+    E_memmove.ret = E_memmove.dest;
     /* return expected value */
  return E_memmove.ret;
 }
@@ -203,7 +203,7 @@ test_memmove(void)
                                      E_memmove.dest,                           //
                                      E_memmove.src,                           //
                                      E_memmove.count                                  );
- ensure(ret == E_memmove.dest);
+    ensure(ret == E_memmove.ret);
     disable();
 }
 static void
