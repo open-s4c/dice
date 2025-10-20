@@ -1,5 +1,5 @@
 /*
- * Copyright (C) Huawei Technologies Co., Ltd. 2025. All rights reserved.
+ * Copyright (C) 2025 Huawei Technologies Co., Ltd.
  * SPDX-License-Identifier: 0BSD
  */
 #include <assert.h>
@@ -12,7 +12,7 @@
 #include <dice/mempool.h>
 #include <vsync/spinlock/caslock.h>
 
-static size_t _sizes[] = {32,
+static size_t sizes_[] = {32,
                           128,
                           512,
                           1024,
@@ -21,15 +21,15 @@ static size_t _sizes[] = {32,
                           1 * 1024 * 1024,
                           4 * 1024 * 1024,
                           8 * 1024 * 1024};
-#define NSTACKS (sizeof(_sizes) / sizeof(size_t))
+#define NSTACKS (sizeof(sizes_) / sizeof(size_t))
 
 #define MEMPOOL_SIZE (1024 * 1024 * 200)
 
 static unsigned int
-_bucketize(size_t size)
+bucketize_(size_t size)
 {
     unsigned int i = 0;
-    for (; i < NSTACKS && size > _sizes[i]; i++)
+    for (; i < NSTACKS && size > sizes_[i]; i++)
         ;
     assert(i < NSTACKS);
     return i;
@@ -54,7 +54,7 @@ typedef struct mempool {
     entry_t *stack[NSTACKS];
 } mempool_t;
 
-static mempool_t _mp;
+static mempool_t mp_;
 
 /* bypass malloc interceptor */
 REAL_DECL(void *, malloc, size_t n);
@@ -62,13 +62,13 @@ REAL_DECL(void *, malloc, size_t n);
 DICE_HIDE void
 mempool_init(size_t cap)
 {
-    memset(&_mp.stack, 0, sizeof(entry_t *) * NSTACKS);
-    _mp.allocated     = 0;
-    _mp.pool.capacity = cap;
-    _mp.pool.next     = 0;
-    _mp.pool.memory   = REAL_CALL(malloc, 0, cap);
-    assert(_mp.pool.memory);
-    memset(_mp.pool.memory, 0, cap);
+    memset(&mp_.stack, 0, sizeof(entry_t *) * NSTACKS);
+    mp_.allocated     = 0;
+    mp_.pool.capacity = cap;
+    mp_.pool.next     = 0;
+    mp_.pool.memory   = REAL_CALL(malloc, 0, cap);
+    assert(mp_.pool.memory);
+    memset(mp_.pool.memory, 0, cap);
     // caslock already initialized with 0
 }
 
@@ -76,24 +76,24 @@ static inline void
 mempool_ensure_initd(void)
 {
     // assumes protected by lock
-    if (_mp.pool.memory == NULL)
+    if (mp_.pool.memory == NULL)
         mempool_init(MEMPOOL_SIZE);
 }
 
 DICE_MODULE_INIT({
-    caslock_acquire(&_mp.lock);
+    caslock_acquire(&mp_.lock);
     mempool_ensure_initd();
-    caslock_release(&_mp.lock);
+    caslock_release(&mp_.lock);
 })
 
 DICE_HIDE_IF void *
 mempool_alloc(size_t n)
 {
-    mempool_t *mp   = &_mp;
+    mempool_t *mp   = &mp_;
     entry_t *e      = NULL;
     size_t size     = n + sizeof(entry_t);
-    unsigned bucket = _bucketize(size);
-    size            = _sizes[bucket];
+    unsigned bucket = bucketize_(size);
+    size            = sizes_[bucket];
     entry_t **stack = &mp->stack[bucket];
     assert(stack);
 
@@ -138,12 +138,12 @@ mempool_realloc(void *ptr, size_t size)
 DICE_HIDE_IF void
 mempool_free(void *ptr)
 {
-    mempool_t *mp = &_mp;
+    mempool_t *mp = &mp_;
     assert(ptr);
     entry_t *e      = (entry_t *)ptr - 1;
     size_t size     = e->size + sizeof(entry_t);
-    unsigned bucket = _bucketize(size);
-    size            = _sizes[bucket];
+    unsigned bucket = bucketize_(size);
+    size            = sizes_[bucket];
     entry_t **stack = &mp->stack[bucket];
 
     // Mempool is used from rogue thread, serialization is necessary

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) Huawei Technologies Co., Ltd. 2025. All rights reserved.
+ * Copyright (C) 2025 Huawei Technologies Co., Ltd.
  * SPDX-License-Identifier: 0BSD
  */
 #include <assert.h>
@@ -25,13 +25,13 @@ int ps_dispatch_max(void);
 void ps_init_();
 
 static DICE_CTOR void
-_init()
+init_()
 {
     ps_init_();
 }
 
 static void
-_load_plugin(const char *path)
+load_plugin_(const char *path)
 {
     log_debug("[%4d] LOAD: %s", DICE_MODULE_PRIO, path);
     void *handle = dlopen(path, RTLD_GLOBAL | RTLD_LAZY);
@@ -41,7 +41,7 @@ _load_plugin(const char *path)
 }
 
 static char *
-_strdup(const char *str)
+strdup_(const char *str)
 {
     if (str == NULL)
         return NULL;
@@ -60,7 +60,7 @@ PS_SUBSCRIBE(CHAIN_CONTROL, EVENT_DICE_INIT, {
     log_debug("[%4d] LOAD: builtin modules: 0..%d", DICE_MODULE_PRIO,
               ps_dispatch_max());
     if (envvar != NULL) {
-        char *plugins = _strdup(envvar);
+        char *plugins = strdup_(envvar);
         assert(plugins);
 
         char *path = strtok(plugins, ":");
@@ -68,7 +68,7 @@ PS_SUBSCRIBE(CHAIN_CONTROL, EVENT_DICE_INIT, {
         // skip first
         path = strtok(NULL, ":");
         while (path != NULL) {
-            _load_plugin(path);
+            load_plugin_(path);
             path = strtok(NULL, ":");
         }
         mempool_free(plugins);
