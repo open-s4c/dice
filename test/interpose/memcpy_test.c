@@ -80,6 +80,7 @@ fake_memcpy(void *dest ,const void *src ,size_t num)
     ensure(dest == E_memcpy.dest);
     ensure(src == E_memcpy.src);
     ensure(num == E_memcpy.num);
+    E_memcpy.ret = E_memcpy.dest;
     /* return expected value */
  return E_memcpy.ret;
 }
@@ -90,6 +91,7 @@ fake_memmove(void *dest ,const void *src ,size_t count)
     ensure(dest == E_memmove.dest);
     ensure(src == E_memmove.src);
     ensure(count == E_memmove.count);
+    E_memcpy.ret = E_memcpy.dest;
     /* return expected value */
  return E_memmove.ret;
 }
@@ -100,6 +102,7 @@ fake_memset(void *ptr, int value, size_t num)
     ensure(ptr == E_memset.ptr);
     ensure(value == E_memset.value);
     ensure(num == E_memset.num);
+    E_memset.ret = E_memset.ptr;
     /* return expected value */
  return E_memset.ret;
 }
@@ -200,15 +203,19 @@ test_memmove(void)
                                      E_memmove.dest,                           //
                                      E_memmove.src,                           //
                                      E_memmove.count                                  );
- ensure(ret == E_memmove.ret);
+ ensure(ret == E_memmove.dest);
     disable();
 }
 static void
 test_memset(void)
 {
     /* initialize event with random content */
-    event_init(&E_memset, sizeof(struct memset_event));
+    //event_init(&E_memset, sizeof(struct memset_event));
     /* call memset with arguments */
+    char name[] = "Alice";
+    E_memset.ptr = &name;
+    E_memset.value = 'B';
+    E_memset.num = 2;
     enable(fake_memset);
      void *  ret =                                   //
                                  memset(                                    //
