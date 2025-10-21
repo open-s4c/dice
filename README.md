@@ -61,12 +61,23 @@ Beside these modules, Dice provice several intercept modules such as
 ```sh
 git clone https://your.repo/dice.git
 cd dice
-make
+cmake -S. -Bbuild -DCMAKE_INSTALL_PREFIX=<PREFIX>
+cmake --build build
+cmake --install build
 ```
 
-Modules are compiled as shared libraries. Ensure they are available in your
-`LD_LIBRARY_PATH`. Note that if you are using macOS, you have to set
-`DYLD_LIBRARY_PATH` and `DYLD_INSERT_LIBRARIES` instead.
+The installation prefix is `/usr/local` by default. Core and modules are
+compiled as shared libraries and installed as follows:
+
+- Dice core: `<PREFIX>/lib/libdice.so`
+- Modules: `<PREFIX>/lib/dice/<MODULE>.so`, eg, `<PREFIX>/lib/dice/malloc.so`
+
+Ensure `<PREFIX>/lib` is in your `LD_LIBRARY_PATH`. Note that if you are using
+macOS, you have to set `DYLD_LIBRARY_PATH` and `DYLD_INSERT_LIBRARIES` instead.
+
+Dice also provides a simple shell script (see `scripts/dice`), which simplifies
+the preloading of Dice and `libtsano`.  The `dice` script is installed in
+`<PREFIX>/bin`.
 
 ## Usage
 
@@ -77,7 +88,8 @@ export LD_PRELOAD=/path/to/libdice.so:/path/to/libdice-malloc.so
 ./your_program
 ```
 
-You can add your own subscriber module and load it the same way to process events.
+You can add your own subscriber module and load it the same way to process
+events.
 
 ## Examples
 

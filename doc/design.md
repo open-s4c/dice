@@ -1,7 +1,7 @@
 ---
 title: Dice Design Document
 author: Diogo Behrens
-version: "0.1"
+version: "0.2"
 ---
 
 # 1. Overview
@@ -104,14 +104,14 @@ subscribers are the modules (or functions) that are interested in reacting to
 these events.
 
 Each event in Dice has a type that specifies what kind of event it is.  The
-event type is identified by an integer `type_id`.  For example, the event
+*event type* is identified by an integer `type_id`.  For example, the event
 corresponding to a thread being initialized is identified by
 `EVENT_THREAD_START`.
 
-Events are published in topics, which are called *chains* in Dice and are
-identified by an integer `chain_id`. Modules can subscribe for events published
-in a chain; subscriptions can be filtered by `type_id` or be triggered for any
-type of event.
+Events are published in topics, which are called *chains* and are identified by
+an integer `chain_id`. Modules can subscribe for events published in a chain;
+subscriptions can be filtered by `type_id` or be triggered for any type of
+event using the special type ID `ANY_TYPE`.
 
 
 ## 2.2. Why Pubsub?
@@ -185,14 +185,15 @@ The Pubsub system introduces several key advantages:
 The Pusbsub system in Dice differs from the standard definition of Pubsub (GoF
 design pattern) in several ways:
 
-- **Chains**: Subscribers are organized in callback chains (not topics), i.e.,
+- **Chains**: Subscribers are organized in handler chains (not topics), i.e.,
   when an event is published to a chain, the subscribers receive the event one
   after another in the order defined in the chain.
 - **Interruptions**: Event handlers can control whether the event is further
   propagated to subsequent handlers by returnig `PS_OK` to continue the
   chain or `PS_STOP_CHAIN` to interrupt it.
-- **Synchronous**: The publisher **blocks until all subscribers have handled the
-  event or the chain has been interrupted.
+- **Synchronous**: The publisher **blocks** until all subscribers have handled the
+  event or the chain has been interrupted. In fact, the thread executing the
+  publish code also executes the subscription handlers, one by one.
 
 These three aspects allow Dice's Pubsub to build powerful patterns such as
 defining phases of computation, republishing events in other chains, realizing
@@ -220,7 +221,10 @@ convention:
 - `INTERCEPT_EVENT`: a function/operation is being called. Publications to
   `INTERCEPT_EVENT` represent the function/operation itself.
 
-To better understand the convention described here, consider the interception
+A module that publishes to one of these intercept chains is called
+*interceptor*.
+
+To better understand the convention described above, consider the interception
 of `malloc`.  The interceptor code would look similar to this:
 
 ```c
@@ -331,22 +335,27 @@ layer above the mempool to simplify the handling of TLS management.
    This is done through a specialized function, often `mempool_free`, which
    ensures that memory is properly cleaned up and made available for future use.
 
+TODO: aligment information
+TODO: link to memory pool description
+
 
 # 4. Self Module
 
 The Self module is one of the key components in Dice, providing essential
-thread-local storage (TLS) management and handling thread initialization and
-finalization events. It acts as the first subscriber and plays a critical role
-in ensuring that each thread gets its own isolated TLS space. Unless the user
-reimplements an equivalent component, Self shall be loaded with Dice before any
-other user module.
+thread-local storage (TLS) management. It acts as the first subscriber and
+plays a critical role in ensuring that each thread gets its own isolated TLS
+space. Unless the user reimplements an equivalent component, Self shall be
+loaded with Dice before any other user module.
 
 
 ## 4.1. What is the Self Module?
 
-The Self module manages thread-specific data, ensuring that each thread has a
-dedicated storage area for maintaining its TLS data. The Self module is invoked
-when a new thread is created or when a thread finishes execution.
+The Self module stays in the middle between interceptors (Section 2.4) and
+subscribers. It manages thread-local storage (TLS), ensuring that each thread
+has a dedicated storage area for maintaining its private data. The TLS is
+intended to be safely used by subscribers, avoiding platform-specific details
+of pthread TLS. The Self module itself employs the TLS to keep track of the
+thread ID as well as guarding the execution from recursive publications.
 
 
 ## 4.2. Why Self?
@@ -368,16 +377,20 @@ The Self module addresses a few important needs:
 
 ## 4.3. How Self Works
 
-1. Thread Initialization: When a new thread is created, the Self module
-   receives an `EVENT_THREAD_START`. Upon receiving this event, it
-   allocates thread-specific data (such as an array of pointers for TLS) from
-   the Mempool. It also assigns a unique thread ID to the current thread, which
-   is managed atomically to ensure correct synchronization.
+1. Thread Initialization: When a new thread is created, the first event
+   published by the thread triggers the initialization of the Self module,
+   which in turn publishes a `EVENT_SELF_INIT`. So, for any thread, one
+   can always expect to receive such an event as the very first event of the
+   thread.  The initilization allocates thread-specific data (such as an array
+   of pointers for TLS) from the Mempool (Section 3). It also assigns a unique
+   thread ID to the current thread. The thread ID is an atomic counter starting
+   from value 1. The thread ID 0 is reserved to represent `NO_THREAD`.
 
 2. Thread Finalization: When a thread finishes execution, the Self module
    receives an `EVENT_THREAD_EXIT` event. It is responsible for cleaning
    up the TLS data associated with the thread, using mempool-free to deallocate
-   memory.
+   memory. A `EVENT_SELF_FINI` is published once the TLS of a thread is
+   reclaimed.
 
 3. TLS Allocation: The Self module allocates TLS only when it receives a
    `EVENT_THREAD_START` event. This ensures that TLS is only allocated when
@@ -397,11 +410,11 @@ interceptors.
 
 ## 4.4. Capture chains
 
-The Self module subscribes to all intercept chains (section 2.4) and republishes
-the events in equivalent **capture chains**: `CAPTURE_BEFORE`, `CAPTURE_AFTER`,
+The Self module subscribes to all intercept chains and republishes the
+events in equivalent **capture chains**: `CAPTURE_BEFORE`, `CAPTURE_AFTER`,
 `CAPTURE_EVENT`.  When republishing to these chains, the Self module sends a
-**self-specific metadata** along with the event.  This metadata can be used by
-any subscriber to query for TLS data as well as thread ID without any extra
+**self-specific metadata** along with the event.  This metadata can be used
+by any subscriber to query for TLS data as well as thread ID without any extra
 cost.  The functions provided for these functionalities are in `dice/self.h`:
 
 - `self_id(metadata_t *md)` returns the Dice's thread ID (starting from 1).
@@ -500,11 +513,11 @@ track thread behavior, monitor memory usage, and enable advanced testing and
 debugging features.
 
 
-# 6. Loading Modules
+# 6. Builtins and plugins
 
 Dice is designed to be loaded as a shared library with `LD_PRELOAD`.
 The core library in Dice has only the Pubsub and the Mempool modules inside.
-Addtional modules can be loaded in two ways.
+Additional modules can be loaded in two ways.
 
 
 ## 6.1. Shared Library Modules
