@@ -25,6 +25,11 @@ static size_t _sizes[] = {32,
 
 #define MEMPOOL_SIZE (1024 * 1024 * 200)
 
+#ifdef ALLOC_STRICT_ALIGN8
+#define ALIGNMENT 8
+#define ALIGN_UP(x, align) (((x) + ((align) - 1)) & ~((align) - 1))
+#endif
+
 static unsigned int
 _bucketize(size_t size)
 {
@@ -69,6 +74,10 @@ mempool_init(size_t cap)
     _mp.pool.memory   = REAL_CALL(malloc, 0, cap);
     assert(_mp.pool.memory);
     memset(_mp.pool.memory, 0, cap);
+
+    #ifdef ALLOC_STRICT_ALIGN8
+    _mp.pool.next = ALIGN_UP((size_t)_mp.pool.memory, ALIGNMENT) - (size_t)_mp.pool.memory;
+    #endif
     // caslock already initialized with 0
 }
 
@@ -94,6 +103,9 @@ mempool_alloc(size_t n)
     size_t size     = n + sizeof(entry_t);
     unsigned bucket = _bucketize(size);
     size            = _sizes[bucket];
+    #ifdef ALLOC_STRICT_ALIGN8
+    size = ALIGN_UP(size, ALIGNMENT);
+    #endif
     entry_t **stack = &mp->stack[bucket];
     assert(stack);
 
@@ -144,6 +156,9 @@ mempool_free(void *ptr)
     size_t size     = e->size + sizeof(entry_t);
     unsigned bucket = _bucketize(size);
     size            = _sizes[bucket];
+    #ifdef ALLOC_STRICT_ALIGN8
+    size = ALIGN_UP(size, ALIGNMENT);
+    #endif
     entry_t **stack = &mp->stack[bucket];
 
     // Mempool is used from rogue thread, serialization is necessary
