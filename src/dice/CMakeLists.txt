@@ -66,18 +66,12 @@ set(DISPATCH_SRCS ${_DSRCS})
 
 # dice libraries
 set(SRCS mempool.c rbtree.c pubsub.c ${CMAKE_CURRENT_SOURCE_DIR}/dispatch.c)
-add_library(dice.o OBJECT ${SRCS})
+add_library(dice.o OBJECT ${SRCS} ${DISPATCH_SRCS})
 target_link_libraries(dice.o PUBLIC dice.h)
 target_compile_options(dice.o PRIVATE -fPIC)
 
-add_library(dice-dispatch.o OBJECT ${DISPATCH_SRCS})
-target_compile_options(dice-dispatch.o PRIVATE -fPIC)
-target_link_libraries(dice-dispatch.o PRIVATE dice.h)
-
-# linking with dice-box.o will bring dice-dispatch.o as public dependency
 add_library(dice-box.o OBJECT box.c)
 target_compile_options(dice-box.o PRIVATE -fPIC)
-target_link_libraries(dice-box.o PUBLIC dice-dispatch.o)
 target_link_libraries(dice-box.o PRIVATE dice.h)
 
 add_library(dice SHARED ${SRCS})
@@ -85,7 +79,7 @@ target_link_libraries(dice PUBLIC dice.h pthread)
 install(TARGETS dice DESTINATION lib)
 
 if(${DICE_COVERAGE})
-  # do not involve dice-dispatch/dice-box in the coverage metrics
+  # do not involve dice-box in the coverage metrics
   set(TARGETS dice.o dice)
   foreach(TARGET ${TARGETS})
     target_compile_options(${TARGET} PRIVATE --coverage)
