@@ -90,8 +90,16 @@ tls_init_(struct self *self)
 DICE_HIDE void
 tls_fini_(struct self *self)
 {
-    // TODO: iterate over all items and mempool_free them
-    (void)self;
+    while (self->tls.root) {
+        struct rbnode *node = self->tls.root;
+        rbtree_remove(&self->tls, node);
+
+        struct tls_item *item = container_of(node, struct tls_item, node);
+        assert(item->ptr);
+        if (item->dtor.free)
+            item->dtor.free(item->dtor.arg, item->ptr);
+        mempool_free(item);
+    }
 }
 
 // -----------------------------------------------------------------------------
@@ -144,28 +152,34 @@ self_tls_set(metadata_t *md, uintptr_t item_key, void *ptr,
     struct tls_item *i  = NULL;
 
     if (ptr == NULL && item == NULL)
-        return;
+        return; // nothing to do
 
     if (item) {
         i = container_of(item, struct tls_item, node);
         if (i->dtor.free)
             i->dtor.free(i->dtor.arg, i->ptr);
 
+        // remove node if ptr == NULL
         if (ptr == NULL) {
             rbtree_remove(&self->tls, &key.node);
             mempool_free(i);
+            return;
         }
+
+        // we can reuse the same node (already in the tree)
+        i->ptr  = ptr;
+        i->dtor = dtor;
     } else {
         i = mempool_alloc(sizeof(struct tls_item));
         if (i == NULL)
             log_fatal("mempool out of memory");
-    }
 
-    memset(i, 0, sizeof(struct tls_item));
-    i->key  = item_key;
-    i->ptr  = ptr;
-    i->dtor = dtor;
-    rbtree_insert(&self->tls, &i->node);
+        memset(i, 0, sizeof(struct tls_item));
+        i->key  = item_key;
+        i->ptr  = ptr;
+        i->dtor = dtor;
+        rbtree_insert(&self->tls, &i->node);
+    }
 }
 
 static void
@@ -299,7 +313,11 @@ static void
 destroy_self_(struct self *self)
 {
     tls_fini_(self);
-    mempool_free(self);
+
+    // The main thread might still intercept after the module has terminated.
+    // So, we keep the self object allocated to avoid issues.
+    if (self->tid != MAIN_THREAD)
+        mempool_free(self);
 }
 
 
