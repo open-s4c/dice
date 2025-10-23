@@ -1,5 +1,5 @@
 /*
- * Copyright (C) Huawei Technologies Co., Ltd. 2025. All rights reserved.
+ * Copyright (C) 2025 Huawei Technologies Co., Ltd.
  * SPDX-License-Identifier: 0BSD
  * -----------------------------------------------------------------------------
  * Thread "self-awareness"
@@ -66,14 +66,14 @@ struct tls_item {
     char data[];
 };
 
-static void _cleanup_threads(pthread_t id);
+static void cleanup_threads_(pthread_t id);
 
 // -----------------------------------------------------------------------------
 // tls items
 // -----------------------------------------------------------------------------
 
 DICE_HIDE int
-_tls_cmp(const struct rbnode *a, const struct rbnode *b)
+tls_cmp_(const struct rbnode *a, const struct rbnode *b)
 {
     const struct tls_item *ea = container_of(a, struct tls_item, node);
     const struct tls_item *eb = container_of(b, struct tls_item, node);
@@ -81,13 +81,13 @@ _tls_cmp(const struct rbnode *a, const struct rbnode *b)
 }
 
 DICE_HIDE void
-_tls_init(struct self *self)
+tls_init_(struct self *self)
 {
-    rbtree_init(&self->tls, _tls_cmp);
+    rbtree_init(&self->tls, tls_cmp_);
 }
 
 DICE_HIDE void
-_tls_fini(struct self *self)
+tls_fini_(struct self *self)
 {
     // TODO: iterate over all items and mempool_free them
     (void)self;
@@ -146,51 +146,51 @@ static struct {
     vatomic64_t count;
     pthread_key_t cache_key;
     quack_t retired;
-} _threads;
+} threads_;
 
 static void
-_thread_cache_destruct(void *arg)
+thread_cache_destruct_(void *arg)
 {
     (void)arg;
 }
 
 static void
-_thread_cache_init(void)
+thread_cache_init_(void)
 {
-    if (pthread_key_create(&_threads.cache_key, _thread_cache_destruct) != 0)
+    if (pthread_key_create(&threads_.cache_key, thread_cache_destruct_) != 0)
         abort();
 }
 
 static void
-_thread_cache_del(struct self *self)
+thread_cache_del_(struct self *self)
 {
     (void)self;
-    if (pthread_setspecific(_threads.cache_key, NULL) != 0)
+    if (pthread_setspecific(threads_.cache_key, NULL) != 0)
         log_fatal("could not del key");
 }
 
 static void
-_thread_cache_set(struct self *self)
+thread_cache_set_(struct self *self)
 {
-    if (pthread_setspecific(_threads.cache_key, self) != 0)
+    if (pthread_setspecific(threads_.cache_key, self) != 0)
         log_fatal("could not set key");
 }
 
 DICE_HIDE struct self *
-_thread_cache_get(void)
+thread_cache_get_(void)
 {
-    return (struct self *)pthread_getspecific(_threads.cache_key);
+    return (struct self *)pthread_getspecific(threads_.cache_key);
 }
 
 #if defined(__linux__)
 
 static uint64_t
-_thread_oid(void)
+thread_oid_(void)
 {
     return (uint64_t)gettid();
 }
 static bool
-_thread_dead(struct self *self)
+thread_dead_(struct self *self)
 {
     return kill((pid_t)self->oid, 0) != 0;
 }
@@ -198,13 +198,13 @@ _thread_dead(struct self *self)
 #else  // !linux
 
 static uint64_t
-_thread_oid(void)
+thread_oid_(void)
 {
     return 0;
 }
 
 static bool
-_thread_dead(struct self *self)
+thread_dead_(struct self *self)
 {
     // pthread_kill with signal 0 does not do anything with the thread, but
     // if an ESRCH error indicates the thread does not exist. See:
@@ -221,37 +221,37 @@ _thread_dead(struct self *self)
 #endif // !linux
 
 DICE_HIDE struct self *
-_create_self()
+create_self_()
 {
     struct self *self;
     self          = mempool_alloc(sizeof(struct self));
     self->guard   = 0;
-    self->tid     = vatomic64_inc_get(&_threads.count);
+    self->tid     = vatomic64_inc_get(&threads_.count);
     self->pid     = pthread_self();
-    self->oid     = _thread_oid();
+    self->oid     = thread_oid_();
     self->retired = false;
-    _tls_init(self);
+    tls_init_(self);
     return self;
 }
 
 static void
-_destroy_self(struct self *self)
+destroy_self_(struct self *self)
 {
-    _tls_fini(self);
+    tls_fini_(self);
     mempool_free(self);
 }
 
 
 static void
-_init_threads(void)
+init_threads_(void)
 {
-    _thread_cache_init();
-    caslock_init(&_threads.lock);
-    quack_init(&_threads.retired);
+    thread_cache_init_();
+    caslock_init(&threads_.lock);
+    quack_init(&threads_.retired);
 }
 
 static struct self *
-_get_self(void)
+get_self_(void)
 {
     // When a thread is created, it won't find its self object anywhere and this
     // function will return NULL. A new self object will be created and stored
@@ -269,15 +269,15 @@ _get_self(void)
     // stack.
 
     pthread_t pid     = pthread_self();
-    struct self *self = _thread_cache_get();
+    struct self *self = thread_cache_get_();
     if (self)
         return self;
 
     // We now search the retired stack. To avoid not seeing our self object
     // while other threads are searching theirs, we have to ensure mutual
     // exlusion here.
-    caslock_acquire(&_threads.lock);
-    struct quack_node_s *item = quack_popall(&_threads.retired);
+    caslock_acquire(&threads_.lock);
+    struct quack_node_s *item = quack_popall(&threads_.retired);
     struct quack_node_s *next = NULL;
 
     for (; item; item = next) {
@@ -287,21 +287,21 @@ _get_self(void)
 
         if (self == NULL && it->pid == pid)
             self = it;
-        quack_push(&_threads.retired, item);
+        quack_push(&threads_.retired, item);
     }
-    caslock_release(&_threads.lock);
+    caslock_release(&threads_.lock);
     assert(self == NULL || self->retired);
     return self;
 }
 
 static void
-_retire_self(struct self *self)
+retire_self_(struct self *self)
 {
     assert(self);
     assert(!self->retired);
     self->retired = true;
-    _thread_cache_del(self);
-    quack_push(&_threads.retired, &self->retired_node);
+    thread_cache_del_(self);
+    quack_push(&threads_.retired, &self->retired_node);
 }
 
 // -----------------------------------------------------------------------------
@@ -321,7 +321,7 @@ _retire_self(struct self *self)
     } while (0)
 
 DICE_HIDE enum ps_err
-_self_handle_before(const chain_id chain, const type_id type, void *event,
+self_handle_before_(const chain_id chain, const type_id type, void *event,
                     struct self *self)
 {
     (void)chain;
@@ -338,7 +338,7 @@ _self_handle_before(const chain_id chain, const type_id type, void *event,
 }
 
 DICE_HIDE enum ps_err
-_self_handle_after(const chain_id chain, const type_id type, void *event,
+self_handle_after_(const chain_id chain, const type_id type, void *event,
                    struct self *self)
 {
     (void)chain;
@@ -355,7 +355,7 @@ _self_handle_after(const chain_id chain, const type_id type, void *event,
 }
 
 DICE_HIDE enum ps_err
-_self_handle_event(const chain_id chain, const type_id type, void *event,
+self_handle_event_(const chain_id chain, const type_id type, void *event,
                    struct self *self)
 {
     (void)chain;
@@ -372,32 +372,32 @@ _self_handle_event(const chain_id chain, const type_id type, void *event,
 }
 
 static struct self *
-_get_or_create_self(bool publish)
+get_or_create_self_(bool publish)
 {
-    struct self *self = _get_self();
+    struct self *self = get_self_();
     if (likely(self)) {
         return self;
     }
 
-    self = _create_self();
+    self = create_self_();
 
-    _thread_cache_set(self);
+    thread_cache_set_(self);
 
     if (publish)
-        _self_handle_event(CAPTURE_EVENT, EVENT_SELF_INIT, 0, self);
+        self_handle_event_(CAPTURE_EVENT, EVENT_SELF_INIT, 0, self);
     return self;
 }
 
 PS_SUBSCRIBE(INTERCEPT_EVENT, ANY_TYPE, {
-    return _self_handle_event(chain, type, event, _get_or_create_self(true));
+    return self_handle_event_(chain, type, event, get_or_create_self_(true));
 })
 PS_SUBSCRIBE(INTERCEPT_BEFORE, ANY_TYPE, {
     if (type == EVENT_THREAD_CREATE)
-        _cleanup_threads(0);
-    return _self_handle_before(chain, type, event, _get_or_create_self(true));
+        cleanup_threads_(0);
+    return self_handle_before_(chain, type, event, get_or_create_self_(true));
 })
 PS_SUBSCRIBE(INTERCEPT_AFTER, ANY_TYPE, {
-    return _self_handle_after(chain, type, event, _get_or_create_self(true));
+    return self_handle_after_(chain, type, event, get_or_create_self_(true));
 })
 
 // -----------------------------------------------------------------------------
@@ -405,23 +405,23 @@ PS_SUBSCRIBE(INTERCEPT_AFTER, ANY_TYPE, {
 // -----------------------------------------------------------------------------
 
 static void
-_self_fini(struct self *self)
+self_fini_(struct self *self)
 {
     if (self == NULL)
         return;
 
     // announce thread self is really over
-    _self_handle_event(CAPTURE_EVENT, EVENT_SELF_FINI, 0, self);
+    self_handle_event_(CAPTURE_EVENT, EVENT_SELF_FINI, 0, self);
 
     // free self resources
-    _destroy_self(self);
+    destroy_self_(self);
 }
 
 static void
-_cleanup_threads(pthread_t pid)
+cleanup_threads_(pthread_t pid)
 {
-    caslock_acquire(&_threads.lock);
-    struct quack_node_s *item = quack_popall(&_threads.retired);
+    caslock_acquire(&threads_.lock);
+    struct quack_node_s *item = quack_popall(&threads_.retired);
     struct quack_node_s *next = NULL;
 
     for (; item; item = next) {
@@ -429,30 +429,30 @@ _cleanup_threads(pthread_t pid)
 
         struct self *self = container_of(item, struct self, retired_node);
 
-        if ((pid != 0 && self->pid == pid) || (pid == 0 && _thread_dead(self)))
-            _self_fini(self);
+        if ((pid != 0 && self->pid == pid) || (pid == 0 && thread_dead_(self)))
+            self_fini_(self);
         else
-            quack_push(&_threads.retired, item);
+            quack_push(&threads_.retired, item);
     }
-    caslock_release(&_threads.lock);
+    caslock_release(&threads_.lock);
 }
 
 PS_SUBSCRIBE(INTERCEPT_EVENT, EVENT_THREAD_EXIT, {
-    struct self *self = _get_or_create_self(true);
-    _self_handle_event(chain, type, event, self);
-    _retire_self(self);
+    struct self *self = get_or_create_self_(true);
+    self_handle_event_(chain, type, event, self);
+    retire_self_(self);
     return PS_STOP_CHAIN;
 })
 
 PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_THREAD_JOIN, {
-    struct self *self             = _get_or_create_self(true);
+    struct self *self             = get_or_create_self_(true);
     struct pthread_join_event *ev = EVENT_PAYLOAD(ev);
-    _self_handle_after(chain, type, event, self);
+    self_handle_after_(chain, type, event, self);
     return PS_STOP_CHAIN;
 })
 
-DICE_MODULE_INIT({ _init_threads(); })
+DICE_MODULE_INIT({ init_threads_(); })
 DICE_MODULE_FINI({
-    _cleanup_threads(0);
-    _self_fini(_get_self());
+    cleanup_threads_(0);
+    self_fini_(get_self_());
 })

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) Huawei Technologies Co., Ltd. 2025. All rights reserved.
+ * Copyright (C) 2025 Huawei Technologies Co., Ltd.
  * SPDX-License-Identifier: 0BSD
  */
 #include <pthread.h>
@@ -28,7 +28,7 @@ INTERPOSE(void, pthread_exit, void *ptr)
 }
 
 static void *
-_trampoline(void *targ)
+trampoline_(void *targ)
 {
     trampoline_t *t      = (trampoline_t *)targ;
     void *arg            = t->arg;
@@ -57,7 +57,7 @@ INTERPOSE(int, pthread_create, pthread_t *thread, const pthread_attr_t *attr,
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_THREAD_CREATE, &ev, &md);
-    ev.ret = REAL(pthread_create, thread, attr, _trampoline, t);
+    ev.ret = REAL(pthread_create, thread, attr, trampoline_, t);
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_THREAD_CREATE, &ev, &md);
     return ev.ret;
 }
