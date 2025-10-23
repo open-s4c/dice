@@ -1,3 +1,6 @@
+# Copyright (C) 2025 Huawei Technologies Co., Ltd.                             #
+# SPDX-License-Identifier: 0BSD                                                #
+
 if(${ENABLE_SANITIZER})
   return()
 endif()
@@ -11,7 +14,9 @@ add_dependencies(expand-tests tsan_test-expand)
 
 # compile command
 add_executable(tsan_test ${CMAKE_CURRENT_SOURCE_DIR}/tsan_test.c)
-target_link_libraries(tsan_test PRIVATE dice.h dice dice-tsan_testing.o
-                                        dice-stacktrace_testing.o pthread)
+target_link_libraries(tsan_test PRIVATE dice-tsan_testing.o
+                                        dice-stacktrace_testing.o)
+target_link_libraries(tsan_test PRIVATE dice.h dice pthread)
+
 # target_compile_options(dice PRIVATE -fsanitize=address)
-add_test(NAME tsan_test COMMAND tsan_test)
+add_test(NAME tsan_test COMMAND ${DICE_SCRIPT} ./tsan_test)

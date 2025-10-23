@@ -24,4 +24,4 @@ endforeach()
 target_link_libraries(trace_checker PRIVATE dice-self)
 
 add_library(mock_checker SHARED mock_checker.c)
-target_link_libraries(mock_checker PUBLIC dice.h)
+target_link_libraries(mock_checker PUBLIC dice.h dice-checkers.h)
