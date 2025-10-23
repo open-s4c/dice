@@ -13,6 +13,15 @@
 #include <dice/pubsub.h>
 #include <dice/events/memcpy.h>
 
+static void *symbol;
+/* we need to declare this as noinline, otherwise the optimization of the
+ * compiler gets rid of the symbol. */
+static inline bool
+enabled(void)
+{
+    return symbol != NULL;
+}
+
 void *
 real_sym(const char *name, const char *ver)
 {
