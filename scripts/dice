@@ -86,6 +86,9 @@ PRELOAD="$LIBDICE$PRELOAD"
 # prefix tsano's libdir if necessary
 TSANO="env TSANO_LIBDIR=$TSANO_LIBDIR $TSANO"
 
+# in case running with ASAN, disable link order check
+export ASAN_OPTIONS=verify_asan_link_order=0
+
 # execute command
 if [ $SO = "dylib" ]; then
     exec $TSANO env DYLD_INSERT_LIBRARIES=$PRELOAD $args
