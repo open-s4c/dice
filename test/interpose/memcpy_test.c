@@ -4,6 +4,7 @@
  */
 #include <stddef.h>
 #include <stdlib.h>
+//#define memcpy fake_memcpy
 #include <string.h>
 
 #define DICE_TEST_INTERPOSE
@@ -12,6 +13,15 @@
 #include <dice/interpose.h>
 #include <dice/pubsub.h>
 #include <dice/events/memcpy.h>
+
+void *
+real_sym(const char *name, const char *ver)
+{
+    (void)ver;
+    if (!enabled())
+        return _real_sym(name, ver);
+    return symbol;
+}
 
 /* Expects struct to match this:
  *
@@ -102,7 +112,8 @@ PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_MEMSET, {
 static void
 test_memcpy(void)
 {
-    E_memcpy.dest = malloc(10);
+    char dest[10];
+    E_memcpy.dest = dest;
     char hello[] = "Hello!";
     E_memcpy.src= hello;
     E_memcpy.num = strlen(E_memcpy.src) + 1;
@@ -114,13 +125,12 @@ test_memcpy(void)
                                      E_memcpy.num                                  );
     ensure(ret == E_memcpy.dest);
     ensure(strcmp(E_memcpy.dest, E_memcpy.src) == 0);
-    free(E_memcpy.dest);
-    E_memcpy.dest = NULL;
 }
 static void
 test_memmove(void)
 {
-    E_memmove.dest = malloc(10);
+    char dest[10];
+    E_memmove.dest = dest;
     char hello[] = "Hi there!";
     E_memmove.src= hello;
     E_memmove.count = 2;
@@ -133,15 +143,14 @@ test_memmove(void)
     ensure(ret == E_memmove.dest);
     log_printf("memmove res %s\n", (char *)E_memmove.dest);
     ensure(strncmp((char *)E_memmove.dest, "Hi", 2) == 0);
-    free(E_memmove.dest);
-    E_memmove.dest = NULL;
 }
 static void
 test_memset(void)
 {
-    E_memset.ptr = malloc(5);
+    char dest[5];
+    E_memset.ptr = dest;
     E_memset.value= 3;
-    E_memset.num = 2;
+    E_memset.num = sizeof(dest);
     E_memset.ret = E_memset.ptr;
      void *  ret =                                   //
                                  memset(                                    //
@@ -149,8 +158,6 @@ test_memset(void)
                                      E_memset.value,                           //
                                      E_memset.num                                  );
     ensure(ret == E_memset.ptr);
-    free(E_memset.ptr);
-    E_memset.ptr = NULL;
 }
 
 int
