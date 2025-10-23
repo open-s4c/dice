@@ -1,3 +1,6 @@
+# Copyright (C) 2025 Huawei Technologies Co., Ltd.                             #
+# SPDX-License-Identifier: 0BSD                                                #
+
 if(${ENABLE_SANITIZER})
   return()
 endif()
@@ -13,8 +16,7 @@ foreach(SRC ${SRCS})
     target_link_options(${TARGET} PRIVATE -fsanitize=thread)
   endif()
 
-  target_link_libraries(${TARGET} PRIVATE trace_checker dice-checkers.h dice
-                                          dice.h)
+  target_link_libraries(${TARGET} PRIVATE mock_checker dice-checkers.h dice.h)
   target_link_libraries(${TARGET} PRIVATE tsano pthread)
   add_test(
     NAME ${TARGET}-test
