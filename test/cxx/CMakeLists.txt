@@ -16,8 +16,7 @@ target_link_libraries(tls_destructor PRIVATE mock_checker pthread)
 add_test(
   NAME tls_destructor
   COMMAND
-    env DICE_BUILD=${PROJECT_BINARY_DIR} DICE_SOURCE=${PROJECT_SOURCE_DIR}
-    ${PROJECT_SOURCE_DIR}/scripts/dice #
+    ${DICE_SCRIPT} #
     -pthread -malloc -self -preload $<TARGET_FILE:malloc_free_checker> #
     ${CMAKE_CURRENT_BINARY_DIR}/tls_destructor #
     COMMAND_EXPAND_LISTS)

@@ -80,6 +80,10 @@ add_subdirectory(deps)
 add_subdirectory(include)
 add_subdirectory(src)
 
+set(DICE_SCRIPT
+    env DICE_BUILD=${PROJECT_BINARY_DIR} DICE_SOURCE=${PROJECT_SOURCE_DIR}
+    ${PROJECT_SOURCE_DIR}/scripts/dice)
+
 if(PROJECT_IS_TOP_LEVEL)
   set(TESTS_DEFAULT on)
 else()
