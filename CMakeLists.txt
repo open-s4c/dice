@@ -11,7 +11,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 add_compile_options(-Wall -Wextra -Werror)
 
-option(DICE_INTERPOSE_MEMCPY "Build dice-memcpy (memcpy, memset, memmove)" on)
+set(DICE_INTERPOSE_MEMCPY on) #"Build dice-memcpy (memcpy, memset, memmove)"
 
 # LTO setup
 option(DICE_LTO "Build Dice with LTO" on)
