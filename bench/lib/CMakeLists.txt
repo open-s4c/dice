@@ -20,7 +20,8 @@ target_link_libraries(dice-bundle PRIVATE dice.o ${MODS})
 # (dispatch-based) are required. It should perform faster than dice-bundle when
 # compiled with LTO.
 add_library(dice-bundle-box SHARED)
-target_link_libraries(dice-bundle-box PRIVATE dice.o dice-box.o ${MODS})
+target_link_libraries(dice-bundle-box PRIVATE dice.o dice-box.o dice-self-box.o
+                                              ${MODS})
 
 # dice-bundle-cbonly - does not contain the dispatchers. It should only be used
 # to measure the overhead of having callbacks and dispatchers in dice-bundle.
