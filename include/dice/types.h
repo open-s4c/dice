@@ -12,10 +12,10 @@
 typedef uint16_t type_id;
 
 /* MAX_TYPES determines the maximum number of event types. */
-#define MAX_TYPES 512
+#define MAX_TYPES 256
 
-/* ANY_TYPE indicates any event type. */
-#define ANY_TYPE 0
+/* ANY_EVENT indicates any event type. */
+#define ANY_EVENT 0
 
 /* chain_id identifies a subscriber group ordered by the subscription time. */
 typedef uint16_t chain_id;

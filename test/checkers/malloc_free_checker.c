@@ -21,7 +21,7 @@ static int captured[] = {
     [EVENT_FREE]   = 0,
 };
 
-PS_SUBSCRIBE(CAPTURE_BEFORE, ANY_TYPE, {
+PS_SUBSCRIBE(CAPTURE_BEFORE, ANY_EVENT, {
     switch (type) {
         case EVENT_MALLOC:
         case EVENT_CALLOC:
