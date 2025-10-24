@@ -90,7 +90,7 @@ static void
 ps_subscribe_sorted_(struct sub **cur, chain_id chain, type_id type,
                      ps_callback_f cb, int prio, bool any_type)
 {
-    // any_type is set if this subscription was from ANY_TYPE
+    // any_type is set if this subscription was from ANY_EVENT
     struct sub *sub;
     struct sub *next = NULL;
 
@@ -149,7 +149,7 @@ ps_subscribe_(chain_id chain, type_id type, ps_callback_f cb, int prio)
         return PS_OK;
     if (chain > MAX_CHAINS)
         return PS_INVALID;
-    if (type != ANY_TYPE)
+    if (type != ANY_EVENT)
         return ps_subscribe_type_(chain, type, cb, prio, false);
 
     int err;
@@ -176,7 +176,7 @@ ps_callback_(const chain_id chain, const type_id type, void *event,
 {
     if (unlikely(chain >= MAX_CHAINS))
         return PS_INVALID;
-    if (unlikely(type == ANY_TYPE || type >= MAX_TYPES))
+    if (unlikely(type == ANY_EVENT || type >= MAX_TYPES))
         return PS_INVALID;
 
     struct type *ev = &chains_[chain].types[type];

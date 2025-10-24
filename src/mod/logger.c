@@ -12,19 +12,19 @@
 #include <dice/self.h>
 
 PS_SUBSCRIBE(
-    CAPTURE_EVENT, ANY_TYPE,
+    CAPTURE_EVENT, ANY_EVENT,
     {
         // log_printf("%" PRIx64 "\t%u[%" PRIx64 "]\n", token._v, event,
         //         (uint64_t)pthread_self());
     })
 PS_SUBSCRIBE(
-    CAPTURE_AFTER, ANY_TYPE,
+    CAPTURE_AFTER, ANY_EVENT,
     {
         // log_printf("%" PRIx64 "\t%u[%" PRIx64 "]\n", token._v, event,
         //         (uint64_t)pthread_self());
     })
 PS_SUBSCRIBE(
-    CAPTURE_BEFORE, ANY_TYPE,
+    CAPTURE_BEFORE, ANY_EVENT,
     {
         // log_printf("%" PRIx64 "\t%u[%" PRIx64 "]\n", token._v, event,
         //         (uint64_t)pthread_self());
