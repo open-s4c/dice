@@ -25,7 +25,7 @@
 #ifdef DICE_HIDE_ALL
     #define DICE_HIDE_IF __attribute__((visibility("hidden")))
 #else
-    #define DICE_HIDE_IF
+    #define DICE_HIDE_IF DICE_WEAK
 #endif
 
 #ifndef likely
