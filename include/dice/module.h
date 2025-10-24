@@ -73,12 +73,20 @@
  * planning for the relation between handlers. The order is either given
  * by linking order (if compilation units are linked together) or by the
  * order of shared libraries in LD_PRELOAD.
+ *
+ * The PS_SUBSCRIBE macro also registers the chain and type names in the pubsub.
+ * This is helpful for debugging.
  */
-#define PS_SUBSCRIBE_SLOT(CHAIN, TYPE, SLOT, HANDLER)                          \
+#define PS_SUBSCRIBE(CHAIN, TYPE, HANDLER)                                     \
+    PS_SUBSCRIBE_SLOT(CHAIN, #CHAIN, TYPE, #TYPE, DICE_MODULE_PRIO, HANDLER)
+
+#define PS_SUBSCRIBE_SLOT(CHAIN, CNAME, TYPE, TNAME, SLOT, HANDLER)            \
     PS_HANDLER_DECL(CHAIN, TYPE, SLOT, HANDLER)                                \
     PS_DISPATCH_DECL(CHAIN, TYPE, SLOT)                                        \
     static void DICE_CTOR ps_subscribe_##CHAIN##_##TYPE##_(void)               \
     {                                                                          \
+        ps_register_chain(CHAIN, CNAME);                                       \
+        ps_register_type(TYPE, TNAME);                                         \
         int err =                                                              \
             ps_subscribe(CHAIN, TYPE, PS_HANDLER(CHAIN, TYPE, SLOT), SLOT);    \
         if (err != PS_OK)                                                      \
@@ -86,7 +94,14 @@
                       err);                                                    \
     }
 
-#define PS_SUBSCRIBE(CHAIN, TYPE, HANDLER)                                     \
-    PS_SUBSCRIBE_SLOT(CHAIN, TYPE, DICE_MODULE_PRIO, HANDLER)
+/* PS_ADVERTISE macro registers the chain and type names in the pubsub. This is
+ * optional and only helpful for debugging.
+ */
+#define PS_ADVERTISE(CHAIN, TYPE)                                              \
+    static void DICE_CTOR ps_advertise_##CHAIN##_##TYPE##_(void)               \
+    {                                                                          \
+        ps_register_chain(CHAIN, #CHAIN);                                      \
+        ps_register_type(TYPE, #TYPE);                                         \
+    }
 
 #endif /* DICE_MODULE_H */

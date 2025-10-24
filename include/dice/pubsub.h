@@ -113,4 +113,12 @@ int ps_subscribe(chain_id chain, type_id type, ps_callback_f cb, int prio);
 #define INTERPOSE_PC                                                           \
     (__builtin_extract_return_addr(__builtin_return_address(0)))
 
+
+void ps_register_chain(chain_id, const char *name);
+void ps_register_type(type_id, const char *name);
+const char *ps_chain_str(chain_id);
+const char *ps_type_str(type_id);
+chain_id ps_chain_lookup(const char *name);
+type_id ps_type_lookup(const char *name);
+
 #endif /* DICE_PUBSUB_H */

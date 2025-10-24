@@ -498,15 +498,15 @@ get_or_create_self_(bool publish)
     return self;
 }
 
-PS_SUBSCRIBE(INTERCEPT_EVENT, ANY_TYPE, {
+PS_SUBSCRIBE(INTERCEPT_EVENT, ANY_EVENT, {
     return self_handle_event_(chain, type, event, get_or_create_self_(true));
 })
-PS_SUBSCRIBE(INTERCEPT_BEFORE, ANY_TYPE, {
+PS_SUBSCRIBE(INTERCEPT_BEFORE, ANY_EVENT, {
     if (type == EVENT_THREAD_CREATE)
         cleanup_threads_(0);
     return self_handle_before_(chain, type, event, get_or_create_self_(true));
 })
-PS_SUBSCRIBE(INTERCEPT_AFTER, ANY_TYPE, {
+PS_SUBSCRIBE(INTERCEPT_AFTER, ANY_EVENT, {
     return self_handle_after_(chain, type, event, get_or_create_self_(true));
 })
 

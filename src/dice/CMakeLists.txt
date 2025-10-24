@@ -70,7 +70,8 @@ set(DISPATCH_SRCS ${_DSRCS})
 # ------------------------------------------------------------------------------
 # dice libraries
 # ------------------------------------------------------------------------------
-set(SRCS mempool.c rbtree.c pubsub.c ${CMAKE_CURRENT_SOURCE_DIR}/dispatch.c)
+set(SRCS mempool.c rbtree.c pubsub.c registry.c
+         ${CMAKE_CURRENT_SOURCE_DIR}/dispatch.c)
 
 # dice (libdice.so) - SHARED library providing interface for plugin modules.
 # Only contains the core components mempool and pubsub. This library gets
