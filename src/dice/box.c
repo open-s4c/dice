@@ -1,5 +1,5 @@
 /*
- * Copyright (C) Huawei Technologies Co., Ltd. 2025. All rights reserved.
+ * Copyright (C) 2025 Huawei Technologies Co., Ltd.
  * SPDX-License-Identifier: 0BSD
  */
 #include <dice/mempool.h>
@@ -23,5 +23,15 @@ ps_publish(const chain_id chain, const type_id type, void *event,
     if (likely(err == PS_DROP_EVENT))
         return PS_DROP_EVENT;
 
+    return PS_OK;
+}
+
+DICE_HIDE int
+ps_subscribe(chain_id chain, type_id type, ps_callback_f cb, int prio)
+{
+    (void)chain;
+    (void)type;
+    (void)cb;
+    (void)prio;
     return PS_OK;
 }
