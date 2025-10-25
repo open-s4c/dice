@@ -131,7 +131,7 @@ The Pubsub system introduces several key advantages:
    Subscriptions are established early during the module initialization, and
    the publishing of events occurs with minimal cost, i.e., the content of the
    events is passed by reference and the callbacks can be either function
-   pointers or direct calls (TODO: see section x.x).
+   pointers or direct dispatches (see Section 6.2).
 
 4. **Customizability**: Subscribers can specify exactly what events they want
    to react to, whether it’s all events in a chain or specific events for a
@@ -168,7 +168,7 @@ The Pubsub system introduces several key advantages:
    In general, event handlers receive four arguments:
 
   - `chain_id chain`: The ID identifying the chain.
-  - `type_id type`: The ID identifyfing the event type.
+  - `type_id type`: The ID identifying the event type.
   - `void *event`: A generic pointer that represents the actual event data
     or **payload**. The actual type of this pointer must be agreed between
     publisher and subscriber and can be determined from `type`. The
@@ -199,10 +199,29 @@ These three aspects allow Dice's Pubsub to build powerful patterns such as
 defining phases of computation, republishing events in other chains, realizing
 when all subscribers of a chain have learned about an event, etc.
 
+## 2.5. Event Flow Overview
+
+```
+app thread
+   │ intercepts pthread_mutex_lock
+   ▼
+interceptor publishes INTERCEPT_BEFORE (EVENT_MUTEX_LOCK)
+   │
+   ▼
+Self module republishes CAPTURE_BEFORE + metadata
+   │
+   ▼
+subscriber handles CAPTURE_BEFORE (EVENT_MUTEX_LOCK)
+   │
+   └─► optional republish or STOP_CHAIN
+```
+
+Use this sequence as a reference when adding new handlers or tracing how events
+propagate between chains.
 
 ## 2.4. Interception chains
 
-The meaning of `chain_id` and `type_id` is given by convetion between publishers
+The meaning of `chain_id` and `type_id` is given by convention between publishers
 and subscribers.  The Pubsub system is oblivious to their meaning.  The header
 file `<dice/intercept.h>` defines three chains: `INTERCEPT_BEFORE`,
 `INTERCEPT_AFTER`, `INTERCEPT_EVENT`. All Dice modules that intercept syscalls
@@ -335,8 +354,29 @@ layer above the mempool to simplify the handling of TLS management.
    This is done through a specialized function, often `mempool_free`, which
    ensures that memory is properly cleaned up and made available for future use.
 
-TODO: aligment information
-TODO: link to memory pool description
+Each bucket in the pool uses fixed slab sizes (32 bytes and up) so returned
+blocks maintain native pointer alignment. For workloads that require different
+alignment guarantees you can tune the `sizes_` table in `src/dice/mempool.c`
+and rebuild.
+
+Implementation details live in `src/dice/mempool.c`; the public API is
+documented in `include/dice/mempool.h`.
+
+```
+process start
+   │
+   ├─► mempool_init() allocates slab arena (main thread)
+   │
+   ├─► worker threads call mempool_alloc()
+   │       │
+   │       ├─► pop slab from freelist if available
+   │       └─► extend arena when freelist empty
+   │
+   └─► modules return memory via mempool_free(), pushing slab back
+```
+
+The diagram highlights the single lock protecting slab lists—plan allocations
+for latency-sensitive code accordingly.
 
 
 # 4. Self Module
@@ -474,7 +514,7 @@ When an application calls an intercepted function, the corresponding interpose
 module is triggered. For example, when `pthread_create` is called, the interpose
 module publishes events using the Pubsub system. For example, when
 `pthread_create` is intercepted, the event `EVENT_THREAD_CREATE` is published.
-Via a trampoline function, passed to the readl `pthread_create`, the new thread
+Via a trampoline function, passed to the real `pthread_create`, the new thread
 also publishes a `EVENT_THREAD_START` event.  Similarly, events like
 `EVENT_MUTEX_LOCK`, `EVENT_MUTEX_UNLOCK`, `EVENT_MALLOC`, and `EVENT_FREE` can
 be intercepted and published to the appropriate chains.
@@ -484,33 +524,30 @@ called `DYLD_INSERT_LIBRARIES`.
 
 ## 5.3. Interpose Modules in Dice
 
-- `dice-pthread_create`: Intercepts the `pthread_create` and `pthread_join`
-  functions to manage thread initialization and finalization.
+- `dice-pthread_create`: Publishes `EVENT_THREAD_CREATE`, `EVENT_THREAD_START`,
+  and `EVENT_THREAD_EXIT`. Load it whenever you need thread lifecycle events or
+  the Self module; exported via `-pthread` in `scripts/dice`.
+- `dice-pthread_mutex`: Emits `EVENT_MUTEX_LOCK`, `_UNLOCK`, and try-lock
+  variants. Use alongside the Self module to build lock-order checkers.
+- `dice-pthread_cond`: Covers `pthread_cond_wait`, `signal`, and `broadcast`
+  paths, generating wait/wake events for scheduling analyses.
+- `dice-malloc`: Hooks `malloc`, `calloc`, `realloc`, and `free`, publishing
+  allocation events that can be correlated with stack traces or leak detectors.
+- `dice-cxa`: Wraps C++ guard helpers so constructors run under Dice control;
+  useful when intercepting static initializers or C++ singletons.
+- `dice-sem`: Tracks POSIX semaphore operations (`sem_wait`, `sem_post`,
+  `sem_trywait`) for workloads that use semaphores instead of mutexes.
+- `dice-tsan`: Substitutes the libtsan frontend; publishes memory-access events
+  and is required for the `tsano` record/replay toolchain.
+- `dice-stacktrace`: Augments capture metadata with call stacks. Automatically
+  loaded with `-tsan` via `scripts/dice` but can be preloaded independently.
+- `dice-self`: Manages TLS for subscribers. Subscribe to capture chains after
+  loading this module or link it in as builtin (`-self`).
 
-- `dice-pthread_mutex`: Intercepts mutex functions like `pthread_mutex_lock`,
-  `pthread_mutex_unlock`, `pthread_mutex_trylock`, etc to monitor thread
-  synchronization events via mutexes.
-
-- `dice-pthread_cond`: Intercepts condition variable functions like
-  `pthread_cond_wait`, `pthread_cond_signal`, etc to track thread
-  synchronization on condition variables.
-
-- `dice-malloc`: Intercepts memory allocation functions like `malloc`, `free`,
-  `calloc`, and others to track memory usage and detect leaks or abnormal memory
-  access.
-
-- `dice-cxa`: Intercepts functions related to exception handling, such as
-  `__cxa_guard_acquire`, `__cxa_guard_release`, and other related functions.
-
-- `dice-sem`: Intercepts semaphore functions like `sem_wait`, `sem_post`, etc to
-  monitor semaphore operations.
-
-- `dice-tsan`: Intercepts all functions exposed by `libtsan.so` to enable
-  fine-grained thread safety analysis.
-
-By using these interpose modules, Dice can gather detailed execution data,
-track thread behavior, monitor memory usage, and enable advanced testing and
-debugging features.
+The stock `scripts/dice` wrapper enables the appropriate mix of these modules
+based on flags like `-pthread`, `-malloc`, and `-tsan`. Custom preload strings
+should follow the same order: core `libdice`, intercept modules, then user
+plugins.
 
 
 # 6. Builtins and plugins

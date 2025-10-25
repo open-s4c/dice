@@ -14,6 +14,20 @@ publish-subscribe (pubsub) architecture.
 - Supports thread, memory, and synchronization tracking
 - Thread-local storage and memory pooling for performance
 
+## Quickstart
+
+```sh
+git clone https://your.repo/dice.git
+cd dice
+cmake -S . -B build
+cmake --build build
+ctest --test-dir build
+LD_PRELOAD=$PWD/build/src/dice/libdice.so ./examples/hello_threads
+```
+
+- Use `scripts/dice` to assemble the preload list for common module sets.
+- macOS users should replace `LD_PRELOAD` with `DYLD_INSERT_LIBRARIES`.
+
 ## Getting Started
 
 To use Dice:
@@ -79,6 +93,13 @@ Dice also provides a simple shell script (see `scripts/dice`), which simplifies
 the preloading of Dice and `libtsano`.  The `dice` script is installed in
 `<PREFIX>/bin`.
 
+- Detailed architecture notes: see `doc/design.md`.
+- Header-level API reference: see `doc/api.md`.
+- Benchmark workflow: see `doc/benchmarking.md`.
+- Task-oriented recipes: see `doc/howto.md`.
+- Contribution checklist (style, tests, benchmarks): see `doc/contributing.md`.
+- Test layout and commands: see `doc/testing.md`.
+
 ## Usage
 
 Example: Run an application with Dice intercepting memory and threading events:
@@ -100,4 +121,3 @@ See examples in the `examples` directory.
 ## License
 
 [0BSD License](LICENSE)
-
