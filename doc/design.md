@@ -520,74 +520,86 @@ The core library in Dice has only the Pubsub and the Mempool modules inside.
 Additional modules can be loaded in two ways.
 
 
-## 6.1. Shared Library Modules
+## 6.1. Loading Strategies
 
-Consider a multithreaded application `foo`. To run `foo` with Dice the user
-simply starts it with the following command:
-
-```
-env LD_PRELOAD=/path/to/libdice.so foo <arg1>
-```
-
-Additional modules can be loaded with the `LD_PRELOAD` variable as well:
+When Dice is used purely as a preload library you only need `libdice.so` plus
+the modules you want to enable. A typical invocation for an application `foo`
+looks like:
 
 ```
-env LD_PRELOAD=/path/to/libdice.so:/path/to/dice-pthread_create.so:... foo <arg1>
+env LD_PRELOAD=/path/to/libdice.so:/path/to/dice-pthread_create.so foo <arg1>
 ```
 
-Subscription callbacks are internally kept as lists of function pointers. The
-corresponding indirection cost has to be considered when deploying Dice in this
-way.
+macOS users should swap `LD_PRELOAD` for `DYLD_INSERT_LIBRARIES`. Module
+constructors register their subscribers during load, so the order of
+initialization is controlled via the `DICE_MODULE_PRIO` macro instead of relying
+on linker quirks. Lower priorities run first, and builtin modules reserve the
+range 0–15. Plugin authors should pick priorities greater than 15 so the core
+interceptors and the Self module execute before user code.
 
-### Subscription Priority
+For tighter deployments you can link Dice core and a curated set of modules into
+a single shared object, e.g.:
 
-TODO:  The following is not really true anymore. With the the introduction of
-`DICE_MODULE_PRIO`, modules define the order when subscribing.
+```
+add_library(libmydice SHARED
+    $<TARGET_OBJECTS:dice.o>
+    $<TARGET_OBJECTS:dice-pthread_create.o>
+    $<TARGET_OBJECTS:dice-pthread_mutex.o>
+    $<TARGET_OBJECTS:my_module.o>)
+```
 
-> One has to be careful in which order the constructors of the modules are
-executed.  On NetBSD the constructors are executed left-to-right. Given a list
-of libraries `LD_PRELOAD=libdice.so:mod1.so:mod2.so`, the subscribers in
-`mod1.so` will be registered earlier than subscribers in `mod2.so`; therefore,
-callbacks in `mod1.so` will be called first.  On Linux, the constructors are
-executed right-to-left. So the opposite subscription order will result.
-
-> In general, the user has to figure out the order the constructors are called by
-the linker and order the shared libraries accordingly.
-
-## 6.2. Monolithic Shared Library
-
-Modules in Dice can also linked together with the core components in a single
-shared library. In this configuration, each module is a compilation unit, i.e.,
-a `.o` file.  When compiling each of these files, the user should specify a
-priority for the subscription order by passing `-DDICE_MODULE_PRIO=VAL` to the
-compiler. `VAL` should be a number between 10 and 9999. The lower the value,
-the higher the priority when subscribing chains.
-
-Assume the user creates a library `libmydice.so` containing `pubsub.o`,
-`mempool.o`, `dice-pthread_create.o` and a user-defined module `mymod.o`. To load
-this bundle, the user simply uses `LD_PRELOAD`:
+The resulting library is still preloaded the same way:
 
 ```
 env LD_PRELOAD=/path/to/libmydice.so foo <arg1>
 ```
 
-If the user compiles all modules with LTO option, the resulting library can be
-much faster than relying on the approach of section 6.1. Nevertheless, without
-further steps, the resulting library above will use function pointers when
-executing the callbacks of the subscribers.
+This approach removes dynamic relocation overhead, enables LTO across modules,
+and allows you to hide the Dice interfaces entirely when combined with the box
+objects described below.
 
-### Fast-Chain Module
+## 6.2. Dispatch vs Callback Execution
 
-TODO: This is outdated. Now we always have builtin and plugin modules. Builtin
-modules are compiled together with Dice and are called using fast-chain
-callbacks. Plugin modules **must have** priorities **greater than** all builtin
-modules.
+Dice supports two execution paths for subscriptions:
 
-> Dice provides a auto-generated module called Fast-Chain module or `fastch.o`,
-which directly call the subscriber callbacks without relying on function
-pointers. To do that, the Fast-Chain module employs large switch cases on the
-`chain_id`, `type_id` and priority values.  However, the ranges of these three
-dimensions has to be limited to keep the size of the generated code manageable.
+- **Callback mode**: `libdice.so` exposes the weak `ps_publish` and
+  `ps_subscribe` entry points. Modules loaded as independent shared libraries
+  call `ps_subscribe` during initialization, and events are dispatched through
+  linked lists of function pointers. This mode maximizes flexibility and is the
+  default when using `LD_PRELOAD` with separate `.so` files.
+- **Dispatch mode**: When modules are compiled together with Dice the build
+  system emits `dispatch_N.c` files that contain large switch tables. Modules
+  with `DICE_MODULE_PRIO` ≤ 15 are treated as builtin and get their handlers
+  wired directly into these tables, bypassing the callback lists. Publication is
+  effectively a jump through the dispatch table, which is faster and makes it
+  easier for the compiler to inline handlers.
 
-> For instructions on how to use Fast-Chain, see the `CMakeLists.txt` inside
-`src/fastch`.
+You can mix both approaches: builtin modules run through dispatch while external
+plugins continue to register callbacks at higher priorities. The `scripts/dice`
+wrapper sets priorities automatically for the stock modules; custom builds can
+pass `-DDICE_MODULE_PRIO=<prio>` when compiling each object.
+
+## 6.3. Box Builds and Hidden Interfaces
+
+When we bundle Dice together with a set of builtin modules we often want to
+strip the dynamic plugin surface so linkers and optimizers can treat the
+package as a sealed unit. The **box** object libraries provide this toggle.
+
+- `src/dice/box.c` (`dice-box.o`) overrides the weak entry points exported by
+  `libdice.so`. The box version of `ps_publish` drives the generated dispatch
+  tables directly and skips the subscription lists; `ps_subscribe` becomes a
+  no-op, and the mempool wrappers forward to the internal symbols while
+  remaining hidden from the dynamic symbol table.
+- `src/mod/self-box.c` (`dice-self-box.o`) performs the same trick for the Self
+  helpers so TLS accessors are only visible inside the bundle.
+- Both targets compile with `DICE_HIDE_ALL`, forcing the linker to keep these
+  overrides local to the resulting shared object. References inside builtin
+  modules still resolve because they are linked in the same library, but no
+  symbol is exported for preloadable plugins to latch on.
+
+Link the box objects in addition to `dice.o` when building a monolithic
+assembly (e.g., `libdice-bundle-box`). Because builtin modules also include the
+generated `dispatch_X.c` fast chain, every publication goes through a switch
+table and ends up invoking the correct handler without registering a callback.
+Dropping the box objects restores the regular plugin surface (`libdice.so`),
+allowing new modules to subscribe via `ps_subscribe` at load time.
