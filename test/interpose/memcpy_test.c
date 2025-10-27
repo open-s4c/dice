@@ -163,59 +163,59 @@ PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_MEMSET, {
 })
 
 
-static void
-event_init(void *ptr, size_t n)
-{
-    char *buf = ptr;
-    for (size_t i = 0; i < n; i++)
-        buf[i] = rand() % 256;
-}
-
 /* test case */
-
+const int SIZE = 10;
 static void
 test_memcpy(void)
 {
-    /* initialize event with random content */
-    event_init(&E_memcpy, sizeof(struct memcpy_event));
-    /* call memcpy with arguments */
     enable(fake_memcpy);
-     void *  ret =                                   //
+    char dest[SIZE];
+    E_memcpy.dest = dest;
+    char hello[] = "Hello!";
+    E_memcpy.src= hello;
+    E_memcpy.num = strlen(E_memcpy.src) + 1;
+    E_memcpy.ret = E_memcpy.dest;
+    void *  ret =                                   //
                                  memcpy(                                    //
                                      E_memcpy.dest,                           //
                                      E_memcpy.src,                           //
-                                     E_memcpy.num                                  );
- ensure(ret == E_memcpy.ret);
+                                     E_memcpy.num                                  );                             
+    ensure(ret == E_memcpy.dest);
     disable();
 }
 static void
 test_memmove(void)
 {
-    /* initialize event with random content */
-    event_init(&E_memmove, sizeof(struct memmove_event));
-    /* call memmove with arguments */
     enable(fake_memmove);
-     void *  ret =                                   //
+    char dest[SIZE];
+    E_memmove.dest = dest;
+    char hello[] = "Hi there!";
+    E_memmove.src= hello;
+    E_memmove.count = 2;
+    E_memmove.ret = E_memmove.dest;
+    void *  ret =                                   //
                                  memmove(                                    //
                                      E_memmove.dest,                           //
                                      E_memmove.src,                           //
                                      E_memmove.count                                  );
- ensure(ret == E_memmove.ret);
+    ensure(ret == E_memmove.dest);
     disable();
 }
 static void
 test_memset(void)
 {
-    /* initialize event with random content */
-    event_init(&E_memset, sizeof(struct memset_event));
-    /* call memset with arguments */
     enable(fake_memset);
-     void *  ret =                                   //
+    char dest[SIZE];
+    E_memset.ptr = dest;
+    E_memset.value= 3;
+    E_memset.num = 5;
+    E_memset.ret = E_memset.ptr;
+    void *  ret =                                   //
                                  memset(                                    //
                                      E_memset.ptr,                           //
                                      E_memset.value,                           //
                                      E_memset.num                                  );
- ensure(ret == E_memset.ret);
+    ensure(ret == E_memset.ptr);
     disable();
 }
 
