@@ -53,10 +53,6 @@ set(MODS
     sem
     cxa)
 
-if(${DICE_INTERPOSE_MEMCPY})
-  set(MODS memcpy ${MODS})
-endif()
-
 if(NOT ${ENABLE_SANITIZER})
   # malloc does not play well with the sanitizers
   set(MODS malloc ${MODS})
@@ -93,3 +89,8 @@ foreach(MOD ${MODS})
     target_link_libraries(${TARGET} PRIVATE ${LIBSAN_LINK})
   endif()
 endforeach()
+
+# Add the test executable for memcpy
+add_executable(memcpy_test ${CMAKE_CURRENT_SOURCE_DIR}/memcpy_test.c)
+target_link_libraries(memcpy_test PRIVATE dice.o tsano pthread)
+add_test(NAME memcpy_test COMMAND memcpy_test)
