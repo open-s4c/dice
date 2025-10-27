@@ -65,7 +65,7 @@ fake_pthread_join(pthread_t thread, void **ptr)
 #define ASSERT_FIELD_EQ(E, field)                                              \
     ensure(memcmp(&ev->field, &(E)->field, sizeof(__typeof((E)->field))) == 0);
 
-PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_PTHREAD_JOIN, {
+PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_THREAD_JOIN, {
     if (!enabled())
         return PS_STOP_CHAIN;
     struct pthread_join_event *ev = EVENT_PAYLOAD(ev);
@@ -73,7 +73,7 @@ PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_PTHREAD_JOIN, {
     ASSERT_FIELD_EQ(&E_pthread_join, ptr);
 })
 
-PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_PTHREAD_JOIN, {
+PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_THREAD_JOIN, {
     if (!enabled())
         return PS_STOP_CHAIN;
     struct pthread_join_event *ev = EVENT_PAYLOAD(ev);

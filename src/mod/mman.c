@@ -1,5 +1,5 @@
 /*
- * Copyright (C) Huawei Technologies Co., Ltd. 2025. All rights reserved.
+ * Copyright (C) 2025 Huawei Technologies Co., Ltd.
  * SPDX-License-Identifier: 0BSD
  */
 #include <dice/chains/intercept.h>
@@ -28,8 +28,8 @@ INTERPOSE(void *, mmap, void *addr, size_t length, int prot, int flags, int fd,
     return ev.ret;
 }
 
-INTERPOSE(void *, mmap64, void *addr, size_t length, int prot, int flags, int fd,
-          off_t offset)
+INTERPOSE(void *, mmap64, void *addr, size_t length, int prot, int flags,
+          int fd, off_t offset)
 {
     struct mmap_event ev = {
         .pc     = INTERPOSE_PC,
@@ -65,4 +65,9 @@ INTERPOSE(int, munmap, void *addr, size_t length)
     return ev.ret;
 }
 
+/* Advertise event type names for debugging messages */
+PS_ADVERTISE_TYPE(EVENT_MMAP)
+PS_ADVERTISE_TYPE(EVENT_MUNMAP)
+
+/* Mark module initialization (optional) */
 DICE_MODULE_INIT()

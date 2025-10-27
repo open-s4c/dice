@@ -80,6 +80,11 @@ ps_init_(void)
     (void)ps_initd_();
 }
 
+/* Advertise event type names for debugging messages */
+PS_ADVERTISE_TYPE(EVENT_DICE_READY)
+PS_ADVERTISE_TYPE(EVENT_DICE_INIT)
+
+/* Mark module initialization (optional) */
 DICE_MODULE_INIT()
 
 // -----------------------------------------------------------------------------
@@ -140,9 +145,11 @@ ps_subscribe_(chain_id chain, type_id type, ps_callback_f cb, int prio)
 {
     ps_init_(); // ensure initialized
 
-    log_debug("Subscribe %u_%u_%d", chain, type, prio);
+    log_debug("Subscribe %s/%s/%d", ps_chain_str(chain), ps_type_str(type),
+              prio);
     if (ps_dispatch_chain_on_(chain) && prio <= ps_dispatch_max()) {
-        log_debug("Ignore subscription %u_%u_%d", chain, type, prio);
+        log_debug("Ignore subscription %s/%s/%d", ps_chain_str(chain),
+                  ps_type_str(type), prio);
         return PS_OK;
     }
     if (chain == CHAIN_CONTROL)
@@ -212,7 +219,7 @@ ps_publish(const chain_id chain, const type_id type, void *event,
     if (unlikely(!ps_initd_()))
         return PS_DROP_EVENT;
 
-    log_debug("Publish %u_%u", chain, type);
+    log_debug("Publish %u/%u", ps_chain_str(chain), ps_type_str(type));
     enum ps_err err = ps_dispatch_(chain, type, event, md);
 
     if (likely(err == PS_STOP_CHAIN))

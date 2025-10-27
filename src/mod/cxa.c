@@ -1,8 +1,9 @@
 /*
- * Copyright (C) Huawei Technologies Co., Ltd. 2025. All rights reserved.
+ * Copyright (C) 2025 Huawei Technologies Co., Ltd.
  * SPDX-License-Identifier: 0BSD
  */
 
+#include "dice/module.h"
 #include <dice/chains/intercept.h>
 #include <dice/events/cxa.h>
 #include <dice/interpose.h>
@@ -48,4 +49,10 @@ INTERPOSE(void, __cxa_guard_abort, void *addr)
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_CXA_GUARD_ABORT, &ev, &md);
 }
 
+/* Advertise event type names for debugging messages */
+PS_ADVERTISE_TYPE(EVENT___CXA_GUARD_ACQUIRE)
+PS_ADVERTISE_TYPE(EVENT___CXA_GUARD_RELEASE)
+PS_ADVERTISE_TYPE(EVENT___CXA_GUARD_ABORT)
+
+/* Mark module initialization (optional) */
 DICE_MODULE_INIT()

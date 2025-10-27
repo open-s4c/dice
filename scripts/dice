@@ -59,6 +59,9 @@ while [ "$#" != "0" ]; do
         -cxa)
             PRELOAD="$PRELOAD:$DICE_DIR/dice-cxa.$SO"
         ;;
+        -logger)
+            PRELOAD="$PRELOAD:$DICE_DIR/dice-logger.$SO"
+        ;;
         -pthread)
             PRELOAD="$PRELOAD:$DICE_DIR/dice-pthread_create.$SO"
             PRELOAD="$PRELOAD:$DICE_DIR/dice-pthread_mutex.$SO"

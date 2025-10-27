@@ -7,15 +7,22 @@
  * @brief Publishes func_entry and func_exit events from TSAN instrumentation.
  *
  ******************************************************************************/
+#include <stdint.h>
+
 #include <dice/chains/intercept.h>
 #include <dice/events/stacktrace.h>
 #include <dice/events/thread.h>
 #include <dice/interpose.h>
 #include <dice/module.h>
 #include <dice/pubsub.h>
-#include <stdint.h>
 
+/* Advertise event type names for debugging messages */
+PS_ADVERTISE_TYPE(EVENT_STACKTRACE_ENTER)
+PS_ADVERTISE_TYPE(EVENT_STACKTRACE_EXIT)
+
+/* Mark module initialization (optional) */
 DICE_MODULE_INIT()
+
 
 static void check_main_start_(void *caller);
 
@@ -76,8 +83,9 @@ check_main_start_(void *retpc)
     #include <stdio.h>
     #include <stdlib.h>
     #include <string.h>
-    #include <sys/stat.h>
     #include <unistd.h>
+
+    #include <sys/stat.h>
 
 static int
 phdr_cb_(struct dl_phdr_info *info, size_t size, void *data)

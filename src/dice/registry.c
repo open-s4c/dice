@@ -123,7 +123,7 @@ ps_registry_add_(bool chain, uint16_t id, const char *name)
 }
 
 
-const char *
+DICE_HIDE const char *
 ps_registry_get_(bool chain, uint16_t id)
 {
     uint16_t max       = chain ? MAX_CHAINS : MAX_TYPES;
@@ -134,12 +134,12 @@ ps_registry_get_(bool chain, uint16_t id)
     if (id >= max)
         log_fatal("cannot find %s %u (max = %u)", what, id, (max - 1));
     const char *name =
-        names[0].assigned ? names[0].assigned : names[0].fallback;
+        names[id].assigned ? names[id].assigned : names[id].fallback;
     caslock_release(&registry_lock_);
     return name;
 }
 
-uint16_t
+DICE_HIDE uint16_t
 ps_registry_lookup_(bool chain, const char *name)
 {
     uint16_t max       = chain ? MAX_CHAINS : MAX_TYPES;

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) Huawei Technologies Co., Ltd. 2025. All rights reserved.
+ * Copyright (C) 2025 Huawei Technologies Co., Ltd.
  * SPDX-License-Identifier: 0BSD
  */
 #include <dice/chains/intercept.h>
@@ -100,4 +100,13 @@ INTERPOSE(void *, aligned_alloc, size_t alignment, size_t size)
     return ev.ret;
 }
 
+/* Advertise event type names for debugging messages */
+PS_ADVERTISE_TYPE(EVENT_MALLOC)
+PS_ADVERTISE_TYPE(EVENT_CALLOC)
+PS_ADVERTISE_TYPE(EVENT_REALLOC)
+PS_ADVERTISE_TYPE(EVENT_FREE)
+PS_ADVERTISE_TYPE(EVENT_POSIX_MEMALIGN)
+PS_ADVERTISE_TYPE(EVENT_ALIGNED_ALLOC)
+
+/* Mark module initialization (optional) */
 DICE_MODULE_INIT()
