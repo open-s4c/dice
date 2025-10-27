@@ -20,7 +20,7 @@ To use Dice:
 
 1. Build Dice and its modules:
 
-    cmake -S . -B build
+    cmake -B build
     cmake --build build
 
 2. Call your program setting LD_PRELOAD:
@@ -69,7 +69,7 @@ Beside these modules, Dice provice several intercept modules such as
 ```sh
 git clone https://your.repo/dice.git
 cd dice
-cmake -S. -Bbuild -DCMAKE_INSTALL_PREFIX=<PREFIX>
+cmake -B build -DCMAKE_INSTALL_PREFIX=<PREFIX>
 cmake --build build
 cmake --install build
 ```

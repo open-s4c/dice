@@ -5,7 +5,7 @@ cmake_minimum_required(VERSION 3.20)
 project(
   dice
   LANGUAGES C CXX ASM
-  VERSION 0.2)
+  VERSION 1.2)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
