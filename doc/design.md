@@ -1,7 +1,7 @@
 ---
 title: Dice Design Document
 author: Diogo Behrens
-version: "0.1"
+version: "1.2"
 ---
 
 # 1. Overview
@@ -104,14 +104,14 @@ subscribers are the modules (or functions) that are interested in reacting to
 these events.
 
 Each event in Dice has a type that specifies what kind of event it is.  The
-event type is identified by an integer `type_id`.  For example, the event
+*event type* is identified by an integer `type_id`.  For example, the event
 corresponding to a thread being initialized is identified by
 `EVENT_THREAD_START`.
 
-Events are published in topics, which are called *chains* in Dice and are
-identified by an integer `chain_id`. Modules can subscribe for events published
-in a chain; subscriptions can be filtered by `type_id` or be triggered for any
-type of event.
+Events are published in topics, which are called *chains* and are identified by
+an integer `chain_id`. Modules can subscribe for events published in a chain;
+subscriptions can be filtered by `type_id` or be triggered for any type of
+event using the special type ID `ANY_TYPE`.
 
 
 ## 2.2. Why Pubsub?
@@ -131,7 +131,7 @@ The Pubsub system introduces several key advantages:
    Subscriptions are established early during the module initialization, and
    the publishing of events occurs with minimal cost, i.e., the content of the
    events is passed by reference and the callbacks can be either function
-   pointers or direct calls (TODO: see section x.x).
+   pointers or direct dispatches (see Section 6.2).
 
 4. **Customizability**: Subscribers can specify exactly what events they want
    to react to, whether it’s all events in a chain or specific events for a
@@ -168,7 +168,7 @@ The Pubsub system introduces several key advantages:
    In general, event handlers receive four arguments:
 
   - `chain_id chain`: The ID identifying the chain.
-  - `type_id type`: The ID identifyfing the event type.
+  - `type_id type`: The ID identifying the event type.
   - `void *event`: A generic pointer that represents the actual event data
     or **payload**. The actual type of this pointer must be agreed between
     publisher and subscriber and can be determined from `type`. The
@@ -185,23 +185,45 @@ The Pubsub system introduces several key advantages:
 The Pusbsub system in Dice differs from the standard definition of Pubsub (GoF
 design pattern) in several ways:
 
-- **Chains**: Subscribers are organized in callback chains (not topics), i.e.,
+- **Chains**: Subscribers are organized in handler chains (not topics), i.e.,
   when an event is published to a chain, the subscribers receive the event one
   after another in the order defined in the chain.
 - **Interruptions**: Event handlers can control whether the event is further
   propagated to subsequent handlers by returnig `PS_OK` to continue the
   chain or `PS_STOP_CHAIN` to interrupt it.
-- **Synchronous**: The publisher **blocks until all subscribers have handled the
-  event or the chain has been interrupted.
+- **Synchronous**: The publisher **blocks** until all subscribers have handled the
+  event or the chain has been interrupted. In fact, the thread executing the
+  publish code also executes the subscription handlers, one by one.
 
 These three aspects allow Dice's Pubsub to build powerful patterns such as
 defining phases of computation, republishing events in other chains, realizing
 when all subscribers of a chain have learned about an event, etc.
 
 
+## 2.5. Event Flow Overview
+
+```
+app thread
+   │ intercepts pthread_mutex_lock
+   ▼
+interceptor publishes INTERCEPT_BEFORE (EVENT_MUTEX_LOCK)
+   │
+   ▼
+Self module republishes CAPTURE_BEFORE + metadata
+   │
+   ▼
+subscriber handles CAPTURE_BEFORE (EVENT_MUTEX_LOCK)
+   │
+   └─► optional republish or STOP_CHAIN
+```
+
+Use this sequence as a reference when adding new handlers or tracing how events
+propagate between chains.
+
+
 ## 2.4. Interception chains
 
-The meaning of `chain_id` and `type_id` is given by convetion between publishers
+The meaning of `chain_id` and `type_id` is given by convention between publishers
 and subscribers.  The Pubsub system is oblivious to their meaning.  The header
 file `<dice/intercept.h>` defines three chains: `INTERCEPT_BEFORE`,
 `INTERCEPT_AFTER`, `INTERCEPT_EVENT`. All Dice modules that intercept syscalls
@@ -220,7 +242,10 @@ convention:
 - `INTERCEPT_EVENT`: a function/operation is being called. Publications to
   `INTERCEPT_EVENT` represent the function/operation itself.
 
-To better understand the convention described here, consider the interception
+A module that publishes to one of these intercept chains is called
+*interceptor*.
+
+To better understand the convention described above, consider the interception
 of `malloc`.  The interceptor code would look similar to this:
 
 ```c
@@ -278,6 +303,7 @@ then used by all modules that require memory during their execution.
 
 There are mainly two problems that Mempool solves:
 
+
 ### Application-runtime Memory Isolation
 
 The execution of an application could be influced by the memory allocation
@@ -287,6 +313,7 @@ the application, and bugs in the application might affect Dice execution.
 Moreover, if Dice is used to create a record/replay environment, the application
 must be able to allocate precisely the same addresses on replay as it has done
 on record run.
+
 
 ### Dependency-free thread-local storage
 
@@ -331,22 +358,48 @@ layer above the mempool to simplify the handling of TLS management.
    This is done through a specialized function, often `mempool_free`, which
    ensures that memory is properly cleaned up and made available for future use.
 
+Each bucket in the pool uses fixed slab sizes (32 bytes and up) so returned
+blocks maintain native pointer alignment. For workloads that require different
+alignment guarantees you can tune the `sizes_` table in `src/dice/mempool.c`
+and rebuild.
+
+Implementation details live in `src/dice/mempool.c`; the public API is
+documented in `include/dice/mempool.h`.
+
+```
+process start
+   │
+   ├─► mempool_init() allocates slab arena (main thread)
+   │
+   ├─► worker threads call mempool_alloc()
+   │       │
+   │       ├─► pop slab from freelist if available
+   │       └─► extend arena when freelist empty
+   │
+   └─► modules return memory via mempool_free(), pushing slab back
+```
+
+The diagram highlights the single lock protecting slab lists—plan allocations
+for latency-sensitive code accordingly.
+
 
 # 4. Self Module
 
 The Self module is one of the key components in Dice, providing essential
-thread-local storage (TLS) management and handling thread initialization and
-finalization events. It acts as the first subscriber and plays a critical role
-in ensuring that each thread gets its own isolated TLS space. Unless the user
-reimplements an equivalent component, Self shall be loaded with Dice before any
-other user module.
+thread-local storage (TLS) management. It acts as the first subscriber and
+plays a critical role in ensuring that each thread gets its own isolated TLS
+space. Unless the user reimplements an equivalent component, Self shall be
+loaded with Dice before any other user module.
 
 
 ## 4.1. What is the Self Module?
 
-The Self module manages thread-specific data, ensuring that each thread has a
-dedicated storage area for maintaining its TLS data. The Self module is invoked
-when a new thread is created or when a thread finishes execution.
+The Self module stays in the middle between interceptors (Section 2.4) and
+subscribers. It manages thread-local storage (TLS), ensuring that each thread
+has a dedicated storage area for maintaining its private data. The TLS is
+intended to be safely used by subscribers, avoiding platform-specific details
+of pthread TLS. The Self module itself employs the TLS to keep track of the
+thread ID as well as guarding the execution from recursive publications.
 
 
 ## 4.2. Why Self?
@@ -368,16 +421,23 @@ The Self module addresses a few important needs:
 
 ## 4.3. How Self Works
 
-1. Thread Initialization: When a new thread is created, the Self module
-   receives an `EVENT_THREAD_START`. Upon receiving this event, it
-   allocates thread-specific data (such as an array of pointers for TLS) from
-   the Mempool. It also assigns a unique thread ID to the current thread, which
-   is managed atomically to ensure correct synchronization.
+1. Thread Initialization: When a new thread is created (including the main
+   thread), the first event published by the thread triggers the initialization
+   of the Self module, which in turn publishes a `EVENT_SELF_INIT`. So,
+   for any thread, one can always expect to receive such an event as the very
+   first event of the thread.  The initilization allocates thread-specific data
+   (such as an array of pointers for TLS) from the Mempool (Section 3). It also
+   assigns a unique thread ID to the current thread. The thread ID is an atomic
+   counter starting from value 1. The thread ID 0 is reserved to represent
+   `NO_THREAD`.
 
 2. Thread Finalization: When a thread finishes execution, the Self module
    receives an `EVENT_THREAD_EXIT` event. It is responsible for cleaning
    up the TLS data associated with the thread, using mempool-free to deallocate
-   memory.
+   memory. A `EVENT_SELF_FINI` is published once the TLS of a thread is
+   reclaimed. The `EVENT_SELF_FINI` of the main thread is sent with `atexit`
+   hooks of the main program, but **cannot be guaranteed** to be the absolute
+   last piece of code executed in the program.
 
 3. TLS Allocation: The Self module allocates TLS only when it receives a
    `EVENT_THREAD_START` event. This ensures that TLS is only allocated when
@@ -397,11 +457,11 @@ interceptors.
 
 ## 4.4. Capture chains
 
-The Self module subscribes to all intercept chains (section 2.4) and republishes
-the events in equivalent **capture chains**: `CAPTURE_BEFORE`, `CAPTURE_AFTER`,
+The Self module subscribes to all intercept chains and republishes the
+events in equivalent **capture chains**: `CAPTURE_BEFORE`, `CAPTURE_AFTER`,
 `CAPTURE_EVENT`.  When republishing to these chains, the Self module sends a
-**self-specific metadata** along with the event.  This metadata can be used by
-any subscriber to query for TLS data as well as thread ID without any extra
+**self-specific metadata** along with the event.  This metadata can be used
+by any subscriber to query for TLS data as well as thread ID without any extra
 cost.  The functions provided for these functionalities are in `dice/self.h`:
 
 - `self_id(metadata_t *md)` returns the Dice's thread ID (starting from 1).
@@ -461,7 +521,7 @@ When an application calls an intercepted function, the corresponding interpose
 module is triggered. For example, when `pthread_create` is called, the interpose
 module publishes events using the Pubsub system. For example, when
 `pthread_create` is intercepted, the event `EVENT_THREAD_CREATE` is published.
-Via a trampoline function, passed to the readl `pthread_create`, the new thread
+Via a trampoline function, passed to the real `pthread_create`, the new thread
 also publishes a `EVENT_THREAD_START` event.  Similarly, events like
 `EVENT_MUTEX_LOCK`, `EVENT_MUTEX_UNLOCK`, `EVENT_MALLOC`, and `EVENT_FREE` can
 be intercepted and published to the appropriate chains.
@@ -469,112 +529,137 @@ be intercepted and published to the appropriate chains.
 Notes that on macOS the environment variable to control library preloading is
 called `DYLD_INSERT_LIBRARIES`.
 
+
 ## 5.3. Interpose Modules in Dice
 
-- `dice-pthread_create`: Intercepts the `pthread_create` and `pthread_join`
-  functions to manage thread initialization and finalization.
+- `dice-pthread_create`: Publishes `EVENT_THREAD_CREATE`, `EVENT_THREAD_START`,
+  and `EVENT_THREAD_EXIT`. Load it whenever you need thread lifecycle events or
+  the Self module; exported via `-pthread` in `scripts/dice`.
+- `dice-pthread_mutex`: Emits `EVENT_MUTEX_LOCK`, `_UNLOCK`, and try-lock
+  variants. Use alongside the Self module to build lock-order checkers.
+- `dice-pthread_cond`: Covers `pthread_cond_wait`, `signal`, and `broadcast`
+  paths, generating wait/wake events for scheduling analyses.
+- `dice-malloc`: Hooks `malloc`, `calloc`, `realloc`, and `free`, publishing
+  allocation events that can be correlated with stack traces or leak detectors.
+- `dice-cxa`: Wraps C++ guard helpers so constructors run under Dice control;
+  useful when intercepting static initializers or C++ singletons.
+- `dice-sem`: Tracks POSIX semaphore operations (`sem_wait`, `sem_post`,
+  `sem_trywait`) for workloads that use semaphores instead of mutexes.
+- `dice-tsan`: Substitutes the libtsan frontend; publishes memory-access events
+  and is required for the `tsano` record/replay toolchain.
+- `dice-stacktrace`: Augments capture metadata with call stacks. Automatically
+  loaded with `-tsan` via `scripts/dice` but can be preloaded independently.
+- `dice-self`: Manages TLS for subscribers. Subscribe to capture chains after
+  loading this module or link it in as builtin (`-self`).
 
-- `dice-pthread_mutex`: Intercepts mutex functions like `pthread_mutex_lock`,
-  `pthread_mutex_unlock`, `pthread_mutex_trylock`, etc to monitor thread
-  synchronization events via mutexes.
-
-- `dice-pthread_cond`: Intercepts condition variable functions like
-  `pthread_cond_wait`, `pthread_cond_signal`, etc to track thread
-  synchronization on condition variables.
-
-- `dice-malloc`: Intercepts memory allocation functions like `malloc`, `free`,
-  `calloc`, and others to track memory usage and detect leaks or abnormal memory
-  access.
-
-- `dice-cxa`: Intercepts functions related to exception handling, such as
-  `__cxa_guard_acquire`, `__cxa_guard_release`, and other related functions.
-
-- `dice-sem`: Intercepts semaphore functions like `sem_wait`, `sem_post`, etc to
-  monitor semaphore operations.
-
-- `dice-tsan`: Intercepts all functions exposed by `libtsan.so` to enable
-  fine-grained thread safety analysis.
-
-By using these interpose modules, Dice can gather detailed execution data,
-track thread behavior, monitor memory usage, and enable advanced testing and
-debugging features.
+The stock `scripts/dice` wrapper enables the appropriate mix of these modules
+based on flags like `-pthread`, `-malloc`, and `-tsan`. Custom preload strings
+should follow the same order: core `libdice`, intercept modules, then user
+plugins.
 
 
-# 6. Loading Modules
+# 6. Builtins and plugins
 
 Dice is designed to be loaded as a shared library with `LD_PRELOAD`.
 The core library in Dice has only the Pubsub and the Mempool modules inside.
-Addtional modules can be loaded in two ways.
+Additional modules can be loaded in two ways.
 
 
-## 6.1. Shared Library Modules
+## 6.1. Loading Strategies
 
-Consider a multithreaded application `foo`. To run `foo` with Dice the user
-simply starts it with the following command:
-
-```
-env LD_PRELOAD=/path/to/libdice.so foo <arg1>
-```
-
-Additional modules can be loaded with the `LD_PRELOAD` variable as well:
+When Dice is used purely as a preload library you only need `libdice.so` plus
+the modules you want to enable. A typical invocation for an application `foo`
+looks like:
 
 ```
-env LD_PRELOAD=/path/to/libdice.so:/path/to/dice-pthread_create.so:... foo <arg1>
+env LD_PRELOAD=/path/to/libdice.so:/path/to/dice-pthread_create.so foo <arg1>
 ```
 
-Subscription callbacks are internally kept as lists of function pointers. The
-corresponding indirection cost has to be considered when deploying Dice in this
-way.
+macOS users should swap `LD_PRELOAD` for `DYLD_INSERT_LIBRARIES`. Module
+constructors register their subscribers during load, so the order of
+initialization is controlled via the `DICE_MODULE_PRIO` macro instead of relying
+on linker quirks. Lower priorities run first, and builtin modules reserve the
+range `0..MAX_BUILTIN_SLOTS-1`. Plugin authors should pick priorities greater
+than that so the core interceptors and the Self module execute before user code.
 
-### Subscription Priority
+For tighter deployments you can link Dice core and a curated set of modules into
+a single shared object, e.g.:
 
-TODO:  The following is not really true anymore. With the the introduction of
-`DICE_MODULE_PRIO`, modules define the order when subscribing.
+```
+add_library(libmydice SHARED
+    $<TARGET_OBJECTS:dice.o>
+    $<TARGET_OBJECTS:dice-pthread_create.o>
+    $<TARGET_OBJECTS:dice-pthread_mutex.o>
+    $<TARGET_OBJECTS:my_module.o>)
+```
 
-> One has to be careful in which order the constructors of the modules are
-executed.  On NetBSD the constructors are executed left-to-right. Given a list
-of libraries `LD_PRELOAD=libdice.so:mod1.so:mod2.so`, the subscribers in
-`mod1.so` will be registered earlier than subscribers in `mod2.so`; therefore,
-callbacks in `mod1.so` will be called first.  On Linux, the constructors are
-executed right-to-left. So the opposite subscription order will result.
-
-> In general, the user has to figure out the order the constructors are called by
-the linker and order the shared libraries accordingly.
-
-## 6.2. Monolithic Shared Library
-
-Modules in Dice can also linked together with the core components in a single
-shared library. In this configuration, each module is a compilation unit, i.e.,
-a `.o` file.  When compiling each of these files, the user should specify a
-priority for the subscription order by passing `-DDICE_MODULE_PRIO=VAL` to the
-compiler. `VAL` should be a number between 10 and 9999. The lower the value,
-the higher the priority when subscribing chains.
-
-Assume the user creates a library `libmydice.so` containing `pubsub.o`,
-`mempool.o`, `dice-pthread_create.o` and a user-defined module `mymod.o`. To load
-this bundle, the user simply uses `LD_PRELOAD`:
+The resulting library is still preloaded the same way:
 
 ```
 env LD_PRELOAD=/path/to/libmydice.so foo <arg1>
 ```
 
-If the user compiles all modules with LTO option, the resulting library can be
-much faster than relying on the approach of section 6.1. Nevertheless, without
-further steps, the resulting library above will use function pointers when
-executing the callbacks of the subscribers.
+This approach removes dynamic relocation overhead, enables LTO across modules,
+and allows you to hide the Dice interfaces entirely when combined with the box
+objects described below.
 
-### Fast-Chain Module
 
-TODO: This is outdated. Now we always have builtin and plugin modules. Builtin
-modules are compiled together with Dice and are called using fast-chain
-callbacks. Plugin modules **must have** priorities **greater than** all builtin
-modules.
+## 6.2. Dispatch vs Callback Execution
 
-> Dice provides a auto-generated module called Fast-Chain module or `fastch.o`,
-which directly call the subscriber callbacks without relying on function
-pointers. To do that, the Fast-Chain module employs large switch cases on the
-`chain_id`, `type_id` and priority values.  However, the ranges of these three
-dimensions has to be limited to keep the size of the generated code manageable.
+Dice supports two types of subscription:
 
-> For instructions on how to use Fast-Chain, see the `CMakeLists.txt` inside
-`src/fastch`.
+- **Callback-based subscriptions**: Modules loaded as independent shared
+  libraries call `ps_subscribe` during initialization. This is the only
+  supported subscription when using `LD_PRELOAD` with separate `.so` files. The
+  subscriptions always take the tripple chain/type/slot, where slot represents
+  the priority of the callback. Multiple modules can use the same slot for this
+  kind of subscription.
+
+- **Dispatch-based subscriptions**: Modules define a handler function following
+  the naming convention `ps_dispatch_CCC_EEE_SSS`, where `CCC` is a chain ID,
+  `EEE` is a event type ID, and `SSS` is a slot priority. Among the builtin
+  range of slots, only one module can occupy one slot, i.e., no two modules can
+  use the same value `SSS`.
+
+In practice, subscriptions are implemented using the `PS_SUBSCRIBE` macro
+from the `dice/module.h` header file.  This macro will provide both types
+of subscription. The compile-time constant `DICE_MODULE_PRIO` constant is
+the slot number of the module.  The subscription mechanism used in runtime
+depends on whether the module is compiled together with Dice **and** whether
+the slot number is within the builtin slot range, i.e.,  `DICE_MODULE_PRIO <
+MAX_BUILTIN_SLOTS`. If that is the case, then the Pubsub will prefer calling
+the defined dispatch function directly instead of using the callback function
+pointers.
+
+On the publisher side, both types of subscriptions are served by the same
+`ps_publish` function. If two modules subscribe for the same chain and event
+type, they are served in the slot priority order (lower first).
+
+Note that the module priority is a compilation option and custom builds can pass
+`-DDICE_MODULE_PRIO=<prio>` when compiling each object to speficy that.
+
+
+## 6.3. Box Builds and Hidden Interfaces
+
+When we bundle Dice together with a set of builtin modules we often want to
+strip the dynamic plugin surface so linkers and optimizers can treat the
+package as a sealed unit. The **box** object libraries provide this toggle.
+
+- `src/dice/box.c` (`dice-box.o`) overrides the weak entry points exported by
+  `libdice.so`. The box version of `ps_publish` drives the generated dispatch
+  tables directly and skips the subscription lists; `ps_subscribe` becomes a
+  no-op, and the mempool wrappers forward to the internal symbols while
+  remaining hidden from the dynamic symbol table.
+- `src/mod/self-box.c` (`dice-self-box.o`) performs the same trick for the Self
+  helpers so TLS accessors are only visible inside the bundle.
+- Both targets compile with `DICE_HIDE_ALL`, forcing the linker to keep these
+  overrides local to the resulting shared object. References inside builtin
+  modules still resolve because they are linked in the same library, but no
+  symbol is exported for preloadable plugins to latch on.
+
+Link the box objects in addition to `dice.o` when building a monolithic
+assembly (e.g., `libdice-bundle-box`). Because builtin modules also include the
+generated `dispatch_X.c` fast chain, every publication goes through a switch
+table and ends up invoking the correct handler without registering a callback.
+Dropping the box objects restores the regular plugin surface (`libdice.so`),
+allowing new modules to subscribe via `ps_subscribe` at load time.
