@@ -6,7 +6,7 @@ set(INTERPOSED_IN ${CMAKE_CURRENT_SOURCE_DIR}/interposed.h.in)
 set(FUNS_malloc malloc calloc realloc free posix_memalign aligned_alloc)
 set(INCL_malloc '<dice/events/malloc.h>')
 
-set(FUNS_memcpy memcpy memmove memset)
+set(FUNS_memcpy memcpy)
 set(INCL_memcpy '<dice/events/memcpy.h>')
 
 set(FUNS_mman mmap munmap)
@@ -53,10 +53,6 @@ set(MODS
     sem
     cxa)
 
-if(${DICE_INTERPOSE_MEMCPY})
-  set(MODS memcpy ${MODS})
-endif()
-
 if(NOT ${ENABLE_SANITIZER})
   # malloc does not play well with the sanitizers
   set(MODS malloc ${MODS})
@@ -85,7 +81,7 @@ foreach(MOD ${MODS})
   add_test(NAME ${TARGET} COMMAND ${TARGET})
   target_link_libraries(${TARGET} PRIVATE dice.h dice.o tsano pthread)
   target_link_libraries(${TARGET} PRIVATE dice-${MOD}_testing.o)
-  # add_dependencies(${TARGET} ${MOD}-expand)
+  add_dependencies(${TARGET} ${MOD}-expand)
 
   if(${ENABLE_SANITIZER})
     target_compile_options(${TARGET} PRIVATE ${LIBSAN_C_FLAGS})
@@ -93,3 +89,10 @@ foreach(MOD ${MODS})
     target_link_libraries(${TARGET} PRIVATE ${LIBSAN_LINK})
   endif()
 endforeach()
+
+# Add the test executable
+add_executable(memcpy_test ${CMAKE_CURRENT_SOURCE_DIR}/memcpy_test.c)
+
+# Link any required libraries (optional)
+target_link_libraries(memcpy_test PRIVATE dice.o tsano pthread)
+add_test(NAME memcpy_test COMMAND memcpy_test)

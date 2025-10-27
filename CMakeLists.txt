@@ -9,9 +9,7 @@ project(
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-add_compile_options(-Wall -Wextra -Werror)
-
-set(DICE_INTERPOSE_MEMCPY on) #"Build dice-memcpy (memcpy, memset, memmove)"
+add_compile_options(-g -Wall -Wextra -Werror)
 
 # LTO setup
 option(DICE_LTO "Build Dice with LTO" on)
