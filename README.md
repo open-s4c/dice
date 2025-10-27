@@ -14,21 +14,29 @@ publish-subscribe (pubsub) architecture.
 - Supports thread, memory, and synchronization tracking
 - Thread-local storage and memory pooling for performance
 
-## Getting Started
+## Quickstart
 
 To use Dice:
 
-1. **Build Dice and its modules**
-2. **Set environment variable**:
-   ```sh
-   export LD_PRELOAD=/path/to/libdice.so:/path/to/module.so:...
-   ```
-3. **Run your program**
-   ```sh
-   ./your_program
-   ```
+1. Build Dice and its modules:
+
+    cmake -S . -B build
+    cmake --build build
+
+2. Call your program setting LD_PRELOAD:
+
+    env LD_PRELOAD=/path/to/libdice.so:/path/to/module.so:... \
+        ./your_program
+
+3. Or use the Dice script to do that for you:
+
+    scripts/dice -pthread -self -malloc -tsan ./your_program
 
 Subscribers and modules will now intercept and handle events during execution.
+The script `scripts/dice` can be used to select, which modules you want to load
+with Dice.  If you prefer composing the command line manually and you are a
+macOS user, you should replace `LD_PRELOAD` with `DYLD_INSERT_LIBRARIES`.
+
 
 ## Architecture Overview
 
@@ -61,31 +69,36 @@ Beside these modules, Dice provice several intercept modules such as
 ```sh
 git clone https://your.repo/dice.git
 cd dice
-make
+cmake -S. -Bbuild -DCMAKE_INSTALL_PREFIX=<PREFIX>
+cmake --build build
+cmake --install build
 ```
 
-Modules are compiled as shared libraries. Ensure they are available in your
-`LD_LIBRARY_PATH`. Note that if you are using macOS, you have to set
-`DYLD_LIBRARY_PATH` and `DYLD_INSERT_LIBRARIES` instead.
+The installation prefix is `/usr/local` by default. Core and modules are
+compiled as shared libraries and installed as follows:
 
-## Usage
+- Dice core: `<PREFIX>/lib/libdice.so`
+- Modules: `<PREFIX>/lib/dice/<MODULE>.so`, eg, `<PREFIX>/lib/dice/malloc.so`
 
-Example: Run an application with Dice intercepting memory and threading events:
+Ensure `<PREFIX>/lib` is in your `LD_LIBRARY_PATH`. Note that if you are using
+macOS, you have to set `DYLD_LIBRARY_PATH` and `DYLD_INSERT_LIBRARIES` instead.
 
-```sh
-export LD_PRELOAD=/path/to/libdice.so:/path/to/libdice-malloc.so
-./your_program
-```
+Dice also provides a simple shell script (see `scripts/dice`), which simplifies
+the preloading of Dice and `libtsano`.  The `dice` script is installed in
+`<PREFIX>/bin`.
 
-You can add your own subscriber module and load it the same way to process events.
-
-## Examples
+## Further information
 
 See examples in the `examples` directory.
+
+- Detailed architecture notes: see `doc/design.md`.
+- Header-level API reference: see `doc/api.md`.
+- Contribution checklist (style, tests, benchmarks): see `doc/contributing.md`.
+- Benchmark workflow: see `doc/benchmarking.md`.
+- Test layout and commands: see `doc/testing.md`.
 
 ---
 
 ## License
 
 [0BSD License](LICENSE)
-
