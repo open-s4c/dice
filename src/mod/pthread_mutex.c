@@ -1,5 +1,5 @@
 /*
- * Copyright (C) Huawei Technologies Co., Ltd. 2025. All rights reserved.
+ * Copyright (C) 2025 Huawei Technologies Co., Ltd.
  * SPDX-License-Identifier: 0BSD
  */
 #include <assert.h>
@@ -74,4 +74,11 @@ INTERPOSE(int, pthread_mutex_unlock, pthread_mutex_t *mutex)
     return ev.ret;
 }
 
+/* Advertise event type names for debugging messages */
+PS_ADVERTISE_TYPE(EVENT_PTHREAD_MUTEX_LOCK)
+PS_ADVERTISE_TYPE(EVENT_PTHREAD_MUTEX_TIMEDLOCK)
+PS_ADVERTISE_TYPE(EVENT_PTHREAD_MUTEX_TRYLOCK)
+PS_ADVERTISE_TYPE(EVENT_PTHREAD_MUTEX_UNLOCK)
+
+/* Mark module initialization (optional) */
 DICE_MODULE_INIT()

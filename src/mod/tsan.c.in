@@ -1,5 +1,5 @@
 /*
- * Copyright (C) Huawei Technologies Co., Ltd. 2023-2025. All rights reserved.
+ * Copyright (C) 2023-2025 Huawei Technologies Co., Ltd.
  * SPDX-License-Identifier: 0BSD
  */
 /*******************************************************************************
@@ -17,6 +17,18 @@
 #include <dice/interpose.h>
 #include <dice/module.h>
 
+/* Advertise event type names for debugging messages */
+PS_ADVERTISE_TYPE(EVENT_MA_READ)
+PS_ADVERTISE_TYPE(EVENT_MA_WRITE)
+PS_ADVERTISE_TYPE(EVENT_MA_AREAD)
+PS_ADVERTISE_TYPE(EVENT_MA_AWRITE)
+PS_ADVERTISE_TYPE(EVENT_MA_RMW)
+PS_ADVERTISE_TYPE(EVENT_MA_XCHG)
+PS_ADVERTISE_TYPE(EVENT_MA_CMPXCHG)
+PS_ADVERTISE_TYPE(EVENT_MA_CMPXCHG_WEAK)
+PS_ADVERTISE_TYPE(EVENT_MA_FENCE)
+
+/* Mark module initialization (optional) */
 DICE_MODULE_INIT()
 
 #define _tmpl_mute // ----------- simple empty macros to make clangd happy -----

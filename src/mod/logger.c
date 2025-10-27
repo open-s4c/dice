@@ -1,34 +1,24 @@
 /*
- * Copyright (C) Huawei Technologies Co., Ltd. 2025. All rights reserved.
+ * Copyright (C) 2025 Huawei Technologies Co., Ltd.
  * SPDX-License-Identifier: 0BSD
  */
 #include <pthread.h>
 
-// #define DICE_XTOR_PRIO 300
 #include <dice/chains/intercept.h>
 #include <dice/log.h>
 #include <dice/module.h>
 #include <dice/pubsub.h>
 #include <dice/self.h>
 
-PS_SUBSCRIBE(
-    CAPTURE_EVENT, ANY_EVENT,
-    {
-        // log_printf("%" PRIx64 "\t%u[%" PRIx64 "]\n", token._v, event,
-        //         (uint64_t)pthread_self());
-    })
-PS_SUBSCRIBE(
-    CAPTURE_AFTER, ANY_EVENT,
-    {
-        // log_printf("%" PRIx64 "\t%u[%" PRIx64 "]\n", token._v, event,
-        //         (uint64_t)pthread_self());
-    })
-PS_SUBSCRIBE(
-    CAPTURE_BEFORE, ANY_EVENT,
-    {
-        // log_printf("%" PRIx64 "\t%u[%" PRIx64 "]\n", token._v, event,
-        //         (uint64_t)pthread_self());
-    })
+static void
+event_log_(struct metadata *md, chain_id chain, type_id type)
+{
+    log_printf("[tid: %" PRIx64 "] %s\t%s\n", self_id(md), ps_chain_str(chain),
+               ps_type_str(type));
+}
 
+PS_SUBSCRIBE(CAPTURE_EVENT, ANY_EVENT, { event_log_(md, chain, type); })
+PS_SUBSCRIBE(CAPTURE_AFTER, ANY_EVENT, { event_log_(md, chain, type); })
+PS_SUBSCRIBE(CAPTURE_BEFORE, ANY_EVENT, { event_log_(md, chain, type); })
 
 DICE_MODULE_INIT()

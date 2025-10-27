@@ -76,4 +76,11 @@ INTERPOSE(int, pthread_join, pthread_t thread, void **ptr)
     return ev.ret;
 }
 
+/* Advertise event type names for debugging messages */
+PS_ADVERTISE_TYPE(EVENT_THREAD_START)
+PS_ADVERTISE_TYPE(EVENT_THREAD_EXIT)
+PS_ADVERTISE_TYPE(EVENT_THREAD_CREATE)
+PS_ADVERTISE_TYPE(EVENT_THREAD_JOIN)
+
+/* Mark module initialization (optional) */
 DICE_MODULE_INIT()

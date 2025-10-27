@@ -112,4 +112,13 @@
         ps_register_type(TYPE, #TYPE);                                         \
     }
 
+/* PS_ADVERTISE_TYPE macro registers the event type name in the pubsub registry.
+ * This is optional and only helpful for debugging.
+ */
+#define PS_ADVERTISE_TYPE(TYPE)                                                \
+    static void DICE_CTOR ps_advertise_type_##TYPE##_(void)                    \
+    {                                                                          \
+        ps_register_type(TYPE, #TYPE);                                         \
+    }
+
 #endif /* DICE_MODULE_H */
