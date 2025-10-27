@@ -1,11 +1,14 @@
-# Copyright (C) Huawei Technologies Co., Ltd. 2025. All rights reserved.
-# SPDX-License-Identifier: 0BSD
+# Copyright (C) 2025 Huawei Technologies Co., Ltd.                             #
+# SPDX-License-Identifier: 0BSD                                                #
 
 add_executable(rbtree_test rbtree_test.c rbtree.c)
 target_link_libraries(rbtree_test PUBLIC dice.h)
 add_test(NAME rbtree_test COMMAND rbtree_test)
 
-# Create sequence of integers a 4th argument indicate the separator
+# ------------------------------------------------------------------------------
+# dispatchers generation
+# ------------------------------------------------------------------------------
+# Create sequence of integers. The 4th argument indicates the separator
 function(seq OUT FROM TO)
   set(SEPARATOR " ")
   if(${ARGC} GREATER 3)
@@ -64,28 +67,46 @@ foreach(SRC ${DISPATCH_SRCS})
 endforeach()
 set(DISPATCH_SRCS ${_DSRCS})
 
+# ------------------------------------------------------------------------------
 # dice libraries
+# ------------------------------------------------------------------------------
 set(SRCS mempool.c rbtree.c pubsub.c ${CMAKE_CURRENT_SOURCE_DIR}/dispatch.c)
-add_library(dice.o OBJECT ${SRCS})
-target_link_libraries(dice.o PUBLIC dice.h)
-target_compile_options(dice.o PRIVATE -fPIC)
 
-add_library(dice-dispatch.o OBJECT ${DISPATCH_SRCS})
-target_compile_options(dice-dispatch.o PRIVATE -fPIC)
-target_link_libraries(dice-dispatch.o PRIVATE dice.h)
-
-# linking with dice-box.o will bring dice-dispatch.o as public dependency
-add_library(dice-box.o OBJECT box.c)
-target_compile_options(dice-box.o PRIVATE -fPIC)
-target_link_libraries(dice-box.o PUBLIC dice-dispatch.o)
-target_link_libraries(dice-box.o PRIVATE dice.h)
-
+# dice (libdice.so) - SHARED library providing interface for plugin modules.
+# Only contains the core components mempool and pubsub. This library gets
+# installed in the system. Dispatch won't be used for this library except for
+# the internal initialization with chain 0 (CHAIN_CONTROL).
 add_library(dice SHARED ${SRCS})
 target_link_libraries(dice PUBLIC dice.h pthread)
 install(TARGETS dice DESTINATION lib)
 
+# dice.o - OBJECT library providing interface for plugin modules and builtin
+# modules. Only contains the core components mempool, pubsub, and dispatch, but
+# can be linked to other modules. See the dispatcher generation above for
+# details on the chains, events and slots handled by dispatch and callbacks.
+add_library(dice.o OBJECT ${SRCS} ${DISPATCH_SRCS})
+target_link_libraries(dice.o PUBLIC dice.h)
+target_compile_options(dice.o PRIVATE -fPIC)
+
+# dice-box.o - OBJECT library that disables callbacks when linked with dice.o.
+# This allows the LTO steps to be more aggressive.
+add_library(dice-box.o OBJECT box.c rbtree.c)
+target_compile_definitions(dice-box.o PRIVATE DICE_HIDE_ALL)
+target_compile_options(dice-box.o PRIVATE -fPIC)
+target_link_libraries(dice-box.o PRIVATE dice.h)
+
+# dice-cbonly.o - OBJECT library as dice.o but without dispatchers. Only used
+# for performance testing.
+add_library(dice-cbonly.o OBJECT ${SRCS})
+target_link_libraries(dice-cbonly.o PUBLIC dice.h)
+target_compile_options(dice-cbonly.o PRIVATE -fPIC)
+
+# ------------------------------------------------------------------------------
+# test configuration
+# ------------------------------------------------------------------------------
+
 if(${DICE_COVERAGE})
-  # do not involve dice-dispatch/dice-box in the coverage metrics
+  # do not involve dice-box in the coverage metrics
   set(TARGETS dice.o dice)
   foreach(TARGET ${TARGETS})
     target_compile_options(${TARGET} PRIVATE --coverage)

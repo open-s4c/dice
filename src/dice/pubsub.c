@@ -135,8 +135,8 @@ ps_subscribe_type_(chain_id chain, type_id type, ps_callback_f cb, int prio,
     return PS_OK;
 }
 
-int
-ps_subscribe(chain_id chain, type_id type, ps_callback_f cb, int prio)
+static int
+ps_subscribe_(chain_id chain, type_id type, ps_callback_f cb, int prio)
 {
     ps_init_(); // ensure initialized
 
@@ -160,13 +160,19 @@ ps_subscribe(chain_id chain, type_id type, ps_callback_f cb, int prio)
     return PS_OK;
 }
 
+DICE_WEAK int
+ps_subscribe(chain_id chain, type_id type, ps_callback_f cb, int prio)
+{
+    return ps_subscribe_(chain, type, cb, prio);
+}
+
 // -----------------------------------------------------------------------------
 // publish interface
 // -----------------------------------------------------------------------------
 
 static enum ps_err
-ps_publish_(const chain_id chain, const type_id type, void *event,
-            metadata_t *md)
+ps_callback_(const chain_id chain, const type_id type, void *event,
+             metadata_t *md)
 {
     if (unlikely(chain >= MAX_CHAINS))
         return PS_INVALID;
@@ -215,5 +221,5 @@ ps_publish(const chain_id chain, const type_id type, void *event,
     if (likely(err == PS_DROP_EVENT))
         return PS_DROP_EVENT;
 
-    return ps_publish_(chain, type, event, md);
+    return ps_callback_(chain, type, event, md);
 }

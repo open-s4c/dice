@@ -37,7 +37,7 @@
 void *real_sym(const char *, const char *);
 
 /* REAL_NAME(F) is the function pointer for the real function F. */
-#define REAL_NAME(F) _dice_real_##F
+#define REAL_NAME(F) dice_real_##F##_
 
 /* REAL_DECL(T, F, ...) declares the function pointer to the real function
  * F, with return type T and arguments as varargs. */

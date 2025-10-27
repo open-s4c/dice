@@ -1,5 +1,5 @@
-# Copyright (C) Huawei Technologies Co., Ltd. 2025. All rights reserved.
-# SPDX-License-Identifier: 0BSD
+# Copyright (C) 2025 Huawei Technologies Co., Ltd.                             #
+# SPDX-License-Identifier: 0BSD                                                #
 
 # test-specific includes such as dice/ensure.h
 include_directories(include)
@@ -39,21 +39,20 @@ foreach(SRC ${SRCS})
 
   # only add it as a test if not in ignore-list
   if(NOT ${TARGET} IN_LIST IGNORE_${DICE_SANITIZER})
-    add_test(NAME ${TARGET} COMMAND ${TSANOSH} ./${TARGET})
+    add_test(NAME ${TARGET} COMMAND ${DICE_SCRIPT} ./${TARGET})
   endif()
 endforeach()
 
 # Additional configuration of some tests
-target_link_libraries(simple PRIVATE dice-self.o dice.o)
-target_link_libraries(intercept_event PRIVATE dice-self.o dice.o)
+target_link_libraries(simple PRIVATE dice-self.o dice)
+target_link_libraries(intercept_event PRIVATE dice-self.o dice)
 
-target_link_libraries(pthread_create_join PRIVATE dice-pthread_create.o dice.o)
-target_link_libraries(pthread_create_exit PRIVATE dice-pthread_create.o dice.o)
-target_link_libraries(pthread_create_detach PRIVATE dice-pthread_create.o
-                                                    dice.o)
+target_link_libraries(pthread_create_join PRIVATE dice-pthread_create.o dice)
+target_link_libraries(pthread_create_exit PRIVATE dice-pthread_create.o dice)
+target_link_libraries(pthread_create_detach PRIVATE dice-pthread_create.o dice)
 target_link_libraries(
   pthread_exit_window PRIVATE dice-pthread_create.o dice-malloc.o dice-self.o
-                              dice.o)
+                              dice)
 
 # handle TASN sanitizer
 foreach(TARGET ${TARGETS})

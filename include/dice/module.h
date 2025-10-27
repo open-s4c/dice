@@ -34,11 +34,11 @@
 #endif
 
 #define DICE_MODULE_INIT(CODE)                                                 \
-    static bool _module_init()                                                 \
+    static bool module_init_()                                                 \
     {                                                                          \
-        static bool _done = false;                                             \
-        if (!_done) {                                                          \
-            _done = true;                                                      \
+        static bool done_ = false;                                             \
+        if (!done_) {                                                          \
+            done_ = true;                                                      \
             do {                                                               \
                 CODE                                                           \
             } while (0);                                                       \
@@ -46,19 +46,19 @@
         }                                                                      \
         return false;                                                          \
     }                                                                          \
-    static DICE_CTOR void _module_ctr()                                        \
+    static DICE_CTOR void module_ctr_()                                        \
     {                                                                          \
-        if (_module_init())                                                    \
+        if (module_init_())                                                    \
             log_debug("[%4d] INIT: %s", DICE_MODULE_PRIO, __FILE__);           \
     }                                                                          \
     PS_SUBSCRIBE(CHAIN_CONTROL, EVENT_DICE_INIT, {                             \
-        if (_module_init())                                                    \
+        if (module_init_())                                                    \
             log_debug("[%4d] INIT! %s", DICE_MODULE_PRIO, __FILE__);           \
     })
 
 
 #define DICE_MODULE_FINI(CODE)                                                 \
-    static DICE_DTOR void _module_fini()                                       \
+    static DICE_DTOR void module_fini_()                                       \
     {                                                                          \
         if (1) {                                                               \
             CODE                                                               \
@@ -77,7 +77,7 @@
 #define PS_SUBSCRIBE_SLOT(CHAIN, TYPE, SLOT, HANDLER)                          \
     PS_HANDLER_DECL(CHAIN, TYPE, SLOT, HANDLER)                                \
     PS_DISPATCH_DECL(CHAIN, TYPE, SLOT)                                        \
-    static void DICE_CTOR _ps_subscribe_##CHAIN##_##TYPE(void)                 \
+    static void DICE_CTOR ps_subscribe_##CHAIN##_##TYPE##_(void)               \
     {                                                                          \
         int err =                                                              \
             ps_subscribe(CHAIN, TYPE, PS_HANDLER(CHAIN, TYPE, SLOT), SLOT);    \

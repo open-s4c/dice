@@ -63,7 +63,8 @@ struct self {
 struct tls_item {
     uintptr_t key;
     struct rbnode node;
-    char data[];
+    struct tls_dtor dtor;
+    void *ptr;
 };
 
 static void cleanup_threads_(pthread_t id);
@@ -89,33 +90,40 @@ tls_init_(struct self *self)
 DICE_HIDE void
 tls_fini_(struct self *self)
 {
-    // TODO: iterate over all items and mempool_free them
-    (void)self;
+    while (self->tls.root) {
+        struct rbnode *node = self->tls.root;
+        rbtree_remove(&self->tls, node);
+
+        struct tls_item *item = container_of(node, struct tls_item, node);
+        assert(item->ptr);
+        if (item->dtor.free)
+            item->dtor.free(item->dtor.arg, item->ptr);
+        mempool_free(item);
+    }
 }
 
 // -----------------------------------------------------------------------------
 // public interface
 // -----------------------------------------------------------------------------
 
-DICE_HIDE_IF thread_id
-self_id(metadata_t *md)
+DICE_HIDE thread_id
+self_id_(metadata_t *md)
 {
     struct self *self = (struct self *)md;
     return self ? self->tid : NO_THREAD;
 }
 
-DICE_HIDE_IF bool
-self_retired(metadata_t *md)
+DICE_HIDE bool
+self_retired_(metadata_t *md)
 {
     struct self *self = (struct self *)md;
     return self ? self->retired : false;
 }
 
-DICE_HIDE_IF void *
-self_tls(metadata_t *md, const void *global, size_t size)
+DICE_HIDE void *
+self_tls_get_(metadata_t *md, uintptr_t item_key)
 {
-    uintptr_t item_key = (uintptr_t)global;
-    struct self *self  = (struct self *)md;
+    struct self *self = (struct self *)md;
 
     // should never be called before the self initialization
     assert(self != NULL);
@@ -123,18 +131,116 @@ self_tls(metadata_t *md, const void *global, size_t size)
     struct tls_item key = {.key = item_key};
     struct rbnode *item = rbtree_find(&self->tls, &key.node);
 
-    if (item) {
-        struct tls_item *i = container_of(item, struct tls_item, node);
-        return i->data;
-    }
-
-    struct tls_item *i = mempool_alloc(size + sizeof(struct tls_item));
-    if (i == NULL)
+    if (!item)
         return NULL;
-    memset(&i->data, 0, size);
-    i->key = item_key;
-    rbtree_insert(&self->tls, &i->node);
-    return i->data;
+
+    struct tls_item *i = container_of(item, struct tls_item, node);
+    return i->ptr;
+}
+
+DICE_HIDE void
+self_tls_set_(metadata_t *md, uintptr_t item_key, void *ptr,
+              struct tls_dtor dtor)
+{
+    struct self *self = (struct self *)md;
+
+    // should never be called before the self initialization
+    assert(self != NULL);
+
+    struct tls_item key = {.key = item_key};
+    struct rbnode *item = rbtree_find(&self->tls, &key.node);
+    struct tls_item *i  = NULL;
+
+    if (ptr == NULL && item == NULL)
+        return; // nothing to do
+
+    if (item) {
+        i = container_of(item, struct tls_item, node);
+        if (i->dtor.free)
+            i->dtor.free(i->dtor.arg, i->ptr);
+
+        // remove node if ptr == NULL
+        if (ptr == NULL) {
+            rbtree_remove(&self->tls, &key.node);
+            mempool_free(i);
+            return;
+        }
+
+        // we can reuse the same node (already in the tree)
+        i->ptr  = ptr;
+        i->dtor = dtor;
+    } else {
+        i = mempool_alloc(sizeof(struct tls_item));
+        if (i == NULL)
+            log_fatal("mempool out of memory");
+
+        memset(i, 0, sizeof(struct tls_item));
+        i->key  = item_key;
+        i->ptr  = ptr;
+        i->dtor = dtor;
+        rbtree_insert(&self->tls, &i->node);
+    }
+}
+
+static void
+mempool_free_dtor_(void *arg, void *ptr)
+{
+    (void)arg;
+    mempool_free(ptr);
+}
+
+DICE_HIDE void *
+self_tls_(metadata_t *md, const void *global, size_t size)
+{
+    uintptr_t item_key = (uintptr_t)global;
+
+    void *data = self_tls_get(md, item_key);
+    if (data)
+        return data;
+
+    void *ptr = mempool_alloc(size);
+    if (ptr == NULL)
+        log_fatal("mempool out of memory");
+    memset(ptr, 0, size);
+
+    self_tls_set(md, item_key, ptr,
+                 (struct tls_dtor){
+                     .free = mempool_free_dtor_,
+                     .arg  = NULL,
+                 });
+
+    return ptr;
+}
+
+DICE_WEAK thread_id
+self_id(metadata_t *md)
+{
+    return self_id_(md);
+}
+
+DICE_WEAK bool
+self_retired(metadata_t *md)
+{
+    return self_retired_(md);
+}
+
+DICE_WEAK void *
+self_tls_get(metadata_t *md, uintptr_t item_key)
+{
+    return self_tls_get_(md, item_key);
+}
+
+DICE_WEAK void
+self_tls_set(metadata_t *md, uintptr_t item_key, void *ptr,
+             struct tls_dtor dtor)
+{
+    self_tls_set_(md, item_key, ptr, dtor);
+}
+
+DICE_WEAK void *
+self_tls(metadata_t *md, const void *global, size_t size)
+{
+    return self_tls_(md, global, size);
 }
 
 // -----------------------------------------------------------------------------
@@ -214,8 +320,8 @@ thread_dead_(struct self *self)
     // work most of the time. However, it is not perfect. It could give
     // false positives if the thread ID is reused by a new thread.
     //
-    // In Linux, it causes the application to crash with segmentation fault. So
-    // there we use the gettid and kill.
+    // In Linux, it causes the application to crash with segmentation fault.
+    // So there we use the gettid and kill.
     return pthread_kill(self->pid, 0) == ESRCH;
 }
 #endif // !linux
@@ -238,7 +344,11 @@ static void
 destroy_self_(struct self *self)
 {
     tls_fini_(self);
-    mempool_free(self);
+
+    // The main thread might still intercept after the module has terminated.
+    // So, we keep the self object allocated to avoid issues.
+    if (self->tid != MAIN_THREAD)
+        mempool_free(self);
 }
 
 
@@ -253,20 +363,20 @@ init_threads_(void)
 static struct self *
 get_self_(void)
 {
-    // When a thread is created, it won't find its self object anywhere and this
-    // function will return NULL. A new self object will be created and stored
-    // in the thread specific area (here called cache).
+    // When a thread is created, it won't find its self object anywhere and
+    // this function will return NULL. A new self object will be created and
+    // stored in the thread specific area (here called cache).
 
-    // When a thread is retired -- ie, between  THREAD_EXIT and SELF_FINI -- its
-    // self object is put into the retired stack. The object is still kept in
-    // the thread_cache.
+    // When a thread is retired -- ie, between  THREAD_EXIT and SELF_FINI --
+    // its self object is put into the retired stack. The object is still
+    // kept in the thread_cache.
 
-    // So when getting self an existing self, we first look in the cache. If the
-    // pthread implementation does not zero the thread specific area on exit,
-    // the thread will find its object there until the end of the thread's
-    // lifetime. However, if the pthread implementation zeros the thread
-    // specific area on exit, we need to look for the thread in the retired
-    // stack.
+    // So when getting self an existing self, we first look in the cache. If
+    // the pthread implementation does not zero the thread specific area on
+    // exit, the thread will find its object there until the end of the
+    // thread's lifetime. However, if the pthread implementation zeros the
+    // thread specific area on exit, we need to look for the thread in the
+    // retired stack.
 
     pthread_t pid     = pthread_self();
     struct self *self = thread_cache_get_();

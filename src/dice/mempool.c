@@ -86,8 +86,8 @@ DICE_MODULE_INIT({
     caslock_release(&mp_.lock);
 })
 
-DICE_HIDE_IF void *
-mempool_alloc(size_t n)
+DICE_HIDE void *
+mempool_alloc_(size_t n)
 {
     mempool_t *mp   = &mp_;
     entry_t *e      = NULL;
@@ -122,8 +122,14 @@ out:
     return e ? e->data : NULL;
 }
 
-DICE_HIDE_IF void *
-mempool_realloc(void *ptr, size_t size)
+DICE_WEAK void *
+mempool_alloc(size_t n)
+{
+    return mempool_alloc_(n);
+}
+
+DICE_HIDE void *
+mempool_realloc_(void *ptr, size_t size)
 {
     void *p = mempool_alloc(size);
     if (!p || !ptr)
@@ -135,8 +141,14 @@ mempool_realloc(void *ptr, size_t size)
     return p;
 }
 
-DICE_HIDE_IF void
-mempool_free(void *ptr)
+DICE_WEAK void *
+mempool_realloc(void *ptr, size_t size)
+{
+    return mempool_realloc_(ptr, size);
+}
+
+DICE_HIDE void
+mempool_free_(void *ptr)
 {
     mempool_t *mp = &mp_;
     assert(ptr);
@@ -153,4 +165,10 @@ mempool_free(void *ptr)
     e->next = *stack;
     *stack  = e;
     caslock_release(&mp->lock);
+}
+
+DICE_WEAK void
+mempool_free(void *ptr)
+{
+    return mempool_free_(ptr);
 }

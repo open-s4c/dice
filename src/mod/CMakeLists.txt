@@ -1,5 +1,5 @@
-# Copyright (C) Huawei Technologies Co., Ltd. 2025. All rights reserved.
-# SPDX-License-Identifier: 0BSD
+# Copyright (C) 2025 Huawei Technologies Co., Ltd.                             #
+# SPDX-License-Identifier: 0BSD                                                #
 
 add_custom_target(
   expand-tsan.c

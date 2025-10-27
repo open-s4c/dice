@@ -117,6 +117,14 @@ RUN.box=	$(TIMED) -r $(REPEAT) -- $(DICECMD) \
 			$(RUNCMD)
 PRO.box=	$(PARSE)
 
+TARGET+=	cbonly
+DEP.cbonly=	$(DEPBUILD)
+DIR.cbonly=	$(DIR.sanitized)
+RUN.cbonly=	$(TIMED) -r $(REPEAT) -- $(DICECMD) \
+			-with $(BUNDLE_DIR)/libdice-bundle-cbonly$(SOEXT) \
+			$(RUNCMD)
+PRO.cbonly=	$(PARSE)
+
 # ------------------------------------------------------------------------------
 BENCHMK= ../bench.mk
 include $(BENCHMK)

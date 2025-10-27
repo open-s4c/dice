@@ -1,5 +1,5 @@
-# Copyright (C) Huawei Technologies Co., Ltd. 2025. All rights reserved.
-# SPDX-License-Identifier: 0BSD
+# Copyright (C) 2025 Huawei Technologies Co., Ltd.                             #
+# SPDX-License-Identifier: 0BSD                                                #
 
 set(INTERPOSED_IN ${CMAKE_CURRENT_SOURCE_DIR}/interposed.h.in)
 
@@ -78,10 +78,10 @@ endforeach()
 foreach(MOD ${MODS})
   set(TARGET ${MOD}_test)
   add_executable(${TARGET} ${CMAKE_CURRENT_SOURCE_DIR}/${TARGET}.c)
-  add_test(NAME ${TARGET} COMMAND ${TARGET})
-  target_link_libraries(${TARGET} PRIVATE dice.h dice.o tsano pthread)
+  target_link_libraries(${TARGET} PRIVATE dice.h dice tsano pthread)
   target_link_libraries(${TARGET} PRIVATE dice-${MOD}_testing.o)
-  add_dependencies(${TARGET} ${MOD}-expand)
+
+  add_test(NAME ${TARGET} COMMAND ${DICE_SCRIPT} ./${TARGET})
 
   if(${ENABLE_SANITIZER})
     target_compile_options(${TARGET} PRIVATE ${LIBSAN_C_FLAGS})

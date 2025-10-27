@@ -29,6 +29,24 @@ bool self_retired(metadata_t *self);
  */
 void *self_tls(metadata_t *self, const void *global, size_t size);
 
+/* Get pointer mapped to key if any.
+ *
+ * If no memory area is mapped to key, return NULL.
+ */
+void *self_tls_get(metadata_t *self, uintptr_t key);
+
+struct tls_dtor {
+    void (*free)(void *arg, void *ptr);
+    void *arg;
+};
+
+/* Set key to map to pointer.
+ *
+ * If no memory area is mapped to key, return NULL.
+ */
+void self_tls_set(metadata_t *self, uintptr_t key, void *ptr,
+                  struct tls_dtor dtor);
+
 
 /* Helper macro that gets or creates a memory area with the size of the type
  * pointed by global_ptr.

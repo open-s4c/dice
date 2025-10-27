@@ -1,7 +1,3 @@
-/*
- * Copyright (C) 2025 Huawei Technologies Co., Ltd.
- * SPDX-License-Identifier: 0BSD
- */
 #include <dice/compiler.h>
 #include <dice/rbtree.h>
 
