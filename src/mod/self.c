@@ -42,7 +42,6 @@
 #include <dice/pubsub.h>
 #include <dice/rbtree.h>
 #include <dice/self.h>
-#include <dice/thread_id.h>
 #include <vsync/atomic.h>
 #include <vsync/spinlock/caslock.h>
 #include <vsync/stack/quack.h>
