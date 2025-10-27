@@ -110,15 +110,40 @@ int ps_subscribe(chain_id chain, type_id type, ps_callback_f cb, int prio);
  */
 #define EVENT_PAYLOAD(var) (__typeof(var))event
 
+/* Capture the caller program counter when logging or building stack traces.
+ * Interceptors use this helper to tag events with the issuing site. */
 #define INTERPOSE_PC                                                           \
     (__builtin_extract_return_addr(__builtin_return_address(0)))
 
-
+/* ps_register_chain registers a chain ID with a string name. */
 void ps_register_chain(chain_id, const char *name);
+
+/* ps_register_type registers an event type ID with a string name. */
 void ps_register_type(type_id, const char *name);
+
+/* ps_chain_str returns the string name of a chain ID.
+ *
+ * If no name is set for the ID, it returns the ID value converted as string.
+ */
 const char *ps_chain_str(chain_id);
+
+/* ps_type_str returns the string name of an event type ID.
+ *
+ * If no name is set for the ID, it returns the ID value converted as string.
+ */
 const char *ps_type_str(type_id);
+
+
+/* ps_chain_lookup searches for the first ID that has the given name.
+ *
+ * Returns MAX_CHAINS if no ID is found.
+ */
 chain_id ps_chain_lookup(const char *name);
+
+/* ps_type_lookup searches for the first ID that has the given name.
+ *
+ * Returns MAX_TYPES if no ID is found.
+ */
 type_id ps_type_lookup(const char *name);
 
 #endif /* DICE_PUBSUB_H */

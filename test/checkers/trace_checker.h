@@ -10,7 +10,6 @@
 #include <stdint.h>
 
 #include <dice/pubsub.h>
-#include <dice/thread_id.h>
 
 #define CHECK_FUNC __attribute__((no_sanitize("thread")))
 

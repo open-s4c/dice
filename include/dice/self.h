@@ -15,11 +15,14 @@
 #include <dice/chains/capture.h>
 #include <dice/events/self.h>
 #include <dice/pubsub.h>
-#include <dice/thread_id.h>
 
-/* Get unique thread id */
+/* Returns the Dice-assigned thread identifier for the current handler
+ * invocation. IDs start at 1; `NO_THREAD` is reserved for representing no
+ * thread and should never be returned. */
 thread_id self_id(metadata_t *self);
 
+/* True when the backing TLS object has been retired (for example, after a
+ * thread exit). */
 bool self_retired(metadata_t *self);
 
 /* Get or allocate a memory area in TLS.
@@ -42,7 +45,8 @@ struct tls_dtor {
 
 /* Set key to map to pointer.
  *
- * If no memory area is mapped to key, return NULL.
+ * Replaces any existing mapping and installs an optional destructor that runs
+ * when the TLS slot is reclaimed.
  */
 void self_tls_set(metadata_t *self, uintptr_t key, void *ptr,
                   struct tls_dtor dtor);

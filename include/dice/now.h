@@ -16,6 +16,7 @@ typedef uint64_t nanosec_t;
 #define NOW_MILLISECOND (1000 * NOW_MICROSECOND)
 #define NOW_SECOND      (1000 * NOW_MILLISECOND)
 
+/* Returns a monotonic timestamp in nanoseconds. */
 static inline nanosec_t
 now(void)
 {
@@ -33,12 +34,14 @@ now(void)
     return result_ns;
 }
 
+/* Convert a nanosecond duration to seconds (floating point). */
 static inline double
 in_sec(nanosec_t ts)
 {
     return ((double)ts) / NOW_SECOND;
 }
 
+/* Convert a nanosecond duration to struct timespec. */
 static inline struct timespec
 to_timespec(nanosec_t ts)
 {
