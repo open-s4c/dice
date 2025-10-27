@@ -23,6 +23,9 @@
 
 
 #ifndef DICE_MODULE_PRIO
+    /* Subscription slot for the current translation unit. Lower values run
+     * first. Builtin modules reserve priorities 0..MAX_BUILTIN_SLOTS-1; plugin
+     * modules should stay above that range. */
     #define DICE_MODULE_PRIO 9999
 #endif
 
@@ -30,9 +33,12 @@
 #if DICE_MODULE_PRIO < 16
     #include <dice/dispatch.h>
 #else
-    #define PS_DISPATCH_DECL(CHAIN, TYPE, SLOT)
+    #define PS_DISPATCH_DEF(CHAIN, TYPE, SLOT)
 #endif
 
+/* DICE_MODULE_INIT wraps the constructor logic of a module. The callback runs
+ * exactly once even if the module is linked multiple times (e.g., builtin plus
+ * plugin builds). */
 #define DICE_MODULE_INIT(CODE)                                                 \
     static bool module_init_()                                                 \
     {                                                                          \
@@ -57,6 +63,8 @@
     })
 
 
+/* DICE_MODULE_FINI marks a destructor hook. Use it for cleanup that must run
+ * when the module is unloaded. */
 #define DICE_MODULE_FINI(CODE)                                                 \
     static DICE_DTOR void module_fini_()                                       \
     {                                                                          \
@@ -81,8 +89,8 @@
     PS_SUBSCRIBE_SLOT(CHAIN, #CHAIN, TYPE, #TYPE, DICE_MODULE_PRIO, HANDLER)
 
 #define PS_SUBSCRIBE_SLOT(CHAIN, CNAME, TYPE, TNAME, SLOT, HANDLER)            \
-    PS_HANDLER_DECL(CHAIN, TYPE, SLOT, HANDLER)                                \
-    PS_DISPATCH_DECL(CHAIN, TYPE, SLOT)                                        \
+    PS_HANDLER_DEF(CHAIN, TYPE, SLOT, HANDLER)                                 \
+    PS_DISPATCH_DEF(CHAIN, TYPE, SLOT)                                         \
     static void DICE_CTOR ps_subscribe_##CHAIN##_##TYPE##_(void)               \
     {                                                                          \
         ps_register_chain(CHAIN, CNAME);                                       \

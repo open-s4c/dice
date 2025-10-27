@@ -42,7 +42,6 @@
 #include <dice/pubsub.h>
 #include <dice/rbtree.h>
 #include <dice/self.h>
-#include <dice/thread_id.h>
 #include <vsync/atomic.h>
 #include <vsync/spinlock/caslock.h>
 #include <vsync/stack/quack.h>
@@ -344,11 +343,15 @@ static void
 destroy_self_(struct self *self)
 {
     tls_fini_(self);
+<<<<<<< HEAD
 
     // The main thread might still intercept after the module has terminated.
     // So, we keep the self object allocated to avoid issues.
     if (self->tid != MAIN_THREAD)
         mempool_free(self);
+=======
+    mempool_free(self);
+>>>>>>> ffd8916 (refactor: Change static/hidden prefix->suffix)
 }
 
 
@@ -498,7 +501,11 @@ get_or_create_self_(bool publish)
     return self;
 }
 
+<<<<<<< HEAD
 PS_SUBSCRIBE(INTERCEPT_EVENT, ANY_EVENT, {
+=======
+PS_SUBSCRIBE(INTERCEPT_EVENT, ANY_TYPE, {
+>>>>>>> ffd8916 (refactor: Change static/hidden prefix->suffix)
     return self_handle_event_(chain, type, event, get_or_create_self_(true));
 })
 PS_SUBSCRIBE(INTERCEPT_BEFORE, ANY_EVENT, {
@@ -506,7 +513,11 @@ PS_SUBSCRIBE(INTERCEPT_BEFORE, ANY_EVENT, {
         cleanup_threads_(0);
     return self_handle_before_(chain, type, event, get_or_create_self_(true));
 })
+<<<<<<< HEAD
 PS_SUBSCRIBE(INTERCEPT_AFTER, ANY_EVENT, {
+=======
+PS_SUBSCRIBE(INTERCEPT_AFTER, ANY_TYPE, {
+>>>>>>> ffd8916 (refactor: Change static/hidden prefix->suffix)
     return self_handle_after_(chain, type, event, get_or_create_self_(true));
 })
 

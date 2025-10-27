@@ -149,7 +149,11 @@ ps_subscribe_(chain_id chain, type_id type, ps_callback_f cb, int prio)
         return PS_OK;
     if (chain > MAX_CHAINS)
         return PS_INVALID;
+<<<<<<< HEAD
     if (type != ANY_EVENT)
+=======
+    if (type != ANY_TYPE)
+>>>>>>> ffd8916 (refactor: Change static/hidden prefix->suffix)
         return ps_subscribe_type_(chain, type, cb, prio, false);
 
     int err;
@@ -171,8 +175,13 @@ ps_subscribe(chain_id chain, type_id type, ps_callback_f cb, int prio)
 // -----------------------------------------------------------------------------
 
 static enum ps_err
+<<<<<<< HEAD
 ps_callback_(const chain_id chain, const type_id type, void *event,
              metadata_t *md)
+=======
+ps_publish_(const chain_id chain, const type_id type, void *event,
+            metadata_t *md)
+>>>>>>> ffd8916 (refactor: Change static/hidden prefix->suffix)
 {
     if (unlikely(chain >= MAX_CHAINS))
         return PS_INVALID;
@@ -221,5 +230,9 @@ ps_publish(const chain_id chain, const type_id type, void *event,
     if (likely(err == PS_DROP_EVENT))
         return PS_DROP_EVENT;
 
+<<<<<<< HEAD
     return ps_callback_(chain, type, event, md);
+=======
+    return ps_publish_(chain, type, event, md);
+>>>>>>> ffd8916 (refactor: Change static/hidden prefix->suffix)
 }

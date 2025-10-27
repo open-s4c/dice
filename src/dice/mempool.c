@@ -144,12 +144,15 @@ mempool_realloc_(void *ptr, size_t size)
 DICE_WEAK void *
 mempool_realloc(void *ptr, size_t size)
 {
+<<<<<<< HEAD
     return mempool_realloc_(ptr, size);
 }
 
 DICE_HIDE void
 mempool_free_(void *ptr)
 {
+=======
+>>>>>>> ffd8916 (refactor: Change static/hidden prefix->suffix)
     mempool_t *mp = &mp_;
     assert(ptr);
     entry_t *e      = (entry_t *)ptr - 1;

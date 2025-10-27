@@ -81,6 +81,7 @@ add_library(dice SHARED ${SRCS})
 target_link_libraries(dice PUBLIC dice.h pthread)
 install(TARGETS dice DESTINATION lib)
 
+<<<<<<< HEAD
 # dice.o - OBJECT library providing interface for plugin modules and builtin
 # modules. Only contains the core components mempool, pubsub, and dispatch, but
 # can be linked to other modules. See the dispatcher generation above for
@@ -108,6 +109,10 @@ target_compile_options(dice-cbonly.o PRIVATE -fPIC)
 
 if(${DICE_COVERAGE})
   # do not involve dice-box in the coverage metrics
+=======
+if(${DICE_COVERAGE})
+  # do not involve dice-dispatch/dice-box in the coverage metrics
+>>>>>>> e16ce3b (cmake: Add option to measure test coverage)
   set(TARGETS dice.o dice)
   foreach(TARGET ${TARGETS})
     target_compile_options(${TARGET} PRIVATE --coverage)

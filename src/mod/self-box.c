@@ -4,7 +4,6 @@
  */
 
 #include <dice/self.h>
-#include <dice/thread_id.h>
 #include <dice/types.h>
 
 thread_id self_id_(metadata_t *md);

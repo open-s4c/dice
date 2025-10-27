@@ -1,3 +1,10 @@
+<<<<<<< HEAD
+=======
+/*
+ * Copyright (C) 2025 Huawei Technologies Co., Ltd.
+ * SPDX-License-Identifier: 0BSD
+ */
+>>>>>>> ffd8916 (refactor: Change static/hidden prefix->suffix)
 #include <dice/compiler.h>
 #include <dice/rbtree.h>
 
