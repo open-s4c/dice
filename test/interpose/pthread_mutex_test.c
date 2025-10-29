@@ -6,7 +6,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define DICE_TEST_INTERPOSE
 #include <dice/chains/intercept.h>
 #include <dice/ensure.h>
 #include <dice/interpose.h>
@@ -14,31 +13,25 @@
 #include <dice/events/pthread.h>
 
 static void *symbol;
+static bool called;
 /* we need to declare this as noinline, otherwise the optimization of the
  * compiler gets rid of the symbol. */
 static __attribute__((noinline)) void
 enable(void *foo)
 {
     symbol = foo;
+    called = false;
 }
 static __attribute__((noinline)) void
 disable(void)
 {
     symbol = NULL;
+    called = false;
 }
 static inline bool
 enabled(void)
 {
     return symbol != NULL;
-}
-
-void *
-real_sym(const char *name, const char *ver)
-{
-    (void)ver;
-    if (!enabled())
-        return _real_sym(name, ver);
-    return symbol;
 }
 
 /* Expects struct to match this:
@@ -79,33 +72,65 @@ struct pthread_mutex_timedlock_event E_pthread_mutex_timedlock;
 int
 fake_pthread_mutex_lock(pthread_mutex_t *mutex)
 {
-    /* check that every argument is as expected */
+    /* check that every argument is as expected (unless should be skipped). */
     ensure(mutex == E_pthread_mutex_lock.mutex);
+
+    /* skipped arguments should be void-cast to silent compiler warnings. */
+
+
+    /* mark as called*/
+    ensure(!called);
+    called = true;
+
     /* return expected value */
  return E_pthread_mutex_lock.ret;
 }
 int
 fake_pthread_mutex_unlock(pthread_mutex_t *mutex)
 {
-    /* check that every argument is as expected */
+    /* check that every argument is as expected (unless should be skipped). */
     ensure(mutex == E_pthread_mutex_unlock.mutex);
+
+    /* skipped arguments should be void-cast to silent compiler warnings. */
+
+
+    /* mark as called*/
+    ensure(!called);
+    called = true;
+
     /* return expected value */
  return E_pthread_mutex_unlock.ret;
 }
 int
 fake_pthread_mutex_trylock(pthread_mutex_t *mutex)
 {
-    /* check that every argument is as expected */
+    /* check that every argument is as expected (unless should be skipped). */
     ensure(mutex == E_pthread_mutex_trylock.mutex);
+
+    /* skipped arguments should be void-cast to silent compiler warnings. */
+
+
+    /* mark as called*/
+    ensure(!called);
+    called = true;
+
     /* return expected value */
  return E_pthread_mutex_trylock.ret;
 }
 int
 fake_pthread_mutex_timedlock(pthread_mutex_t *mutex, const struct timespec *timeout)
 {
-    /* check that every argument is as expected */
+    /* check that every argument is as expected (unless should be skipped). */
     ensure(mutex == E_pthread_mutex_timedlock.mutex);
     ensure(timeout == E_pthread_mutex_timedlock.timeout);
+
+    /* skipped arguments should be void-cast to silent compiler warnings. */
+
+
+    /* mark as called*/
+    ensure(!called);
+    called = true;
+
     /* return expected value */
  return E_pthread_mutex_timedlock.ret;
 }
@@ -118,6 +143,10 @@ PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_PTHREAD_MUTEX_LOCK, {
         return PS_STOP_CHAIN;
     struct pthread_mutex_lock_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E_pthread_mutex_lock, mutex);
+
+    // must be enabled. Let's
+    ensure(enabled());
+    ev->func = fake_pthread_mutex_lock;
 })
 
 PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_PTHREAD_MUTEX_LOCK, {
@@ -132,6 +161,10 @@ PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_PTHREAD_MUTEX_UNLOCK, {
         return PS_STOP_CHAIN;
     struct pthread_mutex_unlock_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E_pthread_mutex_unlock, mutex);
+
+    // must be enabled. Let's
+    ensure(enabled());
+    ev->func = fake_pthread_mutex_unlock;
 })
 
 PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_PTHREAD_MUTEX_UNLOCK, {
@@ -146,6 +179,10 @@ PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_PTHREAD_MUTEX_TRYLOCK, {
         return PS_STOP_CHAIN;
     struct pthread_mutex_trylock_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E_pthread_mutex_trylock, mutex);
+
+    // must be enabled. Let's
+    ensure(enabled());
+    ev->func = fake_pthread_mutex_trylock;
 })
 
 PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_PTHREAD_MUTEX_TRYLOCK, {
@@ -161,6 +198,10 @@ PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_PTHREAD_MUTEX_TIMEDLOCK, {
     struct pthread_mutex_timedlock_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E_pthread_mutex_timedlock, mutex);
     ASSERT_FIELD_EQ(&E_pthread_mutex_timedlock, timeout);
+
+    // must be enabled. Let's
+    ensure(enabled());
+    ev->func = fake_pthread_mutex_timedlock;
 })
 
 PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_PTHREAD_MUTEX_TIMEDLOCK, {
@@ -194,6 +235,7 @@ test_pthread_mutex_lock(void)
                                  pthread_mutex_lock(                                    //
                                      E_pthread_mutex_lock.mutex                                  );
  ensure(ret == E_pthread_mutex_lock.ret);
+    ensure(called);
     disable();
 }
 static void
@@ -207,6 +249,7 @@ test_pthread_mutex_unlock(void)
                                  pthread_mutex_unlock(                                    //
                                      E_pthread_mutex_unlock.mutex                                  );
  ensure(ret == E_pthread_mutex_unlock.ret);
+    ensure(called);
     disable();
 }
 static void
@@ -220,6 +263,7 @@ test_pthread_mutex_trylock(void)
                                  pthread_mutex_trylock(                                    //
                                      E_pthread_mutex_trylock.mutex                                  );
  ensure(ret == E_pthread_mutex_trylock.ret);
+    ensure(called);
     disable();
 }
 static void
@@ -234,6 +278,7 @@ test_pthread_mutex_timedlock(void)
                                      E_pthread_mutex_timedlock.mutex,                           //
                                      E_pthread_mutex_timedlock.timeout                                  );
  ensure(ret == E_pthread_mutex_timedlock.ret);
+    ensure(called);
     disable();
 }
 

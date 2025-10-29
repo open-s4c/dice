@@ -1,0 +1,14 @@
+$__dl; // ----------------------------------------------------------------------
+$__dl; // pthread_create
+$__dl; // ----------------------------------------------------------------------
+$__dl; // we have to ignore the run and arg parameters of pthread_create because
+$__dl; // they get overwritten in our interceptor.
+$__map(UNLESS_pthread_create_run, skip);
+$__map(UNLESS_pthread_create_arg, skip);
+$__map(WHEN_pthread_create_run, dl);
+$__map(WHEN_pthread_create_arg, dl);
+$__dl; // ----------------------------------------------------------------------
+$__dl; // Fallbacks
+$__dl; // ----------------------------------------------------------------------
+$__map(UNLESS, dl);
+$__map(WHEN, skip);

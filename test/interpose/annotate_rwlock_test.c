@@ -6,7 +6,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define DICE_TEST_INTERPOSE
 #include <dice/chains/intercept.h>
 #include <dice/ensure.h>
 #include <dice/interpose.h>
@@ -14,31 +13,25 @@
 #include <dice/events/annotate_rwlock.h>
 
 static void *symbol;
+static bool called;
 /* we need to declare this as noinline, otherwise the optimization of the
  * compiler gets rid of the symbol. */
 static __attribute__((noinline)) void
 enable(void *foo)
 {
     symbol = foo;
+    called = false;
 }
 static __attribute__((noinline)) void
 disable(void)
 {
     symbol = NULL;
+    called = false;
 }
 static inline bool
 enabled(void)
 {
     return symbol != NULL;
-}
-
-void *
-real_sym(const char *name, const char *ver)
-{
-    (void)ver;
-    if (!enabled())
-        return _real_sym(name, ver);
-    return symbol;
 }
 
 /* Expects struct to match this:
@@ -88,6 +81,11 @@ fake_AnnotateRWLockCreate(const char *file, int line, const volatile void *lock)
     ensure(file == E_AnnotateRWLockCreate.file);
     ensure(line == E_AnnotateRWLockCreate.line);
     ensure(lock == E_AnnotateRWLockCreate.lock);
+
+    /* mark as called*/
+    assert(!called);
+    called = true;
+
     /* return expected value */
 }
 void
@@ -97,6 +95,11 @@ fake_AnnotateRWLockDestroy(const char *file, int line, const volatile void *lock
     ensure(file == E_AnnotateRWLockDestroy.file);
     ensure(line == E_AnnotateRWLockDestroy.line);
     ensure(lock == E_AnnotateRWLockDestroy.lock);
+
+    /* mark as called*/
+    assert(!called);
+    called = true;
+
     /* return expected value */
 }
 void
@@ -107,6 +110,11 @@ fake_AnnotateRWLockAcquired(const char *file, int line, const volatile void *loc
     ensure(line == E_AnnotateRWLockAcquired.line);
     ensure(lock == E_AnnotateRWLockAcquired.lock);
     ensure(is_w == E_AnnotateRWLockAcquired.is_w);
+
+    /* mark as called*/
+    assert(!called);
+    called = true;
+
     /* return expected value */
 }
 void
@@ -117,6 +125,11 @@ fake_AnnotateRWLockReleased(const char *file, int line, const volatile void *loc
     ensure(line == E_AnnotateRWLockReleased.line);
     ensure(lock == E_AnnotateRWLockReleased.lock);
     ensure(is_w == E_AnnotateRWLockReleased.is_w);
+
+    /* mark as called*/
+    assert(!called);
+    called = true;
+
     /* return expected value */
 }
 
@@ -130,6 +143,10 @@ PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_ANNOTATERWLOCKCREATE, {
     ASSERT_FIELD_EQ(&E_AnnotateRWLockCreate, file);
     ASSERT_FIELD_EQ(&E_AnnotateRWLockCreate, line);
     ASSERT_FIELD_EQ(&E_AnnotateRWLockCreate, lock);
+
+    // must be enabled. Let's
+    assert(enabled());
+    ev->func = fake_AnnotateRWLockCreate;
 })
 
 PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_ANNOTATERWLOCKCREATE, {
@@ -147,6 +164,10 @@ PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_ANNOTATERWLOCKDESTROY, {
     ASSERT_FIELD_EQ(&E_AnnotateRWLockDestroy, file);
     ASSERT_FIELD_EQ(&E_AnnotateRWLockDestroy, line);
     ASSERT_FIELD_EQ(&E_AnnotateRWLockDestroy, lock);
+
+    // must be enabled. Let's
+    assert(enabled());
+    ev->func = fake_AnnotateRWLockDestroy;
 })
 
 PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_ANNOTATERWLOCKDESTROY, {
@@ -165,6 +186,10 @@ PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_ANNOTATERWLOCKACQUIRED, {
     ASSERT_FIELD_EQ(&E_AnnotateRWLockAcquired, line);
     ASSERT_FIELD_EQ(&E_AnnotateRWLockAcquired, lock);
     ASSERT_FIELD_EQ(&E_AnnotateRWLockAcquired, is_w);
+
+    // must be enabled. Let's
+    assert(enabled());
+    ev->func = fake_AnnotateRWLockAcquired;
 })
 
 PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_ANNOTATERWLOCKACQUIRED, {
@@ -184,6 +209,10 @@ PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_ANNOTATERWLOCKRELEASED, {
     ASSERT_FIELD_EQ(&E_AnnotateRWLockReleased, line);
     ASSERT_FIELD_EQ(&E_AnnotateRWLockReleased, lock);
     ASSERT_FIELD_EQ(&E_AnnotateRWLockReleased, is_w);
+
+    // must be enabled. Let's
+    assert(enabled());
+    ev->func = fake_AnnotateRWLockReleased;
 })
 
 PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_ANNOTATERWLOCKRELEASED, {
@@ -218,6 +247,7 @@ test_AnnotateRWLockCreate(void)
                                      E_AnnotateRWLockCreate.file,                           //
                                      E_AnnotateRWLockCreate.line,                           //
                                      E_AnnotateRWLockCreate.lock                                  );
+    assert(called);
     disable();
 }
 static void
@@ -231,6 +261,7 @@ test_AnnotateRWLockDestroy(void)
                                      E_AnnotateRWLockDestroy.file,                           //
                                      E_AnnotateRWLockDestroy.line,                           //
                                      E_AnnotateRWLockDestroy.lock                                  );
+    assert(called);
     disable();
 }
 static void
@@ -245,6 +276,7 @@ test_AnnotateRWLockAcquired(void)
                                      E_AnnotateRWLockAcquired.line,                           //
                                      E_AnnotateRWLockAcquired.lock,                           //
                                      E_AnnotateRWLockAcquired.is_w                                  );
+    assert(called);
     disable();
 }
 static void
@@ -259,6 +291,7 @@ test_AnnotateRWLockReleased(void)
                                      E_AnnotateRWLockReleased.line,                           //
                                      E_AnnotateRWLockReleased.lock,                           //
                                      E_AnnotateRWLockReleased.is_w                                  );
+    assert(called);
     disable();
 }
 

@@ -6,7 +6,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define DICE_TEST_INTERPOSE
 #include <dice/chains/intercept.h>
 #include <dice/ensure.h>
 #include <dice/interpose.h>
@@ -14,31 +13,25 @@
 #include <dice/events/mman.h>
 
 static void *symbol;
+static bool called;
 /* we need to declare this as noinline, otherwise the optimization of the
  * compiler gets rid of the symbol. */
 static __attribute__((noinline)) void
 enable(void *foo)
 {
     symbol = foo;
+    called = false;
 }
 static __attribute__((noinline)) void
 disable(void)
 {
     symbol = NULL;
+    called = false;
 }
 static inline bool
 enabled(void)
 {
     return symbol != NULL;
-}
-
-void *
-real_sym(const char *name, const char *ver)
-{
-    (void)ver;
-    if (!enabled())
-        return _real_sym(name, ver);
-    return symbol;
 }
 
 /* Expects struct to match this:
@@ -68,22 +61,38 @@ struct munmap_event E_munmap;
 void *
 fake_mmap(void *addr, size_t length, int prot, int flags, int fd, off_t offset)
 {
-    /* check that every argument is as expected */
+    /* check that every argument is as expected (unless should be skipped). */
     ensure(addr == E_mmap.addr);
     ensure(length == E_mmap.length);
     ensure(prot == E_mmap.prot);
     ensure(flags == E_mmap.flags);
     ensure(fd == E_mmap.fd);
     ensure(offset == E_mmap.offset);
+
+    /* skipped arguments should be void-cast to silent compiler warnings. */
+
+
+    /* mark as called*/
+    ensure(!called);
+    called = true;
+
     /* return expected value */
  return E_mmap.ret;
 }
 int
 fake_munmap(void *addr, size_t length)
 {
-    /* check that every argument is as expected */
+    /* check that every argument is as expected (unless should be skipped). */
     ensure(addr == E_munmap.addr);
     ensure(length == E_munmap.length);
+
+    /* skipped arguments should be void-cast to silent compiler warnings. */
+
+
+    /* mark as called*/
+    ensure(!called);
+    called = true;
+
     /* return expected value */
  return E_munmap.ret;
 }
@@ -101,6 +110,10 @@ PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_MMAP, {
     ASSERT_FIELD_EQ(&E_mmap, flags);
     ASSERT_FIELD_EQ(&E_mmap, fd);
     ASSERT_FIELD_EQ(&E_mmap, offset);
+
+    // must be enabled. Let's
+    ensure(enabled());
+    ev->func = fake_mmap;
 })
 
 PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_MMAP, {
@@ -121,6 +134,10 @@ PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_MUNMAP, {
     struct munmap_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E_munmap, addr);
     ASSERT_FIELD_EQ(&E_munmap, length);
+
+    // must be enabled. Let's
+    ensure(enabled());
+    ev->func = fake_munmap;
 })
 
 PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_MUNMAP, {
@@ -159,6 +176,7 @@ test_mmap(void)
                                      E_mmap.fd,                           //
                                      E_mmap.offset                                  );
  ensure(ret == E_mmap.ret);
+    ensure(called);
     disable();
 }
 static void
@@ -173,6 +191,7 @@ test_munmap(void)
                                      E_munmap.addr,                           //
                                      E_munmap.length                                  );
  ensure(ret == E_munmap.ret);
+    ensure(called);
     disable();
 }
 

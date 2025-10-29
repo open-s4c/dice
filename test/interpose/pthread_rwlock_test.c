@@ -6,7 +6,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define DICE_TEST_INTERPOSE
 #include <dice/chains/intercept.h>
 #include <dice/ensure.h>
 #include <dice/interpose.h>
@@ -14,31 +13,25 @@
 #include <dice/events/pthread.h>
 
 static void *symbol;
+static bool called;
 /* we need to declare this as noinline, otherwise the optimization of the
  * compiler gets rid of the symbol. */
 static __attribute__((noinline)) void
 enable(void *foo)
 {
     symbol = foo;
+    called = false;
 }
 static __attribute__((noinline)) void
 disable(void)
 {
     symbol = NULL;
+    called = false;
 }
 static inline bool
 enabled(void)
 {
     return symbol != NULL;
-}
-
-void *
-real_sym(const char *name, const char *ver)
-{
-    (void)ver;
-    if (!enabled())
-        return _real_sym(name, ver);
-    return symbol;
 }
 
 /* Expects struct to match this:
@@ -104,58 +97,114 @@ struct pthread_rwlock_unlock_event E_pthread_rwlock_unlock;
 int
 fake_pthread_rwlock_rdlock(pthread_rwlock_t *lock)
 {
-    /* check that every argument is as expected */
+    /* check that every argument is as expected (unless should be skipped). */
     ensure(lock == E_pthread_rwlock_rdlock.lock);
+
+    /* skipped arguments should be void-cast to silent compiler warnings. */
+
+
+    /* mark as called*/
+    ensure(!called);
+    called = true;
+
     /* return expected value */
  return E_pthread_rwlock_rdlock.ret;
 }
 int
 fake_pthread_rwlock_tryrdlock(pthread_rwlock_t *lock)
 {
-    /* check that every argument is as expected */
+    /* check that every argument is as expected (unless should be skipped). */
     ensure(lock == E_pthread_rwlock_tryrdlock.lock);
+
+    /* skipped arguments should be void-cast to silent compiler warnings. */
+
+
+    /* mark as called*/
+    ensure(!called);
+    called = true;
+
     /* return expected value */
  return E_pthread_rwlock_tryrdlock.ret;
 }
 int
 fake_pthread_rwlock_timedrdlock(pthread_rwlock_t *lock, const struct timespec *abstime)
 {
-    /* check that every argument is as expected */
+    /* check that every argument is as expected (unless should be skipped). */
     ensure(lock == E_pthread_rwlock_timedrdlock.lock);
     ensure(abstime == E_pthread_rwlock_timedrdlock.abstime);
+
+    /* skipped arguments should be void-cast to silent compiler warnings. */
+
+
+    /* mark as called*/
+    ensure(!called);
+    called = true;
+
     /* return expected value */
  return E_pthread_rwlock_timedrdlock.ret;
 }
 int
 fake_pthread_rwlock_wrlock(pthread_rwlock_t *lock)
 {
-    /* check that every argument is as expected */
+    /* check that every argument is as expected (unless should be skipped). */
     ensure(lock == E_pthread_rwlock_wrlock.lock);
+
+    /* skipped arguments should be void-cast to silent compiler warnings. */
+
+
+    /* mark as called*/
+    ensure(!called);
+    called = true;
+
     /* return expected value */
  return E_pthread_rwlock_wrlock.ret;
 }
 int
 fake_pthread_rwlock_trywrlock(pthread_rwlock_t *lock)
 {
-    /* check that every argument is as expected */
+    /* check that every argument is as expected (unless should be skipped). */
     ensure(lock == E_pthread_rwlock_trywrlock.lock);
+
+    /* skipped arguments should be void-cast to silent compiler warnings. */
+
+
+    /* mark as called*/
+    ensure(!called);
+    called = true;
+
     /* return expected value */
  return E_pthread_rwlock_trywrlock.ret;
 }
 int
 fake_pthread_rwlock_timedwrlock(pthread_rwlock_t *lock, const struct timespec *abstime)
 {
-    /* check that every argument is as expected */
+    /* check that every argument is as expected (unless should be skipped). */
     ensure(lock == E_pthread_rwlock_timedwrlock.lock);
     ensure(abstime == E_pthread_rwlock_timedwrlock.abstime);
+
+    /* skipped arguments should be void-cast to silent compiler warnings. */
+
+
+    /* mark as called*/
+    ensure(!called);
+    called = true;
+
     /* return expected value */
  return E_pthread_rwlock_timedwrlock.ret;
 }
 int
 fake_pthread_rwlock_unlock(pthread_rwlock_t *lock)
 {
-    /* check that every argument is as expected */
+    /* check that every argument is as expected (unless should be skipped). */
     ensure(lock == E_pthread_rwlock_unlock.lock);
+
+    /* skipped arguments should be void-cast to silent compiler warnings. */
+
+
+    /* mark as called*/
+    ensure(!called);
+    called = true;
+
     /* return expected value */
  return E_pthread_rwlock_unlock.ret;
 }
@@ -168,6 +217,10 @@ PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_PTHREAD_RWLOCK_RDLOCK, {
         return PS_STOP_CHAIN;
     struct pthread_rwlock_rdlock_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E_pthread_rwlock_rdlock, lock);
+
+    // must be enabled. Let's
+    ensure(enabled());
+    ev->func = fake_pthread_rwlock_rdlock;
 })
 
 PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_PTHREAD_RWLOCK_RDLOCK, {
@@ -182,6 +235,10 @@ PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_PTHREAD_RWLOCK_TRYRDLOCK, {
         return PS_STOP_CHAIN;
     struct pthread_rwlock_tryrdlock_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E_pthread_rwlock_tryrdlock, lock);
+
+    // must be enabled. Let's
+    ensure(enabled());
+    ev->func = fake_pthread_rwlock_tryrdlock;
 })
 
 PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_PTHREAD_RWLOCK_TRYRDLOCK, {
@@ -197,6 +254,10 @@ PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_PTHREAD_RWLOCK_TIMEDRDLOCK, {
     struct pthread_rwlock_timedrdlock_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E_pthread_rwlock_timedrdlock, lock);
     ASSERT_FIELD_EQ(&E_pthread_rwlock_timedrdlock, abstime);
+
+    // must be enabled. Let's
+    ensure(enabled());
+    ev->func = fake_pthread_rwlock_timedrdlock;
 })
 
 PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_PTHREAD_RWLOCK_TIMEDRDLOCK, {
@@ -212,6 +273,10 @@ PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_PTHREAD_RWLOCK_WRLOCK, {
         return PS_STOP_CHAIN;
     struct pthread_rwlock_wrlock_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E_pthread_rwlock_wrlock, lock);
+
+    // must be enabled. Let's
+    ensure(enabled());
+    ev->func = fake_pthread_rwlock_wrlock;
 })
 
 PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_PTHREAD_RWLOCK_WRLOCK, {
@@ -226,6 +291,10 @@ PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_PTHREAD_RWLOCK_TRYWRLOCK, {
         return PS_STOP_CHAIN;
     struct pthread_rwlock_trywrlock_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E_pthread_rwlock_trywrlock, lock);
+
+    // must be enabled. Let's
+    ensure(enabled());
+    ev->func = fake_pthread_rwlock_trywrlock;
 })
 
 PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_PTHREAD_RWLOCK_TRYWRLOCK, {
@@ -241,6 +310,10 @@ PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_PTHREAD_RWLOCK_TIMEDWRLOCK, {
     struct pthread_rwlock_timedwrlock_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E_pthread_rwlock_timedwrlock, lock);
     ASSERT_FIELD_EQ(&E_pthread_rwlock_timedwrlock, abstime);
+
+    // must be enabled. Let's
+    ensure(enabled());
+    ev->func = fake_pthread_rwlock_timedwrlock;
 })
 
 PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_PTHREAD_RWLOCK_TIMEDWRLOCK, {
@@ -256,6 +329,10 @@ PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_PTHREAD_RWLOCK_UNLOCK, {
         return PS_STOP_CHAIN;
     struct pthread_rwlock_unlock_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E_pthread_rwlock_unlock, lock);
+
+    // must be enabled. Let's
+    ensure(enabled());
+    ev->func = fake_pthread_rwlock_unlock;
 })
 
 PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_PTHREAD_RWLOCK_UNLOCK, {
@@ -288,6 +365,7 @@ test_pthread_rwlock_rdlock(void)
                                  pthread_rwlock_rdlock(                                    //
                                      E_pthread_rwlock_rdlock.lock                                  );
  ensure(ret == E_pthread_rwlock_rdlock.ret);
+    ensure(called);
     disable();
 }
 static void
@@ -301,6 +379,7 @@ test_pthread_rwlock_tryrdlock(void)
                                  pthread_rwlock_tryrdlock(                                    //
                                      E_pthread_rwlock_tryrdlock.lock                                  );
  ensure(ret == E_pthread_rwlock_tryrdlock.ret);
+    ensure(called);
     disable();
 }
 static void
@@ -315,6 +394,7 @@ test_pthread_rwlock_timedrdlock(void)
                                      E_pthread_rwlock_timedrdlock.lock,                           //
                                      E_pthread_rwlock_timedrdlock.abstime                                  );
  ensure(ret == E_pthread_rwlock_timedrdlock.ret);
+    ensure(called);
     disable();
 }
 static void
@@ -328,6 +408,7 @@ test_pthread_rwlock_wrlock(void)
                                  pthread_rwlock_wrlock(                                    //
                                      E_pthread_rwlock_wrlock.lock                                  );
  ensure(ret == E_pthread_rwlock_wrlock.ret);
+    ensure(called);
     disable();
 }
 static void
@@ -341,6 +422,7 @@ test_pthread_rwlock_trywrlock(void)
                                  pthread_rwlock_trywrlock(                                    //
                                      E_pthread_rwlock_trywrlock.lock                                  );
  ensure(ret == E_pthread_rwlock_trywrlock.ret);
+    ensure(called);
     disable();
 }
 static void
@@ -355,6 +437,7 @@ test_pthread_rwlock_timedwrlock(void)
                                      E_pthread_rwlock_timedwrlock.lock,                           //
                                      E_pthread_rwlock_timedwrlock.abstime                                  );
  ensure(ret == E_pthread_rwlock_timedwrlock.ret);
+    ensure(called);
     disable();
 }
 static void
@@ -368,6 +451,7 @@ test_pthread_rwlock_unlock(void)
                                  pthread_rwlock_unlock(                                    //
                                      E_pthread_rwlock_unlock.lock                                  );
  ensure(ret == E_pthread_rwlock_unlock.ret);
+    ensure(called);
     disable();
 }
 

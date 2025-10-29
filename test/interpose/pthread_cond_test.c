@@ -6,7 +6,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define DICE_TEST_INTERPOSE
 #include <dice/chains/intercept.h>
 #include <dice/ensure.h>
 #include <dice/interpose.h>
@@ -14,31 +13,25 @@
 #include <dice/events/pthread.h>
 
 static void *symbol;
+static bool called;
 /* we need to declare this as noinline, otherwise the optimization of the
  * compiler gets rid of the symbol. */
 static __attribute__((noinline)) void
 enable(void *foo)
 {
     symbol = foo;
+    called = false;
 }
 static __attribute__((noinline)) void
 disable(void)
 {
     symbol = NULL;
+    called = false;
 }
 static inline bool
 enabled(void)
 {
     return symbol != NULL;
-}
-
-void *
-real_sym(const char *name, const char *ver)
-{
-    (void)ver;
-    if (!enabled())
-        return _real_sym(name, ver);
-    return symbol;
 }
 
 /* Expects struct to match this:
@@ -81,35 +74,67 @@ struct pthread_cond_broadcast_event E_pthread_cond_broadcast;
 int
 fake_pthread_cond_wait(pthread_cond_t *cond, pthread_mutex_t *mutex)
 {
-    /* check that every argument is as expected */
+    /* check that every argument is as expected (unless should be skipped). */
     ensure(cond == E_pthread_cond_wait.cond);
     ensure(mutex == E_pthread_cond_wait.mutex);
+
+    /* skipped arguments should be void-cast to silent compiler warnings. */
+
+
+    /* mark as called*/
+    ensure(!called);
+    called = true;
+
     /* return expected value */
  return E_pthread_cond_wait.ret;
 }
 int
 fake_pthread_cond_timedwait(pthread_cond_t *cond, pthread_mutex_t *mutex, const struct timespec *abstime)
 {
-    /* check that every argument is as expected */
+    /* check that every argument is as expected (unless should be skipped). */
     ensure(cond == E_pthread_cond_timedwait.cond);
     ensure(mutex == E_pthread_cond_timedwait.mutex);
     ensure(abstime == E_pthread_cond_timedwait.abstime);
+
+    /* skipped arguments should be void-cast to silent compiler warnings. */
+
+
+    /* mark as called*/
+    ensure(!called);
+    called = true;
+
     /* return expected value */
  return E_pthread_cond_timedwait.ret;
 }
 int
 fake_pthread_cond_signal(pthread_cond_t *cond)
 {
-    /* check that every argument is as expected */
+    /* check that every argument is as expected (unless should be skipped). */
     ensure(cond == E_pthread_cond_signal.cond);
+
+    /* skipped arguments should be void-cast to silent compiler warnings. */
+
+
+    /* mark as called*/
+    ensure(!called);
+    called = true;
+
     /* return expected value */
  return E_pthread_cond_signal.ret;
 }
 int
 fake_pthread_cond_broadcast(pthread_cond_t *cond)
 {
-    /* check that every argument is as expected */
+    /* check that every argument is as expected (unless should be skipped). */
     ensure(cond == E_pthread_cond_broadcast.cond);
+
+    /* skipped arguments should be void-cast to silent compiler warnings. */
+
+
+    /* mark as called*/
+    ensure(!called);
+    called = true;
+
     /* return expected value */
  return E_pthread_cond_broadcast.ret;
 }
@@ -123,6 +148,10 @@ PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_PTHREAD_COND_WAIT, {
     struct pthread_cond_wait_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E_pthread_cond_wait, cond);
     ASSERT_FIELD_EQ(&E_pthread_cond_wait, mutex);
+
+    // must be enabled. Let's
+    ensure(enabled());
+    ev->func = fake_pthread_cond_wait;
 })
 
 PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_PTHREAD_COND_WAIT, {
@@ -140,6 +169,10 @@ PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_PTHREAD_COND_TIMEDWAIT, {
     ASSERT_FIELD_EQ(&E_pthread_cond_timedwait, cond);
     ASSERT_FIELD_EQ(&E_pthread_cond_timedwait, mutex);
     ASSERT_FIELD_EQ(&E_pthread_cond_timedwait, abstime);
+
+    // must be enabled. Let's
+    ensure(enabled());
+    ev->func = fake_pthread_cond_timedwait;
 })
 
 PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_PTHREAD_COND_TIMEDWAIT, {
@@ -156,6 +189,10 @@ PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_PTHREAD_COND_SIGNAL, {
         return PS_STOP_CHAIN;
     struct pthread_cond_signal_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E_pthread_cond_signal, cond);
+
+    // must be enabled. Let's
+    ensure(enabled());
+    ev->func = fake_pthread_cond_signal;
 })
 
 PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_PTHREAD_COND_SIGNAL, {
@@ -170,6 +207,10 @@ PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_PTHREAD_COND_BROADCAST, {
         return PS_STOP_CHAIN;
     struct pthread_cond_broadcast_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E_pthread_cond_broadcast, cond);
+
+    // must be enabled. Let's
+    ensure(enabled());
+    ev->func = fake_pthread_cond_broadcast;
 })
 
 PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_PTHREAD_COND_BROADCAST, {
@@ -203,6 +244,7 @@ test_pthread_cond_wait(void)
                                      E_pthread_cond_wait.cond,                           //
                                      E_pthread_cond_wait.mutex                                  );
  ensure(ret == E_pthread_cond_wait.ret);
+    ensure(called);
     disable();
 }
 static void
@@ -218,6 +260,7 @@ test_pthread_cond_timedwait(void)
                                      E_pthread_cond_timedwait.mutex,                           //
                                      E_pthread_cond_timedwait.abstime                                  );
  ensure(ret == E_pthread_cond_timedwait.ret);
+    ensure(called);
     disable();
 }
 static void
@@ -231,6 +274,7 @@ test_pthread_cond_signal(void)
                                  pthread_cond_signal(                                    //
                                      E_pthread_cond_signal.cond                                  );
  ensure(ret == E_pthread_cond_signal.ret);
+    ensure(called);
     disable();
 }
 static void
@@ -244,6 +288,7 @@ test_pthread_cond_broadcast(void)
                                  pthread_cond_broadcast(                                    //
                                      E_pthread_cond_broadcast.cond                                  );
  ensure(ret == E_pthread_cond_broadcast.ret);
+    ensure(called);
     disable();
 }
 

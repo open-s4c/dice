@@ -6,7 +6,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define DICE_TEST_INTERPOSE
 #include <dice/chains/intercept.h>
 #include <dice/ensure.h>
 #include <dice/interpose.h>
@@ -14,31 +13,25 @@
 #include <dice/events/cxa.h>
 
 static void *symbol;
+static bool called;
 /* we need to declare this as noinline, otherwise the optimization of the
  * compiler gets rid of the symbol. */
 static __attribute__((noinline)) void
 enable(void *foo)
 {
     symbol = foo;
+    called = false;
 }
 static __attribute__((noinline)) void
 disable(void)
 {
     symbol = NULL;
+    called = false;
 }
 static inline bool
 enabled(void)
 {
     return symbol != NULL;
-}
-
-void *
-real_sym(const char *name, const char *ver)
-{
-    (void)ver;
-    if (!enabled())
-        return _real_sym(name, ver);
-    return symbol;
 }
 
 /* Expects struct to match this:
@@ -69,24 +62,48 @@ struct __cxa_guard_abort_event E___cxa_guard_abort;
 int
 fake___cxa_guard_acquire(void *addr)
 {
-    /* check that every argument is as expected */
+    /* check that every argument is as expected (unless should be skipped). */
     ensure(addr == E___cxa_guard_acquire.addr);
+
+    /* skipped arguments should be void-cast to silent compiler warnings. */
+
+
+    /* mark as called*/
+    ensure(!called);
+    called = true;
+
     /* return expected value */
  return E___cxa_guard_acquire.ret;
 }
 int
 fake___cxa_guard_release(void *addr)
 {
-    /* check that every argument is as expected */
+    /* check that every argument is as expected (unless should be skipped). */
     ensure(addr == E___cxa_guard_release.addr);
+
+    /* skipped arguments should be void-cast to silent compiler warnings. */
+
+
+    /* mark as called*/
+    ensure(!called);
+    called = true;
+
     /* return expected value */
  return E___cxa_guard_release.ret;
 }
 void
 fake___cxa_guard_abort(void *addr)
 {
-    /* check that every argument is as expected */
+    /* check that every argument is as expected (unless should be skipped). */
     ensure(addr == E___cxa_guard_abort.addr);
+
+    /* skipped arguments should be void-cast to silent compiler warnings. */
+
+
+    /* mark as called*/
+    ensure(!called);
+    called = true;
+
     /* return expected value */
 }
 
@@ -98,6 +115,10 @@ PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT___CXA_GUARD_ACQUIRE, {
         return PS_STOP_CHAIN;
     struct __cxa_guard_acquire_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E___cxa_guard_acquire, addr);
+
+    // must be enabled. Let's
+    ensure(enabled());
+    ev->func = fake___cxa_guard_acquire;
 })
 
 PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT___CXA_GUARD_ACQUIRE, {
@@ -112,6 +133,10 @@ PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT___CXA_GUARD_RELEASE, {
         return PS_STOP_CHAIN;
     struct __cxa_guard_release_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E___cxa_guard_release, addr);
+
+    // must be enabled. Let's
+    ensure(enabled());
+    ev->func = fake___cxa_guard_release;
 })
 
 PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT___CXA_GUARD_RELEASE, {
@@ -126,6 +151,10 @@ PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT___CXA_GUARD_ABORT, {
         return PS_STOP_CHAIN;
     struct __cxa_guard_abort_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E___cxa_guard_abort, addr);
+
+    // must be enabled. Let's
+    ensure(enabled());
+    ev->func = fake___cxa_guard_abort;
 })
 
 PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT___CXA_GUARD_ABORT, {
@@ -157,6 +186,7 @@ test___cxa_guard_acquire(void)
                                  __cxa_guard_acquire(                                    //
                                      E___cxa_guard_acquire.addr                                  );
  ensure(ret == E___cxa_guard_acquire.ret);
+    ensure(called);
     disable();
 }
 static void
@@ -170,6 +200,7 @@ test___cxa_guard_release(void)
                                  __cxa_guard_release(                                    //
                                      E___cxa_guard_release.addr                                  );
  ensure(ret == E___cxa_guard_release.ret);
+    ensure(called);
     disable();
 }
 static void
@@ -181,6 +212,7 @@ test___cxa_guard_abort(void)
     enable(fake___cxa_guard_abort);
                                  __cxa_guard_abort(                                    //
                                      E___cxa_guard_abort.addr                                  );
+    ensure(called);
     disable();
 }
 

@@ -15,10 +15,13 @@
 #define MM_PARAMS_FOO
 #define MAKE_UPCASE 1
 #define PARAM       int x
-#define AA          1
-#define E_FOO(...)  1
-#define E_FOO(...)  1
 int FOO(int);
+struct E_FOO {
+    int AA;
+};
+#define AA         1
+#define E_FOO(...) 1
+#define E_FOO(...) 1
 #define INCL       <stdio.h>
 #define $_unmute() // end of fake definitions
 $_dl(); // ---------------------------------------------------------------------
@@ -37,7 +40,6 @@ $_dl(); // ---------------------------------------------------------------------
 #include <stdlib.h>
 #include <string.h>
 
-#define DICE_TEST_INTERPOSE
 #include <dice/chains/intercept.h>
 #include <dice/ensure.h>
 #include <dice/interpose.h>
@@ -47,31 +49,25 @@ $_begin(INCL = [[stdio.h]]);
 $_end();
 
 static void *symbol;
+static bool called;
 /* we need to declare this as noinline, otherwise the optimization of the
  * compiler gets rid of the symbol. */
 static __attribute__((noinline)) void
 enable(void *foo)
 {
     symbol = foo;
+    called = false;
 }
 static __attribute__((noinline)) void
 disable(void)
 {
     symbol = NULL;
+    called = false;
 }
 static inline bool
 enabled(void)
 {
     return symbol != NULL;
-}
-
-void *
-real_sym(const char *name, const char *ver)
-{
-    (void)ver;
-    if (!enabled())
-        return _real_sym(name, ver);
-    return symbol;
 }
 
 $_begin(FOO = [[foo]]);
@@ -92,10 +88,23 @@ $_begin(FOO = [[foo]]);
 MM_RETURN_FOO
 fake_FOO(MM_PARAMS_FOO)
 {
-    /* check that every argument is as expected */
+    /* check that every argument is as expected (unless should be skipped). */
     $__begin(AA = MM_ARGS_FOO);
+    $__UNLESS_FOO_AA;
     ensure(AA == E_FOO.AA);
     $__end();
+
+    /* skipped arguments should be void-cast to silent compiler warnings. */
+    $__begin(AA = MM_ARGS_FOO);
+    $__WHEN_FOO_AA;
+    (void)AA;
+    $__end();
+
+
+    /* mark as called*/
+    ensure(!called);
+    called = true;
+
     /* return expected value */
     $_returns MM_RETURN_FOO $.? return E_FOO.ret;
 }
@@ -110,8 +119,13 @@ PS_SUBSCRIBE(INTERCEPT_BEFORE, MAKE_UPCASE, {
         return PS_STOP_CHAIN;
     struct FOO_event *ev = EVENT_PAYLOAD(ev);
     $__begin(AA = MM_ARGS_FOO);
+    $__UNLESS_FOO_AA; // should skip check?
     ASSERT_FIELD_EQ(&E_FOO, AA);
     $__end();
+
+    // must be enabled. Let's
+    ensure(enabled());
+    ev->func = fake_FOO;
 })
 
 PS_SUBSCRIBE(INTERCEPT_AFTER, MAKE_UPCASE, {
@@ -119,6 +133,7 @@ PS_SUBSCRIBE(INTERCEPT_AFTER, MAKE_UPCASE, {
         return PS_STOP_CHAIN;
     struct FOO_event *ev = EVENT_PAYLOAD(ev);
     $__begin(AA = MM_ARGS_FOO);
+    $__UNLESS_FOO_AA; // should skip check?
     ASSERT_FIELD_EQ(&E_FOO, AA);
     $__end();
     $_returns MM_RETURN_FOO $.? ASSERT_FIELD_EQ(&E_FOO, ret);
@@ -151,6 +166,7 @@ test_FOO(void)
                                      $__end(),                           //
                                  );
     $_returns MM_RETURN_FOO $.? ensure(ret == E_FOO.ret);
+    ensure(called);
     disable();
 }
 $_end();

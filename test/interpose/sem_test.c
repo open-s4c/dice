@@ -6,7 +6,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define DICE_TEST_INTERPOSE
 #include <dice/chains/intercept.h>
 #include <dice/ensure.h>
 #include <dice/interpose.h>
@@ -14,31 +13,25 @@
 #include <dice/events/semaphore.h>
 
 static void *symbol;
+static bool called;
 /* we need to declare this as noinline, otherwise the optimization of the
  * compiler gets rid of the symbol. */
 static __attribute__((noinline)) void
 enable(void *foo)
 {
     symbol = foo;
+    called = false;
 }
 static __attribute__((noinline)) void
 disable(void)
 {
     symbol = NULL;
+    called = false;
 }
 static inline bool
 enabled(void)
 {
     return symbol != NULL;
-}
-
-void *
-real_sym(const char *name, const char *ver)
-{
-    (void)ver;
-    if (!enabled())
-        return _real_sym(name, ver);
-    return symbol;
 }
 
 /* Expects struct to match this:
@@ -79,33 +72,65 @@ struct sem_timedwait_event E_sem_timedwait;
 int
 fake_sem_post(sem_t *sem)
 {
-    /* check that every argument is as expected */
+    /* check that every argument is as expected (unless should be skipped). */
     ensure(sem == E_sem_post.sem);
+
+    /* skipped arguments should be void-cast to silent compiler warnings. */
+
+
+    /* mark as called*/
+    ensure(!called);
+    called = true;
+
     /* return expected value */
  return E_sem_post.ret;
 }
 int
 fake_sem_wait(sem_t *sem)
 {
-    /* check that every argument is as expected */
+    /* check that every argument is as expected (unless should be skipped). */
     ensure(sem == E_sem_wait.sem);
+
+    /* skipped arguments should be void-cast to silent compiler warnings. */
+
+
+    /* mark as called*/
+    ensure(!called);
+    called = true;
+
     /* return expected value */
  return E_sem_wait.ret;
 }
 int
 fake_sem_trywait(sem_t *sem)
 {
-    /* check that every argument is as expected */
+    /* check that every argument is as expected (unless should be skipped). */
     ensure(sem == E_sem_trywait.sem);
+
+    /* skipped arguments should be void-cast to silent compiler warnings. */
+
+
+    /* mark as called*/
+    ensure(!called);
+    called = true;
+
     /* return expected value */
  return E_sem_trywait.ret;
 }
 int
 fake_sem_timedwait(sem_t *sem, const struct timespec *abstime)
 {
-    /* check that every argument is as expected */
+    /* check that every argument is as expected (unless should be skipped). */
     ensure(sem == E_sem_timedwait.sem);
     ensure(abstime == E_sem_timedwait.abstime);
+
+    /* skipped arguments should be void-cast to silent compiler warnings. */
+
+
+    /* mark as called*/
+    ensure(!called);
+    called = true;
+
     /* return expected value */
  return E_sem_timedwait.ret;
 }
@@ -118,6 +143,10 @@ PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_SEM_POST, {
         return PS_STOP_CHAIN;
     struct sem_post_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E_sem_post, sem);
+
+    // must be enabled. Let's
+    ensure(enabled());
+    ev->func = fake_sem_post;
 })
 
 PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_SEM_POST, {
@@ -132,6 +161,10 @@ PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_SEM_WAIT, {
         return PS_STOP_CHAIN;
     struct sem_wait_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E_sem_wait, sem);
+
+    // must be enabled. Let's
+    ensure(enabled());
+    ev->func = fake_sem_wait;
 })
 
 PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_SEM_WAIT, {
@@ -146,6 +179,10 @@ PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_SEM_TRYWAIT, {
         return PS_STOP_CHAIN;
     struct sem_trywait_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E_sem_trywait, sem);
+
+    // must be enabled. Let's
+    ensure(enabled());
+    ev->func = fake_sem_trywait;
 })
 
 PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_SEM_TRYWAIT, {
@@ -161,6 +198,10 @@ PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_SEM_TIMEDWAIT, {
     struct sem_timedwait_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E_sem_timedwait, sem);
     ASSERT_FIELD_EQ(&E_sem_timedwait, abstime);
+
+    // must be enabled. Let's
+    ensure(enabled());
+    ev->func = fake_sem_timedwait;
 })
 
 PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_SEM_TIMEDWAIT, {
@@ -194,6 +235,7 @@ test_sem_post(void)
                                  sem_post(                                    //
                                      E_sem_post.sem                                  );
  ensure(ret == E_sem_post.ret);
+    ensure(called);
     disable();
 }
 static void
@@ -207,6 +249,7 @@ test_sem_wait(void)
                                  sem_wait(                                    //
                                      E_sem_wait.sem                                  );
  ensure(ret == E_sem_wait.ret);
+    ensure(called);
     disable();
 }
 static void
@@ -220,6 +263,7 @@ test_sem_trywait(void)
                                  sem_trywait(                                    //
                                      E_sem_trywait.sem                                  );
  ensure(ret == E_sem_trywait.ret);
+    ensure(called);
     disable();
 }
 static void
@@ -234,6 +278,7 @@ test_sem_timedwait(void)
                                      E_sem_timedwait.sem,                           //
                                      E_sem_timedwait.abstime                                  );
  ensure(ret == E_sem_timedwait.ret);
+    ensure(called);
     disable();
 }
 
