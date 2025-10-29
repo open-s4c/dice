@@ -40,7 +40,7 @@ void *real_sym(const char *, const char *);
 #define REAL_NAME(F) dice_real_##F##_
 
 /* REAL_DECL(T, F, ...) declares the function pointer to the real function
- * F, with return type T and arguments as varargs. */
+ * F, with return type T and VA_ARGS arguments. */
 #define REAL_DECL(T, F, ...) DICE_HIDE DICE_WEAK T (*REAL_NAME(F))(__VA_ARGS__);
 
 /* REAL(F, ...) calls the real function F using its declared function
@@ -51,7 +51,6 @@ void *real_sym(const char *, const char *);
     #define REAL(F, ...) F(__VA_ARGS__)
 #else
     #define REAL(F, ...) REAL_FUNC(F)(__VA_ARGS__)
-
 #endif
 
 #if defined(__linux__)
@@ -60,6 +59,8 @@ void *real_sym(const char *, const char *);
      * https://blog.fesnel.com/blog/2009/08/25/preloading-with-multiple-symbol-versions/
      */
     #define REAL_FUNCP(F) REAL_FUNCV(F, "GLIBC_2.3.2")
+#elif defined(__APPLE__)
+    #define REAL_FUNCP(F) REAL_FUNC(F)
 #else
     #define REAL_FUNCP(F) REAL_FUNCV(F, 0)
 #endif
@@ -73,16 +74,19 @@ void *real_sym(const char *, const char *);
         REAL_DECL(T, F, __VA_ARGS__);                                          \
         T F(__VA_ARGS__)
 
-#elif defined(__APPLE__)
+    #define FAKE_REAL_APPLE_DECL(NAME, FOO, BAR)
 
-    #define INTERPOSE(T, F, ...)                                               \
-        T FAKE_NAME(F)(__VA_ARGS__);                                           \
+#elif defined(__APPLE__)
+    #define FAKE_REAL_APPLE_DECL(NAME, FOO, BAR)                               \
         static struct {                                                        \
             const void *fake;                                                  \
             const void *real;                                                  \
-        } dice_interpose_##F##_                                                \
-            __attribute__((used, section("__DATA,__interpose"))) = {           \
-                (const void *)&FAKE_NAME(F), (const void *)&F};                \
+        }(NAME) __attribute__((used, section("__DATA,__interpose"))) = {       \
+            (const void *)&(FOO), (const void *)&(BAR)}
+
+    #define INTERPOSE(T, F, ...)                                               \
+        T FAKE_NAME(F)(__VA_ARGS__);                                           \
+        FAKE_REAL_APPLE_DECL(dice_interpose_##F##_, FAKE_NAME(F), F);          \
         T FAKE_NAME(F)(__VA_ARGS__)
 
     #define FAKE_NAME(F) dice_fake_##F##_
@@ -94,7 +98,11 @@ void *real_sym(const char *, const char *);
  * In case the function pointer is NULL, this macro initializes it using
  * `REAL_SYM(F, 0)`.
  */
-#define REAL_FUNC(F) REAL_FUNCV(F, 0)
+#if defined(__APPLE__)
+    #define REAL_FUNC(F) F
+#else
+    #define REAL_FUNC(F) REAL_FUNCV(F, 0)
+#endif
 
 /* REAL_FUNCV(F,V) returns the pointer of a declared real function F with
  * version V.

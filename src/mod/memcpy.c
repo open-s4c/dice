@@ -66,6 +66,7 @@ dice___memset(void *ptr, int value, size_t num)
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_MEMSET, &ev, &md);
     return ev.ret;
 }
+FAKE_REAL_APPLE_DECL(memset_, dice___memset, dice___memset);
 
 /* Advertise event type names for debugging messages */
 PS_ADVERTISE_TYPE(EVENT_MEMCPY)
