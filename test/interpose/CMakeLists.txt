@@ -1,8 +1,6 @@
 # Copyright (C) 2025 Huawei Technologies Co., Ltd.                             #
 # SPDX-License-Identifier: 0BSD                                                #
 
-set(INTERPOSED_IN ${CMAKE_CURRENT_SOURCE_DIR}/interposed.h.in)
-
 set(FUNS_malloc malloc calloc realloc free posix_memalign aligned_alloc)
 set(INCL_malloc '<dice/events/malloc.h>')
 
@@ -12,7 +10,7 @@ set(INCL_memcpy '<dice/events/memcpy.h>')
 set(FUNS_mman mmap munmap)
 set(INCL_mman '<dice/events/mman.h>')
 
-set(FUNS_pthread_create pthread_join)
+set(FUNS_pthread_create pthread_create pthread_join)
 set(INCL_pthread_create '<dice/events/pthread.h>')
 
 set(FUNS_pthread_mutex pthread_mutex_lock pthread_mutex_unlock
@@ -33,6 +31,8 @@ set(FUNS_pthread_rwlock
     pthread_rwlock_unlock)
 set(INCL_pthread_rwlock ${INCL_pthread_create})
 
+# TODO: create special tests for INTERCEPT_EVENT chain. Currently, we can only
+# test INTERCEPT_BEFORE and INTERCEPT_AFTER.
 set(FUNS_annotate_rwlock AnnotateRWLockCreate AnnotateRWLockDestroy
                          AnnotateRWLockAcquired AnnotateRWLockReleased)
 set(INCL_annotate_rwlock '<dice/events/annotate_rwlock.h>')
@@ -45,7 +45,7 @@ set(INCL_cxa '<dice/events/cxa.h>')
 
 set(MODS
     mman
-    annotate_rwlock
+    # annotate_rwlock: disabled until INTERCEPT_EVENT can be tested
     pthread_create
     pthread_mutex
     pthread_cond
@@ -65,13 +65,16 @@ foreach(MOD ${MODS})
   add_custom_command(
     OUTPUT ${TARGET}.c
     COMMAND
-      cat ${INTERPOSED_IN} ${CMAKE_CURRENT_SOURCE_DIR}/interpose_test.c.in |
-      $<TARGET_FILE:tmplr> -iP$$ "-DINCL=${INCL_${MOD}}" "-DFOO=${FUNS_${MOD}}"
-      | $<TARGET_FILE:tmplr> -isP\\$$_ "-DFOO=${FUNS_${MOD}}" >
-      ${CMAKE_CURRENT_SOURCE_DIR}/${TARGET}.c)
-
-  add_custom_target(${MOD}-expand DEPENDS ${TARGET}.c)
-  add_dependencies(expand-tests ${MOD}-expand)
+      $<TARGET_FILE:tmplr> -P$$ "-DINCL=${INCL_${MOD}}" "-DFOO=${FUNS_${MOD}}"
+      ${CMAKE_CURRENT_SOURCE_DIR}/interposed_.h.in
+      ${CMAKE_CURRENT_SOURCE_DIR}/interpose_test.c.in #
+      > ${TARGET}_.c
+    COMMAND
+      $<TARGET_FILE:tmplr> -sP\\$$_ "-DFOO=${FUNS_${MOD}}"
+      ${CMAKE_CURRENT_SOURCE_DIR}/interposed__.h.in ${TARGET}_.c #
+      > ${CMAKE_CURRENT_SOURCE_DIR}/${TARGET}.c)
+  add_custom_target(expand-test-${MOD} DEPENDS ${TARGET}.c)
+  add_dependencies(expand-tests expand-test-${MOD})
 endforeach()
 
 # test cases
@@ -81,7 +84,7 @@ foreach(MOD ${MODS})
   target_link_libraries(${TARGET} PRIVATE dice.h dice tsano pthread)
   target_link_libraries(${TARGET} PRIVATE dice-${MOD}_testing.o)
 
-  add_test(NAME ${TARGET} COMMAND ${DICE_SCRIPT} ./${TARGET})
+  add_test(NAME interpose-${TARGET} COMMAND ${DICE_SCRIPT} ./${TARGET})
 
   if(${ENABLE_SANITIZER})
     target_compile_options(${TARGET} PRIVATE ${LIBSAN_C_FLAGS})
@@ -93,4 +96,4 @@ endforeach()
 # Add the test executable for memcpy
 add_executable(memcpy_test ${CMAKE_CURRENT_SOURCE_DIR}/memcpy_test.c)
 target_link_libraries(memcpy_test PRIVATE dice.o tsano pthread)
-add_test(NAME memcpy_test COMMAND memcpy_test)
+add_test(NAME interpose-memcpy_test COMMAND memcpy_test)
