@@ -19,11 +19,12 @@ INTERPOSE(void *, mmap, void *addr, size_t length, int prot, int flags, int fd,
         .fd     = fd,
         .offset = offset,
         .ret    = 0,
+        .func   = REAL_FUNC(mmap),
     };
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_MMAP, &ev, &md);
-    ev.ret = REAL(mmap, addr, length, prot, flags, fd, offset);
+    ev.ret = ev.func(addr, length, prot, flags, fd, offset);
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_MMAP, &ev, &md);
     return ev.ret;
 }
@@ -40,11 +41,12 @@ INTERPOSE(void *, mmap64, void *addr, size_t length, int prot, int flags,
         .fd     = fd,
         .offset = offset,
         .ret    = 0,
+        .func   = REAL_FUNC(mmap64),
     };
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_MMAP, &ev, &md);
-    ev.ret = REAL(mmap64, addr, length, prot, flags, fd, offset);
+    ev.ret = ev.func(addr, length, prot, flags, fd, offset);
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_MMAP, &ev, &md);
     return ev.ret;
 }
@@ -56,11 +58,12 @@ INTERPOSE(int, munmap, void *addr, size_t length)
         .addr   = addr,
         .length = length,
         .ret    = 0,
+        .func   = REAL_FUNC(munmap),
     };
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_MUNMAP, &ev, &md);
-    ev.ret = REAL(munmap, addr, length);
+    ev.ret = ev.func(addr, length);
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_MUNMAP, &ev, &md);
     return ev.ret;
 }

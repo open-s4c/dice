@@ -21,9 +21,13 @@ typedef struct {
 DICE_NORET
 INTERPOSE(void, pthread_exit, void *ptr)
 {
-    struct pthread_exit_event ev = {.pc = INTERPOSE_PC, .ptr = ptr};
+    struct pthread_exit_event ev = {
+        .pc   = INTERPOSE_PC,
+        .ptr  = ptr,
+        .func = REAL_FUNC(pthread_exit),
+    };
     PS_PUBLISH(INTERCEPT_EVENT, EVENT_THREAD_EXIT, &ev, 0);
-    REAL(pthread_exit, ptr);
+    ev.func(ptr);
     exit(1); // unreachable
 }
 
@@ -49,28 +53,34 @@ INTERPOSE(int, pthread_create, pthread_t *thread, const pthread_attr_t *attr,
     t  = mempool_alloc(sizeof(trampoline_t));
     *t = (trampoline_t){.arg = arg, .run = run};
 
-    struct pthread_create_event ev = {.pc     = INTERPOSE_PC,
-                                      .thread = thread,
-                                      .attr   = attr,
-                                      .run    = run,
-                                      .arg    = arg};
+    struct pthread_create_event ev = {
+        .pc     = INTERPOSE_PC,
+        .thread = thread,
+        .attr   = attr,
+        .run    = run,
+        .arg    = arg,
+        .func   = REAL_FUNC(pthread_create),
+    };
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_THREAD_CREATE, &ev, &md);
-    ev.ret = REAL(pthread_create, thread, attr, trampoline_, t);
+    ev.ret = ev.func(thread, attr, trampoline_, t);
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_THREAD_CREATE, &ev, &md);
     return ev.ret;
 }
 
 INTERPOSE(int, pthread_join, pthread_t thread, void **ptr)
 {
-    struct pthread_join_event ev = {.pc     = INTERPOSE_PC,
-                                    .thread = thread,
-                                    .ptr    = ptr};
+    struct pthread_join_event ev = {
+        .pc     = INTERPOSE_PC,
+        .thread = thread,
+        .ptr    = ptr,
+        .func   = REAL_FUNC(pthread_join),
+    };
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_THREAD_JOIN, &ev, &md);
-    ev.ret = REAL(pthread_join, thread, ptr);
+    ev.ret = ev.func(thread, ptr);
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_THREAD_JOIN, &ev, &md);
 
     return ev.ret;

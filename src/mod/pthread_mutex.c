@@ -16,11 +16,12 @@ INTERPOSE(int, pthread_mutex_lock, pthread_mutex_t *mutex)
         .pc    = INTERPOSE_PC,
         .mutex = mutex,
         .ret   = 0,
+        .func  = REAL_FUNC(pthread_mutex_lock),
     };
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_MUTEX_LOCK, &ev, &md);
-    ev.ret = REAL(pthread_mutex_lock, mutex);
+    ev.ret = ev.func(mutex);
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_MUTEX_LOCK, &ev, &md);
     return ev.ret;
 }
@@ -34,11 +35,12 @@ INTERPOSE(int, pthread_mutex_timedlock, pthread_mutex_t *mutex,
         .mutex   = mutex,
         .timeout = timeout,
         .ret     = 0,
+        .func    = REAL_FUNC(pthread_mutex_timedlock),
     };
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_MUTEX_TIMEDLOCK, &ev, &md);
-    ev.ret = REAL(pthread_mutex_timedlock, mutex, timeout);
+    ev.ret = ev.func(mutex, timeout);
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_MUTEX_TIMEDLOCK, &ev, &md);
     return ev.ret;
 }
@@ -50,11 +52,12 @@ INTERPOSE(int, pthread_mutex_trylock, pthread_mutex_t *mutex)
         .pc    = INTERPOSE_PC,
         .mutex = mutex,
         .ret   = 0,
+        .func  = REAL_FUNC(pthread_mutex_trylock),
     };
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_MUTEX_TRYLOCK, &ev, &md);
-    ev.ret = REAL(pthread_mutex_trylock, mutex);
+    ev.ret = ev.func(mutex);
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_MUTEX_TRYLOCK, &ev, &md);
     return ev.ret;
 }
@@ -65,11 +68,12 @@ INTERPOSE(int, pthread_mutex_unlock, pthread_mutex_t *mutex)
         .pc    = INTERPOSE_PC,
         .mutex = mutex,
         .ret   = 0,
+        .func  = REAL_FUNC(pthread_mutex_unlock),
     };
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_MUTEX_UNLOCK, &ev, &md);
-    ev.ret = REAL(pthread_mutex_unlock, mutex);
+    ev.ret = ev.func(mutex);
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_MUTEX_UNLOCK, &ev, &md);
     return ev.ret;
 }

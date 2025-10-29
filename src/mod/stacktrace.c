@@ -169,8 +169,8 @@ INTERPOSE(int, __libc_start_main, main_f mainf, int argc, char **ubp_av,
           void *stack_end)
 {
     main_start_();
-    return REAL_CALL(__libc_start_main, 0, mainf, argc, ubp_av, init, fini,
-                     rtld_fini, stack_end);
+    return REAL(__libc_start_main, mainf, argc, ubp_av, init, fini, rtld_fini,
+                stack_end);
 }
 
     #else  // but no GLIBC, eg, Alpine
@@ -179,8 +179,7 @@ INTERPOSE(int, __libc_start_main, main_f mainf, int argc, char **argv,
           void (*init)(void), void (*fini)(void), void (*rtld_fini)(void))
 {
     main_start_();
-    return REAL_CALL(__libc_start_main, 0, mainf, argc, argv, init, fini,
-                     rtld_fini);
+    return REAL(__libc_start_main, mainf, argc, argv, init, fini, rtld_fini);
 }
     #endif // defined(__linux__)
 #endif

@@ -15,11 +15,12 @@ INTERPOSE(void *, memcpy, void *dest, const void *src, size_t num)
         .src  = src,
         .num  = num,
         .ret  = 0,
+        .func = REAL_FUNC(memcpy),
     };
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_MEMCPY, &ev, &md);
-    ev.ret = REAL(memcpy, dest, src, num);
+    ev.ret = ev.func(dest, src, num);
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_MEMCPY, &ev, &md);
     return ev.ret;
 }
@@ -32,11 +33,12 @@ INTERPOSE(void *, memmove, void *dest, const void *src, size_t count)
         .src   = src,
         .count = count,
         .ret   = 0,
+        .func  = REAL_FUNC(memmove),
     };
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_MEMMOVE, &ev, &md);
-    ev.ret = REAL(memmove, dest, src, count);
+    ev.ret = ev.func(dest, src, count);
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_MEMMOVE, &ev, &md);
     return ev.ret;
 }
@@ -49,11 +51,12 @@ INTERPOSE(void *, memset, void *ptr, int value, size_t num)
         .value = value,
         .num   = num,
         .ret   = 0,
+        .func  = REAL_FUNC(memset),
     };
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_MEMSET, &ev, &md);
-    ev.ret = REAL(memset, ptr, value, num);
+    ev.ret = ev.func(ptr, value, num);
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_MEMSET, &ev, &md);
     return ev.ret;
 }
