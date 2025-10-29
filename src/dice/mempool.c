@@ -66,7 +66,7 @@ mempool_init(size_t cap)
     mp_.allocated     = 0;
     mp_.pool.capacity = cap;
     mp_.pool.next     = 0;
-    mp_.pool.memory   = REAL_CALL(malloc, 0, cap);
+    mp_.pool.memory   = REAL_FUNCV(malloc, 0)(cap);
     assert(mp_.pool.memory);
     memset(mp_.pool.memory, 0, cap);
     // caslock already initialized with 0
