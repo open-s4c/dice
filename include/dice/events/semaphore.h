@@ -16,18 +16,21 @@ struct sem_post_event {
     const void *pc;
     sem_t *sem;
     int ret;
+    int (*func)(sem_t *);
 };
 
 struct sem_wait_event {
     const void *pc;
     sem_t *sem;
     int ret;
+    int (*func)(sem_t *);
 };
 
 struct sem_trywait_event {
     const void *pc;
     sem_t *sem;
     int ret;
+    int (*func)(sem_t *);
 };
 
 #if !defined(__APPLE__)
@@ -36,6 +39,7 @@ struct sem_timedwait_event {
     sem_t *sem;
     const struct timespec *abstime;
     int ret;
+    int (*func)(sem_t *, const struct timespec *);
 };
 #endif
 

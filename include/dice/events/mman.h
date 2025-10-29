@@ -21,6 +21,7 @@ struct mmap_event {
     int fd;
     off_t offset;
     void *ret;
+    void *(*func)(void *, size_t, int, int, int, off_t);
 };
 
 struct munmap_event {
@@ -28,6 +29,7 @@ struct munmap_event {
     void *addr;
     size_t length;
     int ret;
+    int (*func)(void *, size_t);
 };
 
 #endif /* DICE_MMAN_H */
