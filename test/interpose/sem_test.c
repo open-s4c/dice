@@ -144,7 +144,7 @@ PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_SEM_POST, {
     struct sem_post_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E_sem_post, sem);
 
-    // must be enabled. Let's
+    // must be enabled.
     ensure(enabled());
     ev->func = fake_sem_post;
 })
@@ -162,7 +162,7 @@ PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_SEM_WAIT, {
     struct sem_wait_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E_sem_wait, sem);
 
-    // must be enabled. Let's
+    // must be enabled.
     ensure(enabled());
     ev->func = fake_sem_wait;
 })
@@ -180,7 +180,7 @@ PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_SEM_TRYWAIT, {
     struct sem_trywait_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E_sem_trywait, sem);
 
-    // must be enabled. Let's
+    // must be enabled.
     ensure(enabled());
     ev->func = fake_sem_trywait;
 })
@@ -199,7 +199,7 @@ PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_SEM_TIMEDWAIT, {
     ASSERT_FIELD_EQ(&E_sem_timedwait, sem);
     ASSERT_FIELD_EQ(&E_sem_timedwait, abstime);
 
-    // must be enabled. Let's
+    // must be enabled.
     ensure(enabled());
     ev->func = fake_sem_timedwait;
 })
@@ -229,13 +229,16 @@ test_sem_post(void)
 {
     /* initialize event with random content */
     event_init(&E_sem_post, sizeof(struct sem_post_event));
+
+    /* ensure that fields that must be equal are actually equal */
+
     /* call sem_post with arguments */
     enable(fake_sem_post);
      int  ret =                                   //
                                  sem_post(                                    //
                                      E_sem_post.sem                                  );
- ensure(ret == E_sem_post.ret);
     ensure(called);
+ ensure(ret == E_sem_post.ret);
     disable();
 }
 static void
@@ -243,13 +246,16 @@ test_sem_wait(void)
 {
     /* initialize event with random content */
     event_init(&E_sem_wait, sizeof(struct sem_wait_event));
+
+    /* ensure that fields that must be equal are actually equal */
+
     /* call sem_wait with arguments */
     enable(fake_sem_wait);
      int  ret =                                   //
                                  sem_wait(                                    //
                                      E_sem_wait.sem                                  );
- ensure(ret == E_sem_wait.ret);
     ensure(called);
+ ensure(ret == E_sem_wait.ret);
     disable();
 }
 static void
@@ -257,13 +263,16 @@ test_sem_trywait(void)
 {
     /* initialize event with random content */
     event_init(&E_sem_trywait, sizeof(struct sem_trywait_event));
+
+    /* ensure that fields that must be equal are actually equal */
+
     /* call sem_trywait with arguments */
     enable(fake_sem_trywait);
      int  ret =                                   //
                                  sem_trywait(                                    //
                                      E_sem_trywait.sem                                  );
- ensure(ret == E_sem_trywait.ret);
     ensure(called);
+ ensure(ret == E_sem_trywait.ret);
     disable();
 }
 static void
@@ -271,14 +280,17 @@ test_sem_timedwait(void)
 {
     /* initialize event with random content */
     event_init(&E_sem_timedwait, sizeof(struct sem_timedwait_event));
+
+    /* ensure that fields that must be equal are actually equal */
+
     /* call sem_timedwait with arguments */
     enable(fake_sem_timedwait);
      int  ret =                                   //
                                  sem_timedwait(                                    //
                                      E_sem_timedwait.sem,                           //
                                      E_sem_timedwait.abstime                                  );
- ensure(ret == E_sem_timedwait.ret);
     ensure(called);
+ ensure(ret == E_sem_timedwait.ret);
     disable();
 }
 

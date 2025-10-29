@@ -116,7 +116,7 @@ PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT___CXA_GUARD_ACQUIRE, {
     struct __cxa_guard_acquire_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E___cxa_guard_acquire, addr);
 
-    // must be enabled. Let's
+    // must be enabled.
     ensure(enabled());
     ev->func = fake___cxa_guard_acquire;
 })
@@ -134,7 +134,7 @@ PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT___CXA_GUARD_RELEASE, {
     struct __cxa_guard_release_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E___cxa_guard_release, addr);
 
-    // must be enabled. Let's
+    // must be enabled.
     ensure(enabled());
     ev->func = fake___cxa_guard_release;
 })
@@ -152,7 +152,7 @@ PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT___CXA_GUARD_ABORT, {
     struct __cxa_guard_abort_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E___cxa_guard_abort, addr);
 
-    // must be enabled. Let's
+    // must be enabled.
     ensure(enabled());
     ev->func = fake___cxa_guard_abort;
 })
@@ -180,13 +180,16 @@ test___cxa_guard_acquire(void)
 {
     /* initialize event with random content */
     event_init(&E___cxa_guard_acquire, sizeof(struct __cxa_guard_acquire_event));
+
+    /* ensure that fields that must be equal are actually equal */
+
     /* call __cxa_guard_acquire with arguments */
     enable(fake___cxa_guard_acquire);
      int  ret =                                   //
                                  __cxa_guard_acquire(                                    //
                                      E___cxa_guard_acquire.addr                                  );
- ensure(ret == E___cxa_guard_acquire.ret);
     ensure(called);
+ ensure(ret == E___cxa_guard_acquire.ret);
     disable();
 }
 static void
@@ -194,13 +197,16 @@ test___cxa_guard_release(void)
 {
     /* initialize event with random content */
     event_init(&E___cxa_guard_release, sizeof(struct __cxa_guard_release_event));
+
+    /* ensure that fields that must be equal are actually equal */
+
     /* call __cxa_guard_release with arguments */
     enable(fake___cxa_guard_release);
      int  ret =                                   //
                                  __cxa_guard_release(                                    //
                                      E___cxa_guard_release.addr                                  );
- ensure(ret == E___cxa_guard_release.ret);
     ensure(called);
+ ensure(ret == E___cxa_guard_release.ret);
     disable();
 }
 static void
@@ -208,6 +214,9 @@ test___cxa_guard_abort(void)
 {
     /* initialize event with random content */
     event_init(&E___cxa_guard_abort, sizeof(struct __cxa_guard_abort_event));
+
+    /* ensure that fields that must be equal are actually equal */
+
     /* call __cxa_guard_abort with arguments */
     enable(fake___cxa_guard_abort);
                                  __cxa_guard_abort(                                    //

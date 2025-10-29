@@ -102,7 +102,7 @@ PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_PTHREAD_CREATE, {
     ASSERT_FIELD_EQ(&E_pthread_create, thread);
     ASSERT_FIELD_EQ(&E_pthread_create, attr);
 
-    // must be enabled. Let's
+    // must be enabled.
     ensure(enabled());
     ev->func = fake_pthread_create;
 })
@@ -122,7 +122,7 @@ PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_PTHREAD_JOIN, {
     ASSERT_FIELD_EQ(&E_pthread_join, thread);
     ASSERT_FIELD_EQ(&E_pthread_join, ptr);
 
-    // must be enabled. Let's
+    // must be enabled.
     ensure(enabled());
     ev->func = fake_pthread_join;
 })
@@ -152,6 +152,9 @@ test_pthread_create(void)
 {
     /* initialize event with random content */
     event_init(&E_pthread_create, sizeof(struct pthread_create_event));
+
+    /* ensure that fields that must be equal are actually equal */
+
     /* call pthread_create with arguments */
     enable(fake_pthread_create);
      int  ret =                                   //
@@ -160,8 +163,8 @@ test_pthread_create(void)
                                      E_pthread_create.attr,                           //
                                      E_pthread_create.run,                           //
                                      E_pthread_create.arg                                  );
- ensure(ret == E_pthread_create.ret);
     ensure(called);
+ ensure(ret == E_pthread_create.ret);
     disable();
 }
 static void
@@ -169,14 +172,17 @@ test_pthread_join(void)
 {
     /* initialize event with random content */
     event_init(&E_pthread_join, sizeof(struct pthread_join_event));
+
+    /* ensure that fields that must be equal are actually equal */
+
     /* call pthread_join with arguments */
     enable(fake_pthread_join);
      int  ret =                                   //
                                  pthread_join(                                    //
                                      E_pthread_join.thread,                           //
                                      E_pthread_join.ptr                                  );
- ensure(ret == E_pthread_join.ret);
     ensure(called);
+ ensure(ret == E_pthread_join.ret);
     disable();
 }
 

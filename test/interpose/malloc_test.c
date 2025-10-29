@@ -1,50 +1,37 @@
 /*
- * Copyright (C) Huawei Technologies Co., Ltd. 2025. All rights reserved.
+ * Copyright (C) 2025 Huawei Technologies Co., Ltd.
  * SPDX-License-Identifier: 0BSD
  */
 #include <stddef.h>
 #include <stdlib.h>
 #include <string.h>
 
-#define DICE_TEST_INTERPOSE
 #include <dice/chains/intercept.h>
+#include <dice/ensure.h>
 #include <dice/interpose.h>
 #include <dice/pubsub.h>
 #include <dice/events/malloc.h>
 
-#define ensure(COND)                                                           \
-    {                                                                          \
-        if (!(COND)) {                                                         \
-            log_fatal("error: %s", #COND);                                     \
-        }                                                                      \
-    }
-
 static void *symbol;
+static bool called;
 /* we need to declare this as noinline, otherwise the optimization of the
  * compiler gets rid of the symbol. */
 static __attribute__((noinline)) void
 enable(void *foo)
 {
     symbol = foo;
+    called = false;
 }
 static __attribute__((noinline)) void
 disable(void)
 {
     symbol = NULL;
+    called = false;
 }
 static inline bool
 enabled(void)
 {
     return symbol != NULL;
-}
-
-void *
-real_sym(const char *name, const char *ver)
-{
-    (void)ver;
-    if (!enabled())
-        return _real_sym(name, ver);
-    return symbol;
 }
 
 /* Expects struct to match this:
@@ -104,52 +91,100 @@ struct aligned_alloc_event E_aligned_alloc;
 void *
 fake_malloc(size_t size)
 {
-    /* check that every argument is as expected */
+    /* check that every argument is as expected (unless should be skipped). */
     ensure(size == E_malloc.size);
+
+    /* skipped arguments should be void-cast to silent compiler warnings. */
+
+
+    /* mark as called*/
+    ensure(!called);
+    called = true;
+
     /* return expected value */
  return E_malloc.ret;
 }
 void *
 fake_calloc(size_t number, size_t size)
 {
-    /* check that every argument is as expected */
+    /* check that every argument is as expected (unless should be skipped). */
     ensure(number == E_calloc.number);
     ensure(size == E_calloc.size);
+
+    /* skipped arguments should be void-cast to silent compiler warnings. */
+
+
+    /* mark as called*/
+    ensure(!called);
+    called = true;
+
     /* return expected value */
  return E_calloc.ret;
 }
 void *
 fake_realloc(void *ptr, size_t size)
 {
-    /* check that every argument is as expected */
+    /* check that every argument is as expected (unless should be skipped). */
     ensure(ptr == E_realloc.ptr);
     ensure(size == E_realloc.size);
+
+    /* skipped arguments should be void-cast to silent compiler warnings. */
+
+
+    /* mark as called*/
+    ensure(!called);
+    called = true;
+
     /* return expected value */
  return E_realloc.ret;
 }
 void
 fake_free(void *ptr)
 {
-    /* check that every argument is as expected */
+    /* check that every argument is as expected (unless should be skipped). */
     ensure(ptr == E_free.ptr);
+
+    /* skipped arguments should be void-cast to silent compiler warnings. */
+
+
+    /* mark as called*/
+    ensure(!called);
+    called = true;
+
     /* return expected value */
 }
 int
 fake_posix_memalign(void **ptr, size_t alignment, size_t size)
 {
-    /* check that every argument is as expected */
+    /* check that every argument is as expected (unless should be skipped). */
     ensure(ptr == E_posix_memalign.ptr);
     ensure(alignment == E_posix_memalign.alignment);
     ensure(size == E_posix_memalign.size);
+
+    /* skipped arguments should be void-cast to silent compiler warnings. */
+
+
+    /* mark as called*/
+    ensure(!called);
+    called = true;
+
     /* return expected value */
  return E_posix_memalign.ret;
 }
 void *
 fake_aligned_alloc(size_t alignment, size_t size)
 {
-    /* check that every argument is as expected */
+    /* check that every argument is as expected (unless should be skipped). */
     ensure(alignment == E_aligned_alloc.alignment);
     ensure(size == E_aligned_alloc.size);
+
+    /* skipped arguments should be void-cast to silent compiler warnings. */
+
+
+    /* mark as called*/
+    ensure(!called);
+    called = true;
+
     /* return expected value */
  return E_aligned_alloc.ret;
 }
@@ -162,6 +197,10 @@ PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_MALLOC, {
         return PS_STOP_CHAIN;
     struct malloc_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E_malloc, size);
+
+    // must be enabled.
+    ensure(enabled());
+    ev->func = fake_malloc;
 })
 
 PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_MALLOC, {
@@ -177,6 +216,10 @@ PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_CALLOC, {
     struct calloc_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E_calloc, number);
     ASSERT_FIELD_EQ(&E_calloc, size);
+
+    // must be enabled.
+    ensure(enabled());
+    ev->func = fake_calloc;
 })
 
 PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_CALLOC, {
@@ -193,6 +236,10 @@ PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_REALLOC, {
     struct realloc_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E_realloc, ptr);
     ASSERT_FIELD_EQ(&E_realloc, size);
+
+    // must be enabled.
+    ensure(enabled());
+    ev->func = fake_realloc;
 })
 
 PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_REALLOC, {
@@ -208,6 +255,10 @@ PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_FREE, {
         return PS_STOP_CHAIN;
     struct free_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E_free, ptr);
+
+    // must be enabled.
+    ensure(enabled());
+    ev->func = fake_free;
 })
 
 PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_FREE, {
@@ -223,6 +274,10 @@ PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_POSIX_MEMALIGN, {
     ASSERT_FIELD_EQ(&E_posix_memalign, ptr);
     ASSERT_FIELD_EQ(&E_posix_memalign, alignment);
     ASSERT_FIELD_EQ(&E_posix_memalign, size);
+
+    // must be enabled.
+    ensure(enabled());
+    ev->func = fake_posix_memalign;
 })
 
 PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_POSIX_MEMALIGN, {
@@ -240,6 +295,10 @@ PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_ALIGNED_ALLOC, {
     struct aligned_alloc_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E_aligned_alloc, alignment);
     ASSERT_FIELD_EQ(&E_aligned_alloc, size);
+
+    // must be enabled.
+    ensure(enabled());
+    ev->func = fake_aligned_alloc;
 })
 
 PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_ALIGNED_ALLOC, {
@@ -267,11 +326,15 @@ test_malloc(void)
 {
     /* initialize event with random content */
     event_init(&E_malloc, sizeof(struct malloc_event));
+
+    /* ensure that fields that must be equal are actually equal */
+
     /* call malloc with arguments */
     enable(fake_malloc);
      void *  ret =                                   //
                                  malloc(                                    //
                                      E_malloc.size                                  );
+    ensure(called);
  ensure(ret == E_malloc.ret);
     disable();
 }
@@ -280,12 +343,16 @@ test_calloc(void)
 {
     /* initialize event with random content */
     event_init(&E_calloc, sizeof(struct calloc_event));
+
+    /* ensure that fields that must be equal are actually equal */
+
     /* call calloc with arguments */
     enable(fake_calloc);
      void *  ret =                                   //
                                  calloc(                                    //
                                      E_calloc.number,                           //
                                      E_calloc.size                                  );
+    ensure(called);
  ensure(ret == E_calloc.ret);
     disable();
 }
@@ -294,12 +361,16 @@ test_realloc(void)
 {
     /* initialize event with random content */
     event_init(&E_realloc, sizeof(struct realloc_event));
+
+    /* ensure that fields that must be equal are actually equal */
+
     /* call realloc with arguments */
     enable(fake_realloc);
      void *  ret =                                   //
                                  realloc(                                    //
                                      E_realloc.ptr,                           //
                                      E_realloc.size                                  );
+    ensure(called);
  ensure(ret == E_realloc.ret);
     disable();
 }
@@ -308,10 +379,14 @@ test_free(void)
 {
     /* initialize event with random content */
     event_init(&E_free, sizeof(struct free_event));
+
+    /* ensure that fields that must be equal are actually equal */
+
     /* call free with arguments */
     enable(fake_free);
                                  free(                                    //
                                      E_free.ptr                                  );
+    ensure(called);
     disable();
 }
 static void
@@ -319,6 +394,9 @@ test_posix_memalign(void)
 {
     /* initialize event with random content */
     event_init(&E_posix_memalign, sizeof(struct posix_memalign_event));
+
+    /* ensure that fields that must be equal are actually equal */
+
     /* call posix_memalign with arguments */
     enable(fake_posix_memalign);
      int  ret =                                   //
@@ -326,6 +404,7 @@ test_posix_memalign(void)
                                      E_posix_memalign.ptr,                           //
                                      E_posix_memalign.alignment,                           //
                                      E_posix_memalign.size                                  );
+    ensure(called);
  ensure(ret == E_posix_memalign.ret);
     disable();
 }
@@ -334,12 +413,16 @@ test_aligned_alloc(void)
 {
     /* initialize event with random content */
     event_init(&E_aligned_alloc, sizeof(struct aligned_alloc_event));
+
+    /* ensure that fields that must be equal are actually equal */
+
     /* call aligned_alloc with arguments */
     enable(fake_aligned_alloc);
      void *  ret =                                   //
                                  aligned_alloc(                                    //
                                      E_aligned_alloc.alignment,                           //
                                      E_aligned_alloc.size                                  );
+    ensure(called);
  ensure(ret == E_aligned_alloc.ret);
     disable();
 }

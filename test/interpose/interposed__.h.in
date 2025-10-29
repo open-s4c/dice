@@ -1,4 +1,10 @@
 $__dl; // ----------------------------------------------------------------------
+$__dl; // contraint on the field values
+$__dl; // ----------------------------------------------------------------------
+$__map(__memcpy_ret_SAME_AS, dest);
+$__map(__memset_ret_SAME_AS, ptr);
+$__map(__memmove_ret_SAME_AS, dest);
+$__dl; // ----------------------------------------------------------------------
 $__dl; // pthread_create
 $__dl; // ----------------------------------------------------------------------
 $__dl; // we have to ignore the run and arg parameters of pthread_create because
@@ -12,3 +18,4 @@ $__dl; // Fallbacks
 $__dl; // ----------------------------------------------------------------------
 $__map(UNLESS, dl);
 $__map(WHEN, skip);
+$__map(_SAME_AS, $__skip);
