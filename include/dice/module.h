@@ -94,7 +94,6 @@
     static void DICE_CTOR ps_subscribe_##CHAIN##_##TYPE##_(void)               \
     {                                                                          \
         ps_register_chain(CHAIN, CNAME);                                       \
-        ps_register_type(TYPE, TNAME);                                         \
         int err =                                                              \
             ps_subscribe(CHAIN, TYPE, PS_HANDLER(CHAIN, TYPE, SLOT), SLOT);    \
         if (err != PS_OK)                                                      \

@@ -45,24 +45,23 @@ void *real_sym(const char *, const char *);
 
 /* REAL(F, ...) calls the real function F using its declared function
  * pointer. */
-#if defined(__linux__)
+#if defined(__APPLE__)
+    /* On macOS, however, the mechanism uses the interposition attribute and
+     * the call to the real function can be done directly. */
+    #define REAL(F, ...) F(__VA_ARGS__)
+#else
+    #define REAL(F, ...) REAL_FUNC(F)(__VA_ARGS__)
 
-    #define REAL(F, ...) REAL_CALL(F, 0, ##__VA_ARGS__)
+#endif
+
+#if defined(__linux__)
     /* Fix for glibc pthread_cond version issues. We assume that the SUT
      * expects glibc 2.3.2 or above. For more information see issue #36 or
      * https://blog.fesnel.com/blog/2009/08/25/preloading-with-multiple-symbol-versions/
      */
-    #define REALP(F, ...) REAL_CALL(F, "GLIBC_2.3.2", __VA_ARGS__)
-
-#elif defined(__NetBSD__)
-
-    #define REAL(F, ...)  REAL_CALL(F, 0, ##__VA_ARGS__)
-    #define REALP(F, ...) REAL_CALL(F, 0, ##__VA_ARGS__)
-
-#elif defined(__APPLE__)
-    /* On macOS, however, the mechanism uses the interposition attribute and
-     * the call to the real function can be done directly. */
-    #define REAL(F, ...) F(__VA_ARGS__)
+    #define REAL_FUNCP(F) REAL_FUNCV(F, "GLIBC_2.3.2")
+#else
+    #define REAL_FUNCP(F) REAL_FUNCV(F, 0)
 #endif
 
 /* INTERPOSE(T, F, ...) { ... } defines an interposition function for F
@@ -81,34 +80,43 @@ void *real_sym(const char *, const char *);
         static struct {                                                        \
             const void *fake;                                                  \
             const void *real;                                                  \
-        } _dice_interpose_##F                                                  \
+        } dice_interpose_##F##_                                                \
             __attribute__((used, section("__DATA,__interpose"))) = {           \
                 (const void *)&FAKE_NAME(F), (const void *)&F};                \
         T FAKE_NAME(F)(__VA_ARGS__)
 
-    #define FAKE_NAME(F) _dice_fake_##F
+    #define FAKE_NAME(F) dice_fake_##F##_
 
 #endif
 
-/* REAL_CALL(F, ...) calls a declared real function. In case the
- * function pointer is NULL, this macro initializes it using
- * `REAL_SYM()`. If DICE_TEST_INTERPOSE is defined, the function pointer
- * is not set and REAL_SYM is called for every call of REAL_CALL. */
-#if !defined(DICE_TEST_INTERPOSE)
-    #define REAL_CALL(F, V, ...)                                               \
-        ((REAL_NAME(F) == NULL ? (REAL_NAME(F) = REAL_SYM(F, V)) : 0),         \
-         REAL_NAME(F)(__VA_ARGS__))
-#else
-    #define REAL_CALL(F, V, ...)                                               \
-        ((__typeof(REAL_NAME(F)))REAL_SYM(F, V))(__VA_ARGS__)
-#endif
+/* REAL_FUNC(F) returns the pointer of a declared real function F.
+ *
+ * In case the function pointer is NULL, this macro initializes it using
+ * `REAL_SYM(F, 0)`.
+ */
+#define REAL_FUNC(F) REAL_FUNCV(F, 0)
+
+/* REAL_FUNCV(F,V) returns the pointer of a declared real function F with
+ * version V.
+ *
+ * In case the function pointer is NULL, this macro initializes it using
+ * `REAL_SYM(F, V)`.
+ */
+#define REAL_FUNCV(F, V)                                                       \
+    ({                                                                         \
+        if (REAL_NAME(F) == NULL)                                              \
+            REAL_NAME(F) = REAL_SYM(F, V);                                     \
+        REAL_NAME(F);                                                          \
+    })
 
 /* REAL_SYM(F, V) finds real symbol of declared function F with version
  * V. The version value V can be NULL. */
 #define REAL_SYM(F, V) (__typeof(REAL_NAME(F)))real_sym(#F, V)
 
-static inline void *
-_real_sym(const char *name, const char *ver)
+
+/* Finds a real function by calling dlsym or dlvsym. */
+DICE_HIDE DICE_WEAK void *
+real_sym(const char *name, const char *ver)
 {
 #if defined(__GLIBC__)
     if (ver != NULL)
@@ -117,14 +125,5 @@ _real_sym(const char *name, const char *ver)
     (void)ver;
     return dlsym(RTLD_NEXT, name);
 }
-
-/* Finds a real function by calling dlsym or dlvsym. */
-#if !defined(DICE_TEST_INTERPOSE)
-DICE_HIDE DICE_WEAK void *
-real_sym(const char *name, const char *ver)
-{
-    return _real_sym(name, ver);
-}
-#endif
 
 #endif /* DICE_INTERPOSE_H */
