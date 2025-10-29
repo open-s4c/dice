@@ -53,6 +53,7 @@ struct pthread_create_event {
     void *(*run)(void *);
     void *arg;
     int ret;
+    int (*func)(pthread_t *, const pthread_attr_t *, void *(*)(void *), void *);
 };
 
 struct pthread_join_event {
@@ -60,29 +61,34 @@ struct pthread_join_event {
     pthread_t thread;
     void **ptr;
     int ret;
+    int (*func)(pthread_t, void **);
 };
 
 struct pthread_exit_event {
     const void *pc;
     void *ptr;
+    void (*func)(void *);
 };
 
 struct pthread_mutex_lock_event {
     const void *pc;
     pthread_mutex_t *mutex;
     int ret;
+    int (*func)(pthread_mutex_t *);
 };
 
 struct pthread_mutex_trylock_event {
     const void *pc;
     pthread_mutex_t *mutex;
     int ret;
+    int (*func)(pthread_mutex_t *);
 };
 
 struct pthread_mutex_unlock_event {
     const void *pc;
     pthread_mutex_t *mutex;
     int ret;
+    int (*func)(pthread_mutex_t *);
 };
 
 struct pthread_mutex_timedlock_event {
@@ -90,6 +96,7 @@ struct pthread_mutex_timedlock_event {
     pthread_mutex_t *mutex;
     const struct timespec *timeout;
     int ret;
+    int (*func)(pthread_mutex_t *, const struct timespec *);
 };
 
 struct pthread_cond_wait_event {
@@ -97,6 +104,7 @@ struct pthread_cond_wait_event {
     pthread_cond_t *cond;
     pthread_mutex_t *mutex;
     int ret;
+    int (*func)(pthread_cond_t *, pthread_mutex_t *);
 };
 
 struct pthread_cond_timedwait_event {
@@ -105,57 +113,67 @@ struct pthread_cond_timedwait_event {
     pthread_mutex_t *mutex;
     const struct timespec *abstime;
     int ret;
+    int (*func)(pthread_cond_t *, pthread_mutex_t *, const struct timespec *);
 };
 
 struct pthread_cond_signal_event {
     const void *pc;
     pthread_cond_t *cond;
     int ret;
+    int (*func)(pthread_cond_t *);
 };
 
 struct pthread_cond_broadcast_event {
     const void *pc;
     pthread_cond_t *cond;
     int ret;
+    int (*func)(pthread_cond_t *);
 };
 
 struct pthread_rwlock_rdlock_event {
     const void *pc;
     pthread_rwlock_t *lock;
     int ret;
+    int (*func)(pthread_rwlock_t *);
 };
 
 struct pthread_rwlock_tryrdlock_event {
     const void *pc;
     pthread_rwlock_t *lock;
     int ret;
+    int (*func)(pthread_rwlock_t *);
 };
 struct pthread_rwlock_timedrdlock_event {
     const void *pc;
     pthread_rwlock_t *lock;
     const struct timespec *abstime;
     int ret;
+    int (*func)(pthread_rwlock_t *, const struct timespec *);
 };
 struct pthread_rwlock_wrlock_event {
     const void *pc;
     pthread_rwlock_t *lock;
     int ret;
+    int (*func)(pthread_rwlock_t *);
 };
 struct pthread_rwlock_trywrlock_event {
     const void *pc;
     pthread_rwlock_t *lock;
     int ret;
+    int (*func)(pthread_rwlock_t *);
 };
 struct pthread_rwlock_timedwrlock_event {
     const void *pc;
     pthread_rwlock_t *lock;
     const struct timespec *abstime;
     int ret;
+    int (*func)(pthread_rwlock_t *, const struct timespec *);
 };
 struct pthread_rwlock_unlock_event {
     const void *pc;
     pthread_rwlock_t *lock;
     int ret;
+    int (*func)(pthread_rwlock_t *);
 };
 
 #endif /* DICE_PTHREAD_H */

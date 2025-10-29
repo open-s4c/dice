@@ -21,17 +21,20 @@ struct __cxa_guard_acquire_event {
     const void *pc;
     void *addr;
     int ret;
+    int (*func)(void *);
 };
 
 struct __cxa_guard_release_event {
     const void *pc;
     void *addr;
     int ret;
+    int (*func)(void *);
 };
 
 struct __cxa_guard_abort_event {
     const void *pc;
     void *addr;
+    void (*func)(void *);
 };
 
 #endif /* DICE_CXA_H */
