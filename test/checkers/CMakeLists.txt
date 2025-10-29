@@ -21,7 +21,7 @@ foreach(SRC ${SRCS})
   endif()
 endforeach()
 
-target_link_libraries(trace_checker PRIVATE dice-self)
+target_link_libraries(trace_checker PRIVATE dice-self mock_checker)
 
 add_library(mock_checker SHARED mock_checker.c)
 target_link_libraries(mock_checker PUBLIC dice.h dice-checkers.h)

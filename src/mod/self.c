@@ -27,7 +27,7 @@
 #include <signal.h>
 #include <stdio.h>
 #include <string.h>
-#if defined(__NetBSD__)
+#if defined(__NetBSD__) ||  defined(__APPLE__)
     #include <errno.h>
 #endif
 

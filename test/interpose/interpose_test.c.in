@@ -165,8 +165,8 @@ test_FOO(void)
                                      E_FOO.AA,                           //
                                      $__end(),                           //
                                  );
-    $_returns MM_RETURN_FOO $.? ensure(ret == E_FOO.ret);
     ensure(called);
+    $_returns MM_RETURN_FOO $.? ensure(ret == E_FOO.ret);
     disable();
 }
 $_end();

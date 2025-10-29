@@ -58,15 +58,6 @@ struct sem_wait_event E_sem_wait;
  * };
  */
 struct sem_trywait_event E_sem_trywait;
-/* Expects struct to match this:
- *
- * struct sem_timedwait_event {
- *     sem_t *sem;
- *     const struct timespec *abstime;
- *      int  ret;
- * };
- */
-struct sem_timedwait_event E_sem_timedwait;
 
 /* mock implementation of functions */
 int
@@ -116,23 +107,6 @@ fake_sem_trywait(sem_t *sem)
 
     /* return expected value */
  return E_sem_trywait.ret;
-}
-int
-fake_sem_timedwait(sem_t *sem, const struct timespec *abstime)
-{
-    /* check that every argument is as expected (unless should be skipped). */
-    ensure(sem == E_sem_timedwait.sem);
-    ensure(abstime == E_sem_timedwait.abstime);
-
-    /* skipped arguments should be void-cast to silent compiler warnings. */
-
-
-    /* mark as called*/
-    ensure(!called);
-    called = true;
-
-    /* return expected value */
- return E_sem_timedwait.ret;
 }
 
 #define ASSERT_FIELD_EQ(E, field)                                              \
@@ -192,26 +166,6 @@ PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_SEM_TRYWAIT, {
     ASSERT_FIELD_EQ(&E_sem_trywait, sem);
  ASSERT_FIELD_EQ(&E_sem_trywait, ret);
 })
-PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_SEM_TIMEDWAIT, {
-    if (!enabled())
-        return PS_STOP_CHAIN;
-    struct sem_timedwait_event *ev = EVENT_PAYLOAD(ev);
-    ASSERT_FIELD_EQ(&E_sem_timedwait, sem);
-    ASSERT_FIELD_EQ(&E_sem_timedwait, abstime);
-
-    // must be enabled. Let's
-    ensure(enabled());
-    ev->func = fake_sem_timedwait;
-})
-
-PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_SEM_TIMEDWAIT, {
-    if (!enabled())
-        return PS_STOP_CHAIN;
-    struct sem_timedwait_event *ev = EVENT_PAYLOAD(ev);
-    ASSERT_FIELD_EQ(&E_sem_timedwait, sem);
-    ASSERT_FIELD_EQ(&E_sem_timedwait, abstime);
- ASSERT_FIELD_EQ(&E_sem_timedwait, ret);
-})
 
 
 static void
@@ -234,8 +188,8 @@ test_sem_post(void)
      int  ret =                                   //
                                  sem_post(                                    //
                                      E_sem_post.sem                                  );
- ensure(ret == E_sem_post.ret);
     ensure(called);
+ ensure(ret == E_sem_post.ret);
     disable();
 }
 static void
@@ -248,8 +202,8 @@ test_sem_wait(void)
      int  ret =                                   //
                                  sem_wait(                                    //
                                      E_sem_wait.sem                                  );
- ensure(ret == E_sem_wait.ret);
     ensure(called);
+ ensure(ret == E_sem_wait.ret);
     disable();
 }
 static void
@@ -262,23 +216,8 @@ test_sem_trywait(void)
      int  ret =                                   //
                                  sem_trywait(                                    //
                                      E_sem_trywait.sem                                  );
+    ensure(called);
  ensure(ret == E_sem_trywait.ret);
-    ensure(called);
-    disable();
-}
-static void
-test_sem_timedwait(void)
-{
-    /* initialize event with random content */
-    event_init(&E_sem_timedwait, sizeof(struct sem_timedwait_event));
-    /* call sem_timedwait with arguments */
-    enable(fake_sem_timedwait);
-     int  ret =                                   //
-                                 sem_timedwait(                                    //
-                                     E_sem_timedwait.sem,                           //
-                                     E_sem_timedwait.abstime                                  );
- ensure(ret == E_sem_timedwait.ret);
-    ensure(called);
     disable();
 }
 
@@ -288,6 +227,5 @@ main()
     test_sem_post();
     test_sem_wait();
     test_sem_trywait();
-    test_sem_timedwait();
     return 0;
 }

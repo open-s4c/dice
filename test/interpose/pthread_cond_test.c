@@ -243,8 +243,8 @@ test_pthread_cond_wait(void)
                                  pthread_cond_wait(                                    //
                                      E_pthread_cond_wait.cond,                           //
                                      E_pthread_cond_wait.mutex                                  );
- ensure(ret == E_pthread_cond_wait.ret);
     ensure(called);
+ ensure(ret == E_pthread_cond_wait.ret);
     disable();
 }
 static void
@@ -259,8 +259,8 @@ test_pthread_cond_timedwait(void)
                                      E_pthread_cond_timedwait.cond,                           //
                                      E_pthread_cond_timedwait.mutex,                           //
                                      E_pthread_cond_timedwait.abstime                                  );
- ensure(ret == E_pthread_cond_timedwait.ret);
     ensure(called);
+ ensure(ret == E_pthread_cond_timedwait.ret);
     disable();
 }
 static void
@@ -273,8 +273,8 @@ test_pthread_cond_signal(void)
      int  ret =                                   //
                                  pthread_cond_signal(                                    //
                                      E_pthread_cond_signal.cond                                  );
- ensure(ret == E_pthread_cond_signal.ret);
     ensure(called);
+ ensure(ret == E_pthread_cond_signal.ret);
     disable();
 }
 static void
@@ -287,8 +287,8 @@ test_pthread_cond_broadcast(void)
      int  ret =                                   //
                                  pthread_cond_broadcast(                                    //
                                      E_pthread_cond_broadcast.cond                                  );
- ensure(ret == E_pthread_cond_broadcast.ret);
     ensure(called);
+ ensure(ret == E_pthread_cond_broadcast.ret);
     disable();
 }
 

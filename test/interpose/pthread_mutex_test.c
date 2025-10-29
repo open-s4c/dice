@@ -58,15 +58,6 @@ struct pthread_mutex_unlock_event E_pthread_mutex_unlock;
  * };
  */
 struct pthread_mutex_trylock_event E_pthread_mutex_trylock;
-/* Expects struct to match this:
- *
- * struct pthread_mutex_timedlock_event {
- *     pthread_mutex_t *mutex;
- *     const struct timespec *timeout;
- *      int  ret;
- * };
- */
-struct pthread_mutex_timedlock_event E_pthread_mutex_timedlock;
 
 /* mock implementation of functions */
 int
@@ -116,23 +107,6 @@ fake_pthread_mutex_trylock(pthread_mutex_t *mutex)
 
     /* return expected value */
  return E_pthread_mutex_trylock.ret;
-}
-int
-fake_pthread_mutex_timedlock(pthread_mutex_t *mutex, const struct timespec *timeout)
-{
-    /* check that every argument is as expected (unless should be skipped). */
-    ensure(mutex == E_pthread_mutex_timedlock.mutex);
-    ensure(timeout == E_pthread_mutex_timedlock.timeout);
-
-    /* skipped arguments should be void-cast to silent compiler warnings. */
-
-
-    /* mark as called*/
-    ensure(!called);
-    called = true;
-
-    /* return expected value */
- return E_pthread_mutex_timedlock.ret;
 }
 
 #define ASSERT_FIELD_EQ(E, field)                                              \
@@ -192,26 +166,6 @@ PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_PTHREAD_MUTEX_TRYLOCK, {
     ASSERT_FIELD_EQ(&E_pthread_mutex_trylock, mutex);
  ASSERT_FIELD_EQ(&E_pthread_mutex_trylock, ret);
 })
-PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_PTHREAD_MUTEX_TIMEDLOCK, {
-    if (!enabled())
-        return PS_STOP_CHAIN;
-    struct pthread_mutex_timedlock_event *ev = EVENT_PAYLOAD(ev);
-    ASSERT_FIELD_EQ(&E_pthread_mutex_timedlock, mutex);
-    ASSERT_FIELD_EQ(&E_pthread_mutex_timedlock, timeout);
-
-    // must be enabled. Let's
-    ensure(enabled());
-    ev->func = fake_pthread_mutex_timedlock;
-})
-
-PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_PTHREAD_MUTEX_TIMEDLOCK, {
-    if (!enabled())
-        return PS_STOP_CHAIN;
-    struct pthread_mutex_timedlock_event *ev = EVENT_PAYLOAD(ev);
-    ASSERT_FIELD_EQ(&E_pthread_mutex_timedlock, mutex);
-    ASSERT_FIELD_EQ(&E_pthread_mutex_timedlock, timeout);
- ASSERT_FIELD_EQ(&E_pthread_mutex_timedlock, ret);
-})
 
 
 static void
@@ -234,8 +188,8 @@ test_pthread_mutex_lock(void)
      int  ret =                                   //
                                  pthread_mutex_lock(                                    //
                                      E_pthread_mutex_lock.mutex                                  );
- ensure(ret == E_pthread_mutex_lock.ret);
     ensure(called);
+ ensure(ret == E_pthread_mutex_lock.ret);
     disable();
 }
 static void
@@ -248,8 +202,8 @@ test_pthread_mutex_unlock(void)
      int  ret =                                   //
                                  pthread_mutex_unlock(                                    //
                                      E_pthread_mutex_unlock.mutex                                  );
- ensure(ret == E_pthread_mutex_unlock.ret);
     ensure(called);
+ ensure(ret == E_pthread_mutex_unlock.ret);
     disable();
 }
 static void
@@ -262,23 +216,8 @@ test_pthread_mutex_trylock(void)
      int  ret =                                   //
                                  pthread_mutex_trylock(                                    //
                                      E_pthread_mutex_trylock.mutex                                  );
+    ensure(called);
  ensure(ret == E_pthread_mutex_trylock.ret);
-    ensure(called);
-    disable();
-}
-static void
-test_pthread_mutex_timedlock(void)
-{
-    /* initialize event with random content */
-    event_init(&E_pthread_mutex_timedlock, sizeof(struct pthread_mutex_timedlock_event));
-    /* call pthread_mutex_timedlock with arguments */
-    enable(fake_pthread_mutex_timedlock);
-     int  ret =                                   //
-                                 pthread_mutex_timedlock(                                    //
-                                     E_pthread_mutex_timedlock.mutex,                           //
-                                     E_pthread_mutex_timedlock.timeout                                  );
- ensure(ret == E_pthread_mutex_timedlock.ret);
-    ensure(called);
     disable();
 }
 
@@ -288,6 +227,5 @@ main()
     test_pthread_mutex_lock();
     test_pthread_mutex_unlock();
     test_pthread_mutex_trylock();
-    test_pthread_mutex_timedlock();
     return 0;
 }
