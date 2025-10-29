@@ -13,6 +13,7 @@
 #include <dice/chains/capture.h>
 #include <dice/ensure.h>
 #include <dice/events/self.h>
+#include <dice/interpose.h>
 #include <dice/log.h>
 #include <dice/module.h>
 #include <dice/self.h>
@@ -33,11 +34,11 @@ struct thread_trace {
 };
 static struct thread_trace _expected[MAX_NTHREADS];
 
-void
-register_expected_trace(thread_id tid, struct expected_event *trace)
+INTERPOSE(void, register_expected_trace, thread_id tid,
+          struct expected_event *trace)
 {
     assert(tid > 0 && tid < MAX_NTHREADS);
-    log_info("register expected trace thread=%lu", tid);
+    log_info("register expected trace thread=%" PRIu64, tid);
     _expected[tid] = (struct thread_trace){.trace = trace, .next = trace};
 }
 

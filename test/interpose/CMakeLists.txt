@@ -1,44 +1,53 @@
 # Copyright (C) 2025 Huawei Technologies Co., Ltd.                             #
 # SPDX-License-Identifier: 0BSD                                                #
 
-set(FUNS_malloc malloc calloc realloc free posix_memalign aligned_alloc)
 set(INCL_malloc '<dice/events/malloc.h>')
+set(FUNS_malloc malloc calloc realloc free posix_memalign aligned_alloc)
 
-set(FUNS_memcpy memcpy memmove memset)
 set(INCL_memcpy '<dice/events/memcpy.h>')
+set(FUNS_memcpy memcpy memmove memset)
 
-set(FUNS_mman mmap munmap)
 set(INCL_mman '<dice/events/mman.h>')
+set(FUNS_mman mmap munmap)
 
-set(FUNS_pthread_create pthread_create pthread_join)
 set(INCL_pthread_create '<dice/events/pthread.h>')
+set(FUNS_pthread_create pthread_create pthread_join)
 
-set(FUNS_pthread_mutex pthread_mutex_lock pthread_mutex_unlock
-                       pthread_mutex_trylock pthread_mutex_timedlock)
 set(INCL_pthread_mutex ${INCL_pthread_create})
+set(FUNS_pthread_mutex pthread_mutex_lock pthread_mutex_unlock
+                       pthread_mutex_trylock)
+if(NOT APPLE)
+  set(FUNS_pthread_mutex ${FUNS_pthread_mutex} pthread_mutex_timedlock)
+endif()
 
+set(INCL_pthread_cond ${INCL_pthread_create})
 set(FUNS_pthread_cond pthread_cond_wait pthread_cond_timedwait
                       pthread_cond_signal pthread_cond_broadcast)
-set(INCL_pthread_cond ${INCL_pthread_create})
+if(NOT APPLE)
+  set(FUNS_pthread_cond ${FUNS_pthread_cond} pthread_cond_timedwait)
+endif()
 
-set(FUNS_pthread_rwlock
-    pthread_rwlock_rdlock
-    pthread_rwlock_tryrdlock
-    pthread_rwlock_timedrdlock
-    pthread_rwlock_wrlock
-    pthread_rwlock_trywrlock
-    pthread_rwlock_timedwrlock
-    pthread_rwlock_unlock)
 set(INCL_pthread_rwlock ${INCL_pthread_create})
+set(FUNS_pthread_rwlock
+    pthread_rwlock_rdlock pthread_rwlock_tryrdlock pthread_rwlock_wrlock
+    pthread_rwlock_trywrlock pthread_rwlock_unlock)
+
+if(NOT APPLE)
+  set(FUNS_pthread_rwlock ${FUNS_pthread_rwlock} pthread_rwlock_timedrdlock
+                          pthread_rwlock_timedwrlock)
+endif()
+
+set(INCL_sem '<dice/events/semaphore.h>')
+set(FUNS_sem sem_post sem_wait sem_trywait)
+if(NOT APPLE)
+  set(FUNS_sem ${FUNS_sem} sem_timedwait)
+endif()
 
 # TODO: create special tests for INTERCEPT_EVENT chain. Currently, we can only
 # test INTERCEPT_BEFORE and INTERCEPT_AFTER.
+set(INCL_annotate_rwlock '<dice/events/annotate_rwlock.h>')
 set(FUNS_annotate_rwlock AnnotateRWLockCreate AnnotateRWLockDestroy
                          AnnotateRWLockAcquired AnnotateRWLockReleased)
-set(INCL_annotate_rwlock '<dice/events/annotate_rwlock.h>')
-
-set(FUNS_sem sem_post sem_wait sem_trywait sem_timedwait)
-set(INCL_sem '<dice/events/semaphore.h>')
 
 set(FUNS_cxa __cxa_guard_acquire __cxa_guard_release __cxa_guard_abort)
 set(INCL_cxa '<dice/events/cxa.h>')
@@ -90,6 +99,12 @@ foreach(MOD ${MODS})
   target_compile_options(
     ${TARGET} PRIVATE -fno-builtin-memcpy -fno-builtin-memset
                       -fno-builtin-memmmove)
+  if(APPLE)
+    # We keep the expanded versions of the test cases in the repo. However, when
+    # running on macOS, we regerate the test files without timed variants, which
+    # are not available in that system.
+    add_dependencies(${TARGET} expand-test-${MOD})
+  endif()
 
   set(PRELOAD $<TARGET_FILE:dice-${MOD}>)
 
@@ -107,5 +122,12 @@ foreach(MOD ${MODS})
     target_link_libraries(${TARGET} PRIVATE ${LIBSAN_LINK})
   endif()
 endforeach()
+
+# Add the test executable for memcpy
+if(NOT APPLE)
+  add_executable(memcpy_test ${CMAKE_CURRENT_SOURCE_DIR}/memcpy_test.c)
+  target_link_libraries(memcpy_test PRIVATE dice.o tsano pthread)
+  add_test(NAME interpose-memcpy_test COMMAND memcpy_test)
+endif()
 
 target_link_libraries(cxa_test PRIVATE stdc++)

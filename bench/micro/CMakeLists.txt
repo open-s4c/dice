@@ -42,6 +42,10 @@ endforeach()
 
 add_library(micro-dice SHARED)
 target_link_libraries(micro-dice PUBLIC ${OBJS} dice-box.o pthread)
+if(APPLE)
+  target_link_libraries(micro-dice PRIVATE stdc++)
+endif()
+
 if(${ENABLE_SANITIZER})
   target_link_options(micro-dice PRIVATE ${LIBSAN_SHARED})
 endif()

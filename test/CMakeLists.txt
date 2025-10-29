@@ -23,6 +23,12 @@ set(IGNORE_undefined)
 
 # Dice script options
 set(DICE_OPTS_thread_sequence -pthread -self -preload $<TARGET_FILE:id_checker>)
+set(DICE_OPTS_simple -self)
+set(DICE_OPTS_intercept_event -self)
+set(DICE_OPTS_pthread_create_join -pthread)
+set(DICE_OPTS_pthread_create_exit -pthread)
+set(DICE_OPTS_pthread_create_detach -pthread)
+set(DICE_OPTS_pthread_exit_window -pthread -malloc -self)
 
 # tsano script path
 set(TSANOSH env TSANO_LIBDIR=${CMAKE_CURRENT_BINARY_DIR}/../deps/tsano/
@@ -38,7 +44,7 @@ foreach(SRC ${SRCS})
 
   # create executable
   add_executable(${TARGET} ${SRC})
-  target_link_libraries(${TARGET} PRIVATE dice.h)
+  target_link_libraries(${TARGET} PRIVATE dice dice.h)
 
   # only add it as a test if not in ignore-list
   if(NOT ${TARGET} IN_LIST IGNORE_${DICE_SANITIZER})
@@ -48,15 +54,7 @@ foreach(SRC ${SRCS})
 endforeach()
 
 # Additional configuration of some tests
-target_link_libraries(simple PRIVATE dice-self.o dice)
-target_link_libraries(intercept_event PRIVATE dice-self.o dice)
-
-target_link_libraries(pthread_create_join PRIVATE dice-pthread_create.o dice)
-target_link_libraries(pthread_create_exit PRIVATE dice-pthread_create.o dice)
-target_link_libraries(pthread_create_detach PRIVATE dice-pthread_create.o dice)
-target_link_libraries(
-  pthread_exit_window PRIVATE dice-pthread_create.o dice-malloc.o dice-self.o
-                              dice)
+target_link_libraries(pthread_exit_window PRIVATE dice-self)
 
 # handle TASN sanitizer
 foreach(TARGET ${TARGETS})

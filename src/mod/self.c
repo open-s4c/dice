@@ -30,6 +30,8 @@
 #if defined(__NetBSD__)
     #include <errno.h>
     #include <lwp.h>
+#elif defined(__APPLE__)
+    #include <errno.h>
 #endif
 
 #ifndef DICE_MODULE_PRIO
@@ -325,17 +327,18 @@ thread_dead_(struct self *self)
     return pthread_kill(self->ptid, 0) == ESRCH;
 }
 
-#else  // !linux && !NetBSD
+#elif defined(__APPLE__)
 
 static uint64_t
 thread_osid_(void)
 {
-    return 0;
+    return (uint64_t)pthread_mach_thread_np(pthread_self());
 }
 
 static bool
 thread_dead_(struct self *self)
 {
+    (void)self;
     return false;
 }
 #endif // !linux
