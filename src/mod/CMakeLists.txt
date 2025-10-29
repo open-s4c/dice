@@ -11,8 +11,7 @@ add_dependencies(expand-tsan.c tmplr)
 set(TSAN_MODULES tsan stacktrace)
 
 # to ensure the dice-memcpy module uses builtin memset, we ALWAYS compile it
-# with -O2, even if the user requested -O0
-set(OPTIONS_memcpy -O2)
+# with -O2, even if the user requested -O0 set(OPTIONS_memcpy -O2)
 
 file(GLOB SRCS *.c)
 foreach(SRC ${SRCS})

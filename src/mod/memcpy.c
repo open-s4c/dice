@@ -45,14 +45,21 @@ INTERPOSE(void *, memmove, void *dest, const void *src, size_t count)
 
 INTERPOSE(void *, memset, void *ptr, int value, size_t num)
 {
-    struct memset_event ev = {
-        .pc    = INTERPOSE_PC,
-        .ptr   = ptr,
-        .value = value,
-        .num   = num,
-        .ret   = 0,
-        .func  = REAL_FUNC(memset),
-    };
+    // struct memset_event ev = {
+    //     .pc    = INTERPOSE_PC,
+    //     .ptr   = ptr,
+    //     .value = value,
+    //     .num   = num,
+    //     .ret   = 0,
+    //     .func  = REAL_FUNC(memset),
+    // };
+    struct memset_event ev;
+    ev.pc    = INTERPOSE_PC;
+    ev.ptr   = ptr;
+    ev.value = value;
+    ev.num   = num;
+    ev.ret   = 0;
+    ev.func  = REAL_FUNC(memset);
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_MEMSET, &ev, &md);
