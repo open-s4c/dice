@@ -36,6 +36,11 @@ foreach(SRC ${SRCS})
   target_link_libraries(${TARGET} PRIVATE dice dice.h)
   target_compile_options(${TARGET} PRIVATE ${OPTIONS_${MODULE}})
   set_target_properties(${TARGET} PROPERTIES PREFIX "")
+  if(APPLE)
+    # Allow unresolved symbols that will be provided by the sanitizer/runtime at
+    # preload time (Annotate*, pthread_*, etc).
+    target_link_options(${TARGET} PRIVATE -undefined dynamic_lookup)
+  endif()
   install(TARGETS ${TARGET} DESTINATION lib/dice)
 
   if(NOT ${TARGET} MATCHES "wrap_memset")
@@ -69,3 +74,6 @@ endforeach()
 
 target_link_libraries(dice-self PRIVATE pthread)
 target_link_libraries(dice-self.o PUBLIC pthread)
+if(APPLE)
+  target_link_libraries(dice-cxa PUBLIC stdc++)
+endif()
