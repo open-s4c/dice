@@ -12,14 +12,15 @@
 INTERPOSE(int, sem_post, sem_t *sem)
 {
     struct sem_post_event ev = {
-        .pc  = INTERPOSE_PC,
-        .sem = sem,
-        .ret = 0,
+        .pc   = INTERPOSE_PC,
+        .sem  = sem,
+        .ret  = 0,
+        .func = REAL_FUNC(sem_post),
     };
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_SEM_POST, &ev, &md);
-    ev.ret = REAL(sem_post, sem);
+    ev.ret = ev.func(sem);
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_SEM_POST, &ev, &md);
     return ev.ret;
 }
@@ -27,14 +28,15 @@ INTERPOSE(int, sem_post, sem_t *sem)
 INTERPOSE(int, sem_wait, sem_t *sem)
 {
     struct sem_wait_event ev = {
-        .pc  = INTERPOSE_PC,
-        .sem = sem,
-        .ret = 0,
+        .pc   = INTERPOSE_PC,
+        .sem  = sem,
+        .ret  = 0,
+        .func = REAL_FUNC(sem_wait),
     };
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_SEM_WAIT, &ev, &md);
-    ev.ret = REAL(sem_wait, sem);
+    ev.ret = ev.func(sem);
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_SEM_WAIT, &ev, &md);
     return ev.ret;
 }
@@ -42,14 +44,15 @@ INTERPOSE(int, sem_wait, sem_t *sem)
 INTERPOSE(int, sem_trywait, sem_t *sem)
 {
     struct sem_trywait_event ev = {
-        .pc  = INTERPOSE_PC,
-        .sem = sem,
-        .ret = 0,
+        .pc   = INTERPOSE_PC,
+        .sem  = sem,
+        .ret  = 0,
+        .func = REAL_FUNC(sem_trywait),
     };
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_SEM_TRYWAIT, &ev, &md);
-    ev.ret = REAL(sem_trywait, sem);
+    ev.ret = ev.func(sem);
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_SEM_TRYWAIT, &ev, &md);
     return ev.ret;
 }
@@ -62,11 +65,12 @@ INTERPOSE(int, sem_timedwait, sem_t *sem, const struct timespec *abstime)
         .sem     = sem,
         .abstime = abstime,
         .ret     = 0,
+        .func    = REAL_FUNC(sem_timedwait),
     };
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_SEM_TIMEDWAIT, &ev, &md);
-    ev.ret = REAL(sem_timedwait, sem, abstime);
+    ev.ret = ev.func(sem, abstime);
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_SEM_TIMEDWAIT, &ev, &md);
     return ev.ret;
 }

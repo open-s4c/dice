@@ -16,11 +16,12 @@ INTERPOSE(int, pthread_rwlock_rdlock, pthread_rwlock_t *lock)
         .pc   = INTERPOSE_PC,
         .lock = lock,
         .ret  = 0,
+        .func = REAL_FUNC(pthread_rwlock_rdlock),
     };
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_RWLOCK_RDLOCK, &ev, &md);
-    ev.ret = REAL(pthread_rwlock_rdlock, lock);
+    ev.ret = ev.func(lock);
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_RWLOCK_RDLOCK, &ev, &md);
     return ev.ret;
 }
@@ -34,11 +35,12 @@ INTERPOSE(int, pthread_rwlock_timedrdlock, pthread_rwlock_t *lock,
         .lock    = lock,
         .abstime = abstime,
         .ret     = 0,
+        .func    = REAL_FUNC(pthread_rwlock_timedrdlock),
     };
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_RWLOCK_TIMEDRDLOCK, &ev, &md);
-    ev.ret = REAL(pthread_rwlock_timedrdlock, lock, abstime);
+    ev.ret = ev.func(lock, abstime);
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_RWLOCK_TIMEDRDLOCK, &ev, &md);
     return ev.ret;
 }
@@ -50,11 +52,12 @@ INTERPOSE(int, pthread_rwlock_tryrdlock, pthread_rwlock_t *lock)
         .pc   = INTERPOSE_PC,
         .lock = lock,
         .ret  = 0,
+        .func = REAL_FUNC(pthread_rwlock_tryrdlock),
     };
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_RWLOCK_TRYRDLOCK, &ev, &md);
-    ev.ret = REAL(pthread_rwlock_tryrdlock, lock);
+    ev.ret = ev.func(lock);
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_RWLOCK_TRYRDLOCK, &ev, &md);
     return ev.ret;
 }
@@ -65,11 +68,12 @@ INTERPOSE(int, pthread_rwlock_wrlock, pthread_rwlock_t *lock)
         .pc   = INTERPOSE_PC,
         .lock = lock,
         .ret  = 0,
+        .func = REAL_FUNC(pthread_rwlock_wrlock),
     };
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_RWLOCK_WRLOCK, &ev, &md);
-    ev.ret = REAL(pthread_rwlock_wrlock, lock);
+    ev.ret = ev.func(lock);
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_RWLOCK_WRLOCK, &ev, &md);
     return ev.ret;
 }
@@ -83,11 +87,12 @@ INTERPOSE(int, pthread_rwlock_timedwrlock, pthread_rwlock_t *lock,
         .lock    = lock,
         .abstime = abstime,
         .ret     = 0,
+        .func    = REAL_FUNC(pthread_rwlock_timedwrlock),
     };
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_RWLOCK_TIMEDWRLOCK, &ev, &md);
-    ev.ret = REAL(pthread_rwlock_timedwrlock, lock, abstime);
+    ev.ret = ev.func(lock, abstime);
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_RWLOCK_TIMEDWRLOCK, &ev, &md);
     return ev.ret;
 }
@@ -99,11 +104,12 @@ INTERPOSE(int, pthread_rwlock_trywrlock, pthread_rwlock_t *lock)
         .pc   = INTERPOSE_PC,
         .lock = lock,
         .ret  = 0,
+        .func = REAL_FUNC(pthread_rwlock_trywrlock),
     };
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_RWLOCK_TRYWRLOCK, &ev, &md);
-    ev.ret = REAL(pthread_rwlock_trywrlock, lock);
+    ev.ret = ev.func(lock);
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_RWLOCK_TRYWRLOCK, &ev, &md);
     return ev.ret;
 }
@@ -114,11 +120,12 @@ INTERPOSE(int, pthread_rwlock_unlock, pthread_rwlock_t *lock)
         .pc   = INTERPOSE_PC,
         .lock = lock,
         .ret  = 0,
+        .func = REAL_FUNC(pthread_rwlock_unlock),
     };
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_RWLOCK_UNLOCK, &ev, &md);
-    ev.ret = REAL(pthread_rwlock_unlock, lock);
+    ev.ret = ev.func(lock);
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_RWLOCK_UNLOCK, &ev, &md);
     return ev.ret;
 }

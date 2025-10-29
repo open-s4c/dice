@@ -15,10 +15,11 @@ INTERPOSE(int, __cxa_guard_acquire, void *addr)
         .pc   = INTERPOSE_PC,
         .addr = addr,
         .ret  = 0,
+        .func = REAL_FUNC(__cxa_guard_acquire),
     };
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_CXA_GUARD_ACQUIRE, &ev, &md);
-    ev.ret = REAL(__cxa_guard_acquire, addr);
+    ev.ret = ev.func(addr);
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_CXA_GUARD_ACQUIRE, &ev, &md);
     return ev.ret;
 }
@@ -29,10 +30,11 @@ INTERPOSE(int, __cxa_guard_release, void *addr)
         .pc   = INTERPOSE_PC,
         .addr = addr,
         .ret  = 0,
+        .func = REAL_FUNC(__cxa_guard_release),
     };
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_CXA_GUARD_RELEASE, &ev, &md);
-    ev.ret = REAL(__cxa_guard_release, addr);
+    ev.ret = ev.func(addr);
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_CXA_GUARD_RELEASE, &ev, &md);
     return ev.ret;
 }
@@ -42,10 +44,11 @@ INTERPOSE(void, __cxa_guard_abort, void *addr)
     struct __cxa_guard_abort_event ev = {
         .pc   = INTERPOSE_PC,
         .addr = addr,
+        .func = REAL_FUNC(__cxa_guard_abort),
     };
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_CXA_GUARD_ABORT, &ev, &md);
-    REAL(__cxa_guard_abort, addr);
+    ev.func(addr);
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_CXA_GUARD_ABORT, &ev, &md);
 }
 
