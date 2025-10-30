@@ -26,7 +26,7 @@ running:
   `micro` publishes bare events, `micro2` adds capture handlers and TLS via the
   Self module, and `micro3` links against the `micro-dice` bundle to exercise
   generated dispatch code.
-- `leveldb`: Builds Google’s LevelDB `db_bench` tool and runs `readrandom`
+- `leveldb`: Builds Google's LevelDB `db_bench` tool and runs `readrandom`
   against a populated database to approximate a storage workload.
 - `raytracing`: Renders `theRestOfYourLife` from raytracing.github.io to
   represent a CPU-bound C++ application with heavy threading.
@@ -42,12 +42,12 @@ Each suite reuses the same scenario names so results are comparable:
 - `tsan`: Program built with ThreadSanitizer instrumentation and executed with
   the stock libtsan runtime.
 - `tsano`: Same instrumentation as `tsan`, but executed through the Dice
-  `tsano` launcher to quantify the cost of Dice’s replacement runtime.
+  `tsano` launcher to quantify the cost of Dice's replacement runtime.
 - `core`: Only `libdice` is preloaded (no extra modules) so we can measure the
   fixed cost of the runtime and loader.
 - `intercept`: Loads `libdice` plus the interceptor modules for pthreads,
   malloc/free, C++ guards, and libtsan. Modules are injected as individual
-  DSOs via the system loader (the configuration often labelled “elf” in
+  DSOs via the system loader (the configuration often labelled "elf" in
   reports).
 - `self`: Extends `intercept` by also loading `dice-self` to account for TLS
   management overhead when subscribers depend on Self metadata.

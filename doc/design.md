@@ -69,7 +69,7 @@ with core modules as a single shared library.
 ## 1.3. Example Use Cases
 
 - Tracer: A subscriber can capture all event types and log them to a file,
-  providing a trace of the program’s execution. This can be useful for debugging
+  providing a trace of the program's execution. This can be useful for debugging
   and understanding the flow of control in complex multithreaded programs.
 
 - State Machine Monitoring: A subscriber that tracks the state of resources
@@ -134,7 +134,7 @@ The Pubsub system introduces several key advantages:
    pointers or direct dispatches (see Section 6.2).
 
 4. **Customizability**: Subscribers can specify exactly what events they want
-   to react to, whether it’s all events in a chain or specific events for a
+   to react to, whether it's all events in a chain or specific events for a
    particular chain and event type.
 
 
@@ -295,7 +295,7 @@ pool of memory.
 ## 3.1. What is Mempool?
 
 The Mempool is a custom memory management system that pre-allocates a chunk of
-memory at the start of the program’s execution. This large block of memory is
+memory at the start of the program's execution. This large block of memory is
 then used by all modules that require memory during their execution.
 
 
@@ -477,9 +477,9 @@ the equivalent `INTERCEPT_` chains.
 
 One example of how the Self module can be used is for managing file descriptors
 on a per-thread basis. Each thread can store its own file descriptor in its TLS
-space, ensuring that threads do not interfere with each other’s file operations.
+space, ensuring that threads do not interfere with each other's file operations.
 A subscriber could intercept system calls like open or close, logging the event
-and associating file descriptors with the correct thread’s TLS.
+and associating file descriptors with the correct thread's TLS.
 
 
 # 5. Interpose Modules
@@ -503,13 +503,13 @@ By using interposition, Dice can intercept functions like `pthread_create`,
 code of the application.
 
 
-## 5.2. How Interposition Works with `LD_PRELOAD`
+## 5.2. How Interposition Works with `LD_PRELOAD`
 
 The `LD_PRELOAD` environment variable is a mechanism in Unix-like systems that
 allows users to load shared libraries before others. When an application is run,
 the dynamic linker checks the `LD_PRELOAD` variable and loads any libraries
 listed in it before the default system libraries. This allows Dice to interpose
-on functions without modifying the application’s code or the system libraries
+on functions without modifying the application's code or the system libraries
 themselves.
 
 Each interpose module in Dice targets a specific set of functions. For example,
