@@ -160,8 +160,8 @@ test_pthread_create(void)
                                      E_pthread_create.attr,                           //
                                      E_pthread_create.run,                           //
                                      E_pthread_create.arg                                  );
- ensure(ret == E_pthread_create.ret);
     ensure(called);
+ ensure(ret == E_pthread_create.ret);
     disable();
 }
 static void
@@ -175,8 +175,8 @@ test_pthread_join(void)
                                  pthread_join(                                    //
                                      E_pthread_join.thread,                           //
                                      E_pthread_join.ptr                                  );
- ensure(ret == E_pthread_join.ret);
     ensure(called);
+ ensure(ret == E_pthread_join.ret);
     disable();
 }
 

@@ -16,6 +16,14 @@ set(TSAN_simple-tsan on)
 set(DICE_simple on)
 set(DICE_intercept_event on)
 
+# test dice flags
+set(DFLAGS_simple -self)
+set(DFLAGS_intercept_event -self)
+set(DFLAGS_pthread_create_join -pthread)
+set(DFLAGS_pthread_create_exit -pthread)
+set(DFLAGS_pthread_create_detach -pthread)
+set(DFLAGS_pthread_exit_window -pthread -malloc -self)
+
 # Test cases in these lists will be compiled but not ran with sanitizers
 set(IGNORE_address "pthread_exit_window")
 set(IGNORE_thread "pthread_exit_window")
@@ -35,24 +43,17 @@ foreach(SRC ${SRCS})
 
   # create executable
   add_executable(${TARGET} ${SRC})
-  target_link_libraries(${TARGET} PRIVATE dice.h)
+  target_link_libraries(${TARGET} PRIVATE dice dice.h)
 
   # only add it as a test if not in ignore-list
   if(NOT ${TARGET} IN_LIST IGNORE_${DICE_SANITIZER})
-    add_test(NAME ${TARGET} COMMAND ${DICE_SCRIPT} ./${TARGET})
+    add_test(NAME ${TARGET} COMMAND ${DICE_SCRIPT} ${DFLAGS_${TARGET}}
+                                    ./${TARGET})
   endif()
 endforeach()
 
 # Additional configuration of some tests
-target_link_libraries(simple PRIVATE dice-self.o dice)
-target_link_libraries(intercept_event PRIVATE dice-self.o dice)
-
-target_link_libraries(pthread_create_join PRIVATE dice-pthread_create.o dice)
-target_link_libraries(pthread_create_exit PRIVATE dice-pthread_create.o dice)
-target_link_libraries(pthread_create_detach PRIVATE dice-pthread_create.o dice)
-target_link_libraries(
-  pthread_exit_window PRIVATE dice-pthread_create.o dice-malloc.o dice-self.o
-                              dice)
+target_link_libraries(pthread_exit_window PRIVATE dice-self)
 
 # handle TASN sanitizer
 foreach(TARGET ${TARGETS})

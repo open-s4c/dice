@@ -40,7 +40,7 @@ void *real_sym(const char *, const char *);
 #define REAL_NAME(F) dice_real_##F##_
 
 /* REAL_DECL(T, F, ...) declares the function pointer to the real function
- * F, with return type T and arguments as varargs. */
+ * F, with return type T and VA_ARGS arguments. */
 #define REAL_DECL(T, F, ...) DICE_HIDE DICE_WEAK T (*REAL_NAME(F))(__VA_ARGS__);
 
 /* REAL(F, ...) calls the real function F using its declared function
@@ -51,7 +51,6 @@ void *real_sym(const char *, const char *);
     #define REAL(F, ...) F(__VA_ARGS__)
 #else
     #define REAL(F, ...) REAL_FUNC(F)(__VA_ARGS__)
-
 #endif
 
 #if defined(__linux__)
@@ -61,7 +60,7 @@ void *real_sym(const char *, const char *);
      */
     #define REAL_FUNCP(F) REAL_FUNCV(F, "GLIBC_2.3.2")
 #else
-    #define REAL_FUNCP(F) REAL_FUNCV(F, 0)
+    #define REAL_FUNCP(F) REAL_FUNC(F)
 #endif
 
 /* INTERPOSE(T, F, ...) { ... } defines an interposition function for F
@@ -94,7 +93,11 @@ void *real_sym(const char *, const char *);
  * In case the function pointer is NULL, this macro initializes it using
  * `REAL_SYM(F, 0)`.
  */
-#define REAL_FUNC(F) REAL_FUNCV(F, 0)
+#if defined(__APPLE__)
+    #define REAL_FUNC(F) F
+#else
+    #define REAL_FUNC(F) REAL_FUNCV(F, 0)
+#endif
 
 /* REAL_FUNCV(F,V) returns the pointer of a declared real function F with
  * version V.

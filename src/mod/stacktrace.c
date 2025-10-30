@@ -181,5 +181,16 @@ INTERPOSE(int, __libc_start_main, main_f mainf, int argc, char **argv,
     main_start_();
     return REAL(__libc_start_main, mainf, argc, argv, init, fini, rtld_fini);
 }
-    #endif // defined(__linux__)
+    #endif // defined(__GLIBC__)
+
+#elif defined(__APPLE__)
+
+static inline void
+check_main_start_(void *retpc)
+{
+    main_start_();
+    (void)retpc;
+}
+
+
 #endif

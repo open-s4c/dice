@@ -185,8 +185,8 @@ test___cxa_guard_acquire(void)
      int  ret =                                   //
                                  __cxa_guard_acquire(                                    //
                                      E___cxa_guard_acquire.addr                                  );
- ensure(ret == E___cxa_guard_acquire.ret);
     ensure(called);
+ ensure(ret == E___cxa_guard_acquire.ret);
     disable();
 }
 static void
@@ -199,8 +199,8 @@ test___cxa_guard_release(void)
      int  ret =                                   //
                                  __cxa_guard_release(                                    //
                                      E___cxa_guard_release.addr                                  );
- ensure(ret == E___cxa_guard_release.ret);
     ensure(called);
+ ensure(ret == E___cxa_guard_release.ret);
     disable();
 }
 static void

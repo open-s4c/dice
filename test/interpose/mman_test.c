@@ -175,8 +175,8 @@ test_mmap(void)
                                      E_mmap.flags,                           //
                                      E_mmap.fd,                           //
                                      E_mmap.offset                                  );
- ensure(ret == E_mmap.ret);
     ensure(called);
+ ensure(ret == E_mmap.ret);
     disable();
 }
 static void
@@ -190,8 +190,8 @@ test_munmap(void)
                                  munmap(                                    //
                                      E_munmap.addr,                           //
                                      E_munmap.length                                  );
- ensure(ret == E_munmap.ret);
     ensure(called);
+ ensure(ret == E_munmap.ret);
     disable();
 }
 
