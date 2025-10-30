@@ -20,23 +20,27 @@ To use Dice:
 
 1. Build Dice and its modules:
 
-    cmake -B build
-    cmake --build build
+```sh
+cmake -B build
+cmake --build build
+```
 
-2. Call your program setting LD_PRELOAD:
+2. Call your program setting `LD_PRELOAD`:
 
-    env LD_PRELOAD=/path/to/libdice.so:/path/to/module.so:... \
-        ./your_program
+```sh
+env LD_PRELOAD=/path/to/libdice.so:/path/to/module.so:... ./your_program
+```
 
 3. Or use the Dice script to do that for you:
 
-    scripts/dice -pthread -self -malloc -tsan ./your_program
+```sh
+scripts/dice -pthread -self -malloc -tsan ./your_program
+```
 
 Subscribers and modules will now intercept and handle events during execution.
 The script `scripts/dice` can be used to select, which modules you want to load
 with Dice.  If you prefer composing the command line manually and you are a
 macOS user, you should replace `LD_PRELOAD` with `DYLD_INSERT_LIBRARIES`.
-
 
 ## Architecture Overview
 
@@ -67,8 +71,6 @@ Beside these modules, Dice provice several intercept modules such as
 ## Building and Installation
 
 ```sh
-git clone https://your.repo/dice.git
-cd dice
 cmake -B build -DCMAKE_INSTALL_PREFIX=<PREFIX>
 cmake --build build
 cmake --install build
@@ -91,11 +93,12 @@ the preloading of Dice and `libtsano`.  The `dice` script is installed in
 
 See examples in the `examples` directory.
 
-- Detailed architecture notes: see `doc/design.md`.
-- Header-level API reference: see `doc/api.md`.
-- Contribution checklist (style, tests, benchmarks): see `doc/contributing.md`.
-- Benchmark workflow: see `doc/benchmarking.md`.
-- Test layout and commands: see `doc/testing.md`.
+- Detailed architecture notes: [doc/design.md](doc/design.md).
+- Header-level API reference: [doc/api.md](doc/api.md).
+- Contribution checklist (style, tests, etc):
+  [doc/contributing.md](doc/contributing.md).
+- Benchmark workflow: [doc/benchmarking.md](doc/benchmarking.md).
+- Test layout and commands: [doc/testing.md](doc/testing.md).
 
 ---
 
