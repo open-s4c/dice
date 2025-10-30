@@ -149,7 +149,7 @@ PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_PTHREAD_COND_WAIT, {
     ASSERT_FIELD_EQ(&E_pthread_cond_wait, cond);
     ASSERT_FIELD_EQ(&E_pthread_cond_wait, mutex);
 
-    // must be enabled. Let's
+    // must be enabled.
     ensure(enabled());
     ev->func = fake_pthread_cond_wait;
 })
@@ -170,7 +170,7 @@ PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_PTHREAD_COND_TIMEDWAIT, {
     ASSERT_FIELD_EQ(&E_pthread_cond_timedwait, mutex);
     ASSERT_FIELD_EQ(&E_pthread_cond_timedwait, abstime);
 
-    // must be enabled. Let's
+    // must be enabled.
     ensure(enabled());
     ev->func = fake_pthread_cond_timedwait;
 })
@@ -190,7 +190,7 @@ PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_PTHREAD_COND_SIGNAL, {
     struct pthread_cond_signal_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E_pthread_cond_signal, cond);
 
-    // must be enabled. Let's
+    // must be enabled.
     ensure(enabled());
     ev->func = fake_pthread_cond_signal;
 })
@@ -208,7 +208,7 @@ PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_PTHREAD_COND_BROADCAST, {
     struct pthread_cond_broadcast_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E_pthread_cond_broadcast, cond);
 
-    // must be enabled. Let's
+    // must be enabled.
     ensure(enabled());
     ev->func = fake_pthread_cond_broadcast;
 })
@@ -237,14 +237,17 @@ test_pthread_cond_wait(void)
 {
     /* initialize event with random content */
     event_init(&E_pthread_cond_wait, sizeof(struct pthread_cond_wait_event));
+
+    /* ensure that fields that must be equal are actually equal */
+
     /* call pthread_cond_wait with arguments */
     enable(fake_pthread_cond_wait);
      int  ret =                                   //
                                  pthread_cond_wait(                                    //
                                      E_pthread_cond_wait.cond,                           //
                                      E_pthread_cond_wait.mutex                                  );
- ensure(ret == E_pthread_cond_wait.ret);
     ensure(called);
+ ensure(ret == E_pthread_cond_wait.ret);
     disable();
 }
 static void
@@ -252,6 +255,9 @@ test_pthread_cond_timedwait(void)
 {
     /* initialize event with random content */
     event_init(&E_pthread_cond_timedwait, sizeof(struct pthread_cond_timedwait_event));
+
+    /* ensure that fields that must be equal are actually equal */
+
     /* call pthread_cond_timedwait with arguments */
     enable(fake_pthread_cond_timedwait);
      int  ret =                                   //
@@ -259,8 +265,8 @@ test_pthread_cond_timedwait(void)
                                      E_pthread_cond_timedwait.cond,                           //
                                      E_pthread_cond_timedwait.mutex,                           //
                                      E_pthread_cond_timedwait.abstime                                  );
- ensure(ret == E_pthread_cond_timedwait.ret);
     ensure(called);
+ ensure(ret == E_pthread_cond_timedwait.ret);
     disable();
 }
 static void
@@ -268,13 +274,16 @@ test_pthread_cond_signal(void)
 {
     /* initialize event with random content */
     event_init(&E_pthread_cond_signal, sizeof(struct pthread_cond_signal_event));
+
+    /* ensure that fields that must be equal are actually equal */
+
     /* call pthread_cond_signal with arguments */
     enable(fake_pthread_cond_signal);
      int  ret =                                   //
                                  pthread_cond_signal(                                    //
                                      E_pthread_cond_signal.cond                                  );
- ensure(ret == E_pthread_cond_signal.ret);
     ensure(called);
+ ensure(ret == E_pthread_cond_signal.ret);
     disable();
 }
 static void
@@ -282,13 +291,16 @@ test_pthread_cond_broadcast(void)
 {
     /* initialize event with random content */
     event_init(&E_pthread_cond_broadcast, sizeof(struct pthread_cond_broadcast_event));
+
+    /* ensure that fields that must be equal are actually equal */
+
     /* call pthread_cond_broadcast with arguments */
     enable(fake_pthread_cond_broadcast);
      int  ret =                                   //
                                  pthread_cond_broadcast(                                    //
                                      E_pthread_cond_broadcast.cond                                  );
- ensure(ret == E_pthread_cond_broadcast.ret);
     ensure(called);
+ ensure(ret == E_pthread_cond_broadcast.ret);
     disable();
 }
 

@@ -144,7 +144,7 @@ PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_PTHREAD_MUTEX_LOCK, {
     struct pthread_mutex_lock_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E_pthread_mutex_lock, mutex);
 
-    // must be enabled. Let's
+    // must be enabled.
     ensure(enabled());
     ev->func = fake_pthread_mutex_lock;
 })
@@ -162,7 +162,7 @@ PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_PTHREAD_MUTEX_UNLOCK, {
     struct pthread_mutex_unlock_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E_pthread_mutex_unlock, mutex);
 
-    // must be enabled. Let's
+    // must be enabled.
     ensure(enabled());
     ev->func = fake_pthread_mutex_unlock;
 })
@@ -180,7 +180,7 @@ PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_PTHREAD_MUTEX_TRYLOCK, {
     struct pthread_mutex_trylock_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E_pthread_mutex_trylock, mutex);
 
-    // must be enabled. Let's
+    // must be enabled.
     ensure(enabled());
     ev->func = fake_pthread_mutex_trylock;
 })
@@ -199,7 +199,7 @@ PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_PTHREAD_MUTEX_TIMEDLOCK, {
     ASSERT_FIELD_EQ(&E_pthread_mutex_timedlock, mutex);
     ASSERT_FIELD_EQ(&E_pthread_mutex_timedlock, timeout);
 
-    // must be enabled. Let's
+    // must be enabled.
     ensure(enabled());
     ev->func = fake_pthread_mutex_timedlock;
 })
@@ -229,13 +229,16 @@ test_pthread_mutex_lock(void)
 {
     /* initialize event with random content */
     event_init(&E_pthread_mutex_lock, sizeof(struct pthread_mutex_lock_event));
+
+    /* ensure that fields that must be equal are actually equal */
+
     /* call pthread_mutex_lock with arguments */
     enable(fake_pthread_mutex_lock);
      int  ret =                                   //
                                  pthread_mutex_lock(                                    //
                                      E_pthread_mutex_lock.mutex                                  );
- ensure(ret == E_pthread_mutex_lock.ret);
     ensure(called);
+ ensure(ret == E_pthread_mutex_lock.ret);
     disable();
 }
 static void
@@ -243,13 +246,16 @@ test_pthread_mutex_unlock(void)
 {
     /* initialize event with random content */
     event_init(&E_pthread_mutex_unlock, sizeof(struct pthread_mutex_unlock_event));
+
+    /* ensure that fields that must be equal are actually equal */
+
     /* call pthread_mutex_unlock with arguments */
     enable(fake_pthread_mutex_unlock);
      int  ret =                                   //
                                  pthread_mutex_unlock(                                    //
                                      E_pthread_mutex_unlock.mutex                                  );
- ensure(ret == E_pthread_mutex_unlock.ret);
     ensure(called);
+ ensure(ret == E_pthread_mutex_unlock.ret);
     disable();
 }
 static void
@@ -257,13 +263,16 @@ test_pthread_mutex_trylock(void)
 {
     /* initialize event with random content */
     event_init(&E_pthread_mutex_trylock, sizeof(struct pthread_mutex_trylock_event));
+
+    /* ensure that fields that must be equal are actually equal */
+
     /* call pthread_mutex_trylock with arguments */
     enable(fake_pthread_mutex_trylock);
      int  ret =                                   //
                                  pthread_mutex_trylock(                                    //
                                      E_pthread_mutex_trylock.mutex                                  );
- ensure(ret == E_pthread_mutex_trylock.ret);
     ensure(called);
+ ensure(ret == E_pthread_mutex_trylock.ret);
     disable();
 }
 static void
@@ -271,14 +280,17 @@ test_pthread_mutex_timedlock(void)
 {
     /* initialize event with random content */
     event_init(&E_pthread_mutex_timedlock, sizeof(struct pthread_mutex_timedlock_event));
+
+    /* ensure that fields that must be equal are actually equal */
+
     /* call pthread_mutex_timedlock with arguments */
     enable(fake_pthread_mutex_timedlock);
      int  ret =                                   //
                                  pthread_mutex_timedlock(                                    //
                                      E_pthread_mutex_timedlock.mutex,                           //
                                      E_pthread_mutex_timedlock.timeout                                  );
- ensure(ret == E_pthread_mutex_timedlock.ret);
     ensure(called);
+ ensure(ret == E_pthread_mutex_timedlock.ret);
     disable();
 }
 

@@ -71,7 +71,8 @@ enum ps_err ps_publish(const chain_id chain, const type_id type, void *event,
 /* PS_PUBLISH simplifies the publication and drop mechanism of metadata. */
 #define PS_PUBLISH(chain, type, event, md)                                     \
     do {                                                                       \
-        metadata_t __md = {0};                                                 \
+        metadata_t __md;                                                       \
+        __md.drop       = false;                                               \
         metadata_t *_md = (md) != NULL ? (metadata_t *)(md) : &__md;           \
         if (_md->drop)                                                         \
             break;                                                             \
