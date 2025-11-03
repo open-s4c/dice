@@ -5,16 +5,19 @@
 #ifndef DICE_COMPILER_H
 #define DICE_COMPILER_H
 
+#include <stddef.h>
+
 #include <vsync/atomic.h>
 
 #ifndef DICE_XTOR_PRIO
     #define DICE_XTOR_PRIO
 #endif
 
-#define DICE_CTOR  __attribute__((constructor(DICE_XTOR_PRIO)))
-#define DICE_DTOR  __attribute__((destructor(DICE_XTOR_PRIO)))
-#define DICE_WEAK  __attribute__((weak))
-#define DICE_NORET _Noreturn
+#define DICE_CTOR   __attribute__((constructor(DICE_XTOR_PRIO)))
+#define DICE_DTOR   __attribute__((destructor(DICE_XTOR_PRIO)))
+#define DICE_WEAK   __attribute__((weak))
+#define DICE_NORET  _Noreturn
+#define DICE_UNUSED __attribute__((unused))
 
 #ifndef DICE_NOHIDE
     #define DICE_HIDE __attribute__((visibility("hidden")))
@@ -31,9 +34,14 @@
 #ifndef likely
     #define likely(x) __builtin_expect(!!(x), 1)
 #endif
-
 #ifndef unlikely
     #define unlikely(x) __builtin_expect(!!(x), 0)
 #endif
+
+DICE_WEAK DICE_HIDE void *
+dice_memset(void *s, int c, size_t n)
+{
+    return __builtin_memset(s, c, n);
+}
 
 #endif /* DICE_COMPILER_H */

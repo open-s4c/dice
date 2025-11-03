@@ -87,20 +87,20 @@ install(TARGETS dice DESTINATION lib)
 # details on the chains, events and slots handled by dispatch and callbacks.
 add_library(dice.o OBJECT ${SRCS} ${DISPATCH_SRCS})
 target_link_libraries(dice.o PUBLIC dice.h)
-target_compile_options(dice.o PRIVATE -fPIC)
+target_compile_options(dice.o PRIVATE -fPIC -fno-builtin-memset)
 
 # dice-box.o - OBJECT library that disables callbacks when linked with dice.o.
 # This allows the LTO steps to be more aggressive.
 add_library(dice-box.o OBJECT box.c rbtree.c)
 target_compile_definitions(dice-box.o PRIVATE DICE_HIDE_ALL)
-target_compile_options(dice-box.o PRIVATE -fPIC)
+target_compile_options(dice-box.o PRIVATE -fPIC -fno-builtin-memset)
 target_link_libraries(dice-box.o PRIVATE dice.h)
 
 # dice-cbonly.o - OBJECT library as dice.o but without dispatchers. Only used
 # for performance testing.
 add_library(dice-cbonly.o OBJECT ${SRCS})
 target_link_libraries(dice-cbonly.o PUBLIC dice.h)
-target_compile_options(dice-cbonly.o PRIVATE -fPIC)
+target_compile_options(dice-cbonly.o PRIVATE -fPIC -fno-builtin-memset)
 
 # ------------------------------------------------------------------------------
 # test configuration

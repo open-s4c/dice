@@ -62,13 +62,13 @@ REAL_DECL(void *, malloc, size_t n);
 DICE_HIDE void
 mempool_init(size_t cap)
 {
-    memset(&mp_.stack, 0, sizeof(entry_t *) * NSTACKS);
+    dice_memset(&mp_.stack, 0, sizeof(entry_t *) * NSTACKS);
     mp_.allocated     = 0;
     mp_.pool.capacity = cap;
     mp_.pool.next     = 0;
     mp_.pool.memory   = REAL_FUNCV(malloc, 0)(cap);
     assert(mp_.pool.memory);
-    memset(mp_.pool.memory, 0, cap);
+    dice_memset(mp_.pool.memory, 0, cap);
     // caslock already initialized with 0
 }
 

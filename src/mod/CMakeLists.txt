@@ -10,38 +10,33 @@ add_dependencies(expand-tsan.c tmplr)
 
 set(TSAN_MODULES tsan stacktrace)
 
+# Compile options to modules can be set like this: set(OPTIONS_memcpy -O2)
+
 file(GLOB SRCS *.c)
 foreach(SRC ${SRCS})
   get_filename_component(MODULE ${SRC} NAME_WLE)
   set(TARGET dice-${MODULE})
 
-  if(${TARGET} STREQUAL "dice-memcpy")
-    continue()
-  endif()
-
   add_library(${TARGET} SHARED ${SRC})
   target_link_libraries(${TARGET} PRIVATE dice dice.h)
+  target_compile_options(${TARGET} PRIVATE ${OPTIONS_${MODULE}})
   set_target_properties(${TARGET} PROPERTIES PREFIX "")
   install(TARGETS ${TARGET} DESTINATION lib/dice)
 
   add_library(${TARGET}.o OBJECT ${SRC})
   target_link_libraries(${TARGET}.o PRIVATE dice.h)
-
-  add_library(${TARGET}_testing.o OBJECT ${SRC})
-  target_link_libraries(${TARGET}_testing.o PRIVATE dice.h)
-  target_compile_options(${TARGET}_testing.o PRIVATE -DDICE_TEST_INTERPOSE)
+  target_compile_options(${TARGET}.o PRIVATE -fno-builtin-memset)
+  target_compile_options(${TARGET}.o PRIVATE ${OPTIONS_${MODULE}})
 
   if(NOT "${MODULE}" IN_LIST TSAN_MODULES)
     if(NOT "${DICE_SANITIZER}" STREQUAL "")
       target_compile_options(${TARGET} PUBLIC -fsanitize=${DICE_SANITIZER})
       target_compile_options(${TARGET}.o PRIVATE -fsanitize=${DICE_SANITIZER})
-      target_compile_options(${TARGET}_testing.o
-                             PRIVATE -fsanitize=${DICE_SANITIZER})
     endif()
   endif()
 
   if(${DICE_COVERAGE})
-    foreach(ENDING "" ".o" "_testing.o")
+    foreach(ENDING "" ".o")
       target_compile_options(${TARGET}${ENDING} PRIVATE --coverage)
       target_link_options(${TARGET}${ENDING} PUBLIC --coverage)
     endforeach()
