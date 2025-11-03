@@ -218,7 +218,7 @@ PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_PTHREAD_RWLOCK_RDLOCK, {
     struct pthread_rwlock_rdlock_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E_pthread_rwlock_rdlock, lock);
 
-    // must be enabled. Let's
+    // must be enabled.
     ensure(enabled());
     ev->func = fake_pthread_rwlock_rdlock;
 })
@@ -236,7 +236,7 @@ PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_PTHREAD_RWLOCK_TRYRDLOCK, {
     struct pthread_rwlock_tryrdlock_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E_pthread_rwlock_tryrdlock, lock);
 
-    // must be enabled. Let's
+    // must be enabled.
     ensure(enabled());
     ev->func = fake_pthread_rwlock_tryrdlock;
 })
@@ -255,7 +255,7 @@ PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_PTHREAD_RWLOCK_TIMEDRDLOCK, {
     ASSERT_FIELD_EQ(&E_pthread_rwlock_timedrdlock, lock);
     ASSERT_FIELD_EQ(&E_pthread_rwlock_timedrdlock, abstime);
 
-    // must be enabled. Let's
+    // must be enabled.
     ensure(enabled());
     ev->func = fake_pthread_rwlock_timedrdlock;
 })
@@ -274,7 +274,7 @@ PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_PTHREAD_RWLOCK_WRLOCK, {
     struct pthread_rwlock_wrlock_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E_pthread_rwlock_wrlock, lock);
 
-    // must be enabled. Let's
+    // must be enabled.
     ensure(enabled());
     ev->func = fake_pthread_rwlock_wrlock;
 })
@@ -292,7 +292,7 @@ PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_PTHREAD_RWLOCK_TRYWRLOCK, {
     struct pthread_rwlock_trywrlock_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E_pthread_rwlock_trywrlock, lock);
 
-    // must be enabled. Let's
+    // must be enabled.
     ensure(enabled());
     ev->func = fake_pthread_rwlock_trywrlock;
 })
@@ -311,7 +311,7 @@ PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_PTHREAD_RWLOCK_TIMEDWRLOCK, {
     ASSERT_FIELD_EQ(&E_pthread_rwlock_timedwrlock, lock);
     ASSERT_FIELD_EQ(&E_pthread_rwlock_timedwrlock, abstime);
 
-    // must be enabled. Let's
+    // must be enabled.
     ensure(enabled());
     ev->func = fake_pthread_rwlock_timedwrlock;
 })
@@ -330,7 +330,7 @@ PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_PTHREAD_RWLOCK_UNLOCK, {
     struct pthread_rwlock_unlock_event *ev = EVENT_PAYLOAD(ev);
     ASSERT_FIELD_EQ(&E_pthread_rwlock_unlock, lock);
 
-    // must be enabled. Let's
+    // must be enabled.
     ensure(enabled());
     ev->func = fake_pthread_rwlock_unlock;
 })
@@ -359,13 +359,16 @@ test_pthread_rwlock_rdlock(void)
 {
     /* initialize event with random content */
     event_init(&E_pthread_rwlock_rdlock, sizeof(struct pthread_rwlock_rdlock_event));
+
+    /* ensure that fields that must be equal are actually equal */
+
     /* call pthread_rwlock_rdlock with arguments */
     enable(fake_pthread_rwlock_rdlock);
      int  ret =                                   //
                                  pthread_rwlock_rdlock(                                    //
                                      E_pthread_rwlock_rdlock.lock                                  );
- ensure(ret == E_pthread_rwlock_rdlock.ret);
     ensure(called);
+ ensure(ret == E_pthread_rwlock_rdlock.ret);
     disable();
 }
 static void
@@ -373,13 +376,16 @@ test_pthread_rwlock_tryrdlock(void)
 {
     /* initialize event with random content */
     event_init(&E_pthread_rwlock_tryrdlock, sizeof(struct pthread_rwlock_tryrdlock_event));
+
+    /* ensure that fields that must be equal are actually equal */
+
     /* call pthread_rwlock_tryrdlock with arguments */
     enable(fake_pthread_rwlock_tryrdlock);
      int  ret =                                   //
                                  pthread_rwlock_tryrdlock(                                    //
                                      E_pthread_rwlock_tryrdlock.lock                                  );
- ensure(ret == E_pthread_rwlock_tryrdlock.ret);
     ensure(called);
+ ensure(ret == E_pthread_rwlock_tryrdlock.ret);
     disable();
 }
 static void
@@ -387,14 +393,17 @@ test_pthread_rwlock_timedrdlock(void)
 {
     /* initialize event with random content */
     event_init(&E_pthread_rwlock_timedrdlock, sizeof(struct pthread_rwlock_timedrdlock_event));
+
+    /* ensure that fields that must be equal are actually equal */
+
     /* call pthread_rwlock_timedrdlock with arguments */
     enable(fake_pthread_rwlock_timedrdlock);
      int  ret =                                   //
                                  pthread_rwlock_timedrdlock(                                    //
                                      E_pthread_rwlock_timedrdlock.lock,                           //
                                      E_pthread_rwlock_timedrdlock.abstime                                  );
- ensure(ret == E_pthread_rwlock_timedrdlock.ret);
     ensure(called);
+ ensure(ret == E_pthread_rwlock_timedrdlock.ret);
     disable();
 }
 static void
@@ -402,13 +411,16 @@ test_pthread_rwlock_wrlock(void)
 {
     /* initialize event with random content */
     event_init(&E_pthread_rwlock_wrlock, sizeof(struct pthread_rwlock_wrlock_event));
+
+    /* ensure that fields that must be equal are actually equal */
+
     /* call pthread_rwlock_wrlock with arguments */
     enable(fake_pthread_rwlock_wrlock);
      int  ret =                                   //
                                  pthread_rwlock_wrlock(                                    //
                                      E_pthread_rwlock_wrlock.lock                                  );
- ensure(ret == E_pthread_rwlock_wrlock.ret);
     ensure(called);
+ ensure(ret == E_pthread_rwlock_wrlock.ret);
     disable();
 }
 static void
@@ -416,13 +428,16 @@ test_pthread_rwlock_trywrlock(void)
 {
     /* initialize event with random content */
     event_init(&E_pthread_rwlock_trywrlock, sizeof(struct pthread_rwlock_trywrlock_event));
+
+    /* ensure that fields that must be equal are actually equal */
+
     /* call pthread_rwlock_trywrlock with arguments */
     enable(fake_pthread_rwlock_trywrlock);
      int  ret =                                   //
                                  pthread_rwlock_trywrlock(                                    //
                                      E_pthread_rwlock_trywrlock.lock                                  );
- ensure(ret == E_pthread_rwlock_trywrlock.ret);
     ensure(called);
+ ensure(ret == E_pthread_rwlock_trywrlock.ret);
     disable();
 }
 static void
@@ -430,14 +445,17 @@ test_pthread_rwlock_timedwrlock(void)
 {
     /* initialize event with random content */
     event_init(&E_pthread_rwlock_timedwrlock, sizeof(struct pthread_rwlock_timedwrlock_event));
+
+    /* ensure that fields that must be equal are actually equal */
+
     /* call pthread_rwlock_timedwrlock with arguments */
     enable(fake_pthread_rwlock_timedwrlock);
      int  ret =                                   //
                                  pthread_rwlock_timedwrlock(                                    //
                                      E_pthread_rwlock_timedwrlock.lock,                           //
                                      E_pthread_rwlock_timedwrlock.abstime                                  );
- ensure(ret == E_pthread_rwlock_timedwrlock.ret);
     ensure(called);
+ ensure(ret == E_pthread_rwlock_timedwrlock.ret);
     disable();
 }
 static void
@@ -445,13 +463,16 @@ test_pthread_rwlock_unlock(void)
 {
     /* initialize event with random content */
     event_init(&E_pthread_rwlock_unlock, sizeof(struct pthread_rwlock_unlock_event));
+
+    /* ensure that fields that must be equal are actually equal */
+
     /* call pthread_rwlock_unlock with arguments */
     enable(fake_pthread_rwlock_unlock);
      int  ret =                                   //
                                  pthread_rwlock_unlock(                                    //
                                      E_pthread_rwlock_unlock.lock                                  );
- ensure(ret == E_pthread_rwlock_unlock.ret);
     ensure(called);
+ ensure(ret == E_pthread_rwlock_unlock.ret);
     disable();
 }
 

@@ -123,7 +123,7 @@ PS_SUBSCRIBE(INTERCEPT_BEFORE, MAKE_UPCASE, {
     ASSERT_FIELD_EQ(&E_FOO, AA);
     $__end();
 
-    // must be enabled. Let's
+    // must be enabled.
     ensure(enabled());
     ev->func = fake_FOO;
 })
@@ -157,6 +157,15 @@ test_FOO(void)
 {
     /* initialize event with random content */
     event_init(&E_FOO, sizeof(struct FOO_event));
+
+    /* ensure that fields that must be equal are actually equal */
+    $__begin(AA = MM_ARGS_FOO);
+    E_FOO.AA = E_FOO.__FOO_AA_SAME_AS;
+    $__end();
+    $__begin(AA = FOO);
+    E_FOO.ret = E_FOO.__FOO_ret_SAME_AS;
+    $__end();
+
     /* call FOO with arguments */
     enable(fake_FOO);
     $_returns MM_RETURN_FOO $.!? ret =                                   //
@@ -165,8 +174,8 @@ test_FOO(void)
                                      E_FOO.AA,                           //
                                      $__end(),                           //
                                  );
-    $_returns MM_RETURN_FOO $.? ensure(ret == E_FOO.ret);
     ensure(called);
+    $_returns MM_RETURN_FOO $.? ensure(ret == E_FOO.ret);
     disable();
 }
 $_end();

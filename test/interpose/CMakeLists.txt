@@ -45,6 +45,7 @@ set(INCL_cxa '<dice/events/cxa.h>')
 
 set(MODS
     mman
+    memcpy
     # annotate_rwlock: disabled until INTERCEPT_EVENT can be tested
     pthread_create
     pthread_mutex
@@ -53,7 +54,9 @@ set(MODS
     sem
     cxa)
 
-if(NOT ${ENABLE_SANITIZER})
+if(${ENABLE_SANITIZER})
+  message(STATUS "Ignoring malloc tests")
+else()
   # malloc does not play well with the sanitizers
   set(MODS malloc ${MODS})
 endif()
@@ -82,9 +85,13 @@ foreach(MOD ${MODS})
   set(TARGET ${MOD}_test)
   add_executable(${TARGET} ${CMAKE_CURRENT_SOURCE_DIR}/${TARGET}.c)
   target_link_libraries(${TARGET} PRIVATE dice.h dice tsano pthread)
-  target_link_libraries(${TARGET} PRIVATE dice-${MOD}_testing.o)
+  target_compile_options(
+    ${TARGET} PRIVATE -fno-builtin-memcpy -fno-builtin-memset
+                      -fno-builtin-memmmove)
 
-  add_test(NAME interpose-${TARGET} COMMAND ${DICE_SCRIPT} ./${TARGET})
+  add_test(NAME interpose-${TARGET}
+           COMMAND ${DICE_SCRIPT} -preload $<TARGET_FILE:dice-${MOD}>
+                   ${CMAKE_CURRENT_BINARY_DIR}/${TARGET})
 
   if(${ENABLE_SANITIZER})
     target_compile_options(${TARGET} PRIVATE ${LIBSAN_C_FLAGS})
@@ -93,7 +100,4 @@ foreach(MOD ${MODS})
   endif()
 endforeach()
 
-# Add the test executable for memcpy
-add_executable(memcpy_test ${CMAKE_CURRENT_SOURCE_DIR}/memcpy_test.c)
-target_link_libraries(memcpy_test PRIVATE dice.o tsano pthread)
-add_test(NAME interpose-memcpy_test COMMAND memcpy_test)
+target_link_libraries(cxa_test PRIVATE stdc++)
