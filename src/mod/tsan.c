@@ -119,7 +119,7 @@ __tsan_release(void *addr)
 void *
 __tsan_memset(void *b, int c, size_t len)
 {
-    return memset(b, c, len);
+    return dice_memset(b, c, len);
 }
 void *
 __tsan_memcpy(void *dst, const void *src, size_t len)
