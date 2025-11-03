@@ -111,7 +111,7 @@ PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_MMAP, {
     ASSERT_FIELD_EQ(&E_mmap, fd);
     ASSERT_FIELD_EQ(&E_mmap, offset);
 
-    // must be enabled. Let's
+    // must be enabled.
     ensure(enabled());
     ev->func = fake_mmap;
 })
@@ -135,7 +135,7 @@ PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_MUNMAP, {
     ASSERT_FIELD_EQ(&E_munmap, addr);
     ASSERT_FIELD_EQ(&E_munmap, length);
 
-    // must be enabled. Let's
+    // must be enabled.
     ensure(enabled());
     ev->func = fake_munmap;
 })
@@ -165,6 +165,9 @@ test_mmap(void)
 {
     /* initialize event with random content */
     event_init(&E_mmap, sizeof(struct mmap_event));
+
+    /* ensure that fields that must be equal are actually equal */
+
     /* call mmap with arguments */
     enable(fake_mmap);
      void *  ret =                                   //
@@ -175,8 +178,8 @@ test_mmap(void)
                                      E_mmap.flags,                           //
                                      E_mmap.fd,                           //
                                      E_mmap.offset                                  );
- ensure(ret == E_mmap.ret);
     ensure(called);
+ ensure(ret == E_mmap.ret);
     disable();
 }
 static void
@@ -184,14 +187,17 @@ test_munmap(void)
 {
     /* initialize event with random content */
     event_init(&E_munmap, sizeof(struct munmap_event));
+
+    /* ensure that fields that must be equal are actually equal */
+
     /* call munmap with arguments */
     enable(fake_munmap);
      int  ret =                                   //
                                  munmap(                                    //
                                      E_munmap.addr,                           //
                                      E_munmap.length                                  );
- ensure(ret == E_munmap.ret);
     ensure(called);
+ ensure(ret == E_munmap.ret);
     disable();
 }
 
