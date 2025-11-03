@@ -14,8 +14,7 @@ add_dependencies(expand-tests tsan_test-expand)
 
 # compile command
 add_executable(tsan_test ${CMAKE_CURRENT_SOURCE_DIR}/tsan_test.c)
-target_link_libraries(tsan_test PRIVATE dice-tsan_testing.o
-                                        dice-stacktrace_testing.o)
+target_link_libraries(tsan_test PRIVATE dice-tsan.o dice-stacktrace.o)
 target_link_libraries(tsan_test PRIVATE dice.h dice pthread)
 
 # target_compile_options(dice PRIVATE -fsanitize=address)

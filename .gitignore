@@ -1,4 +1,5 @@
 .kakrc
 build
+build-*
 .cache
 compile_flags.txt
