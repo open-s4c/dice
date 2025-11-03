@@ -43,6 +43,11 @@ INTERPOSE(void *, memmove, void *dest, const void *src, size_t count)
     return ev.ret;
 }
 
+#if 0
+//
+// Unfortunately, there is no safe way at the moment how to handle this
+// interception in all compiler versions.
+//
 INTERPOSE(void *, memset, void *ptr, int value, size_t num)
 {
     struct memset_event ev = {
@@ -60,6 +65,7 @@ INTERPOSE(void *, memset, void *ptr, int value, size_t num)
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_MEMSET, &ev, &md);
     return ev.ret;
 }
+#endif
 
 /* Advertise event type names for debugging messages */
 PS_ADVERTISE_TYPE(EVENT_MEMCPY)

@@ -4,7 +4,8 @@
 set(FUNS_malloc malloc calloc realloc free posix_memalign aligned_alloc)
 set(INCL_malloc '<dice/events/malloc.h>')
 
-set(FUNS_memcpy memcpy memmove memset)
+# TODO: enable memset interception
+set(FUNS_memcpy memcpy memmove)
 set(INCL_memcpy '<dice/events/memcpy.h>')
 
 set(FUNS_mman mmap munmap)
