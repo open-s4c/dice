@@ -4,8 +4,7 @@
 set(FUNS_malloc malloc calloc realloc free posix_memalign aligned_alloc)
 set(INCL_malloc '<dice/events/malloc.h>')
 
-# TODO: enable memset interception
-set(FUNS_memcpy memcpy memmove)
+set(FUNS_memcpy memcpy memmove memset)
 set(INCL_memcpy '<dice/events/memcpy.h>')
 
 set(FUNS_mman mmap munmap)
@@ -90,8 +89,14 @@ foreach(MOD ${MODS})
     ${TARGET} PRIVATE -fno-builtin-memcpy -fno-builtin-memset
                       -fno-builtin-memmmove)
 
+  set(PRELOAD $<TARGET_FILE:dice-${MOD}>)
+
+  if(${MOD} STREQUAL "memcpy")
+    set(PRELOAD "$<TARGET_FILE:dice-wrap_memset>:${PRELOAD}")
+  endif()
+
   add_test(NAME interpose-${TARGET}
-           COMMAND ${DICE_SCRIPT} -preload $<TARGET_FILE:dice-${MOD}>
+           COMMAND ${DICE_SCRIPT} -preload ${PRELOAD}
                    ${CMAKE_CURRENT_BINARY_DIR}/${TARGET})
 
   if(${ENABLE_SANITIZER})
