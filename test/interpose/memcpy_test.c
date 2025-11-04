@@ -54,6 +54,16 @@ struct memcpy_event E_memcpy;
  * };
  */
 struct memmove_event E_memmove;
+/* Expects struct to match this:
+ *
+ * struct memset_event {
+ *     void *ptr;
+ *     int value;
+ *     size_t num;
+ *      void *  ret;
+ * };
+ */
+struct memset_event E_memset;
 
 /* mock implementation of functions */
 void *
@@ -91,6 +101,24 @@ fake_memmove(void *dest ,const void *src ,size_t count)
 
     /* return expected value */
  return E_memmove.ret;
+}
+void *
+fake_memset(void *ptr, int value, size_t num)
+{
+    /* check that every argument is as expected (unless should be skipped). */
+    ensure(ptr == E_memset.ptr);
+    ensure(value == E_memset.value);
+    ensure(num == E_memset.num);
+
+    /* skipped arguments should be void-cast to silent compiler warnings. */
+
+
+    /* mark as called*/
+    ensure(!called);
+    called = true;
+
+    /* return expected value */
+ return E_memset.ret;
 }
 
 #define ASSERT_FIELD_EQ(E, field)                                              \
@@ -139,6 +167,28 @@ PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_MEMMOVE, {
     ASSERT_FIELD_EQ(&E_memmove, src);
     ASSERT_FIELD_EQ(&E_memmove, count);
  ASSERT_FIELD_EQ(&E_memmove, ret);
+})
+PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_MEMSET, {
+    if (!enabled())
+        return PS_STOP_CHAIN;
+    struct memset_event *ev = EVENT_PAYLOAD(ev);
+    ASSERT_FIELD_EQ(&E_memset, ptr);
+    ASSERT_FIELD_EQ(&E_memset, value);
+    ASSERT_FIELD_EQ(&E_memset, num);
+
+    // must be enabled.
+    ensure(enabled());
+    ev->func = fake_memset;
+})
+
+PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_MEMSET, {
+    if (!enabled())
+        return PS_STOP_CHAIN;
+    struct memset_event *ev = EVENT_PAYLOAD(ev);
+    ASSERT_FIELD_EQ(&E_memset, ptr);
+    ASSERT_FIELD_EQ(&E_memset, value);
+    ASSERT_FIELD_EQ(&E_memset, num);
+ ASSERT_FIELD_EQ(&E_memset, ret);
 })
 
 
@@ -192,11 +242,32 @@ test_memmove(void)
  ensure(ret == E_memmove.ret);
     disable();
 }
+static void
+test_memset(void)
+{
+    /* initialize event with random content */
+    event_init(&E_memset, sizeof(struct memset_event));
+
+    /* ensure that fields that must be equal are actually equal */
+    E_memset.ret = E_memset.ptr;
+
+    /* call memset with arguments */
+    enable(fake_memset);
+     void *  ret =                                   //
+                                 memset(                                    //
+                                     E_memset.ptr,                           //
+                                     E_memset.value,                           //
+                                     E_memset.num                                  );
+    ensure(called);
+ ensure(ret == E_memset.ret);
+    disable();
+}
 
 int
 main()
 {
     test_memcpy();
     test_memmove();
+    test_memset();
     return 0;
 }
