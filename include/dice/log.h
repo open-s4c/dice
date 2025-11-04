@@ -10,7 +10,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-#ifndef LOG_LOCKED
+#ifdef LOG_UNLOCKED
     #define LOG_LOCK_ACQUIRE
     #define LOG_LOCK_RELEASE
 #else
@@ -87,7 +87,27 @@ DICE_WEAK caslock_t log_lock;
     #define log_info log_none
 #endif
 
+/* log_fatal always prints the message and exits with EXIT_FAILURE.
+ *
+ * It indicates a fatal error was detected, but it is a possibly expected error
+ * (in contrast to abort below).
+ */
 #define log_fatal(fmt, ...)                                                    \
+    do {                                                                       \
+        LOG_LOCK_ACQUIRE;                                                      \
+        log_printf(LOG_PREFIX);                                                \
+        log_printf(fmt, ##__VA_ARGS__);                                        \
+        log_printf(LOG_SUFFIX);                                                \
+        LOG_LOCK_RELEASE;                                                      \
+        exit(EXIT_FAILURE);                                                    \
+    } while (0)
+
+/* log_abort always prints the message and aborts the program.
+ *
+ * It indicates an unexpected error was detected, ie, an internal bug in Dice or
+ * one of its modules.
+ */
+#define log_abort(fmt, ...)                                                    \
     do {                                                                       \
         LOG_LOCK_ACQUIRE;                                                      \
         log_printf(LOG_PREFIX);                                                \

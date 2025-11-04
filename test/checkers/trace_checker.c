@@ -8,9 +8,6 @@
 #ifndef LOG_LEVEL
     #define LOG_LEVEL INFO
 #endif
-#ifndef LOG_LOCKED
-    #define LOG_LOCKED
-#endif
 
 #include "trace_checker.h"
 #include <dice/chains/capture.h>
