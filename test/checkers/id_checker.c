@@ -2,9 +2,6 @@
 #ifndef LOG_LEVEL
     #define LOG_LEVEL INFO
 #endif
-#ifndef LOG_LOCKED
-    #define LOG_LOCKED
-#endif
 
 #include <dice/chains/capture.h>
 #include <dice/ensure.h>
@@ -14,7 +11,7 @@
 #include <dice/self.h>
 
 #if defined(__NetBSD__)
-     #include <lwp.h>
+    #include <lwp.h>
 static uint64_t
 osid_(void)
 {
@@ -46,7 +43,8 @@ check_ids_(chain_id chain, type_id type, struct metadata *md)
     if (mdid != 0 && mdid != osid) {
         log_fatal("[%" PRIu64 " %s/%s] unexpected OS-based id %" PRIu64
                   " != %" PRIu64,
-                  self_id(md), ps_chain_str(chain), ps_type_str(type), mdid, osid);
+                  self_id(md), ps_chain_str(chain), ps_type_str(type), mdid,
+                  osid);
     }
 }
 

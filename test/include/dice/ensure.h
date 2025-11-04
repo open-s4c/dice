@@ -1,20 +1,16 @@
 /*
- * Copyright (C) Huawei Technologies Co., Ltd. 2025. All rights reserved.
+ * Copyright (C) 2025 Huawei Technologies Co., Ltd.
  * SPDX-License-Identifier: 0BSD
  */
 #ifndef DICE_ENSURE_H
 #define DICE_ENSURE_H
 
-#ifdef NDEBUG
-    #include <dice/log.h>
-    #define ensure(COND)                                                       \
-        {                                                                      \
-            if (!(COND)) {                                                     \
-                log_fatal("error: %s", #COND);                                 \
-            }                                                                  \
-        }
-#else
-    #include <assert.h>
-    #define ensure assert
-#endif
+#include <dice/log.h>
+#define ensure(COND)                                                           \
+    {                                                                          \
+        if (!(COND)) {                                                         \
+            log_abort("cannot ensure: %s", #COND);                             \
+        }                                                                      \
+    }
+
 #endif /* DICE_ENSURE_H */

@@ -49,7 +49,7 @@ right building blocks when writing interceptors or subscribers.
 - `interpose.h`: platform-specific macros (`INTERPOSE`, `REAL`, `REAL_DECL`)
   for wrapping libc and pthread functions while still calling the original.
 - `log.h`: logging macros (`log_debug`, `log_info`, `log_warn`, `log_fatal`)
-  and configuration controls (`LOG_LEVEL`, `LOG_PREFIX`, `LOG_LOCKED`).
+  and configuration controls (`LOG_LEVEL`, `LOG_PREFIX`, `LOG_UNLOCKED`).
 - `compiler.h`: shared compiler attributes (`DICE_CTOR`, `DICE_HIDE`, `likely`,
   etc.) used across Dice headers.
 
