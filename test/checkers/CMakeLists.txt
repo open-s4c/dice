@@ -6,7 +6,7 @@ target_include_directories(
   dice-checkers.h INTERFACE "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>"
                             "$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>")
 
-set(SRCS trace_checker.c malloc_free_checker.c)
+set(SRCS trace_checker.c malloc_free_checker.c id_checker.c)
 foreach(SRC ${SRCS})
   get_filename_component(TEST ${SRC} NAME_WLE)
   set(TARGET ${TEST})
@@ -22,6 +22,7 @@ foreach(SRC ${SRCS})
 endforeach()
 
 target_link_libraries(trace_checker PRIVATE dice-self)
+target_link_libraries(id_checker PRIVATE dice-self)
 
 add_library(mock_checker SHARED mock_checker.c)
 target_link_libraries(mock_checker PUBLIC dice.h dice-checkers.h)

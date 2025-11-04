@@ -21,6 +21,9 @@ set(IGNORE_address "pthread_exit_window")
 set(IGNORE_thread "pthread_exit_window")
 set(IGNORE_undefined)
 
+# Dice script options
+set(DICE_OPTS_thread_sequence -pthread -self -preload $<TARGET_FILE:id_checker>)
+
 # tsano script path
 set(TSANOSH env TSANO_LIBDIR=${CMAKE_CURRENT_BINARY_DIR}/../deps/tsano/
             ${CMAKE_CURRENT_SOURCE_DIR}/../deps/tsano/tsano)
@@ -39,7 +42,8 @@ foreach(SRC ${SRCS})
 
   # only add it as a test if not in ignore-list
   if(NOT ${TARGET} IN_LIST IGNORE_${DICE_SANITIZER})
-    add_test(NAME ${TARGET} COMMAND ${DICE_SCRIPT} ./${TARGET})
+    add_test(NAME ${TARGET} COMMAND ${DICE_SCRIPT} ${DICE_OPTS_${TEST}}
+                                    ${CMAKE_CURRENT_BINARY_DIR}/${TARGET})
   endif()
 endforeach()
 
