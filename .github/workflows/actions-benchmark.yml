@@ -22,6 +22,7 @@ jobs:
       packages: write
       attestations: write
       id-token: write
+    timeout-minutes: 200
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -47,8 +48,8 @@ jobs:
              -H ${{ matrix.os }}
              -n ${{ matrix.cfg.cc }}
              -d results
+             -b "micro leveldb raytracing"
              # uncomment the next line to select only one benchmark
-             # -b "micro"
       - name: Update wiki
         run: scripts/update-wiki.sh
              -d results
