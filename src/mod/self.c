@@ -29,6 +29,7 @@
 #include <string.h>
 #if defined(__NetBSD__)
     #include <errno.h>
+    #include <lwp.h>
 #endif
 
 #ifndef DICE_MODULE_PRIO
@@ -50,9 +51,9 @@
 struct self {
     metadata_t md;
     struct quack_node_s retired_node;
-    uint64_t oid;
-    pthread_t pid;
-    thread_id tid;
+    uint64_t osid;  // OS-specific thread identifier
+    pthread_t ptid; // pthread-specific thread identifier
+    thread_id id;   // Dice thread identifier \in 1..MAX_UINT64-1
     struct rbtree tls;
     int guard;
     bool retired;
@@ -109,7 +110,7 @@ DICE_HIDE thread_id
 self_id_(metadata_t *md)
 {
     struct self *self = (struct self *)md;
-    return self ? self->tid : NO_THREAD;
+    return self ? self->id : NO_THREAD;
 }
 
 DICE_HIDE bool
@@ -290,22 +291,22 @@ thread_cache_get_(void)
 #if defined(__linux__)
 
 static uint64_t
-thread_oid_(void)
+thread_osid_(void)
 {
     return (uint64_t)gettid();
 }
 static bool
 thread_dead_(struct self *self)
 {
-    return kill((pid_t)self->oid, 0) != 0;
+    return kill((pid_t)self->osid, 0) != 0;
 }
 
-#else  // !linux
+#elif defined(__NetBSD__)
 
 static uint64_t
-thread_oid_(void)
+thread_osid_(void)
 {
-    return 0;
+    return _lwp_self();
 }
 
 static bool
@@ -321,7 +322,21 @@ thread_dead_(struct self *self)
     //
     // In Linux, it causes the application to crash with segmentation fault.
     // So there we use the gettid and kill.
-    return pthread_kill(self->pid, 0) == ESRCH;
+    return pthread_kill(self->ptid, 0) == ESRCH;
+}
+
+#else  // !linux && !NetBSD
+
+static uint64_t
+thread_osid_(void)
+{
+    return 0;
+}
+
+static bool
+thread_dead_(struct self *self)
+{
+    return false;
 }
 #endif // !linux
 
@@ -331,9 +346,9 @@ create_self_()
     struct self *self;
     self          = mempool_alloc(sizeof(struct self));
     self->guard   = 0;
-    self->tid     = vatomic64_inc_get(&threads_.count);
-    self->pid     = pthread_self();
-    self->oid     = thread_oid_();
+    self->id      = vatomic64_inc_get(&threads_.count);
+    self->ptid    = pthread_self();
+    self->osid    = thread_osid_();
     self->retired = false;
     tls_init_(self);
     return self;
@@ -344,9 +359,9 @@ destroy_self_(struct self *self)
 {
     tls_fini_(self);
 
-    // The main thread might still intercept after the module has terminated.
-    // So, we keep the self object allocated to avoid issues.
-    if (self->tid != MAIN_THREAD)
+    // The main thread might still intercept after the module has
+    // terminated. So, we keep the self object allocated to avoid issues.
+    if (self->id != MAIN_THREAD)
         mempool_free(self);
 }
 
@@ -370,14 +385,17 @@ get_self_(void)
     // its self object is put into the retired stack. The object is still
     // kept in the thread_cache.
 
-    // So when getting self an existing self, we first look in the cache. If
-    // the pthread implementation does not zero the thread specific area on
-    // exit, the thread will find its object there until the end of the
-    // thread's lifetime. However, if the pthread implementation zeros the
-    // thread specific area on exit, we need to look for the thread in the
-    // retired stack.
+    // So when searching for the self object, we first look in the cache
+    // (ie, the thread specific area provided by pthread). The pthread
+    // implementation is expected to zero that thread specific area when
+    // starting a new thread, and (in some systems) it also does it when
+    // terminating the thread. When the latter happens, we need to look for
+    // the thread in the retired stack.
 
-    pthread_t pid     = pthread_self();
+    // Since pthread_self ids can be reused, we use the pair (ptid,osid) ids as
+    // unique identifier.
+
+    pthread_t ptid    = pthread_self();
     struct self *self = thread_cache_get_();
     if (self)
         return self;
@@ -394,7 +412,8 @@ get_self_(void)
 
         struct self *it = container_of(item, struct self, retired_node);
 
-        if (self == NULL && it->pid == pid)
+        uint64_t osid = thread_osid_();
+        if (self == NULL && it->ptid == ptid && it->osid == osid)
             self = it;
         quack_push(&threads_.retired, item);
     }
@@ -422,11 +441,11 @@ retire_self_(struct self *self)
         self->guard++;                                                         \
         self->md = (metadata_t){0};                                            \
         log_debug(">> [%lu:0x%lx:%lu] %s/%s: %d", self_id(&self->md),          \
-                  (uint64_t)self->pid, self->oid, ps_chain_str(chain),         \
+                  (uint64_t)self->ptid, self->osid, ps_chain_str(chain),       \
                   ps_type_str(type), self->guard);                             \
         PS_PUBLISH(chain, type, event, &self->md);                             \
         log_debug("<< [%lu:0x%lx:%lu] %s/%s: %d", self_id(&self->md),          \
-                  (uint64_t)self->pid, self->oid, ps_chain_str(chain),         \
+                  (uint64_t)self->ptid, self->osid, ps_chain_str(chain),       \
                   ps_type_str(type), self->guard);                             \
         self->guard--;                                                         \
     } while (0)
@@ -442,7 +461,7 @@ self_handle_before_(const chain_id chain, const type_id type, void *event,
         self_guard(CAPTURE_BEFORE, type, event, self);
     else
         log_debug(">>> [%lu:0x%lx:%lu] %s/%s: %d", self_id(&self->md),
-                  (uint64_t)self->pid, self->oid, ps_chain_str(chain),
+                  (uint64_t)self->ptid, self->osid, ps_chain_str(chain),
                   ps_type_str(type), self->guard);
 
     assert(self->guard >= 0);
@@ -460,7 +479,7 @@ self_handle_after_(const chain_id chain, const type_id type, void *event,
         self_guard(CAPTURE_AFTER, type, event, self);
     else
         log_debug("<<< [%lu:0x%lx:%lu] %s/%s: %d", self_id(&self->md),
-                  (uint64_t)self->pid, self->oid, ps_chain_str(chain),
+                  (uint64_t)self->ptid, self->osid, ps_chain_str(chain),
                   ps_type_str(type), self->guard);
 
     assert(self->guard >= 0);
@@ -478,7 +497,7 @@ self_handle_event_(const chain_id chain, const type_id type, void *event,
         self_guard(CAPTURE_EVENT, type, event, self);
     else
         log_debug("!!! [%lu:0x%lx:%lu] %s/%s: %d", self_id(&self->md),
-                  (uint64_t)self->pid, self->oid, ps_chain_str(chain),
+                  (uint64_t)self->ptid, self->osid, ps_chain_str(chain),
                   ps_type_str(type), self->guard);
 
     assert(self->guard >= 0);
@@ -532,7 +551,7 @@ self_fini_(struct self *self)
 }
 
 static void
-cleanup_threads_(pthread_t pid)
+cleanup_threads_(pthread_t ptid)
 {
     caslock_acquire(&threads_.lock);
     struct quack_node_s *item = quack_popall(&threads_.retired);
@@ -543,7 +562,8 @@ cleanup_threads_(pthread_t pid)
 
         struct self *self = container_of(item, struct self, retired_node);
 
-        if ((pid != 0 && self->pid == pid) || (pid == 0 && thread_dead_(self)))
+        if ((ptid != 0 && self->ptid == ptid) ||
+            (ptid == 0 && thread_dead_(self)))
             self_fini_(self);
         else
             quack_push(&threads_.retired, item);
