@@ -81,13 +81,13 @@ tls_cmp_(const struct rbnode *a, const struct rbnode *b)
     return ea->key > eb->key ? 1 : ea->key < eb->key ? -1 : 0;
 }
 
-DICE_HIDE void
+static inline void
 tls_init_(struct self *self)
 {
     rbtree_init(&self->tls, tls_cmp_);
 }
 
-DICE_HIDE void
+static inline void
 tls_fini_(struct self *self)
 {
     while (self->tls.root) {
@@ -106,21 +106,21 @@ tls_fini_(struct self *self)
 // public interface
 // -----------------------------------------------------------------------------
 
-DICE_HIDE thread_id
+static inline thread_id
 self_id_(metadata_t *md)
 {
     struct self *self = (struct self *)md;
     return self ? self->id : NO_THREAD;
 }
 
-DICE_HIDE bool
+static inline bool
 self_retired_(metadata_t *md)
 {
     struct self *self = (struct self *)md;
     return self ? self->retired : false;
 }
 
-DICE_HIDE void *
+static inline void *
 self_tls_get_(metadata_t *md, uintptr_t item_key)
 {
     struct self *self = (struct self *)md;
@@ -138,7 +138,7 @@ self_tls_get_(metadata_t *md, uintptr_t item_key)
     return i->ptr;
 }
 
-DICE_HIDE void
+static void
 self_tls_set_(metadata_t *md, uintptr_t item_key, void *ptr,
               struct tls_dtor dtor)
 {
@@ -189,13 +189,13 @@ mempool_free_dtor_(void *arg, void *ptr)
     mempool_free(ptr);
 }
 
-DICE_HIDE void *
+static inline void *
 self_tls_(metadata_t *md, const void *global, size_t size)
 {
     uintptr_t item_key = (uintptr_t)global;
 
     void *data = self_tls_get(md, item_key);
-    if (data)
+    if (likely(data))
         return data;
 
     void *ptr = mempool_alloc(size);
@@ -282,7 +282,7 @@ thread_cache_set_(struct self *self)
         log_fatal("could not set key");
 }
 
-DICE_HIDE struct self *
+static inline struct self *
 thread_cache_get_(void)
 {
     return (struct self *)pthread_getspecific(threads_.cache_key);
@@ -340,7 +340,7 @@ thread_dead_(struct self *self)
 }
 #endif // !linux
 
-DICE_HIDE struct self *
+static struct self *
 create_self_()
 {
     struct self *self;
@@ -374,7 +374,7 @@ init_threads_(void)
     quack_init(&threads_.retired);
 }
 
-static struct self *
+static inline struct self *
 get_self_(void)
 {
     // When a thread is created, it won't find its self object anywhere and
@@ -397,7 +397,7 @@ get_self_(void)
 
     pthread_t ptid    = pthread_self();
     struct self *self = thread_cache_get_();
-    if (self)
+    if (likely(self))
         return self;
 
     // We now search the retired stack. To avoid not seeing our self object
@@ -450,7 +450,7 @@ retire_self_(struct self *self)
         self->guard--;                                                         \
     } while (0)
 
-DICE_HIDE enum ps_err
+static inline enum ps_err
 self_handle_before_(const chain_id chain, const type_id type, void *event,
                     struct self *self)
 {
@@ -468,7 +468,7 @@ self_handle_before_(const chain_id chain, const type_id type, void *event,
     return PS_STOP_CHAIN;
 }
 
-DICE_HIDE enum ps_err
+static inline enum ps_err
 self_handle_after_(const chain_id chain, const type_id type, void *event,
                    struct self *self)
 {
@@ -486,7 +486,7 @@ self_handle_after_(const chain_id chain, const type_id type, void *event,
     return PS_STOP_CHAIN;
 }
 
-DICE_HIDE enum ps_err
+static inline enum ps_err
 self_handle_event_(const chain_id chain, const type_id type, void *event,
                    struct self *self)
 {
@@ -504,7 +504,7 @@ self_handle_event_(const chain_id chain, const type_id type, void *event,
     return PS_STOP_CHAIN;
 }
 
-static struct self *
+static inline struct self *
 get_or_create_self_(bool publish)
 {
     struct self *self = get_self_();
@@ -525,7 +525,7 @@ PS_SUBSCRIBE(INTERCEPT_EVENT, ANY_EVENT, {
     return self_handle_event_(chain, type, event, get_or_create_self_(true));
 })
 PS_SUBSCRIBE(INTERCEPT_BEFORE, ANY_EVENT, {
-    if (type == EVENT_THREAD_CREATE)
+    if (unlikely(type == EVENT_THREAD_CREATE))
         cleanup_threads_(0);
     return self_handle_before_(chain, type, event, get_or_create_self_(true));
 })
