@@ -267,7 +267,7 @@ thread_cache_init_(void)
         abort();
 }
 
-static void
+static DICE_UNUSED void
 thread_cache_del_(struct self *self)
 {
     (void)self;
@@ -428,7 +428,6 @@ retire_self_(struct self *self)
     assert(self);
     assert(!self->retired);
     self->retired = true;
-    thread_cache_del_(self);
     quack_push(&threads_.retired, &self->retired_node);
 }
 
