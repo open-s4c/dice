@@ -106,21 +106,21 @@ tls_fini_(struct self *self)
 // public interface
 // -----------------------------------------------------------------------------
 
-static inline thread_id
+static thread_id
 self_id_(metadata_t *md)
 {
     struct self *self = (struct self *)md;
     return likely(self) ? self->id : NO_THREAD;
 }
 
-static inline bool
+static bool
 self_retired_(metadata_t *md)
 {
     struct self *self = (struct self *)md;
     return likely(self) ? self->retired : false;
 }
 
-static inline void *
+static void *
 self_tls_get_(metadata_t *md, uintptr_t item_key)
 {
     struct self *self = (struct self *)md;
@@ -189,7 +189,7 @@ mempool_free_dtor_(void *arg, void *ptr)
     mempool_free(ptr);
 }
 
-static inline void *
+static void *
 self_tls_(metadata_t *md, const void *global, size_t size)
 {
     uintptr_t item_key = (uintptr_t)global;
