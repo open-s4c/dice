@@ -18,7 +18,7 @@ ps_publish(const chain_id chain, const type_id type, void *event,
            metadata_t *md)
 {
     if (unlikely(!ready_))
-        if (unlikely(!ps_initd_()))
+        if (!ps_initd_())
             return PS_DROP_EVENT;
 
     enum ps_err err = ps_dispatch_(chain, type, event, md);
