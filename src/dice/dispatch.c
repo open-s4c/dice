@@ -6,22 +6,6 @@
 
 /* chain dispatcher prototypes */
 DICE_WEAK DICE_HIDE enum ps_err
-ps_dispatch_0_(const chain_id chain, const type_id type, void *event,
-                 metadata_t *md)
-{
-    (void)chain;
-    (void)type;
-    (void)event;
-    (void)md;
-    return PS_HANDLER_OFF;
-}
-
-DICE_WEAK DICE_HIDE bool
-ps_dispatch_chain_0_on_(void)
-{
-    return false;
-}
-DICE_WEAK DICE_HIDE enum ps_err
 ps_dispatch_1_(const chain_id chain, const type_id type, void *event,
                  metadata_t *md)
 {
@@ -34,6 +18,22 @@ ps_dispatch_1_(const chain_id chain, const type_id type, void *event,
 
 DICE_WEAK DICE_HIDE bool
 ps_dispatch_chain_1_on_(void)
+{
+    return false;
+}
+DICE_WEAK DICE_HIDE enum ps_err
+ps_dispatch_4_(const chain_id chain, const type_id type, void *event,
+                 metadata_t *md)
+{
+    (void)chain;
+    (void)type;
+    (void)event;
+    (void)md;
+    return PS_HANDLER_OFF;
+}
+
+DICE_WEAK DICE_HIDE bool
+ps_dispatch_chain_4_on_(void)
 {
     return false;
 }
@@ -70,22 +70,6 @@ ps_dispatch_chain_3_on_(void)
     return false;
 }
 DICE_WEAK DICE_HIDE enum ps_err
-ps_dispatch_4_(const chain_id chain, const type_id type, void *event,
-                 metadata_t *md)
-{
-    (void)chain;
-    (void)type;
-    (void)event;
-    (void)md;
-    return PS_HANDLER_OFF;
-}
-
-DICE_WEAK DICE_HIDE bool
-ps_dispatch_chain_4_on_(void)
-{
-    return false;
-}
-DICE_WEAK DICE_HIDE enum ps_err
 ps_dispatch_5_(const chain_id chain, const type_id type, void *event,
                  metadata_t *md)
 {
@@ -117,6 +101,22 @@ ps_dispatch_chain_6_on_(void)
 {
     return false;
 }
+DICE_WEAK DICE_HIDE enum ps_err
+ps_dispatch_0_(const chain_id chain, const type_id type, void *event,
+                 metadata_t *md)
+{
+    (void)chain;
+    (void)type;
+    (void)event;
+    (void)md;
+    return PS_HANDLER_OFF;
+}
+
+DICE_WEAK DICE_HIDE bool
+ps_dispatch_chain_0_on_(void)
+{
+    return false;
+}
 
 DICE_HIDE bool
 ps_dispatch_chain_on_(const chain_id chain)
@@ -124,20 +124,20 @@ ps_dispatch_chain_on_(const chain_id chain)
     switch (chain) {
         default:
             return false;
-        case 0:
-            return ps_dispatch_chain_0_on_();
         case 1:
             return ps_dispatch_chain_1_on_();
+        case 4:
+            return ps_dispatch_chain_4_on_();
         case 2:
             return ps_dispatch_chain_2_on_();
         case 3:
             return ps_dispatch_chain_3_on_();
-        case 4:
-            return ps_dispatch_chain_4_on_();
         case 5:
             return ps_dispatch_chain_5_on_();
         case 6:
             return ps_dispatch_chain_6_on_();
+        case 0:
+            return ps_dispatch_chain_0_on_();
     }
 }
 
@@ -146,20 +146,20 @@ DICE_HIDE enum ps_err
 ps_dispatch_(const chain_id chain, const type_id type, void *event,
              metadata_t *md)
 {
-    if (likely(chain == 0))
-        return ps_dispatch_0_(chain, type, event, md);
     if (likely(chain == 1))
         return ps_dispatch_1_(chain, type, event, md);
+    if (likely(chain == 4))
+        return ps_dispatch_4_(chain, type, event, md);
     if (likely(chain == 2))
         return ps_dispatch_2_(chain, type, event, md);
     if (likely(chain == 3))
         return ps_dispatch_3_(chain, type, event, md);
-    if (likely(chain == 4))
-        return ps_dispatch_4_(chain, type, event, md);
     if (likely(chain == 5))
         return ps_dispatch_5_(chain, type, event, md);
     if (likely(chain == 6))
         return ps_dispatch_6_(chain, type, event, md);
+    if (likely(chain == 0))
+        return ps_dispatch_0_(chain, type, event, md);
     return PS_HANDLER_OFF;
 }
 

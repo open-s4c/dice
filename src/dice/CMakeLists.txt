@@ -28,7 +28,7 @@ seq(EEE 1 128 \;)
 seq(SSS 0 15 \;)
 seq(SSX 0 15 ,)
 seq(CHAINS 0 6 \;)
-seq(CCC 0 6 ,)
+set(CCC "1,4,2,3,5,6,0")
 
 add_custom_command(
   OUTPUT dispatch.c
