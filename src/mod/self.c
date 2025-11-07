@@ -110,14 +110,14 @@ static inline thread_id
 self_id_(metadata_t *md)
 {
     struct self *self = (struct self *)md;
-    return self ? self->id : NO_THREAD;
+    return likely(self) ? self->id : NO_THREAD;
 }
 
 static inline bool
 self_retired_(metadata_t *md)
 {
     struct self *self = (struct self *)md;
-    return self ? self->retired : false;
+    return likely(self) ? self->retired : false;
 }
 
 static inline void *
@@ -518,7 +518,6 @@ get_or_create_self_(bool publish)
     }
 
     self = create_self_();
-
     thread_cache_set_(self);
 
     if (publish)

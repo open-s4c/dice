@@ -76,7 +76,7 @@ static inline void
 mempool_ensure_initd(void)
 {
     // assumes protected by lock
-    if (mp_.pool.memory == NULL)
+    if (unlikely(mp_.pool.memory == NULL))
         mempool_init(MEMPOOL_SIZE);
 }
 

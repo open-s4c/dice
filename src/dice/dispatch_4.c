@@ -20654,112 +20654,112 @@ ps_dispatch_4_1_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_1_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_1_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_1_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_1_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_1_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_1_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_1_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_1_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_1_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_1_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_1_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_1_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_1_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_1_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_1_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_1_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -20773,112 +20773,112 @@ ps_dispatch_4_2_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_2_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_2_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_2_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_2_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_2_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_2_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_2_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_2_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_2_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_2_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_2_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_2_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_2_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_2_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_2_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_2_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -20892,112 +20892,112 @@ ps_dispatch_4_3_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_3_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_3_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_3_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_3_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_3_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_3_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_3_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_3_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_3_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_3_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_3_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_3_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_3_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_3_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_3_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_3_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -21011,112 +21011,112 @@ ps_dispatch_4_4_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_4_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_4_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_4_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_4_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_4_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_4_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_4_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_4_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_4_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_4_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_4_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_4_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_4_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_4_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_4_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_4_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -21130,112 +21130,112 @@ ps_dispatch_4_5_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_5_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_5_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_5_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_5_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_5_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_5_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_5_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_5_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_5_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_5_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_5_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_5_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_5_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_5_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_5_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_5_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -21249,112 +21249,112 @@ ps_dispatch_4_6_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_6_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_6_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_6_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_6_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_6_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_6_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_6_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_6_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_6_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_6_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_6_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_6_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_6_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_6_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_6_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_6_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -21368,112 +21368,112 @@ ps_dispatch_4_7_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_7_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_7_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_7_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_7_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_7_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_7_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_7_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_7_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_7_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_7_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_7_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_7_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_7_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_7_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_7_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_7_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -21487,112 +21487,112 @@ ps_dispatch_4_8_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_8_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_8_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_8_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_8_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_8_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_8_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_8_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_8_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_8_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_8_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_8_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_8_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_8_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_8_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_8_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_8_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -21606,112 +21606,112 @@ ps_dispatch_4_9_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_9_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_9_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_9_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_9_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_9_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_9_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_9_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_9_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_9_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_9_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_9_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_9_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_9_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_9_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_9_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_9_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -21725,112 +21725,112 @@ ps_dispatch_4_10_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_10_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_10_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_10_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_10_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_10_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_10_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_10_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_10_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_10_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_10_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_10_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_10_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_10_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_10_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_10_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_10_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -21844,112 +21844,112 @@ ps_dispatch_4_11_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_11_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_11_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_11_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_11_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_11_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_11_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_11_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_11_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_11_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_11_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_11_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_11_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_11_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_11_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_11_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_11_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -21963,112 +21963,112 @@ ps_dispatch_4_12_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_12_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_12_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_12_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_12_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_12_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_12_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_12_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_12_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_12_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_12_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_12_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_12_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_12_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_12_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_12_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_12_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -22082,112 +22082,112 @@ ps_dispatch_4_13_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_13_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_13_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_13_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_13_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_13_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_13_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_13_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_13_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_13_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_13_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_13_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_13_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_13_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_13_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_13_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_13_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -22201,112 +22201,112 @@ ps_dispatch_4_14_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_14_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_14_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_14_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_14_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_14_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_14_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_14_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_14_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_14_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_14_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_14_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_14_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_14_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_14_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_14_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_14_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -22320,112 +22320,112 @@ ps_dispatch_4_15_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_15_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_15_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_15_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_15_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_15_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_15_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_15_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_15_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_15_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_15_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_15_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_15_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_15_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_15_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_15_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_15_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -22439,112 +22439,112 @@ ps_dispatch_4_16_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_16_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_16_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_16_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_16_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_16_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_16_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_16_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_16_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_16_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_16_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_16_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_16_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_16_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_16_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_16_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_16_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -22558,112 +22558,112 @@ ps_dispatch_4_17_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_17_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_17_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_17_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_17_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_17_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_17_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_17_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_17_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_17_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_17_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_17_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_17_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_17_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_17_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_17_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_17_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -22677,112 +22677,112 @@ ps_dispatch_4_18_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_18_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_18_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_18_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_18_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_18_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_18_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_18_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_18_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_18_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_18_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_18_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_18_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_18_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_18_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_18_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_18_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -22796,112 +22796,112 @@ ps_dispatch_4_19_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_19_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_19_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_19_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_19_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_19_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_19_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_19_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_19_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_19_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_19_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_19_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_19_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_19_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_19_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_19_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_19_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -22915,112 +22915,112 @@ ps_dispatch_4_20_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_20_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_20_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_20_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_20_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_20_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_20_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_20_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_20_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_20_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_20_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_20_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_20_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_20_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_20_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_20_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_20_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -23034,112 +23034,112 @@ ps_dispatch_4_21_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_21_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_21_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_21_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_21_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_21_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_21_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_21_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_21_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_21_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_21_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_21_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_21_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_21_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_21_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_21_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_21_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -23153,112 +23153,112 @@ ps_dispatch_4_22_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_22_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_22_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_22_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_22_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_22_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_22_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_22_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_22_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_22_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_22_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_22_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_22_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_22_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_22_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_22_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_22_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -23272,112 +23272,112 @@ ps_dispatch_4_23_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_23_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_23_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_23_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_23_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_23_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_23_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_23_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_23_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_23_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_23_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_23_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_23_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_23_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_23_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_23_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_23_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -23391,112 +23391,112 @@ ps_dispatch_4_24_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_24_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_24_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_24_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_24_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_24_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_24_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_24_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_24_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_24_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_24_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_24_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_24_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_24_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_24_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_24_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_24_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -23510,112 +23510,112 @@ ps_dispatch_4_25_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_25_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_25_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_25_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_25_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_25_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_25_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_25_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_25_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_25_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_25_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_25_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_25_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_25_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_25_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_25_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_25_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -23629,112 +23629,112 @@ ps_dispatch_4_26_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_26_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_26_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_26_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_26_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_26_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_26_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_26_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_26_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_26_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_26_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_26_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_26_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_26_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_26_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_26_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_26_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -23748,112 +23748,112 @@ ps_dispatch_4_27_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_27_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_27_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_27_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_27_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_27_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_27_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_27_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_27_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_27_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_27_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_27_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_27_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_27_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_27_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_27_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_27_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -23867,112 +23867,112 @@ ps_dispatch_4_28_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_28_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_28_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_28_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_28_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_28_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_28_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_28_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_28_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_28_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_28_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_28_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_28_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_28_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_28_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_28_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_28_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -23986,112 +23986,112 @@ ps_dispatch_4_29_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_29_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_29_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_29_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_29_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_29_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_29_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_29_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_29_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_29_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_29_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_29_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_29_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_29_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_29_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_29_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_29_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -24105,112 +24105,112 @@ ps_dispatch_4_30_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_30_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_30_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_30_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_30_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_30_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_30_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_30_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_30_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_30_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_30_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_30_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_30_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_30_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_30_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_30_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_30_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -24224,112 +24224,112 @@ ps_dispatch_4_31_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_31_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_31_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_31_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_31_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_31_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_31_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_31_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_31_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_31_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_31_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_31_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_31_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_31_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_31_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_31_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_31_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -24343,112 +24343,112 @@ ps_dispatch_4_32_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_32_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_32_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_32_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_32_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_32_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_32_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_32_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_32_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_32_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_32_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_32_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_32_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_32_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_32_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_32_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_32_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -24462,112 +24462,112 @@ ps_dispatch_4_33_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_33_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_33_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_33_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_33_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_33_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_33_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_33_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_33_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_33_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_33_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_33_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_33_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_33_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_33_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_33_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_33_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -24581,112 +24581,112 @@ ps_dispatch_4_34_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_34_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_34_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_34_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_34_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_34_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_34_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_34_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_34_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_34_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_34_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_34_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_34_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_34_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_34_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_34_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_34_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -24700,112 +24700,112 @@ ps_dispatch_4_35_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_35_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_35_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_35_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_35_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_35_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_35_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_35_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_35_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_35_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_35_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_35_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_35_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_35_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_35_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_35_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_35_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -24819,112 +24819,112 @@ ps_dispatch_4_36_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_36_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_36_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_36_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_36_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_36_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_36_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_36_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_36_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_36_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_36_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_36_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_36_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_36_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_36_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_36_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_36_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -24938,112 +24938,112 @@ ps_dispatch_4_37_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_37_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_37_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_37_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_37_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_37_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_37_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_37_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_37_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_37_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_37_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_37_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_37_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_37_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_37_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_37_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_37_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -25057,112 +25057,112 @@ ps_dispatch_4_38_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_38_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_38_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_38_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_38_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_38_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_38_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_38_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_38_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_38_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_38_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_38_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_38_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_38_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_38_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_38_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_38_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -25176,112 +25176,112 @@ ps_dispatch_4_39_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_39_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_39_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_39_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_39_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_39_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_39_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_39_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_39_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_39_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_39_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_39_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_39_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_39_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_39_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_39_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_39_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -25295,112 +25295,112 @@ ps_dispatch_4_40_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_40_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_40_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_40_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_40_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_40_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_40_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_40_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_40_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_40_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_40_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_40_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_40_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_40_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_40_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_40_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_40_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -25414,112 +25414,112 @@ ps_dispatch_4_41_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_41_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_41_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_41_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_41_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_41_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_41_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_41_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_41_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_41_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_41_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_41_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_41_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_41_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_41_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_41_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_41_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -25533,112 +25533,112 @@ ps_dispatch_4_42_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_42_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_42_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_42_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_42_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_42_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_42_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_42_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_42_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_42_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_42_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_42_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_42_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_42_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_42_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_42_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_42_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -25652,112 +25652,112 @@ ps_dispatch_4_43_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_43_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_43_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_43_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_43_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_43_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_43_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_43_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_43_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_43_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_43_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_43_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_43_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_43_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_43_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_43_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_43_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -25771,112 +25771,112 @@ ps_dispatch_4_44_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_44_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_44_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_44_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_44_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_44_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_44_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_44_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_44_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_44_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_44_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_44_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_44_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_44_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_44_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_44_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_44_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -25890,112 +25890,112 @@ ps_dispatch_4_45_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_45_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_45_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_45_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_45_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_45_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_45_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_45_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_45_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_45_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_45_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_45_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_45_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_45_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_45_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_45_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_45_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -26009,112 +26009,112 @@ ps_dispatch_4_46_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_46_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_46_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_46_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_46_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_46_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_46_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_46_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_46_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_46_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_46_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_46_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_46_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_46_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_46_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_46_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_46_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -26128,112 +26128,112 @@ ps_dispatch_4_47_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_47_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_47_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_47_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_47_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_47_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_47_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_47_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_47_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_47_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_47_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_47_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_47_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_47_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_47_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_47_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_47_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -26247,112 +26247,112 @@ ps_dispatch_4_48_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_48_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_48_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_48_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_48_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_48_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_48_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_48_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_48_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_48_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_48_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_48_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_48_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_48_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_48_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_48_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_48_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -26366,112 +26366,112 @@ ps_dispatch_4_49_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_49_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_49_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_49_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_49_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_49_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_49_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_49_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_49_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_49_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_49_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_49_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_49_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_49_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_49_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_49_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_49_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -26485,112 +26485,112 @@ ps_dispatch_4_50_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_50_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_50_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_50_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_50_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_50_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_50_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_50_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_50_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_50_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_50_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_50_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_50_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_50_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_50_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_50_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_50_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -26604,112 +26604,112 @@ ps_dispatch_4_51_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_51_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_51_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_51_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_51_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_51_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_51_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_51_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_51_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_51_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_51_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_51_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_51_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_51_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_51_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_51_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_51_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -26723,112 +26723,112 @@ ps_dispatch_4_52_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_52_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_52_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_52_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_52_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_52_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_52_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_52_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_52_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_52_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_52_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_52_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_52_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_52_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_52_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_52_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_52_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -26842,112 +26842,112 @@ ps_dispatch_4_53_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_53_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_53_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_53_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_53_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_53_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_53_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_53_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_53_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_53_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_53_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_53_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_53_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_53_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_53_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_53_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_53_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -26961,112 +26961,112 @@ ps_dispatch_4_54_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_54_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_54_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_54_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_54_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_54_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_54_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_54_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_54_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_54_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_54_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_54_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_54_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_54_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_54_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_54_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_54_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -27080,112 +27080,112 @@ ps_dispatch_4_55_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_55_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_55_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_55_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_55_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_55_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_55_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_55_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_55_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_55_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_55_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_55_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_55_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_55_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_55_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_55_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_55_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -27199,112 +27199,112 @@ ps_dispatch_4_56_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_56_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_56_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_56_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_56_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_56_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_56_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_56_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_56_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_56_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_56_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_56_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_56_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_56_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_56_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_56_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_56_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -27318,112 +27318,112 @@ ps_dispatch_4_57_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_57_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_57_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_57_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_57_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_57_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_57_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_57_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_57_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_57_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_57_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_57_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_57_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_57_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_57_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_57_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_57_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -27437,112 +27437,112 @@ ps_dispatch_4_58_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_58_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_58_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_58_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_58_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_58_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_58_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_58_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_58_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_58_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_58_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_58_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_58_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_58_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_58_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_58_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_58_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -27556,112 +27556,112 @@ ps_dispatch_4_59_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_59_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_59_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_59_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_59_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_59_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_59_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_59_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_59_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_59_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_59_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_59_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_59_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_59_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_59_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_59_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_59_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -27675,112 +27675,112 @@ ps_dispatch_4_60_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_60_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_60_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_60_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_60_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_60_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_60_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_60_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_60_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_60_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_60_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_60_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_60_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_60_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_60_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_60_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_60_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -27794,112 +27794,112 @@ ps_dispatch_4_61_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_61_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_61_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_61_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_61_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_61_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_61_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_61_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_61_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_61_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_61_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_61_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_61_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_61_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_61_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_61_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_61_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -27913,112 +27913,112 @@ ps_dispatch_4_62_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_62_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_62_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_62_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_62_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_62_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_62_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_62_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_62_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_62_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_62_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_62_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_62_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_62_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_62_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_62_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_62_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -28032,112 +28032,112 @@ ps_dispatch_4_63_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_63_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_63_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_63_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_63_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_63_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_63_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_63_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_63_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_63_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_63_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_63_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_63_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_63_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_63_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_63_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_63_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -28151,112 +28151,112 @@ ps_dispatch_4_64_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_64_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_64_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_64_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_64_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_64_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_64_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_64_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_64_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_64_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_64_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_64_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_64_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_64_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_64_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_64_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_64_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -28270,112 +28270,112 @@ ps_dispatch_4_65_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_65_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_65_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_65_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_65_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_65_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_65_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_65_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_65_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_65_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_65_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_65_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_65_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_65_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_65_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_65_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_65_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -28389,112 +28389,112 @@ ps_dispatch_4_66_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_66_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_66_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_66_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_66_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_66_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_66_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_66_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_66_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_66_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_66_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_66_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_66_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_66_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_66_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_66_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_66_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -28508,112 +28508,112 @@ ps_dispatch_4_67_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_67_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_67_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_67_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_67_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_67_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_67_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_67_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_67_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_67_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_67_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_67_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_67_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_67_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_67_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_67_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_67_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -28627,112 +28627,112 @@ ps_dispatch_4_68_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_68_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_68_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_68_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_68_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_68_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_68_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_68_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_68_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_68_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_68_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_68_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_68_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_68_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_68_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_68_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_68_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -28746,112 +28746,112 @@ ps_dispatch_4_69_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_69_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_69_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_69_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_69_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_69_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_69_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_69_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_69_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_69_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_69_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_69_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_69_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_69_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_69_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_69_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_69_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -28865,112 +28865,112 @@ ps_dispatch_4_70_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_70_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_70_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_70_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_70_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_70_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_70_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_70_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_70_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_70_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_70_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_70_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_70_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_70_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_70_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_70_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_70_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -28984,112 +28984,112 @@ ps_dispatch_4_71_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_71_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_71_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_71_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_71_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_71_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_71_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_71_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_71_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_71_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_71_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_71_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_71_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_71_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_71_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_71_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_71_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -29103,112 +29103,112 @@ ps_dispatch_4_72_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_72_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_72_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_72_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_72_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_72_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_72_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_72_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_72_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_72_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_72_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_72_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_72_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_72_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_72_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_72_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_72_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -29222,112 +29222,112 @@ ps_dispatch_4_73_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_73_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_73_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_73_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_73_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_73_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_73_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_73_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_73_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_73_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_73_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_73_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_73_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_73_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_73_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_73_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_73_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -29341,112 +29341,112 @@ ps_dispatch_4_74_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_74_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_74_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_74_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_74_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_74_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_74_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_74_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_74_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_74_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_74_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_74_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_74_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_74_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_74_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_74_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_74_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -29460,112 +29460,112 @@ ps_dispatch_4_75_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_75_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_75_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_75_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_75_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_75_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_75_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_75_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_75_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_75_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_75_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_75_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_75_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_75_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_75_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_75_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_75_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -29579,112 +29579,112 @@ ps_dispatch_4_76_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_76_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_76_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_76_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_76_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_76_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_76_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_76_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_76_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_76_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_76_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_76_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_76_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_76_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_76_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_76_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_76_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -29698,112 +29698,112 @@ ps_dispatch_4_77_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_77_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_77_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_77_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_77_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_77_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_77_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_77_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_77_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_77_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_77_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_77_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_77_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_77_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_77_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_77_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_77_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -29817,112 +29817,112 @@ ps_dispatch_4_78_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_78_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_78_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_78_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_78_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_78_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_78_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_78_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_78_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_78_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_78_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_78_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_78_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_78_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_78_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_78_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_78_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -29936,112 +29936,112 @@ ps_dispatch_4_79_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_79_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_79_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_79_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_79_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_79_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_79_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_79_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_79_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_79_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_79_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_79_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_79_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_79_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_79_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_79_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_79_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -30055,112 +30055,112 @@ ps_dispatch_4_80_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_80_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_80_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_80_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_80_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_80_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_80_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_80_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_80_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_80_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_80_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_80_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_80_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_80_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_80_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_80_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_80_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -30174,112 +30174,112 @@ ps_dispatch_4_81_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_81_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_81_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_81_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_81_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_81_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_81_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_81_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_81_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_81_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_81_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_81_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_81_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_81_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_81_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_81_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_81_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -30293,112 +30293,112 @@ ps_dispatch_4_82_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_82_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_82_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_82_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_82_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_82_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_82_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_82_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_82_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_82_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_82_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_82_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_82_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_82_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_82_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_82_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_82_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -30412,112 +30412,112 @@ ps_dispatch_4_83_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_83_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_83_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_83_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_83_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_83_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_83_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_83_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_83_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_83_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_83_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_83_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_83_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_83_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_83_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_83_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_83_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -30531,112 +30531,112 @@ ps_dispatch_4_84_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_84_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_84_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_84_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_84_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_84_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_84_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_84_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_84_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_84_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_84_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_84_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_84_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_84_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_84_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_84_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_84_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -30650,112 +30650,112 @@ ps_dispatch_4_85_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_85_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_85_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_85_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_85_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_85_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_85_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_85_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_85_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_85_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_85_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_85_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_85_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_85_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_85_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_85_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_85_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -30769,112 +30769,112 @@ ps_dispatch_4_86_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_86_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_86_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_86_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_86_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_86_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_86_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_86_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_86_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_86_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_86_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_86_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_86_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_86_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_86_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_86_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_86_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -30888,112 +30888,112 @@ ps_dispatch_4_87_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_87_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_87_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_87_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_87_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_87_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_87_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_87_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_87_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_87_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_87_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_87_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_87_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_87_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_87_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_87_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_87_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -31007,112 +31007,112 @@ ps_dispatch_4_88_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_88_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_88_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_88_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_88_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_88_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_88_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_88_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_88_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_88_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_88_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_88_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_88_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_88_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_88_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_88_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_88_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -31126,112 +31126,112 @@ ps_dispatch_4_89_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_89_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_89_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_89_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_89_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_89_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_89_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_89_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_89_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_89_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_89_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_89_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_89_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_89_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_89_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_89_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_89_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -31245,112 +31245,112 @@ ps_dispatch_4_90_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_90_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_90_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_90_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_90_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_90_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_90_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_90_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_90_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_90_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_90_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_90_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_90_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_90_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_90_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_90_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_90_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -31364,112 +31364,112 @@ ps_dispatch_4_91_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_91_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_91_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_91_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_91_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_91_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_91_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_91_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_91_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_91_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_91_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_91_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_91_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_91_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_91_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_91_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_91_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -31483,112 +31483,112 @@ ps_dispatch_4_92_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_92_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_92_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_92_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_92_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_92_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_92_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_92_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_92_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_92_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_92_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_92_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_92_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_92_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_92_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_92_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_92_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -31602,112 +31602,112 @@ ps_dispatch_4_93_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_93_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_93_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_93_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_93_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_93_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_93_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_93_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_93_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_93_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_93_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_93_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_93_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_93_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_93_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_93_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_93_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -31721,112 +31721,112 @@ ps_dispatch_4_94_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_94_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_94_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_94_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_94_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_94_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_94_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_94_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_94_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_94_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_94_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_94_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_94_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_94_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_94_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_94_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_94_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -31840,112 +31840,112 @@ ps_dispatch_4_95_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_95_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_95_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_95_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_95_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_95_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_95_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_95_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_95_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_95_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_95_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_95_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_95_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_95_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_95_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_95_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_95_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -31959,112 +31959,112 @@ ps_dispatch_4_96_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_96_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_96_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_96_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_96_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_96_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_96_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_96_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_96_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_96_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_96_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_96_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_96_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_96_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_96_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_96_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_96_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -32078,112 +32078,112 @@ ps_dispatch_4_97_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_97_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_97_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_97_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_97_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_97_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_97_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_97_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_97_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_97_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_97_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_97_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_97_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_97_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_97_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_97_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_97_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -32197,112 +32197,112 @@ ps_dispatch_4_98_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_98_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_98_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_98_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_98_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_98_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_98_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_98_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_98_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_98_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_98_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_98_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_98_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_98_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_98_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_98_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_98_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -32316,112 +32316,112 @@ ps_dispatch_4_99_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_99_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_99_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_99_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_99_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_99_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_99_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_99_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_99_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_99_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_99_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_99_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_99_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_99_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_99_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_99_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_99_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -32435,112 +32435,112 @@ ps_dispatch_4_100_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_100_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_100_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_100_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_100_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_100_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_100_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_100_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_100_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_100_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_100_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_100_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_100_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_100_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_100_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_100_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_100_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -32554,112 +32554,112 @@ ps_dispatch_4_101_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_101_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_101_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_101_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_101_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_101_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_101_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_101_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_101_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_101_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_101_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_101_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_101_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_101_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_101_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_101_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_101_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -32673,112 +32673,112 @@ ps_dispatch_4_102_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_102_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_102_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_102_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_102_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_102_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_102_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_102_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_102_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_102_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_102_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_102_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_102_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_102_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_102_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_102_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_102_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -32792,112 +32792,112 @@ ps_dispatch_4_103_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_103_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_103_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_103_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_103_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_103_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_103_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_103_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_103_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_103_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_103_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_103_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_103_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_103_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_103_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_103_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_103_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -32911,112 +32911,112 @@ ps_dispatch_4_104_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_104_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_104_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_104_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_104_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_104_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_104_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_104_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_104_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_104_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_104_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_104_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_104_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_104_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_104_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_104_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_104_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -33030,112 +33030,112 @@ ps_dispatch_4_105_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_105_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_105_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_105_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_105_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_105_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_105_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_105_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_105_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_105_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_105_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_105_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_105_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_105_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_105_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_105_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_105_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -33149,112 +33149,112 @@ ps_dispatch_4_106_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_106_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_106_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_106_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_106_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_106_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_106_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_106_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_106_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_106_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_106_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_106_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_106_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_106_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_106_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_106_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_106_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -33268,112 +33268,112 @@ ps_dispatch_4_107_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_107_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_107_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_107_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_107_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_107_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_107_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_107_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_107_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_107_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_107_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_107_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_107_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_107_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_107_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_107_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_107_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -33387,112 +33387,112 @@ ps_dispatch_4_108_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_108_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_108_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_108_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_108_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_108_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_108_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_108_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_108_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_108_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_108_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_108_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_108_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_108_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_108_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_108_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_108_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -33506,112 +33506,112 @@ ps_dispatch_4_109_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_109_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_109_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_109_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_109_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_109_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_109_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_109_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_109_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_109_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_109_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_109_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_109_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_109_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_109_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_109_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_109_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -33625,112 +33625,112 @@ ps_dispatch_4_110_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_110_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_110_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_110_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_110_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_110_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_110_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_110_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_110_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_110_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_110_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_110_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_110_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_110_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_110_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_110_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_110_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -33744,112 +33744,112 @@ ps_dispatch_4_111_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_111_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_111_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_111_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_111_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_111_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_111_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_111_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_111_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_111_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_111_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_111_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_111_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_111_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_111_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_111_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_111_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -33863,112 +33863,112 @@ ps_dispatch_4_112_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_112_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_112_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_112_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_112_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_112_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_112_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_112_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_112_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_112_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_112_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_112_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_112_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_112_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_112_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_112_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_112_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -33982,112 +33982,112 @@ ps_dispatch_4_113_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_113_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_113_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_113_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_113_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_113_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_113_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_113_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_113_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_113_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_113_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_113_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_113_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_113_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_113_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_113_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_113_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -34101,112 +34101,112 @@ ps_dispatch_4_114_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_114_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_114_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_114_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_114_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_114_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_114_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_114_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_114_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_114_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_114_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_114_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_114_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_114_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_114_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_114_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_114_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -34220,112 +34220,112 @@ ps_dispatch_4_115_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_115_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_115_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_115_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_115_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_115_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_115_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_115_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_115_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_115_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_115_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_115_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_115_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_115_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_115_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_115_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_115_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -34339,112 +34339,112 @@ ps_dispatch_4_116_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_116_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_116_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_116_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_116_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_116_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_116_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_116_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_116_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_116_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_116_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_116_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_116_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_116_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_116_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_116_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_116_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -34458,112 +34458,112 @@ ps_dispatch_4_117_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_117_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_117_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_117_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_117_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_117_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_117_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_117_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_117_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_117_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_117_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_117_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_117_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_117_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_117_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_117_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_117_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -34577,112 +34577,112 @@ ps_dispatch_4_118_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_118_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_118_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_118_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_118_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_118_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_118_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_118_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_118_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_118_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_118_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_118_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_118_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_118_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_118_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_118_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_118_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -34696,112 +34696,112 @@ ps_dispatch_4_119_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_119_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_119_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_119_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_119_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_119_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_119_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_119_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_119_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_119_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_119_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_119_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_119_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_119_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_119_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_119_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_119_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -34815,112 +34815,112 @@ ps_dispatch_4_120_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_120_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_120_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_120_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_120_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_120_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_120_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_120_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_120_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_120_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_120_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_120_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_120_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_120_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_120_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_120_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_120_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -34934,112 +34934,112 @@ ps_dispatch_4_121_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_121_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_121_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_121_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_121_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_121_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_121_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_121_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_121_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_121_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_121_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_121_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_121_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_121_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_121_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_121_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_121_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -35053,112 +35053,112 @@ ps_dispatch_4_122_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_122_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_122_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_122_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_122_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_122_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_122_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_122_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_122_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_122_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_122_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_122_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_122_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_122_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_122_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_122_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_122_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -35172,112 +35172,112 @@ ps_dispatch_4_123_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_123_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_123_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_123_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_123_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_123_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_123_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_123_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_123_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_123_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_123_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_123_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_123_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_123_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_123_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_123_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_123_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -35291,112 +35291,112 @@ ps_dispatch_4_124_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_124_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_124_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_124_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_124_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_124_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_124_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_124_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_124_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_124_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_124_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_124_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_124_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_124_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_124_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_124_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_124_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -35410,112 +35410,112 @@ ps_dispatch_4_125_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_125_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_125_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_125_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_125_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_125_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_125_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_125_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_125_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_125_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_125_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_125_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_125_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_125_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_125_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_125_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_125_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -35529,112 +35529,112 @@ ps_dispatch_4_126_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_126_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_126_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_126_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_126_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_126_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_126_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_126_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_126_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_126_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_126_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_126_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_126_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_126_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_126_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_126_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_126_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -35648,112 +35648,112 @@ ps_dispatch_4_127_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_127_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_127_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_127_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_127_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_127_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_127_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_127_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_127_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_127_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_127_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_127_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_127_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_127_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_127_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_127_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_127_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
@@ -35767,112 +35767,112 @@ ps_dispatch_4_128_(const chain_id chain, const type_id type, void *event,
         err = ps_dispatch_4_128_0_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_128_1_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_128_2_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_128_3_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_128_4_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_128_5_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_128_6_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_128_7_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_128_8_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_128_9_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_128_10_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_128_11_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_128_12_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_128_13_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_128_14_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_4_128_15_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
             err = ps_dispatch_4_0_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
+        if (likely(err == PS_STOP_CHAIN))
             return PS_STOP_CHAIN;
     }
     return PS_OK;
