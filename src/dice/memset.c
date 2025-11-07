@@ -1,5 +1,5 @@
 #include <dice/compiler.h>
-
+#if 0
 DICE_HIDE void *
 memset(void *s, int c, size_t n)
 {
@@ -9,3 +9,4 @@ memset(void *s, int c, size_t n)
     }
     return s;
 }
+#endif
