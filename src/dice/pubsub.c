@@ -39,6 +39,8 @@ static struct chain chains_[MAX_CHAINS];
 // initializer
 // -----------------------------------------------------------------------------
 
+DICE_HIDE bool ready_ = false;
+
 DICE_HIDE bool
 ps_initd_(void)
 {
@@ -46,10 +48,9 @@ ps_initd_(void)
         NONE,
         START,
         BLOCK,
-    } state_          = NONE;
-    static bool ready = false;
+    } state_ = NONE;
 
-    if (likely(ready)) {
+    if (likely(ready_)) {
         return true;
     }
 
@@ -58,7 +59,7 @@ ps_initd_(void)
             // This must be the main thread, at latest the thread creation.
             state_ = START;
             PS_PUBLISH(CHAIN_CONTROL, EVENT_DICE_INIT, 0, 0);
-            ready = true;
+            ready_ = true;
             PS_PUBLISH(CHAIN_CONTROL, EVENT_DICE_READY, 0, 0);
             return true;
         case START:

@@ -492,145 +492,113 @@ ps_dispatch_0_98_(const chain_id chain, const type_id type, void *event,
     enum ps_err err;
     {
         err = ps_dispatch_0_98_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
-            return PS_STOP_CHAIN;
-
-        err = ps_dispatch_0_0_0_(chain, type, event, md);
+        if (err == PS_HANDLER_OFF)
+            err = ps_dispatch_0_0_0_(chain, type, event, md);
         if (err == PS_STOP_CHAIN)
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_0_98_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
-            return PS_STOP_CHAIN;
-
-        err = ps_dispatch_0_0_1_(chain, type, event, md);
+        if (err == PS_HANDLER_OFF)
+            err = ps_dispatch_0_0_1_(chain, type, event, md);
         if (err == PS_STOP_CHAIN)
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_0_98_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
-            return PS_STOP_CHAIN;
-
-        err = ps_dispatch_0_0_2_(chain, type, event, md);
+        if (err == PS_HANDLER_OFF)
+            err = ps_dispatch_0_0_2_(chain, type, event, md);
         if (err == PS_STOP_CHAIN)
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_0_98_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
-            return PS_STOP_CHAIN;
-
-        err = ps_dispatch_0_0_3_(chain, type, event, md);
+        if (err == PS_HANDLER_OFF)
+            err = ps_dispatch_0_0_3_(chain, type, event, md);
         if (err == PS_STOP_CHAIN)
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_0_98_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
-            return PS_STOP_CHAIN;
-
-        err = ps_dispatch_0_0_4_(chain, type, event, md);
+        if (err == PS_HANDLER_OFF)
+            err = ps_dispatch_0_0_4_(chain, type, event, md);
         if (err == PS_STOP_CHAIN)
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_0_98_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
-            return PS_STOP_CHAIN;
-
-        err = ps_dispatch_0_0_5_(chain, type, event, md);
+        if (err == PS_HANDLER_OFF)
+            err = ps_dispatch_0_0_5_(chain, type, event, md);
         if (err == PS_STOP_CHAIN)
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_0_98_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
-            return PS_STOP_CHAIN;
-
-        err = ps_dispatch_0_0_6_(chain, type, event, md);
+        if (err == PS_HANDLER_OFF)
+            err = ps_dispatch_0_0_6_(chain, type, event, md);
         if (err == PS_STOP_CHAIN)
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_0_98_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
-            return PS_STOP_CHAIN;
-
-        err = ps_dispatch_0_0_7_(chain, type, event, md);
+        if (err == PS_HANDLER_OFF)
+            err = ps_dispatch_0_0_7_(chain, type, event, md);
         if (err == PS_STOP_CHAIN)
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_0_98_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
-            return PS_STOP_CHAIN;
-
-        err = ps_dispatch_0_0_8_(chain, type, event, md);
+        if (err == PS_HANDLER_OFF)
+            err = ps_dispatch_0_0_8_(chain, type, event, md);
         if (err == PS_STOP_CHAIN)
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_0_98_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
-            return PS_STOP_CHAIN;
-
-        err = ps_dispatch_0_0_9_(chain, type, event, md);
+        if (err == PS_HANDLER_OFF)
+            err = ps_dispatch_0_0_9_(chain, type, event, md);
         if (err == PS_STOP_CHAIN)
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_0_98_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
-            return PS_STOP_CHAIN;
-
-        err = ps_dispatch_0_0_10_(chain, type, event, md);
+        if (err == PS_HANDLER_OFF)
+            err = ps_dispatch_0_0_10_(chain, type, event, md);
         if (err == PS_STOP_CHAIN)
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_0_98_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
-            return PS_STOP_CHAIN;
-
-        err = ps_dispatch_0_0_11_(chain, type, event, md);
+        if (err == PS_HANDLER_OFF)
+            err = ps_dispatch_0_0_11_(chain, type, event, md);
         if (err == PS_STOP_CHAIN)
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_0_98_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
-            return PS_STOP_CHAIN;
-
-        err = ps_dispatch_0_0_12_(chain, type, event, md);
+        if (err == PS_HANDLER_OFF)
+            err = ps_dispatch_0_0_12_(chain, type, event, md);
         if (err == PS_STOP_CHAIN)
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_0_98_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
-            return PS_STOP_CHAIN;
-
-        err = ps_dispatch_0_0_13_(chain, type, event, md);
+        if (err == PS_HANDLER_OFF)
+            err = ps_dispatch_0_0_13_(chain, type, event, md);
         if (err == PS_STOP_CHAIN)
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_0_98_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
-            return PS_STOP_CHAIN;
-
-        err = ps_dispatch_0_0_14_(chain, type, event, md);
+        if (err == PS_HANDLER_OFF)
+            err = ps_dispatch_0_0_14_(chain, type, event, md);
         if (err == PS_STOP_CHAIN)
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_0_98_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
-            return PS_STOP_CHAIN;
-
-        err = ps_dispatch_0_0_15_(chain, type, event, md);
+        if (err == PS_HANDLER_OFF)
+            err = ps_dispatch_0_0_15_(chain, type, event, md);
         if (err == PS_STOP_CHAIN)
             return PS_STOP_CHAIN;
     }
@@ -643,145 +611,113 @@ ps_dispatch_0_99_(const chain_id chain, const type_id type, void *event,
     enum ps_err err;
     {
         err = ps_dispatch_0_99_0_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
-            return PS_STOP_CHAIN;
-
-        err = ps_dispatch_0_0_0_(chain, type, event, md);
+        if (err == PS_HANDLER_OFF)
+            err = ps_dispatch_0_0_0_(chain, type, event, md);
         if (err == PS_STOP_CHAIN)
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_0_99_1_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
-            return PS_STOP_CHAIN;
-
-        err = ps_dispatch_0_0_1_(chain, type, event, md);
+        if (err == PS_HANDLER_OFF)
+            err = ps_dispatch_0_0_1_(chain, type, event, md);
         if (err == PS_STOP_CHAIN)
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_0_99_2_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
-            return PS_STOP_CHAIN;
-
-        err = ps_dispatch_0_0_2_(chain, type, event, md);
+        if (err == PS_HANDLER_OFF)
+            err = ps_dispatch_0_0_2_(chain, type, event, md);
         if (err == PS_STOP_CHAIN)
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_0_99_3_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
-            return PS_STOP_CHAIN;
-
-        err = ps_dispatch_0_0_3_(chain, type, event, md);
+        if (err == PS_HANDLER_OFF)
+            err = ps_dispatch_0_0_3_(chain, type, event, md);
         if (err == PS_STOP_CHAIN)
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_0_99_4_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
-            return PS_STOP_CHAIN;
-
-        err = ps_dispatch_0_0_4_(chain, type, event, md);
+        if (err == PS_HANDLER_OFF)
+            err = ps_dispatch_0_0_4_(chain, type, event, md);
         if (err == PS_STOP_CHAIN)
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_0_99_5_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
-            return PS_STOP_CHAIN;
-
-        err = ps_dispatch_0_0_5_(chain, type, event, md);
+        if (err == PS_HANDLER_OFF)
+            err = ps_dispatch_0_0_5_(chain, type, event, md);
         if (err == PS_STOP_CHAIN)
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_0_99_6_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
-            return PS_STOP_CHAIN;
-
-        err = ps_dispatch_0_0_6_(chain, type, event, md);
+        if (err == PS_HANDLER_OFF)
+            err = ps_dispatch_0_0_6_(chain, type, event, md);
         if (err == PS_STOP_CHAIN)
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_0_99_7_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
-            return PS_STOP_CHAIN;
-
-        err = ps_dispatch_0_0_7_(chain, type, event, md);
+        if (err == PS_HANDLER_OFF)
+            err = ps_dispatch_0_0_7_(chain, type, event, md);
         if (err == PS_STOP_CHAIN)
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_0_99_8_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
-            return PS_STOP_CHAIN;
-
-        err = ps_dispatch_0_0_8_(chain, type, event, md);
+        if (err == PS_HANDLER_OFF)
+            err = ps_dispatch_0_0_8_(chain, type, event, md);
         if (err == PS_STOP_CHAIN)
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_0_99_9_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
-            return PS_STOP_CHAIN;
-
-        err = ps_dispatch_0_0_9_(chain, type, event, md);
+        if (err == PS_HANDLER_OFF)
+            err = ps_dispatch_0_0_9_(chain, type, event, md);
         if (err == PS_STOP_CHAIN)
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_0_99_10_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
-            return PS_STOP_CHAIN;
-
-        err = ps_dispatch_0_0_10_(chain, type, event, md);
+        if (err == PS_HANDLER_OFF)
+            err = ps_dispatch_0_0_10_(chain, type, event, md);
         if (err == PS_STOP_CHAIN)
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_0_99_11_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
-            return PS_STOP_CHAIN;
-
-        err = ps_dispatch_0_0_11_(chain, type, event, md);
+        if (err == PS_HANDLER_OFF)
+            err = ps_dispatch_0_0_11_(chain, type, event, md);
         if (err == PS_STOP_CHAIN)
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_0_99_12_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
-            return PS_STOP_CHAIN;
-
-        err = ps_dispatch_0_0_12_(chain, type, event, md);
+        if (err == PS_HANDLER_OFF)
+            err = ps_dispatch_0_0_12_(chain, type, event, md);
         if (err == PS_STOP_CHAIN)
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_0_99_13_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
-            return PS_STOP_CHAIN;
-
-        err = ps_dispatch_0_0_13_(chain, type, event, md);
+        if (err == PS_HANDLER_OFF)
+            err = ps_dispatch_0_0_13_(chain, type, event, md);
         if (err == PS_STOP_CHAIN)
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_0_99_14_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
-            return PS_STOP_CHAIN;
-
-        err = ps_dispatch_0_0_14_(chain, type, event, md);
+        if (err == PS_HANDLER_OFF)
+            err = ps_dispatch_0_0_14_(chain, type, event, md);
         if (err == PS_STOP_CHAIN)
             return PS_STOP_CHAIN;
     }
     {
         err = ps_dispatch_0_99_15_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
-            return PS_STOP_CHAIN;
-
-        err = ps_dispatch_0_0_15_(chain, type, event, md);
+        if (err == PS_HANDLER_OFF)
+            err = ps_dispatch_0_0_15_(chain, type, event, md);
         if (err == PS_STOP_CHAIN)
             return PS_STOP_CHAIN;
     }

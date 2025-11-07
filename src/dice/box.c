@@ -11,13 +11,15 @@
 
 bool ps_initd_(void);
 enum ps_err ps_dispatch_(const chain_id, const type_id, void *, metadata_t *);
+extern DICE_HIDE bool ready_;
 
 DICE_HIDE enum ps_err
 ps_publish(const chain_id chain, const type_id type, void *event,
            metadata_t *md)
 {
-    if (unlikely(!ps_initd_()))
-        return PS_DROP_EVENT;
+    if (unlikely(!ready_))
+        if (unlikely(!ps_initd_()))
+            return PS_DROP_EVENT;
 
     enum ps_err err = ps_dispatch_(chain, type, event, md);
 
