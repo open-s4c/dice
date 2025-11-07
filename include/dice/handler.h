@@ -20,7 +20,7 @@
 /* PS_HANDLER_DEF defines an inline handler that wraps user code and returns a
  * ps_err. */
 #define PS_HANDLER_DEF(CHAIN, TYPE, SLOT, CODE)                                \
-    static enum ps_err PS_HANDLER(CHAIN, TYPE, SLOT)(                          \
+    static inline enum ps_err PS_HANDLER(CHAIN, TYPE, SLOT)(                   \
         const chain_id chain, const type_id type, void *event, metadata_t *md) \
     {                                                                          \
         /* Parameters are marked as unused to silence warnings. */             \
