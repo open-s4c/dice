@@ -81,13 +81,13 @@ tls_cmp_(const struct rbnode *a, const struct rbnode *b)
     return ea->key > eb->key ? 1 : ea->key < eb->key ? -1 : 0;
 }
 
-static inline void
+static void
 tls_init_(struct self *self)
 {
     rbtree_init(&self->tls, tls_cmp_);
 }
 
-static inline void
+static void
 tls_fini_(struct self *self)
 {
     while (self->tls.root) {
@@ -374,6 +374,32 @@ init_threads_(void)
     quack_init(&threads_.retired);
 }
 
+static struct self *
+quack_search_(pthread_t ptid)
+{
+    // We now search the retired stack. To avoid not seeing our self object
+    // while other threads are searching theirs, we have to ensure mutual
+    // exlusion here.
+    struct self *self = NULL;
+    caslock_acquire(&threads_.lock);
+    struct quack_node_s *item = quack_popall(&threads_.retired);
+    struct quack_node_s *next = NULL;
+
+    for (; item; item = next) {
+        next = item->next;
+
+        struct self *it = container_of(item, struct self, retired_node);
+
+        uint64_t osid = thread_osid_();
+        if (self == NULL && it->ptid == ptid && it->osid == osid)
+            self = it;
+        quack_push(&threads_.retired, item);
+    }
+    caslock_release(&threads_.lock);
+    assert(self == NULL || self->retired);
+    return self;
+}
+
 static inline struct self *
 get_self_(void)
 {
@@ -399,27 +425,7 @@ get_self_(void)
     struct self *self = thread_cache_get_();
     if (likely(self))
         return self;
-
-    // We now search the retired stack. To avoid not seeing our self object
-    // while other threads are searching theirs, we have to ensure mutual
-    // exlusion here.
-    caslock_acquire(&threads_.lock);
-    struct quack_node_s *item = quack_popall(&threads_.retired);
-    struct quack_node_s *next = NULL;
-
-    for (; item; item = next) {
-        next = item->next;
-
-        struct self *it = container_of(item, struct self, retired_node);
-
-        uint64_t osid = thread_osid_();
-        if (self == NULL && it->ptid == ptid && it->osid == osid)
-            self = it;
-        quack_push(&threads_.retired, item);
-    }
-    caslock_release(&threads_.lock);
-    assert(self == NULL || self->retired);
-    return self;
+    return quack_search_(ptid);
 }
 
 static void
