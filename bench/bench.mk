@@ -12,7 +12,7 @@
 # PERFORMANCE OF THIS SOFTWARE.
 # ------------------------------------------------------------------------------
 # bench.mk - a terrible benchmark framework for stuborn developers
-#   version: 0.2
+#   version: 0.2.1
 #   license: 0BSD
 #
 # Quick start:
@@ -101,6 +101,14 @@ help:
 	@echo " run             run benchmark using RUN.bench"
 	@echo " process         process results using PRO.bench"
 	@echo " example         create an example Makefile"
+	@echo " info            show the value of bench.mk variables"
+
+info:
+	@echo "== bench.mk config =="
+	@echo "   ROOTDIR:  $(ROOTDIR)"
+	@echo "   WORKDIR:  $(WORKDIR)"
+	@echo "   BENCHMK:  $(BENCHMK)"
+	@echo "   MAKEFILE: $(MAKEFILE)"
 
 configure:
 	@$(MAKE) cfg
