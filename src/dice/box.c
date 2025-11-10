@@ -2,6 +2,7 @@
  * Copyright (C) 2025 Huawei Technologies Co., Ltd.
  * SPDX-License-Identifier: 0BSD
  */
+#include "tweaks.h"
 #include <dice/mempool.h>
 #include <dice/pubsub.h>
 
@@ -16,10 +17,11 @@ DICE_HIDE enum ps_err
 ps_publish(const chain_id chain, const type_id type, void *event,
            metadata_t *md)
 {
-    if (unlikely(!ps_initd_()))
+    if (PS_NOT_INITD_())
         return PS_DROP_EVENT;
 
     enum ps_err err = ps_dispatch_(chain, type, event, md);
+    log_debug("Dispatch %u/%u", ps_chain_str(chain), ps_type_str(type));
 
     if (likely(err == PS_STOP_CHAIN))
         return PS_OK;
