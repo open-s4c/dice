@@ -7,6 +7,7 @@
 #include <stdio.h>
 
 #define DICE_MODULE_PRIO 1
+#include "tweaks.h"
 #include <dice/mempool.h>
 #include <dice/module.h>
 #include <dice/pubsub.h>
@@ -46,10 +47,13 @@ ps_initd_(void)
         NONE,
         START,
         BLOCK,
-    } state_          = NONE;
-    static bool ready = false;
+    } state_ = NONE;
 
-    if (likely(ready)) {
+#if !defined(__clang__)
+    static bool ready_ = false;
+#endif
+
+    if (likely(ready_)) {
         return true;
     }
 
@@ -58,7 +62,7 @@ ps_initd_(void)
             // This must be the main thread, at latest the thread creation.
             state_ = START;
             PS_PUBLISH(CHAIN_CONTROL, EVENT_DICE_INIT, 0, 0);
-            ready = true;
+            ready_ = true;
             PS_PUBLISH(CHAIN_CONTROL, EVENT_DICE_READY, 0, 0);
             return true;
         case START:
@@ -72,7 +76,6 @@ ps_initd_(void)
             return true;
     }
 }
-
 
 DICE_HIDE void
 ps_init_(void)
@@ -216,7 +219,7 @@ DICE_WEAK enum ps_err
 ps_publish(const chain_id chain, const type_id type, void *event,
            metadata_t *md)
 {
-    if (unlikely(!ps_initd_()))
+    if (PS_NOT_INITD_())
         return PS_DROP_EVENT;
 
     log_debug("Publish %u/%u", ps_chain_str(chain), ps_type_str(type));
