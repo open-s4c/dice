@@ -1,0 +1,41 @@
+name: Performance regression tests
+on:
+  push:
+    branches:
+      - "!main"
+  pull_request:
+
+env:
+  REGISTRY: ghcr.io
+
+jobs:
+  test-linux-x86:
+    if: true
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, ubuntu-22.04, ubuntu-24.04-arm, ubuntu-22.04-arm]
+        cc: [ "gcc", "clang" ]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Get compiler version
+        run: ${{ matrix.cc }} --version
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Ensure main was fetched
+        run: git fetch --depth 1 origin main:main
+      - name: Run performance regression tests
+        run: scripts/regression.sh
+             -c ${{ matrix.cc }}
+             -t HEAD -t main
+             run sum
+      - name: Show results
+        run: cat results.csv
+      - name: Ensure HEAD is not slower than main
+        run: scripts/regression.sh
+             -c ${{ matrix.cc }}
+             -t HEAD -t main
+             check HEAD
+      - run: cd work-HEAD-${{ matrix.cc }} && git rev-parse --short HEAD
+      - run: cd work-main-${{ matrix.cc }} && git rev-parse --short HEAD
