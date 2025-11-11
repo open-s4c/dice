@@ -15,7 +15,9 @@ static char *strings[MAX_EXP] = {0};
 static char **head            = &strings[0];
 static char **tail            = &strings[0];
 
-INTERPOSE(ssize_t, write, int fd, const void *buf, size_t count)
+REAL_DECL(ssize_t, write, int, const void *, size_t);
+ssize_t
+write(int fd, const void *buf, size_t count)
 {
     static int nest = 0;
     if (nest == 1) {
