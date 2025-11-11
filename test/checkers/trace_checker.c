@@ -48,34 +48,45 @@ _check_next(struct thread_trace *exp, chain_id chain, type_id type,
 {
     struct expected_event *next = exp->next;
     if (!next->set) {
-        log_warn("[%" PRIu64 "] trace ends too early: expected event %d:%d", id,
-                 chain, type);
+        log_warn("[%" PRIu64
+                 "] trace ends too early:\n"
+                 "\t\t      expected event %s:%s",
+                 id, ps_chain_str(chain), ps_type_str(type));
         return;
     }
     if (!next->wild) {
         bool mismatch = next->chain != chain || next->type != type;
         if (mismatch && next->atleast > 0) {
-            log_fatal("[%" PRIu64 "] event %d:%d mismatch %d:%d", id, chain,
-                      type, next->chain, next->type);
+            log_fatal("[%" PRIu64
+                      "] event %s:%s\n"
+                      "\t\t      mismatch %s:%s",
+                      id, ps_chain_str(chain), ps_type_str(type),
+                      ps_chain_str(next->chain), ps_type_str(next->type));
         } else if (mismatch) {
             exp->next++;
-            log_warn("[%" PRIu64 "] event %d:%d mismatch (go to next)", id,
-                     chain, type);
+            log_warn("[%" PRIu64 "] event %s:%s mismatch (go to next)", id,
+                     ps_chain_str(chain), ps_type_str(type));
             _check_next(exp, chain, type, id);
             return;
         }
-        log_warn("[%" PRIu64 "] event %d:%d match", id, chain, type);
+        log_warn("[%" PRIu64 "] event %s:%s match", id, ps_chain_str(chain),
+                 ps_type_str(type));
         if (next->atleast > 0)
             next->atleast--;
         if (next->atmost-- == 1)
             exp->next++;
     } else {
         if (next->chain != chain || next->type != type) {
-            log_warn("[%" PRIu64 "] event %d:%d wild match %d:%d", id, chain,
-                     type, next->chain, next->type);
+            log_warn("[%" PRIu64
+                     "] event %s:%s\n"
+                     "\t\t      wild match %s:%s",
+                     id, ps_chain_str(chain), ps_type_str(type),
+                     ps_chain_str(next->chain), ps_type_str(next->type));
+            ;
             return;
         }
-        log_warn("[%" PRIu64 "] event %d:%d match suffix", id, chain, type);
+        log_warn("[%" PRIu64 "] event %s:%s match suffix", id,
+                 ps_chain_str(chain), ps_type_str(type));
         ensure(next->atleast == next->atmost);
         ensure(next->atleast == 1);
         exp->next++;
@@ -86,8 +97,8 @@ static void
 _postpone_event(chain_id chain, type_id type, struct metadata *md)
 {
     thread_id id = self_id(md);
-    log_warn("[%" PRIu64 "] trace not yet registered: postpone event %d:%d", id,
-             chain, type);
+    log_warn("[%" PRIu64 "] postpone event %s:%s", id, ps_chain_str(chain),
+             ps_type_str(type));
     struct postponed *pp = SELF_TLS(md, &_postponed);
     if (pp->count >= MAX_POSTPONED)
         log_fatal("[%" PRIu64 "] too many postponed events: %lu", id,
@@ -119,9 +130,8 @@ _check_trace(chain_id chain, type_id type, struct metadata *md)
     }
 
     if (exp->next == NULL)
-        log_fatal("[%" PRIu64
-                  "] trace not yet registered: expected event %d:%d",
-                  id, chain, type);
+        log_fatal("[%" PRIu64 "] not yet registered: expected %d:%d", id, chain,
+                  type);
 
     _check_next(exp, chain, type, id);
 }
