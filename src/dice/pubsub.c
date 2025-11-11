@@ -222,7 +222,7 @@ ps_publish(const chain_id chain, const type_id type, void *event,
     if (PS_NOT_INITD_())
         return PS_DROP_EVENT;
 
-    log_debug("Publish %u/%u", ps_chain_str(chain), ps_type_str(type));
+    log_debug("Publish %s/%s", ps_chain_str(chain), ps_type_str(type));
     enum ps_err err = ps_dispatch_(chain, type, event, md);
 
     if (likely(err == PS_STOP_CHAIN))
