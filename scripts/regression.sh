@@ -9,12 +9,17 @@ MAKE=make
 REPO=$(readlink -f $(dirname "$0")/..)
 LOG=regression.log
 RESULTS=results.csv
-REPEAT=3
 
-# when checking whether one tag is indeed faster then the others, we subtract
-# a "safety coefficient" which we consider to be only noise in the measurement
-# by default 300ms.
-VARIABILITY=0.3
+# Number of repetitions of each TAG/CC/BENCHMARK combination
+REPEAT=5
+
+# When checking whether one tag is indeed faster then the others, we compare
+# them like this:
+#
+#     TARGET / BASELINE <= coefficient
+#
+# The "safety coefficient" represents the measurement noise (default 5%).
+VARIABILITY=0.05
 
 
 if [ -z "$TAGS" ]; then
@@ -149,23 +154,31 @@ check() {
 	count=0
 	s=$VARIABILITY
 	for cc in $CC; do
-		X=$(cat results.csv \
-			| grep $BETTER \
-			| grep $cc \
-			| head -n 1 \
+
+		# Calculate mean of measurements
+		VAL=$(cat results.csv \
+			| grep $BETTER, \
+			| grep $cc, \
 			| cut -d, -f4)
+		echo $VAL
+		LX=$(echo $VAL | wc -w)
+		SX=$(echo $VAL | tr ' ' '\n' | paste -sd+ - | bc -l)
+
 		for tag in $TAGS; do
 			if [ "$tag" = "$BETTER" ]; then
 				continue
 			fi
-			Y=$(cat results.csv \
-				| grep $tag \
-				| grep $cc \
-				| head -n 1 \
-				| cut -d, -f4)
 
-			echo -n "   [$cc] $BETTER($X) x $tag($Y) : "
-			Z=$(echo "($X-$s) <= $Y" | bc -l)
+			# Calculate mean of measurements
+			VAL=$(cat results.csv \
+				| grep $tag, \
+				| grep $cc, \
+				| cut -d, -f4)
+			LY=$(echo $VAL | wc -w)
+			SY=$(echo $VAL | tr ' ' '\n' | paste -sd+ - | bc -l)
+
+			echo -n "   [$cc] $BETTER($SX/$LX) x $tag($SY/$LY) : "
+			Z=$(echo "($SX)/($SY)*($LY)/($LX) <= (1+$s)" | bc -l)
 			if [ "$Z" = 0 ]; then
 				echo "FAIL"
 				count=$(echo "$count + 1" | bc -l)
