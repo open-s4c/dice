@@ -28,14 +28,16 @@ seq(EEE 1 128 \;)
 seq(SSS 0 15 \;)
 seq(SSX 0 15 ,)
 seq(CHAINS 0 6 \;)
-seq(CCC 0 6 ,)
+# Manually create the sequencer of chains to ensure 1 and 4 are in the front.
+# That improves the chances of LTO optimizing them.
+set(CCC "1,4,2,3,5,6,0")
 
 set(DISPATCH_C ${CMAKE_CURRENT_BINARY_DIR}/dispatch.c)
 
 add_custom_command(
   OUTPUT ${DISPATCH_C}
-  COMMAND $<TARGET_FILE:tmplr> "-DCCC=${CCC}" "-DSSS=${SSX}"
-          -s ${CMAKE_CURRENT_SOURCE_DIR}/dispatch.c.in > dispatch.c
+  COMMAND $<TARGET_FILE:tmplr> "-DCCC=${CCC}" "-DSSS=${SSX}" -s
+          ${CMAKE_CURRENT_SOURCE_DIR}/dispatch.c.in > dispatch.c
   DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/dispatch.c.in
   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
 add_custom_target(expand-dispatch DEPENDS tmplr ${DISPATCH_C})

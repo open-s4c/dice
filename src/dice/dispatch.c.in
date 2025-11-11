@@ -40,12 +40,12 @@ DICE_HIDE bool
 ps_dispatch_chain_on_(const chain_id chain)
 {
     switch (chain) {
-        _tmpl_begin(CCC = CHAINS);
+        default:
+            return false;
+            _tmpl_begin(CCC = CHAINS);
         case CCC:
             return ps_dispatch_chain_CCC_on_();
             _tmpl_end();
-        default:
-            return false;
     }
 }
 
@@ -54,14 +54,11 @@ DICE_HIDE enum ps_err
 ps_dispatch_(const chain_id chain, const type_id type, void *event,
              metadata_t *md)
 {
-    switch (chain) {
-        default:
-            return PS_HANDLER_OFF;
-            _tmpl_begin(CCC = CHAINS);
-        case CCC:
-            return ps_dispatch_CCC_(chain, type, event, md);
-            _tmpl_end();
-    }
+    _tmpl_begin(CCC = CHAINS);
+    if (likely(chain == CCC))
+        return ps_dispatch_CCC_(chain, type, event, md);
+    _tmpl_end();
+    return PS_HANDLER_OFF;
 }
 
 _tmpl_begin(SSS = SLOTS);
