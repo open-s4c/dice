@@ -45,7 +45,6 @@ set(INCL_cxa '<dice/events/cxa.h>')
 
 set(MODS
     mman
-    memcpy
     # annotate_rwlock: disabled until INTERCEPT_EVENT can be tested
     pthread_create
     pthread_mutex
@@ -58,7 +57,11 @@ if(${ENABLE_SANITIZER})
   message(STATUS "Ignoring malloc tests")
 else()
   # malloc does not play well with the sanitizers
-  set(MODS malloc ${MODS})
+  set(MODS ${MODS} malloc)
+endif()
+
+if(NOT APPLE)
+  set(MODS ${MODS} memcpy)
 endif()
 
 # generate interpose test source
