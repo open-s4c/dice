@@ -12,9 +12,11 @@
 #include <dice/log.h>
 
 struct expected_event expected_1[] = {
+#ifndef __APPLE__
     EXPECTED_EVENT(CAPTURE_EVENT, EVENT_SELF_INIT),
     // initialization until THREAD_START is published
     EXPECTED_SUFFIX(CAPTURE_EVENT, EVENT_THREAD_START),
+#endif
     // there is a short time window until the main function is finally called,
     // some mutex might be accessed during this period
     EXPECTED_SUFFIX(CAPTURE_EVENT, EVENT_STACKTRACE_ENTER),

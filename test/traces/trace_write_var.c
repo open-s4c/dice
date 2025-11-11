@@ -9,7 +9,9 @@
 #include <dice/log.h>
 
 struct expected_event expected[] = {
+#ifndef __APPLE__
     EXPECTED_EVENT(CAPTURE_EVENT, EVENT_SELF_INIT),
+#endif
     EXPECTED_SUFFIX(CAPTURE_EVENT, EVENT_SELF_FINI),
     EXPECTED_ANY_SUFFIX,
     EXPECTED_END,
