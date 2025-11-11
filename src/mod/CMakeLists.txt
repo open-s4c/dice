@@ -1,18 +1,27 @@
 # Copyright (C) 2025 Huawei Technologies Co., Ltd.                             #
 # SPDX-License-Identifier: 0BSD                                                #
 
-add_custom_target(
-  expand-tsan.c
-  COMMAND $<TARGET_FILE:tmplr> ${CMAKE_CURRENT_SOURCE_DIR}/tsan.c.in >
-          ${CMAKE_CURRENT_SOURCE_DIR}/tsan.c
-  DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/tsan.c.in)
+set(TSAN_C ${CMAKE_CURRENT_BINARY_DIR}/tsan.c)
+set(TSAN_C_IN ${CMAKE_CURRENT_SOURCE_DIR}/tsan.c.in)
+
+add_custom_command(
+  OUTPUT ${TSAN_C}
+  COMMAND $<TARGET_FILE:tmplr> ${TSAN_C_IN} > tsan.c
+  DEPENDS ${TSAN_C_IN}
+  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
+
+add_custom_target(expand-tsan.c DEPENDS ${TSAN_C})
 add_dependencies(expand-tsan.c tmplr)
 
 set(TSAN_MODULES tsan stacktrace)
 
 # Compile options to modules can be set like this: set(OPTIONS_memcpy -O2)
 
+set(TSAN_SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/tsan.c)
+
 file(GLOB SRCS *.c)
+list(REMOVE_ITEM SRCS ${TSAN_SOURCE})
+list(APPEND SRCS ${TSAN_C})
 foreach(SRC ${SRCS})
   get_filename_component(MODULE ${SRC} NAME_WLE)
   set(TARGET dice-${MODULE})

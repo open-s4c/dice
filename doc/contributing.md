@@ -9,7 +9,7 @@ substance of your change set.
   `.clang-format` that enforces 4-space indentation and 80-column lines
   (version >= 17).
 - Run `cmake-format -i` on modified CMakeLists.txt files (version >= 0.6).
-- Prefer lower_snake_case identifiers; exported symbols should use the
+- Prefer `lower_snake_case` identifiers; exported symbols should use the
   `dice_`, `ps_`, or module-specific prefixes for consistency.
 - Keep public headers minimal—add new APIs beside related source files and
   document them inline.
@@ -36,6 +36,11 @@ should be added as additional modules in `src/mod` and a new focused test under
   always reflect the current contract.
 - Mention the commands you ran in the PR body (e.g., build, tests, benchmarks)
   as per the project guidelines.
+- Generated sources live in the build tree. `.in` templates (for example,
+  `dispatch.c.in`, `tsan_test.c.in`) are expanded by the in-tree `tmplr`
+  executable ([link](https://github.com/open-s4c/tmplr)) during the CMake build,
+  and helper targets such as `expand-dispatch` or `expand-tests` recreate the
+  outputs under `build/`. Avoid committing the generated files themselves.
 
 ## Adding New Interceptors
 

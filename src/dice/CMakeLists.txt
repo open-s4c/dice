@@ -30,48 +30,46 @@ seq(SSX 0 15 ,)
 seq(CHAINS 0 6 \;)
 seq(CCC 0 6 ,)
 
+set(DISPATCH_C ${CMAKE_CURRENT_BINARY_DIR}/dispatch.c)
+
 add_custom_command(
-  OUTPUT dispatch.c
-  COMMAND $<TARGET_FILE:tmplr> "-DCCC=${CCC}" "-DSSS=${SSX}" -s dispatch.c.in >
-          dispatch.c
-  DEPENDS dispatch.c.in
-  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
-add_custom_target(expand-dispatch DEPENDS tmplr dispatch.c)
+  OUTPUT ${DISPATCH_C}
+  COMMAND $<TARGET_FILE:tmplr> "-DCCC=${CCC}" "-DSSS=${SSX}"
+          -s ${CMAKE_CURRENT_SOURCE_DIR}/dispatch.c.in > dispatch.c
+  DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/dispatch.c.in
+  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
+add_custom_target(expand-dispatch DEPENDS tmplr ${DISPATCH_C})
 
 # CHAIN_CONTROL has only events 98..99
 set(EEE_0 98 99)
 
-set(DISPATCH_SRCS loader.c)
+set(DISPATCH_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/loader.c)
+set(DISPATCH_GENERATED ${DISPATCH_C})
 foreach(CHAIN ${CHAINS})
-  list(APPEND DISPATCH_SRCS dispatch_${CHAIN}.c)
+  set(DISPATCH_CHAIN_C ${CMAKE_CURRENT_BINARY_DIR}/dispatch_${CHAIN}.c)
+  list(APPEND DISPATCH_GENERATED ${DISPATCH_CHAIN_C})
   set(eee "${EEE}")
   if(EEE_${CHAIN})
     set(eee "${EEE_${CHAIN}}")
   endif()
   add_custom_command(
-    OUTPUT dispatch_${CHAIN}.c
+    OUTPUT ${DISPATCH_CHAIN_C}
     COMMAND
-      cat dispatch_chain.c.in | #
+      cat ${CMAKE_CURRENT_SOURCE_DIR}/dispatch_chain.c.in | #
       $<TARGET_FILE:tmplr> "-DCCC=${CHAIN}" "-DEEE='${eee}'" "-DSSS='${SSS}'" -i
       | $<TARGET_FILE:tmplr> "-DEEE='${eee}'" "-DSSS='${SSS}'" -P_tmpl2 -i >
       dispatch_${CHAIN}.c
-    DEPENDS dispatch_chain.c.in
-    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
-  add_custom_target(expand-dispatch_${CHAIN} DEPENDS dispatch_${CHAIN}.c)
+    DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/dispatch_chain.c.in
+    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
+  add_custom_target(expand-dispatch_${CHAIN} DEPENDS ${DISPATCH_CHAIN_C})
   add_dependencies(expand-dispatch expand-dispatch_${CHAIN})
 endforeach()
-
-set(_DSRCS)
-foreach(SRC ${DISPATCH_SRCS})
-  set(_DSRCS ${_DSRCS} ${CMAKE_CURRENT_SOURCE_DIR}/${SRC})
-endforeach()
-set(DISPATCH_SRCS ${_DSRCS})
+set(DISPATCH_SRCS ${DISPATCH_SRCS} ${DISPATCH_GENERATED})
 
 # ------------------------------------------------------------------------------
 # dice libraries
 # ------------------------------------------------------------------------------
-set(SRCS mempool.c rbtree.c pubsub.c registry.c memset.c
-         ${CMAKE_CURRENT_SOURCE_DIR}/dispatch.c)
+set(SRCS mempool.c rbtree.c pubsub.c registry.c memset.c ${DISPATCH_C})
 
 # dice (libdice.so) - SHARED library providing interface for plugin modules.
 # Only contains the core components mempool and pubsub. This library gets

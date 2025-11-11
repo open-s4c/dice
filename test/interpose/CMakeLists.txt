@@ -64,9 +64,10 @@ endif()
 # generate interpose test source
 foreach(MOD ${MODS})
   set(TARGET ${MOD}_test)
+  set(TARGET_SRC ${CMAKE_CURRENT_BINARY_DIR}/${TARGET}.c)
   string(REPLACE ";" "\;" FUNS_${MOD} "${FUNS_${MOD}}")
   add_custom_command(
-    OUTPUT ${TARGET}.c
+    OUTPUT ${TARGET_SRC}
     COMMAND
       $<TARGET_FILE:tmplr> -P$$ "-DINCL=${INCL_${MOD}}" "-DFOO=${FUNS_${MOD}}"
       ${CMAKE_CURRENT_SOURCE_DIR}/interposed_.h.in
@@ -75,15 +76,16 @@ foreach(MOD ${MODS})
     COMMAND
       $<TARGET_FILE:tmplr> -sP\\$$_ "-DFOO=${FUNS_${MOD}}"
       ${CMAKE_CURRENT_SOURCE_DIR}/interposed__.h.in ${TARGET}_.c #
-      > ${CMAKE_CURRENT_SOURCE_DIR}/${TARGET}.c)
-  add_custom_target(expand-test-${MOD} DEPENDS ${TARGET}.c)
+      > ${TARGET}.c
+    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
+  add_custom_target(expand-test-${MOD} DEPENDS ${TARGET_SRC})
   add_dependencies(expand-tests expand-test-${MOD})
 endforeach()
 
 # test cases
 foreach(MOD ${MODS})
   set(TARGET ${MOD}_test)
-  add_executable(${TARGET} ${CMAKE_CURRENT_SOURCE_DIR}/${TARGET}.c)
+  add_executable(${TARGET} ${CMAKE_CURRENT_BINARY_DIR}/${TARGET}.c)
   target_link_libraries(${TARGET} PRIVATE dice.h dice tsano pthread)
   target_compile_options(
     ${TARGET} PRIVATE -fno-builtin-memcpy -fno-builtin-memset
