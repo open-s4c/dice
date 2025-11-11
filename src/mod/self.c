@@ -440,13 +440,13 @@ retire_self_(struct self *self)
     do {                                                                       \
         self->guard++;                                                         \
         self->md = (metadata_t){0};                                            \
-        log_debug(">> [%lu:0x%lx:%lu] %s/%s: %d", self_id(&self->md),          \
-                  (uint64_t)self->ptid, self->osid, ps_chain_str(chain),       \
-                  ps_type_str(type), self->guard);                             \
+        log_debug(">> [%" PRIu64 ":0x%" PRIx64 ":%" PRIu64 "] %s/%s: %d",      \
+                  self_id(&self->md), (uint64_t)self->ptid, self->osid,        \
+                  ps_chain_str(chain), ps_type_str(type), self->guard);        \
         PS_PUBLISH(chain, type, event, &self->md);                             \
-        log_debug("<< [%lu:0x%lx:%lu] %s/%s: %d", self_id(&self->md),          \
-                  (uint64_t)self->ptid, self->osid, ps_chain_str(chain),       \
-                  ps_type_str(type), self->guard);                             \
+        log_debug("<< [%" PRIu64 ":0x%" PRIx64 ":%" PRIu64 "] %s/%s: %d",      \
+                  self_id(&self->md), (uint64_t)self->ptid, self->osid,        \
+                  ps_chain_str(chain), ps_type_str(type), self->guard);        \
         self->guard--;                                                         \
     } while (0)
 
@@ -460,9 +460,9 @@ self_handle_before_(const chain_id chain, const type_id type, void *event,
     if (likely(self->guard++ == 0))
         self_guard(CAPTURE_BEFORE, type, event, self);
     else
-        log_debug(">>> [%lu:0x%lx:%lu] %s/%s: %d", self_id(&self->md),
-                  (uint64_t)self->ptid, self->osid, ps_chain_str(chain),
-                  ps_type_str(type), self->guard);
+        log_debug(">>> [%" PRIu64 ":0x%" PRIx64 ":%" PRIu64 "] %s/%s: %d",
+                  self_id(&self->md), (uint64_t)self->ptid, self->osid,
+                  ps_chain_str(chain), ps_type_str(type), self->guard);
 
     assert(self->guard >= 0);
     return PS_STOP_CHAIN;
@@ -478,9 +478,9 @@ self_handle_after_(const chain_id chain, const type_id type, void *event,
     if (likely(self->guard-- == 1))
         self_guard(CAPTURE_AFTER, type, event, self);
     else
-        log_debug("<<< [%lu:0x%lx:%lu] %s/%s: %d", self_id(&self->md),
-                  (uint64_t)self->ptid, self->osid, ps_chain_str(chain),
-                  ps_type_str(type), self->guard);
+        log_debug("<<< [%" PRIu64 ":0x%" PRIx64 ":%" PRIu64 "] %s/%s: %d",
+                  self_id(&self->md), (uint64_t)self->ptid, self->osid,
+                  ps_chain_str(chain), ps_type_str(type), self->guard);
 
     assert(self->guard >= 0);
     return PS_STOP_CHAIN;
@@ -496,9 +496,9 @@ self_handle_event_(const chain_id chain, const type_id type, void *event,
     if (likely(self->guard == 0))
         self_guard(CAPTURE_EVENT, type, event, self);
     else
-        log_debug("!!! [%lu:0x%lx:%lu] %s/%s: %d", self_id(&self->md),
-                  (uint64_t)self->ptid, self->osid, ps_chain_str(chain),
-                  ps_type_str(type), self->guard);
+        log_debug("!!! [%" PRIu64 ":0x%" PRIx64 ":%" PRIu64 "] %s/%s: %d",
+                  self_id(&self->md), (uint64_t)self->ptid, self->osid,
+                  ps_chain_str(chain), ps_type_str(type), self->guard);
 
     assert(self->guard >= 0);
     return PS_STOP_CHAIN;
