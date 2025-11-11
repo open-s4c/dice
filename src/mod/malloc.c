@@ -64,7 +64,14 @@ INTERPOSE(void, free, void *ptr)
         .ptr  = ptr,
         .func = REAL_FUNC(free),
     };
-
+#if defined(__APPLE__)
+    // On macOS, if we intercept free when ptr == 0, the program hangs. We still
+    // need to investigate why this is happening.
+    if (ptr == 0) {
+        ev.func(ptr);
+        return;
+    }
+#endif
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_FREE, &ev, &md);
     ev.func(ptr);
