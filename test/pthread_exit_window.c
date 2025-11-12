@@ -66,7 +66,7 @@ main()
 // remember when thread exit
 PS_SUBSCRIBE(CAPTURE_EVENT, EVENT_THREAD_EXIT, {
     log_printf("2) tid = %p\tself = %p\n", (void *)pthread_self(), md);
-    log_printf("Thread %lu exit\n", self_id(md));
+    log_printf("Thread %" PRIu64 " exit\n", self_id(md));
     assert(self_id(md) == 2);
     exit_called++;
 })
@@ -83,6 +83,6 @@ PS_SUBSCRIBE(CAPTURE_BEFORE, EVENT_FREE, {
 
     log_printf("4) tid = %p\tself = %p\n", (void *)pthread_self(), md);
     log_printf("Retired thread before free. ID should be 2\n");
-    log_printf("\tuid = %lu\n", self_id(md));
+    log_printf("\tuid = %" PRIu64 "\n", self_id(md));
     assert(self_id(md) == 2);
 })
