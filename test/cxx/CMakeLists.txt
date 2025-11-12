@@ -7,6 +7,7 @@ if(${ENABLE_SANITIZER})
 endif()
 
 add_executable(tls_destructor tls_destructor.cpp)
+target_compile_options(tls_destructor PRIVATE -std=c++11)
 if(${ENABLE_SANITIZER})
   target_compile_options(tls_destructor PRIVATE ${LIBSAN_CXX_FLAGS})
   target_link_options(tls_destructor PRIVATE ${LIBSAN_LD_FLAGS})

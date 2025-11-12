@@ -106,8 +106,8 @@ jobs:
         run: cmake --install build
 
   test-macos:
-    if: false
-    runs-on: macos-latest
+    if: true
+    runs-on: macos-15
     steps:
       - uses: actions/checkout@v4
         with:

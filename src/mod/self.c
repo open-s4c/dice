@@ -331,7 +331,7 @@ static bool
 thread_dead_(struct self *self)
 {
     (void)self;
-    return false;
+    return pthread_kill(self->ptid, 0) == ESRCH;
 }
 #endif // !linux
 
