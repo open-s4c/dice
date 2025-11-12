@@ -160,7 +160,6 @@ check() {
 			| grep $BETTER, \
 			| grep $cc, \
 			| cut -d, -f4)
-		echo $VAL
 		LX=$(echo $VAL | wc -w)
 		SX=$(echo $VAL | tr ' ' '\n' | paste -sd+ - | bc -l)
 
