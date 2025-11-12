@@ -110,14 +110,14 @@ DICE_HIDE thread_id
 self_id_(metadata_t *md)
 {
     struct self *self = (struct self *)md;
-    return self ? self->id : NO_THREAD;
+    return likely(self) ? self->id : NO_THREAD;
 }
 
 DICE_HIDE bool
 self_retired_(metadata_t *md)
 {
     struct self *self = (struct self *)md;
-    return self ? self->retired : false;
+    return likely(self) ? self->retired : false;
 }
 
 DICE_HIDE void *
@@ -195,7 +195,7 @@ self_tls_(metadata_t *md, const void *global, size_t size)
     uintptr_t item_key = (uintptr_t)global;
 
     void *data = self_tls_get(md, item_key);
-    if (data)
+    if (likely(data))
         return data;
 
     void *ptr = mempool_alloc(size);
@@ -412,12 +412,11 @@ get_self_(void)
     // Since pthread_self ids can be reused, we use the pair (ptid,osid) ids as
     // unique identifier.
 
-    pthread_t ptid    = pthread_self();
     struct self *self = thread_cache_get_();
     if (likely(self))
         return self;
 
-    return quack_search_(ptid);
+    return quack_search_(pthread_self());
 }
 
 static void
