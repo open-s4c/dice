@@ -15,6 +15,9 @@ foreach(SRC ${SRCS})
   if(CMAKE_C_COMPILER_ID STREQUAL "GNU")
     target_link_options(${TARGET} PRIVATE -fsanitize=thread)
   endif()
+  if(${SRC} MATCHES ".*\.cpp")
+    target_compile_options(${TARGET} PRIVATE -std=c++11)
+  endif()
 
   target_link_libraries(${TARGET} PRIVATE mock_checker tsano pthread)
 
