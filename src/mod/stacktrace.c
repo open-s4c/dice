@@ -23,8 +23,7 @@ PS_ADVERTISE_TYPE(EVENT_STACKTRACE_EXIT)
 /* Mark module initialization (optional) */
 DICE_MODULE_INIT()
 
-
-static void check_main_start_(void *caller);
+static inline void check_main_start_(void *caller);
 
 void
 __tsan_func_entry(void *caller)
