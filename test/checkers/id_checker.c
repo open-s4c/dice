@@ -17,11 +17,18 @@ osid_(void)
 {
     return (uint64_t)_lwp_self();
 }
-#else
+#elif defined(__linux__)
 static uint64_t
 osid_(void)
 {
     return (uint64_t)gettid();
+}
+#elif defined(__APPLE__)
+    #include <pthread.h>
+static uint64_t
+osid_(void)
+{
+    return (uint64_t)pthread_mach_thread_np(pthread_self());
 }
 #endif
 
