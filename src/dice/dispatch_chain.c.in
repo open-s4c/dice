@@ -50,10 +50,8 @@ ps_dispatch_CCC_EEE_(const chain_id chain, const type_id type, void *event,
     _tmpl2_begin(SSS = SLOTS);
     {
         err = ps_dispatch_CCC_EEE_SSS_(chain, type, event, md);
-        if (err == PS_STOP_CHAIN)
-            return PS_STOP_CHAIN;
-
-        err = ps_dispatch_CCC_0_SSS_(chain, type, event, md);
+        if (err == PS_HANDLER_OFF)
+            err = ps_dispatch_CCC_0_SSS_(chain, type, event, md);
         if (err == PS_STOP_CHAIN)
             return PS_STOP_CHAIN;
     }
