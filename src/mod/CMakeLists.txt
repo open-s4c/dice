@@ -13,6 +13,12 @@ add_custom_command(
 add_custom_target(expand-tsan.c DEPENDS ${TSAN_C})
 add_dependencies(expand-tsan.c tmplr)
 
+set(OVERRIDE_TYPES "" "Debug")
+if("${CMAKE_BUILD_TYPE}" IN_LIST OVERRIDE_TYPES)
+  set(LINK_OVERRIDE on)
+  message(STATUS "Linking modules with dice-override")
+endif()
+
 set(TSAN_MODULES tsan stacktrace)
 
 # Compile options to modules can be set like this: set(OPTIONS_memcpy -O2)
@@ -33,7 +39,10 @@ foreach(SRC ${SRCS})
   install(TARGETS ${TARGET} DESTINATION lib/dice)
 
   if(NOT ${TARGET} MATCHES "wrap_memset")
-    target_link_libraries(${TARGET} PRIVATE dice-override.o)
+
+    if(${LINK_OVERRIDE})
+      target_link_libraries(${TARGET} PRIVATE dice-override.o)
+    endif()
 
     add_library(${TARGET}.o OBJECT ${SRC})
     target_link_libraries(${TARGET}.o PRIVATE dice.h)

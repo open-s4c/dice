@@ -174,7 +174,7 @@ self_tls_set_(metadata_t *md, uintptr_t item_key, void *ptr,
         if (i == NULL)
             log_fatal("mempool out of memory");
 
-        dice_memset(i, 0, sizeof(struct tls_item));
+        memset(i, 0, sizeof(struct tls_item));
         i->key  = item_key;
         i->ptr  = ptr;
         i->dtor = dtor;
@@ -201,7 +201,7 @@ self_tls_(metadata_t *md, const void *global, size_t size)
     void *ptr = mempool_alloc(size);
     if (ptr == NULL)
         log_fatal("mempool out of memory");
-    dice_memset(ptr, 0, size);
+    memset(ptr, 0, size);
 
     self_tls_set(md, item_key, ptr,
                  (struct tls_dtor){

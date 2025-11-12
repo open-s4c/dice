@@ -38,10 +38,4 @@
     #define unlikely(x) __builtin_expect(!!(x), 0)
 #endif
 
-DICE_WEAK DICE_HIDE void *
-dice_memset(void *s, int c, size_t n)
-{
-    return __builtin_memset(s, c, n);
-}
-
 #endif /* DICE_COMPILER_H */
