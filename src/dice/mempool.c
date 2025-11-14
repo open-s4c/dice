@@ -137,7 +137,7 @@ mempool_realloc_(void *ptr, size_t size)
     entry_t *e = (entry_t *)ptr - 1;
     size       = e->size < size ? e->size : size;
     memcpy(p, ptr, size);
-    free(ptr);
+    mempool_free(ptr);
     return p;
 }
 
