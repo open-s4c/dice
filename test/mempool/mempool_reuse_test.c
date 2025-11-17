@@ -2,6 +2,7 @@
  * Copyright (C) 2025 Huawei Technologies Co., Ltd.
  * SPDX-License-Identifier: 0BSD
  */
+#undef NDEBUG
 #include <assert.h>
 #include <stdint.h>
 #include <string.h>
