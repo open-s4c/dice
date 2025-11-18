@@ -6,7 +6,7 @@
  * @brief Interruptable chain-based pubsub
  *
  * This component provides a chain-based pubsub. When an event is published to a
- * chain (aka topic), handlers are called in priority order. Each handler has
+ * chain (aka topic), handlers are called in slot order. Each handler has
  * the option of interruping the chain by returning false.
  *
  * Events are have a type (`type_id`) and have a payload `payload`. A chain is
@@ -84,7 +84,7 @@ enum ps_err ps_publish(const chain_id chain, const type_id type, void *event,
 
 /* ps_subscribe subscribes a callback in a chain for an event.
  *
- * `prio` determines the relative order in which the callbacks are called with
+ * `slot` determines the relative order in which the callbacks are called with
  * published events.
  *
  * Note: ps_subscribe should only be called during initialization of the
@@ -95,7 +95,7 @@ enum ps_err ps_publish(const chain_id chain, const type_id type, void *event,
  * Note: Instead of directly using this function, use `PS_SUBSCRIBE()` macro
  * defined in `dice/module.h` header file.
  */
-int ps_subscribe(chain_id chain, type_id type, ps_callback_f cb, int prio);
+int ps_subscribe(chain_id chain, type_id type, ps_callback_f cb, int slot);
 
 /* EVENT_PAYLOAD casts the event argument `event` to type of the given
  * variable.

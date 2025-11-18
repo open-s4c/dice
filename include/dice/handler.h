@@ -11,7 +11,7 @@
  * dice/module.h and use the macros provided there. */
 
 /* PS_HANDLER builds the canonical name for handlers associated with a given
- * chain/type/priority triple. The resulting name follows the pattern
+ * chain/type/slot triple. The resulting name follows the pattern
  * ps_handler_CHAIN_TYPE_SLOT, where CHAIN, TYPE and SLOT are resolved to their
  * underlying numbers. */
 #define PS_HANDLER(CHAIN, TYPE, SLOT)                                          \

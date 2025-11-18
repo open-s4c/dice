@@ -31,7 +31,7 @@
  * builtin module for this slot. It overwrites a weakly defined symbol in the
  * dispatcher module, which always return false. */
 DICE_HIDE bool
-V_JOIN(V_JOIN(ps_dispatch_slot, DICE_MODULE_PRIO), on_)(void)
+V_JOIN(V_JOIN(ps_dispatch_slot, DICE_MODULE_SLOT), on_)(void)
 {
     return true;
 }

@@ -56,7 +56,7 @@ NOTE: That sanitizer tests do not work in all configurations.
   `test/traces/CMakeLists.txt`. Use `scripts/dice` in the test command to load
   the required modules.
 - **Order tests**: expand the scenarios in `test/order/` to cover additional
-  link combinations or constructor priorities when you introduce new modules.
+  link combinations or slots when you introduce new modules.
 
 Refer back to `doc/contributing.md` for the checklist that reviewers expect when
 new behaviours are added.

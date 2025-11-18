@@ -23,12 +23,12 @@ right building blocks when writing interceptors or subscribers.
   `ps_callback_f` signature.
 - `module.h`: convenience macros for module initialization and subscription.
   `DICE_MODULE_INIT`/`DICE_MODULE_FINI` wrap constructor hooks,
-  and `PS_SUBSCRIBE` registers handlers with the correct priority
-  (`DICE_MODULE_PRIO` defaults to 9999).
+  and `PS_SUBSCRIBE` registers handlers with the slot
+  (`DICE_MODULE_SLOT` defaults to 9999).
 - `handler.h`: emits the inline handler stubs used by `PS_SUBSCRIBE`. Most code
   relies on this indirectly via `module.h`.
 - `dispatch.h`: declares the fast-path dispatch hooks that builtin modules use.
-  When you compile a module with `DICE_MODULE_PRIO < MAX_BUILTIN_SLOTS`
+  When you compile a module with `DICE_MODULE_SLOT < MAX_BUILTIN_SLOTS`
   the generated dispatch tables call your handler without going through the
   callback list.
 

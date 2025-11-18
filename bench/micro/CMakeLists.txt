@@ -28,14 +28,14 @@ set(MODS
     dice-tsan.o
     dice-stacktrace.o)
 
-set(PRIO_dice-self 4)
-set(PRIO_dice-microcb 5)
+set(SLOT_dice-self 4)
+set(SLOT_dice-microcb 5)
 
 set(OBJS ${MODS} dice.o)
 foreach(TARGET ${OBJS})
   get_filename_component(MOD ${TARGET} NAME_WLE)
-  if(PRIO_${MOD})
-    target_compile_options(${TARGET} PRIVATE -DDICE_MODULE_PRIO=${PRIO_${MOD}})
+  if(SLOT_${MOD})
+    target_compile_options(${TARGET} PRIVATE -DDICE_MODULE_SLOT=${SLOT_${MOD}})
   endif()
   target_compile_options(${TARGET} PRIVATE -fPIC)
 endforeach()

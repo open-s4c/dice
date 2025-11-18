@@ -6,7 +6,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 
-#define DICE_MODULE_PRIO 1
+#define DICE_MODULE_SLOT 0
 #include "tweaks.h"
 #include <dice/mempool.h>
 #include <dice/module.h>
@@ -21,7 +21,7 @@ struct sub {
     chain_id chain;
     chain_id type;
     ps_callback_f cb;
-    int prio;
+    int slot;
     struct sub *next;
 };
 
@@ -96,20 +96,20 @@ DICE_MODULE_INIT()
 
 static void
 ps_subscribe_sorted_(struct sub **cur, chain_id chain, type_id type,
-                     ps_callback_f cb, int prio, bool any_type)
+                     ps_callback_f cb, int slot, bool any_type)
 {
     // any_type is set if this subscription was from ANY_EVENT
     struct sub *sub;
     struct sub *next = NULL;
 
-    if (*cur == NULL || prio < (*cur)->prio) {
+    if (*cur == NULL || slot < (*cur)->slot) {
         next = *cur;
         goto insert;
-    } else if (prio == (*cur)->prio && !any_type) {
+    } else if (slot == (*cur)->slot && !any_type) {
         next = *cur;
         goto insert;
     } else {
-        ps_subscribe_sorted_(&(*cur)->next, chain, type, cb, prio, any_type);
+        ps_subscribe_sorted_(&(*cur)->next, chain, type, cb, slot, any_type);
         return;
     }
 
@@ -119,16 +119,15 @@ insert:
     *sub = (struct sub){.chain = chain,
                         .type  = type,
                         .cb    = cb,
-                        .prio  = prio,
+                        .slot  = slot,
                         .next  = next};
     *cur = sub;
 }
 
 static int
-ps_subscribe_type_(chain_id chain, type_id type, ps_callback_f cb, int prio,
+ps_subscribe_type_(chain_id chain, type_id type, ps_callback_f cb, int slot,
                    bool any_type)
 {
-    (void)prio;
     if (type > MAX_TYPES)
         return PS_INVALID;
 
@@ -138,21 +137,21 @@ ps_subscribe_type_(chain_id chain, type_id type, ps_callback_f cb, int prio,
     ev->count++;
 
     // register subscription
-    ps_subscribe_sorted_(&ev->head, chain, type, cb, prio, any_type);
+    ps_subscribe_sorted_(&ev->head, chain, type, cb, slot, any_type);
 
     return PS_OK;
 }
 
 static int
-ps_subscribe_(chain_id chain, type_id type, ps_callback_f cb, int prio)
+ps_subscribe_(chain_id chain, type_id type, ps_callback_f cb, int slot)
 {
     ps_init_(); // ensure initialized
 
     log_debug("Subscribe %s/%s/%d", ps_chain_str(chain), ps_type_str(type),
-              prio);
-    if (ps_dispatch_chain_on_(chain) && prio <= ps_dispatch_max()) {
+              slot);
+    if (ps_dispatch_chain_on_(chain) && slot <= ps_dispatch_max()) {
         log_debug("Ignore subscription %s/%s/%d", ps_chain_str(chain),
-                  ps_type_str(type), prio);
+                  ps_type_str(type), slot);
         return PS_OK;
     }
     if (chain == CHAIN_CONTROL)
@@ -160,20 +159,20 @@ ps_subscribe_(chain_id chain, type_id type, ps_callback_f cb, int prio)
     if (chain > MAX_CHAINS)
         return PS_INVALID;
     if (type != ANY_EVENT)
-        return ps_subscribe_type_(chain, type, cb, prio, false);
+        return ps_subscribe_type_(chain, type, cb, slot, false);
 
     int err;
     for (size_t i = 1; i < MAX_TYPES; i++)
-        if ((err = ps_subscribe_type_(chain, i, cb, prio, true)) != 0)
+        if ((err = ps_subscribe_type_(chain, i, cb, slot, true)) != 0)
             return err;
 
     return PS_OK;
 }
 
 DICE_WEAK int
-ps_subscribe(chain_id chain, type_id type, ps_callback_f cb, int prio)
+ps_subscribe(chain_id chain, type_id type, ps_callback_f cb, int slot)
 {
-    return ps_subscribe_(chain, type, cb, prio);
+    return ps_subscribe_(chain, type, cb, slot);
 }
 
 // -----------------------------------------------------------------------------
