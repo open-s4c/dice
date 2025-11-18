@@ -68,6 +68,7 @@ help() {
 	echo " -c COMP     Compiler(s) to build Dice (default \"$CC\")"
 	echo " -u URL      Git repository URL (default \"$REPO\")"
 	echo " -r REPEAT   Number of repetitions (default \"$REPEAT\")"
+	echo " -f FILE     Results file (Default \"$RESULTS\")"
 	echo " -h          This help message"
 	echo
 }
@@ -127,6 +128,7 @@ regression() {
 summary() {
 	TAGS="$1"
 	CC="$2"
+
 	echo "== Collect summaries =="
 	echo "tag,cc,bench,nthreads,count,time_s" > $RESULTS
 	for tag in $TAGS; do
@@ -147,10 +149,26 @@ summary() {
 }
 
 check() {
-	TAGS="$1"
-	CC="$2"
-	BETTER="$3"
+	if ! test -f $RESULTS; then
+		echo "error: not results file \"$RESULTS\""
+		exit 1
+	fi
+	TAGS="$(cat $RESULTS | tail +2 | cut -d, -f1 | sort | uniq)"
+	CC="$(cat $RESULTS | tail +2 | cut -d, -f2 | sort | uniq)"
+	echo "== Parameters in $RESULTS =="
+	echo "   TAGS:  $TAGS"
+	echo "   CC:    $CC"
+	echo
+
+	BETTER="$1"
+
+	if ! echo $TAGS | grep $BETTER > /dev/null; then
+		echo "error: $BETTER not in tags of $RESULTS"
+		exit 1
+	fi
+
 	echo "== Check $BETTER is better or equal =="
+
 	count=0
 	s=$VARIABILITY
 	for cc in $CC; do
@@ -278,6 +296,7 @@ echo
 
 if in_list run $actions; then
 	regression "$TAGS" "$CC"
+	summary "$TAGS" "$CC"
 fi
 if in_list sum $actions; then
 	summary "$TAGS" "$CC"
@@ -286,5 +305,5 @@ if in_list show $actions; then
 	show_sum
 fi
 if in_list check $actions; then
-	check "$TAGS" "$CC" "$BETTER"
+	check "$BETTER"
 fi
