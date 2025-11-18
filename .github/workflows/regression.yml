@@ -33,9 +33,6 @@ jobs:
       - name: Show results
         run: cat results.csv
       - name: Ensure HEAD is not slower than main
-        run: scripts/regression.sh
-             -c ${{ matrix.cc }}
-             -t HEAD -t main
-             check HEAD
+        run: scripts/regression.sh check HEAD
       - run: cd work-HEAD-${{ matrix.cc }} && git rev-parse --short HEAD
       - run: cd work-main-${{ matrix.cc }} && git rev-parse --short HEAD
