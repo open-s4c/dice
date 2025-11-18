@@ -40,11 +40,11 @@ Examples of events that can be intercepted are:
   such are `__tsan_read8`, `__tsan_exchange`, etc.
 
 Within a chain, events are delivered to the event handlers in the subscription
-priority order.  Event handlers can keep state and have side effect as well
-as change the event content such that following handlers receive an updated
-event.  This mechanism allows subscribers to track resource states, detect
-concurrency issues, and create complex runtime monitoring systems, including
-state machines and deterministic replay systems.
+**slot order** (described below).  Event handlers can keep state and have side
+effect as well as change the event content such that following handlers receive
+an updated event.  This mechanism allows subscribers to track resource states,
+detect concurrency issues, and create complex runtime monitoring systems,
+including state machines and deterministic replay systems.
 
 
 ## 1.2. Modules
@@ -150,7 +150,7 @@ The Pubsub system introduces several key advantages:
 
    Besides the chain ID and the event type ID, `ps_subscribe` takes as
    arguments a pointer the the event handler function and a subscription
-   priority order.
+   slot order.
 
    The second option is to define the event handler function with a predefined
    function name and compile it together with Dice. Refer to Section X.X for
@@ -177,10 +177,10 @@ The Pubsub system introduces several key advantages:
     metadata to the subscribers. Actual type defined by `chain`.
 
 4. **Chain broadcast**: The ordering of delivery of events to handlers is
-   controlled by the chain. When an event is published, it travels through the
-   chain of subscribers in the order of their subscription priority. This order
-   is determined during subscription. This allows for flexible control over
-   event flow and processing.
+   controlled by the chain. When an event is published, it travels through
+   the chain of subscribers in the slot order. This order is determined
+   during subscription. This allows for flexible control over event flow
+   and processing.
 
 The Pusbsub system in Dice differs from the standard definition of Pubsub (GoF
 design pattern) in several ways:
@@ -577,10 +577,11 @@ env LD_PRELOAD=/path/to/libdice.so:/path/to/dice-pthread_create.so foo <arg1>
 
 macOS users should swap `LD_PRELOAD` for `DYLD_INSERT_LIBRARIES`. Module
 constructors register their subscribers during load, so the order of
-initialization is controlled via the `DICE_MODULE_PRIO` macro instead of relying
-on linker quirks. Lower priorities run first, and builtin modules reserve the
-range `0..MAX_BUILTIN_SLOTS-1`. Plugin authors should pick priorities greater
-than that so the core interceptors and the Self module execute before user code.
+initialization is controlled via the `DICE_MODULE_SLOT` macro instead of
+relying on linker quirks. Lower slots run first, and builtin modules reserve
+the range `0..MAX_BUILTIN_SLOTS-1`. Plugin authors should pick slots greater
+than that so the core interceptors and the Self module execute before
+user code.
 
 For tighter deployments you can link Dice core and a curated set of modules into
 a single shared object, e.g.:
@@ -617,26 +618,23 @@ Dice supports two types of subscription:
 
 - **Dispatch-based subscriptions**: Modules define a handler function following
   the naming convention `ps_dispatch_CCC_EEE_SSS`, where `CCC` is a chain ID,
-  `EEE` is a event type ID, and `SSS` is a slot priority. Among the builtin
-  range of slots, only one module can occupy one slot, i.e., no two modules can
-  use the same value `SSS`.
+  `EEE` is a event type ID, and `SSS` is a slot. Among the builtin range of
+  slots, only one module can occupy one slot, i.e., no two modules can use
+  the same value `SSS`.
 
 In practice, subscriptions are implemented using the `PS_SUBSCRIBE` macro
 from the `dice/module.h` header file.  This macro will provide both types
-of subscription. The compile-time constant `DICE_MODULE_PRIO` constant is
-the slot number of the module.  The subscription mechanism used in runtime
-depends on whether the module is compiled together with Dice **and** whether
-the slot number is within the builtin slot range, i.e.,  `DICE_MODULE_PRIO <
+of subscription. The compile-time constant `DICE_MODULE_SLOT` constant is
+the slot of the module.  The subscription mechanism used in runtime depends
+on whether the module is compiled together with Dice **and** whether
+the slot is within the builtin slot range, i.e.,  `DICE_MODULE_SLOT <
 MAX_BUILTIN_SLOTS`. If that is the case, then the Pubsub will prefer calling
 the defined dispatch function directly instead of using the callback function
 pointers.
 
 On the publisher side, both types of subscriptions are served by the same
 `ps_publish` function. If two modules subscribe for the same chain and event
-type, they are served in the slot priority order (lower first).
-
-Note that the module priority is a compilation option and custom builds can pass
-`-DDICE_MODULE_PRIO=<prio>` when compiling each object to speficy that.
+type, they are served in the slot order (lower first).
 
 
 ## 6.3. Box Builds and Hidden Interfaces

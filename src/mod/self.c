@@ -34,8 +34,8 @@
     #include <errno.h>
 #endif
 
-#ifndef DICE_MODULE_PRIO
-    #define DICE_MODULE_PRIO 4
+#ifndef DICE_MODULE_SLOT
+    #define DICE_MODULE_SLOT 4
 #endif
 #include <dice/chains/intercept.h>
 #include <dice/events/pthread.h>

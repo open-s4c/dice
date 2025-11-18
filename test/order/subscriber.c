@@ -1,12 +1,12 @@
 /*
- * Copyright (C) Huawei Technologies Co., Ltd. 2025. All rights reserved.
+ * Copyright (C) 2025 Huawei Technologies Co., Ltd.
  * SPDX-License-Identifier: 0BSD
  */
 #ifndef POSITION
     #error Define POSITION when compiling this file
 #endif
 
-#define DICE_MODULE_PRIO POSITION
+#define DICE_MODULE_SLOT POSITION
 #include "defs.h"
 #include <dice/module.h>
 #include <dice/pubsub.h>

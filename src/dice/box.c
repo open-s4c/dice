@@ -33,12 +33,12 @@ ps_publish(const chain_id chain, const type_id type, void *event,
 }
 
 DICE_HIDE int
-ps_subscribe(chain_id chain, type_id type, ps_callback_f cb, int prio)
+ps_subscribe(chain_id chain, type_id type, ps_callback_f cb, int slot)
 {
     (void)chain;
     (void)type;
     (void)cb;
-    (void)prio;
+    (void)slot;
     return PS_OK;
 }
 

@@ -22,15 +22,15 @@
 #include <dice/pubsub.h>
 
 
-#ifndef DICE_MODULE_PRIO
+#ifndef DICE_MODULE_SLOT
     /* Subscription slot for the current translation unit. Lower values run
-     * first. Builtin modules reserve priorities 0..MAX_BUILTIN_SLOTS-1; plugin
+     * first. Builtin modules reserve slots 0..MAX_BUILTIN_SLOTS-1; plugin
      * modules should stay above that range. */
-    #define DICE_MODULE_PRIO 9999
+    #define DICE_MODULE_SLOT 9999
 #endif
 
-// should enable ps_dispatch?
-#if DICE_MODULE_PRIO < 16
+/* Enable ps_dispatch if within the maximum number of builtin slots */
+#if DICE_MODULE_SLOT < MAX_BUILTIN_SLOTS
     #include <dice/dispatch.h>
 #else
     #define PS_DISPATCH_DEF(CHAIN, TYPE, SLOT)
@@ -55,11 +55,11 @@
     static DICE_CTOR void module_ctr_()                                        \
     {                                                                          \
         if (module_init_())                                                    \
-            log_debug("[%4d] INIT: %s", DICE_MODULE_PRIO, __FILE__);           \
+            log_debug("[%4d] INIT: %s", DICE_MODULE_SLOT, __FILE__);           \
     }                                                                          \
     PS_SUBSCRIBE(CHAIN_CONTROL, EVENT_DICE_INIT, {                             \
         if (module_init_())                                                    \
-            log_debug("[%4d] INIT! %s", DICE_MODULE_PRIO, __FILE__);           \
+            log_debug("[%4d] INIT! %s", DICE_MODULE_SLOT, __FILE__);           \
     })
 
 
@@ -86,7 +86,7 @@
  * This is helpful for debugging.
  */
 #define PS_SUBSCRIBE(CHAIN, TYPE, HANDLER)                                     \
-    PS_SUBSCRIBE_SLOT(CHAIN, #CHAIN, TYPE, #TYPE, DICE_MODULE_PRIO, HANDLER)
+    PS_SUBSCRIBE_SLOT(CHAIN, #CHAIN, TYPE, #TYPE, DICE_MODULE_SLOT, HANDLER)
 
 #define PS_SUBSCRIBE_SLOT(CHAIN, CNAME, TYPE, TNAME, SLOT, HANDLER)            \
     PS_HANDLER_DEF(CHAIN, TYPE, SLOT, HANDLER)                                 \
