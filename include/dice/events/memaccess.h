@@ -20,11 +20,14 @@
 #define EVENT_MA_CMPXCHG      36
 #define EVENT_MA_CMPXCHG_WEAK 37
 #define EVENT_MA_FENCE        38
+#define EVENT_MA_READ_RANGE   39
+#define EVENT_MA_WRITE_RANGE  40
+#define LAST_MA_EVENT         EVENT_MA_WRITE_RANGE
 
 static inline bool
 is_memaccess(type_id type)
 {
-    return type >= EVENT_MA_READ && type <= EVENT_MA_FENCE;
+    return type >= EVENT_MA_READ && type <= LAST_MA_EVENT;
 }
 
 struct ma_read_event {
@@ -140,6 +143,20 @@ struct ma_fence_event {
     const void *pc;
     const char *func;
     int mo;
+};
+
+struct ma_read_range_event {
+    const void *pc;
+    const char *func;
+    void *addr;        
+    size_t size;
+};
+
+struct ma_write_range_event {
+    const void *pc;
+    const char *func;
+    void *addr;         
+    size_t size; 
 };
 
 #endif /* DICE_MEMACCESS_H */
