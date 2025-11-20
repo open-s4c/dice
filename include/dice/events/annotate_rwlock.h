@@ -19,10 +19,10 @@ void AnnotateRWLockAcquired(const char *file, int line,
 void AnnotateRWLockReleased(const char *file, int line,
                             const volatile void *lock, long is_w);
 
-#define EVENT_ANNOTATE_RWLOCK_CREATE  42
-#define EVENT_ANNOTATE_RWLOCK_DESTROY 43
-#define EVENT_ANNOTATE_RWLOCK_ACQ     44
-#define EVENT_ANNOTATE_RWLOCK_REL     45
+#define EVENT_ANNOTATE_RWLOCK_CREATE  43
+#define EVENT_ANNOTATE_RWLOCK_DESTROY 44
+#define EVENT_ANNOTATE_RWLOCK_ACQ     45
+#define EVENT_ANNOTATE_RWLOCK_REL     46
 
 #define EVENT_ANNOTATERWLOCKCREATE   EVENT_ANNOTATE_RWLOCK_CREATE
 #define EVENT_ANNOTATERWLOCKDESTROY  EVENT_ANNOTATE_RWLOCK_DESTROY

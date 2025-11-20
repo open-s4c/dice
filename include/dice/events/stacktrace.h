@@ -5,8 +5,8 @@
 #ifndef DICE_STACKTRACE_H
 #define DICE_STACKTRACE_H
 
-#define EVENT_STACKTRACE_ENTER 40
-#define EVENT_STACKTRACE_EXIT  41
+#define EVENT_STACKTRACE_ENTER 41
+#define EVENT_STACKTRACE_EXIT  42
 
 typedef struct {
     const void *pc;

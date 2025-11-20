@@ -27,6 +27,8 @@ PS_ADVERTISE_TYPE(EVENT_MA_XCHG)
 PS_ADVERTISE_TYPE(EVENT_MA_CMPXCHG)
 PS_ADVERTISE_TYPE(EVENT_MA_CMPXCHG_WEAK)
 PS_ADVERTISE_TYPE(EVENT_MA_FENCE)
+PS_ADVERTISE_TYPE(EVENT_MA_READ_RANGE)
+PS_ADVERTISE_TYPE(EVENT_MA_WRITE_RANGE)
 
 /* Mark module initialization (optional) */
 DICE_MODULE_INIT()
@@ -45,6 +47,7 @@ DICE_MODULE_INIT()
 #define BITS          0
 #define uBITS         u8
 #define ma_FUNC_event ma_read_event
+#define ma_FUNC_range_event ma_read_range_event
 #define _tmpl_unmute  // --------------------------------------------------------
 _tmpl_map(nix, );
 _tmpl_map(UPCASE, _tmpl_upcase);
@@ -60,14 +63,20 @@ __tsan_init()
 {
 }
 
+_tmpl_begin(FUNC = [[read; write]]);
 void
-__tsan_write_range(void)
+__tsan_FUNC_range(void *addr, unsigned long size)
 {
+    struct ma_FUNC_range_event ev = {
+        .pc   = (INTERPOSE_PC),
+        .func = "FUNC_range",
+        .addr = addr,
+        .size = size,
+    };
+
+    PS_PUBLISH(INTERCEPT_EVENT, EV_TYPE(FUNC_range), &ev, 0);
 }
-void
-__tsan_read_range(void)
-{
-}
+_tmpl_end()
 
 /* empty vptr impl */
 void
