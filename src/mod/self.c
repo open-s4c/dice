@@ -39,7 +39,6 @@
 #endif
 #include <dice/chains/intercept.h>
 #include <dice/events/pthread.h>
-#include <dice/log.h>
 #include <dice/mempool.h>
 #include <dice/module.h>
 #include <dice/pubsub.h>

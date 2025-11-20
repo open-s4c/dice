@@ -34,7 +34,7 @@ foreach(SRC ${SRCS})
 
   add_library(${TARGET} SHARED ${SRC})
   target_link_libraries(${TARGET} PRIVATE dice dice.h)
-  target_compile_options(${TARGET} PRIVATE ${OPTIONS_${MODULE}})
+  target_compile_options(${TARGET} PRIVATE -fPIC ${OPTIONS_${MODULE}})
   set_target_properties(${TARGET} PROPERTIES PREFIX "")
   if(APPLE)
     # Allow unresolved symbols that will be provided by the sanitizer/runtime at
