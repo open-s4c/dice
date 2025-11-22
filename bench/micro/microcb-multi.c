@@ -1,7 +1,3 @@
-/*
- * Copyright (C) 2025 Huawei Technologies Co., Ltd.
- * SPDX-License-Identifier: 0BSD
- */
 #include <assert.h>
 #include <pthread.h>
 #include <unistd.h>
@@ -20,6 +16,20 @@ int y = 0;
 PS_SUBSCRIBE(CAPTURE_EVENT, EVENT_MA_AWRITE, {
     struct ma_awrite_event *ev = EVENT_PAYLOAD(ev);
     x += ev->val.u64;
+    y++;
+    return PS_STOP_CHAIN;
+})
+
+struct thread_state {
+    int x;
+};
+
+struct thread_state key_;
+
+PS_SUBSCRIBE(CAPTURE_EVENT, EVENT_MA_AREAD, {
+    struct ma_aread_event *ev  = EVENT_PAYLOAD(ev);
+    struct thread_state *state = SELF_TLS(md, &key_);
+    state->x += ev->val.u64;
     y++;
     return PS_STOP_CHAIN;
 })

@@ -9,6 +9,8 @@ MAKE=make
 REPO=$(readlink -f $(dirname "$0")/..)
 LOG=regression.log
 RESULTS=results.csv
+CURBUILD=$REPO/build
+BENCH=micro3
 
 # Number of repetitions of each TAG/CC/BENCHMARK combination
 REPEAT=5
@@ -69,6 +71,7 @@ help() {
 	echo " -u URL      Git repository URL (default \"$REPO\")"
 	echo " -r REPEAT   Number of repetitions (default \"$REPEAT\")"
 	echo " -f FILE     Results file (Default \"$RESULTS\")"
+	echo " -b BENCH    Micro benchmark selection (Default \"$BENCH\")"
 	echo " -h          This help message"
 	echo
 }
@@ -93,15 +96,19 @@ config() {
 
 build() {
 	DIR=$1
-	cmake --build "$DIR/build" -j \
-		-t dice  -t micro-dice \
-		-t micro -t micro2 -t micro3
+	cmake --build "$DIR/build" -j -t dice  -t $BENCH
 }
 
 run() {
 	DIR=$1
 	for i in $(seq 1 $REPEAT); do
-		$MAKE -C "$DIR/bench/micro" run process VERBOSE=1 FORCE=1
+		cp -r $REPO/bench/bench.mk $REPO/bench/common.mk $DIR/bench/
+		cp -r $REPO/bench/micro/Makefile $DIR/bench/micro/Makefile
+		$MAKE -C "$DIR/bench/micro" \
+			VERBOSE=1 FORCE=1 \
+			LIBPATH=$DIR/build/bench/micro \
+			BINDIR=$CURBUILD/bench/micro \
+			run process
 		cp "$DIR/bench/micro/work/results.csv" "$DIR/results-$i.csv"
 	done
 }
@@ -142,7 +149,7 @@ summary() {
 		done
 	done
 	cat $RESULTS \
-	| grep -E "(micro3|time_s)" \
+	| grep -E "($BENCH|time_s)" \
 	| cut -d, -f1,2,3,6 > $RESULTS.tmp
 	mv $RESULTS.tmp $RESULTS
 	echo
@@ -253,6 +260,10 @@ while [ $# -gt 0 ]; do
 	-r)
 		shift
 		REPEAT="$1"
+		;;
+	-b)
+		shift
+		BENCH="$1"
 		;;
 	-m)
 		shift

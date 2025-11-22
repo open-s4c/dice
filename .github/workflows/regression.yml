@@ -25,9 +25,16 @@ jobs:
           fetch-depth: 0
       - name: Ensure main was fetched
         run: git fetch --depth 1 origin main:main
+      - name: Configure benchmark with HEAD
+        run: cmake -Bbuild
+             -DCMAKE_C_COMPILER=${{ matrix.cc }}
+             -DCMAKE_BUILD_TYPE=Release
+      - name: Build benchmark with HEAD
+        run: cmake --build build -t micro3
       - name: Run performance regression tests
         run: scripts/regression.sh
              -c ${{ matrix.cc }}
+             -b micro3
              -t HEAD -t main
              run sum
       - name: Show results
