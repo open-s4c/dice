@@ -10,8 +10,11 @@ target_link_libraries(micro2 dice pthread)
 add_library(microcb.o OBJECT microcb.c)
 target_link_libraries(microcb.o dice.h)
 
+add_library(microtls.o OBJECT microcb-tls.c)
+target_link_libraries(microtls.o dice.h)
+
 set(MODS
-    microcb.o
+    dice.o
     dice-self.o
     # pthread library
     dice-pthread_create.o
@@ -30,8 +33,9 @@ set(MODS
 
 set(SLOT_dice-self 4)
 set(SLOT_dice-microcb 5)
+set(SLOT_dice-microtls 5)
 
-set(OBJS ${MODS} dice.o)
+set(OBJS ${MODS} microcb.o microtls.o)
 foreach(TARGET ${OBJS})
   get_filename_component(MOD ${TARGET} NAME_WLE)
   if(SLOT_${MOD})
@@ -41,14 +45,23 @@ foreach(TARGET ${OBJS})
 endforeach()
 
 add_library(micro-dice SHARED)
-target_link_libraries(micro-dice PUBLIC ${OBJS} dice-box.o pthread)
+target_link_libraries(micro-dice PUBLIC ${MODS} microcb.o dice-box.o pthread)
+
+add_library(micro-dice-tls SHARED)
+target_link_libraries(micro-dice-tls PUBLIC ${MODS} microtls.o dice-box.o
+                                            pthread)
 if(APPLE)
   target_link_libraries(micro-dice PRIVATE stdc++)
+  target_link_libraries(micro-dice-tls PRIVATE stdc++)
 endif()
 
 if(${ENABLE_SANITIZER})
   target_link_options(micro-dice PRIVATE ${LIBSAN_SHARED})
+  target_link_options(micro-dice-tls PRIVATE ${LIBSAN_SHARED})
 endif()
 
 add_executable(micro3 micro3.c)
 target_link_libraries(micro3 PUBLIC micro-dice)
+
+add_executable(micro4 micro4.c)
+target_link_libraries(micro4 PUBLIC micro-dice-tls)

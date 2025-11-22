@@ -36,6 +36,11 @@ DEP.micro3=	.summary.run
 RUN.micro3=	env $(PRFX)_LIBRARY_PATH=$(LIBPATH) $(BINDIR)/micro3
 PRO.micro3=	cat $(WORKDIR)/$*.run.log | $(FORMAT) >> $(WORKDIR)/results.csv
 
+TARGET+=	micro4
+DEP.micro4=	.summary.run
+RUN.micro4=	env $(PRFX)_LIBRARY_PATH=$(LIBPATH) $(BINDIR)/micro4
+PRO.micro4=	cat $(WORKDIR)/$*.run.log | $(FORMAT) >> $(WORKDIR)/results.csv
+
 # ------------------------------------------------------------------------------
 BENCHMK= ../bench.mk
 include $(BENCHMK)
