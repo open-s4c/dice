@@ -24,7 +24,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: Configure
-        run: cmake -S. -Bbuild
+        run: cmake -Bbuild
              -DCMAKE_INSTALL_PREFIX=/tmp/target
              -DCMAKE_C_COMPILER=${{ matrix.cfg.cc }}
              -DCMAKE_CXX_COMPILER=${{ matrix.cfg.cxx }}
@@ -53,7 +53,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: Configure
-        run: cmake -S. -Bbuild
+        run: cmake -Bbuild
              -DCMAKE_INSTALL_PREFIX=/tmp/target
              -DCMAKE_C_COMPILER=${{ matrix.cfg.cc }}
              -DCMAKE_CXX_COMPILER=${{ matrix.cfg.cxx }}
@@ -76,7 +76,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: Configure
-        run: cmake -S. -Bbuild
+        run: cmake -Bbuild
              -DDICE_SANITIZER=${{matrix.sanitizer}}
              -DCMAKE_C_COMPILER=gcc
              -DCMAKE_CXX_COMPILER=g++
@@ -94,7 +94,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: Configure
-        run: cmake -S. -Bbuild
+        run: cmake -Bbuild
              -DCMAKE_INSTALL_PREFIX=/tmp/target
              -DCMAKE_C_COMPILER=clang
              -DCMAKE_CXX_COMPILER=clang++
@@ -113,7 +113,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: Configure
-        run: cmake -S. -Bbuild
+        run: cmake -Bbuild
              -DCMAKE_INSTALL_PREFIX=/tmp/target
       - name: Build
         run: cmake --build build
