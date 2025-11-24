@@ -30,7 +30,7 @@ jobs:
         with:
           github-token: ${{ secrets.PAT }}
           script: |
-            const owner = ${{ env.OWNER }};
+            const owner = '${{ env.OWNER }}';
             const repo = '${{ matrix.dependant }}';
             const sha = '${{ github.sha }}';
             const attempt = '${{ github.run_attempt }}';
