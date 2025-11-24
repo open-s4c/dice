@@ -18,7 +18,7 @@ jobs:
         uses: peter-evans/repository-dispatch@v3
         with:
           token: ${{ secrets.PAT }}
-          repository: ${{ OWNER }}/${{ matrix.dependant }}
+          repository: ${{ env.OWNER }}/${{ matrix.dependant }}
           event-type: test-dice
           client-payload: >
             {
@@ -30,7 +30,7 @@ jobs:
         with:
           github-token: ${{ secrets.PAT }}
           script: |
-            const owner = ${{ OWNER }};
+            const owner = ${{ env.OWNER }};
             const repo = '${{ matrix.dependant }}';
             const sha = '${{ github.sha }}';
             const attempt = '${{ github.run_attempt }}';
