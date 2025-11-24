@@ -27,4 +27,4 @@ jobs:
         with:
           ref: ${{ github.sha }}
           repo: open-s4c/${{ matrix.dependant }}
-          token: ${{ secrets.PAT }}
+          repo-token: ${{ secrets.PAT }}
