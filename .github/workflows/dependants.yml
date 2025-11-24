@@ -36,8 +36,9 @@ jobs:
           script: |
             const owner = '${{ env.OWNER }}';
             const repo = '${{ matrix.dependant }}';
+            const dice_sha = '${{ github.sha }}'
             const attempt = '${{ github.run_attempt }}';
-            const checkName = `dice-${sha}-${attempt}`;
+            const checkName = `dice-${dice_sha}-${attempt}`;
             const maxRetries = 60;
             const interval = 10000;
             const refResponse = await github.rest.repos.getBranch({
