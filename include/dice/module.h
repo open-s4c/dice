@@ -101,14 +101,13 @@
                       err);                                                    \
     }
 
-/* PS_ADVERTISE macro registers the chain and type names in the pubsub. This is
+/* PS_ADVERTISE_CHAIN macro registers the chain name in the pubsub. This is
  * optional and only helpful for debugging.
  */
-#define PS_ADVERTISE(CHAIN, TYPE)                                              \
-    static void DICE_CTOR ps_advertise_##CHAIN##_##TYPE##_(void)               \
+#define PS_ADVERTISE_CHAIN(CHAIN)                                              \
+    static void DICE_CTOR ps_advertise_chain_##CHAIN##_(void)                  \
     {                                                                          \
         ps_register_chain(CHAIN, #CHAIN);                                      \
-        ps_register_type(TYPE, #TYPE);                                         \
     }
 
 /* PS_ADVERTISE_TYPE macro registers the event type name in the pubsub registry.
