@@ -111,7 +111,7 @@ corresponding to a thread being initialized is identified by
 Events are published in topics, which are called *chains* and are identified by
 an integer `chain_id`. Modules can subscribe for events published in a chain;
 subscriptions can be filtered by `type_id` or be triggered for any type of
-event using the special type ID `ANY_TYPE`.
+event using the special type ID `ANY_EVENT`.
 
 
 ## 2.2. Why Pubsub?
