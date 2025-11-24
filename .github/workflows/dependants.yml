@@ -3,6 +3,9 @@ on:
   - push
   - pull_request
 
+env:
+  OWNER: open-s4c
+
 jobs:
   run-dependant-actions:
     strategy:
@@ -11,19 +14,55 @@ jobs:
         dependant: [dice-rs]
     runs-on: ubuntu-latest
     steps:
-      - name: Trigger Project ${{ matrix.dependant }} workflow
+      - name: Trigger ${{ matrix.dependant }} workflow
         uses: peter-evans/repository-dispatch@v3
         with:
           token: ${{ secrets.PAT }}
-          repository: open-s4c/${{ matrix.dependant }}
+          repository: ${{ OWNER }}/${{ matrix.dependant }}
           event-type: test-dice
           client-payload: >
             {
-              "sha": "${{ github.sha }}"
+              "sha": "${{ github.sha }}",
+              "attempt": "${{ github.run_attempt }}"
             }
-      - name: Wait for ${{ matrix.dependant }} result
-        uses: lewagon/wait-on-check-action@v1.3.2
+      - name: Wait for ${{ matrix.dependant }} workflow
+        uses: actions/github-script@v7
         with:
-          ref: ${{ github.sha }}
-          repo: open-s4c/${{ matrix.dependant }}
-          repo-token: ${{ secrets.PAT }}
+          github-token: ${{ secrets.PAT }}
+          script: |
+            const owner = ${{ OWNER }};
+            const repo = '${{ matrix.dependant }}';
+            const sha = '${{ github.sha }}';
+            const attempt = '${{ github.run_attempt }}';
+            const checkId = `dice-${sha}-${attempt}`;
+            const maxRetries = 60;
+            const interval = 10000;
+
+            let check;
+            for (let i = 0; i < maxRetries; i++) {
+              const response = await github.rest.checks.listForRef({
+                owner,
+                repo,
+                ref: sha,
+                per_page: 100
+              });
+
+              check = response.data.check_runs.find(c => c.name === checkId);
+
+              if (check) {
+                if (check.status === 'completed') break;
+              }
+
+              console.log(`Waiting for check ${checkId} in ${repo}...`);
+              await new Promise(r => setTimeout(r, interval));
+            }
+
+            if (!check) {
+              throw new Error(`Check ${checkId} not found in ${repo}`);
+            }
+
+            console.log(`Check conclusion: ${check.conclusion}`);
+
+            if (check.conclusion !== 'success') {
+              throw new Error(`Downstream workflow failed in ${repo}`);
+            }
