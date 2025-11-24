@@ -1,7 +1,11 @@
 name: Test Dice dependant against the current branch
 on:
-  - push
-  - pull_request
+  push:
+    branches:
+    - main
+    tags:
+    - '**'
+  pull_request:
 
 env:
   OWNER: open-s4c
@@ -32,11 +36,16 @@ jobs:
           script: |
             const owner = '${{ env.OWNER }}';
             const repo = '${{ matrix.dependant }}';
-            const sha = '${{ github.sha }}';
             const attempt = '${{ github.run_attempt }}';
-            const checkId = `dice-${sha}-${attempt}`;
+            const checkName = `dice-${sha}-${attempt}`;
             const maxRetries = 60;
             const interval = 10000;
+            const refResponse = await github.rest.repos.getBranch({
+              owner,
+              repo,
+              branch: 'main'
+            });
+            const sha = refResponse.data.commit.sha;
 
             let check;
             for (let i = 0; i < maxRetries; i++) {
@@ -47,22 +56,22 @@ jobs:
                 per_page: 100
               });
 
-              check = response.data.check_runs.find(c => c.name === checkId);
+              check = response.data.check_runs.find(c => c.name === checkName);
 
               if (check) {
                 if (check.status === 'completed') break;
               }
 
-              console.log(`Waiting for check ${checkId} in ${repo}...`);
+              console.log(`Waiting for check ${checkName} in ${repo}...`);
               await new Promise(r => setTimeout(r, interval));
             }
 
             if (!check) {
-              throw new Error(`Check ${checkId} not found in ${repo}`);
+              throw new Error(`Check ${checkName} not found in ${repo}`);
             }
 
             console.log(`Check conclusion: ${check.conclusion}`);
 
             if (check.conclusion !== 'success') {
-              throw new Error(`Downstream workflow failed in ${repo}`);
+              throw new Error(`Downstream workflow failed in ${repo}\n${check.output.summary}`);
             }
