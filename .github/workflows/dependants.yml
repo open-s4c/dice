@@ -1,0 +1,30 @@
+name: Test Dice dependant against the current branch
+on:
+  - push
+  - pull_request
+
+jobs:
+  run-dependant-actions:
+    strategy:
+      fail-fast: false
+      matrix:
+        dependant: [dice-rs]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Project ${{ matrix.dependant }} workflow
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ secrets.PAT }}
+          repository: open-s4c/${{ matrix.dependant }}
+          event-type: test-dice
+          client-payload: >
+            {
+              "branch": "${{ github.ref_name }}",
+              "sha": "${{ github.sha }}"
+            }
+      - name: Wait for ${{ matrix.dependant }} result
+        uses: lewagon/wait-on-check-action@v1.3.2
+        with:
+          ref: ${{ github.sha }}
+          repo: open-s4c/${{ matrix.dependant }}
+          token: ${{ secrets.PAT }}
