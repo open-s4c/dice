@@ -1,4 +1,4 @@
-name: Test Dice dependant against the current branch
+name: Test Dice dependants against the current branch
 on:
   push:
     branches:
@@ -29,6 +29,12 @@ jobs:
               "sha": "${{ github.sha }}",
               "attempt": "${{ github.run_attempt }}"
             }
+      - name: Create empty check
+        uses: LouisBrunner/checks-action@v2.0.0
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          name: ${{ matrix.dependant }}-${{ github.event.client_payload.sha }}-${{ github.event.client_payload.attempt }}
+          status: expected
       - name: Wait for ${{ matrix.dependant }} result
         uses: lewagon/wait-on-check-action@v1.3.2
         with:
