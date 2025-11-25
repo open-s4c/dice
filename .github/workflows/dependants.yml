@@ -36,7 +36,7 @@ jobs:
       - name: Trigger ${{ matrix.dependant }} workflow
         uses: peter-evans/repository-dispatch@v3
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.PAT }}
           repository: ${{ env.OWNER }}/${{ matrix.dependant }}
           event-type: test-dice
           client-payload: >
