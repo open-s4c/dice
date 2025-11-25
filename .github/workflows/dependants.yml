@@ -20,17 +20,23 @@ jobs:
     permissions:
       checks: write
     env:
-      CHECK_NAME: ${{ matrix.dependant }}-${{ github.sha }}-${{ github.run_attempt }}
+      COMMIT: ${{
+        github.event.pull_request.head.sha ||
+        github.event.push.head_commit.id ||
+        format('Event type is neither "push" nor "pull_request".')
+      }}
+      CHECK_NAME: ${{ matrix.dependant }}-${{ env.COMMIT }}-${{ github.run_attempt }}
     steps:
       - name: Trigger ${{ matrix.dependant }} workflow
         uses: peter-evans/repository-dispatch@v3
         with:
-          token: ${{ secrets.PAT }}
+          token: ${{ secrets.GITHUB_TOKEN }}
           repository: ${{ env.OWNER }}/${{ matrix.dependant }}
           event-type: test-dice
           client-payload: >
             {
               "sha": "${{ github.sha }}",
+              "commit": "${{ env.COMMIT }}"
               "check_name": "${{ env.CHECK_NAME }}"
             }
       - name: Create empty check
@@ -42,7 +48,7 @@ jobs:
       - name: Wait for ${{ matrix.dependant }} result
         uses: lewagon/wait-on-check-action@v1.4.1
         with:
-          ref: ${{ github.sha }}
+          ref: ${{ env.COMMIT }}
           check-name: ${{ env.CHECK_NAME }}
-          repo-token: ${{ secrets.PAT }}
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
           wait-interval: 10
