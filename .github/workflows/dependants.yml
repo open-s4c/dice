@@ -34,7 +34,7 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           name: ${{ matrix.dependant }}-${{ github.event.client_payload.sha }}-${{ github.event.client_payload.attempt }}
-          status: expected
+          status: in_progress
       - name: Wait for ${{ matrix.dependant }} result
         uses: lewagon/wait-on-check-action@v1.3.2
         with:
