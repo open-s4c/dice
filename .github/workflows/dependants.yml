@@ -19,6 +19,8 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       checks: write
+    env:
+      CHECK_NAME: ${{ matrix.dependant }}-${{ github.sha }}-${{ github.run_attempt }}
     steps:
       - name: Trigger ${{ matrix.dependant }} workflow
         uses: peter-evans/repository-dispatch@v3
@@ -35,12 +37,12 @@ jobs:
         uses: LouisBrunner/checks-action@v2.0.0
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          name: ${{ matrix.dependant }}-${{ github.event.client_payload.sha }}-${{ github.event.client_payload.attempt }}
+          name: ${{ env.CHECK_NAME }}
           status: in_progress
       - name: Wait for ${{ matrix.dependant }} result
         uses: lewagon/wait-on-check-action@v1.3.2
         with:
           ref: ${{ github.sha }}
-          check-name: ${{ matrix.dependant }}-${{ github.sha }}-${{ github.run_attempt }}
+          check-name: ${{ env.CHECK_NAME }}
           repo-token: ${{ secrets.PAT }}
           wait-interval: 10
