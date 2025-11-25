@@ -31,7 +31,7 @@ jobs:
           client-payload: >
             {
               "sha": "${{ github.sha }}",
-              "attempt": "${{ github.run_attempt }}"
+              "check_name": "${{ env.CHECK_NAME }}"
             }
       - name: Create empty check
         uses: LouisBrunner/checks-action@v2.0.0
