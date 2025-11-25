@@ -29,51 +29,10 @@ jobs:
               "sha": "${{ github.sha }}",
               "attempt": "${{ github.run_attempt }}"
             }
-      - name: Wait for ${{ matrix.dependant }} workflow
-        uses: actions/github-script@v7
+      - name: Wait for ${{ matrix.dependant }} result
+        uses: lewagon/wait-on-check-action@v1.3.2
         with:
-          github-token: ${{ secrets.PAT }}
-          script: |
-            const owner = '${{ env.OWNER }}';
-            const repo = '${{ matrix.dependant }}';
-            const dice_sha = '${{ github.sha }}'
-            const attempt = '${{ github.run_attempt }}';
-            const checkName = `dice-${dice_sha}-${attempt}`;
-            const maxRetries = 60;
-            const interval = 10000;
-            const refResponse = await github.rest.repos.getBranch({
-              owner,
-              repo,
-              branch: 'main'
-            });
-            const sha = refResponse.data.commit.sha;
-
-            let check;
-            for (let i = 0; i < maxRetries; i++) {
-              const response = await github.rest.checks.listForRef({
-                owner,
-                repo,
-                ref: sha,
-                per_page: 100
-              });
-
-              check = response.data.check_runs.find(c => c.output.title === checkName);
-
-              if (check) {
-                console.log(`Check found but not completed: ${check.status}`);
-                if (check.status === 'completed') break;
-              }
-
-              console.log(`Waiting for check ${checkName} in ${repo}...`);
-              await new Promise(r => setTimeout(r, interval));
-            }
-
-            if (!check) {
-              throw new Error(`Check ${checkName} not found in ${repo}`);
-            }
-
-            console.log(`Check conclusion: ${check.conclusion}`);
-
-            if (check.conclusion !== 'success') {
-              throw new Error(`Downstream workflow failed in ${repo}\n${check.output.summary}`);
-            }
+          ref: ${{ github.sha }}
+          check-name: ${{ matrix.dependant }}-${{ github.sha }}-${{ github.run_attempt }}
+          repo-token: ${{ secrets.PAT }}
+          wait-interval: 10
