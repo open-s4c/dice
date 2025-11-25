@@ -21,7 +21,6 @@ jobs:
       checks: write
     env:
       COMMIT: ${{ github.event.pull_request.head.sha || github.event.push.head_commit.id }}
-      CHECK_NAME: ${{ matrix.dependant }}-${{ env.COMMIT }}-${{ github.run_attempt }}
     steps:
       - name: Check if COMMIT is available
         run: |
@@ -30,6 +29,10 @@ jobs:
             exit 1
           fi
         shell: bash
+      - name: Set CHECK_NAME
+        id: set-check-name
+        run: |
+          echo "CHECK_NAME=${{ matrix.dependant }}-${{ env.COMMIT }}-${{ github.run_attempt }}" >> $GITHUB_ENV
       - name: Trigger ${{ matrix.dependant }} workflow
         uses: peter-evans/repository-dispatch@v3
         with:
