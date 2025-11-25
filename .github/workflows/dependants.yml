@@ -57,9 +57,10 @@ jobs:
                 per_page: 100
               });
 
-              check = response.data.check_runs.find(c => c.name === checkName);
+              check = response.data.check_runs.find(c => c.output.title === checkName);
 
               if (check) {
+                console.log(`Check found but not completed: ${check.status}`);
                 if (check.status === 'completed') break;
               }
 
