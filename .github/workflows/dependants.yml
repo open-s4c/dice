@@ -57,5 +57,5 @@ jobs:
           ref: ${{ env.COMMIT }}
           check-name: ${{ env.CHECK_NAME }}
           repo-token: ${{ secrets.GITHUB_TOKEN }}
-          allowed-conclusions: success,skipped,failure,cancelled
+          allowed-conclusions: [success,skipped,failure,cancelled]
           wait-interval: 10
