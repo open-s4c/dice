@@ -40,7 +40,7 @@ jobs:
           name: ${{ env.CHECK_NAME }}
           status: in_progress
       - name: Wait for ${{ matrix.dependant }} result
-        uses: lewagon/wait-on-check-action@v1.3.2
+        uses: lewagon/wait-on-check-action@v1.4.1
         with:
           ref: ${{ github.sha }}
           check-name: ${{ env.CHECK_NAME }}
