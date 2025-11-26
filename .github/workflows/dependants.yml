@@ -56,12 +56,10 @@ jobs:
             const checkName = '${{ env.CHECK_NAME }}';
             const check = checkRuns.data.check_runs.find(cr => cr.name === checkName);
             if (check) {
-              await github.rest.checks.update({
+              await github.rest.checks.rerequest({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                check_run_id: check.id,
-                status: 'in_progress',
-                conclusion: null
+                check_run_id: check.id
               });
               core.setOutput('check_id', check.id);
             }
@@ -72,7 +70,7 @@ jobs:
         with:
           token: ${{ steps.generate-token.outputs.token }}
           name: '${{ env.CHECK_NAME }}'
-          status: in_progress
+          status: queued
       - name: Trigger ${{ matrix.dependant }} workflow
         uses: peter-evans/repository-dispatch@v3
         with:
