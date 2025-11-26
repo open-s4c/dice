@@ -55,15 +55,14 @@ jobs:
             const checkName = '${{ env.CHECK_NAME }}';
             const check = checkRuns.data.check_runs.find(cr => cr.name === checkName);
             if (check) {
+              await github.rest.checks.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                check_run_id: check.id,
+                status: 'in_progress'
+              });
               core.setOutput('check_id', check.id);
             }
-      - name: Reuse check
-        if: steps.get_check.outputs.check_id != ''
-        uses: LouisBrunner/checks-action@v2.0.0
-        with:
-          token: ${{ steps.generate-token.outputs.token }}
-          check_id: '${{ steps.get_check.outputs.check_id }}'
-          status: in_progress
       - name: Create empty check
         if: steps.get_check.outputs.check_id == ''
         id: create-check
