@@ -32,13 +32,13 @@ jobs:
       - name: Set CHECK_NAME
         id: set-check-name
         run: |
-          echo "CHECK_NAME= Test ${{ matrix.dependant }} against commit ${{ env.COMMIT }} (attempt ${{ github.run_attempt }})" >> $GITHUB_ENV
+          echo "CHECK_NAME=Test ${{ matrix.dependant }} against commit ${{ env.COMMIT }} (attempt ${{ github.run_attempt }})" >> $GITHUB_ENV
       - name: Create empty check
         id: create-check
         uses: LouisBrunner/checks-action@v2.0.0
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          name: ${{ env.CHECK_NAME }}
+          name: '${{ env.CHECK_NAME }}'
           status: in_progress
       - name: Trigger ${{ matrix.dependant }} workflow
         uses: peter-evans/repository-dispatch@v3
