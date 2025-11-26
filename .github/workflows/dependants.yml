@@ -43,7 +43,7 @@ jobs:
           app-id: ${{ secrets.APP_ID }}
           private-key: ${{ secrets.APP_PRIVATE_KEY }}
       - name: Get check id
-        uses: actions/github-script@v6
+        uses: actions/github-script@v8
         id: get_check
         with:
           github-token: ${{ steps.generate-token.outputs.token }}
@@ -56,6 +56,7 @@ jobs:
             const checkName = '${{ env.CHECK_NAME }}';
             const check = checkRuns.data.check_runs.find(cr => cr.name === checkName);
             if (check) {
+              console.log(Object.keys(github.rest.checks));
               await github.rest.checks.rerequest({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
