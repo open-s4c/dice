@@ -57,6 +57,13 @@ jobs:
             if (check) {
               core.setOutput('check_id', check.id);
             }
+      - name: Reuse check
+        if: steps.get_check.outputs.check_id != ''
+        uses: LouisBrunner/checks-action@v2.0.0
+        with:
+          token: ${{ steps.generate-token.outputs.token }}
+          check_id: '${{ steps.get_check.outputs.check_id }}'
+          status: in_progress
       - name: Create empty check
         if: steps.get_check.outputs.check_id == ''
         id: create-check
