@@ -50,7 +50,7 @@ jobs:
             {
               "sha": "${{ github.sha }}",
               "commit": "${{ env.COMMIT }}",
-              "check_id": "${{ steps.generate-token.outputs.check_id }}"
+              "check_id": "${{ steps.create-check.outputs.check_id }}"
             }
       - name: Wait for ${{ matrix.dependant }} result
         uses: lewagon/wait-on-check-action@v1.4.1
