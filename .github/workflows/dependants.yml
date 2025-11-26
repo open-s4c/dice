@@ -47,7 +47,7 @@ jobs:
         id: get_check
         with:
           script: |
-            const checkRuns = await github.checks.listForRef({
+            const checkRuns = await github.rest.checks.listForRef({
               owner: context.repo.owner,
               repo: context.repo.repo,
               ref: '${{ env.COMMIT }}',
