@@ -49,12 +49,11 @@ jobs:
       - name: Trigger ${{ matrix.dependant }} workflow
         uses: peter-evans/repository-dispatch@v3
         with:
-          token: ${{ secrets.PAT }}
+          token: ${{ steps.generate-token.outputs.token }}
           repository: ${{ env.OWNER }}/${{ matrix.dependant }}
           event-type: test-dice
           client-payload: >
             {
-              "sha": "${{ github.sha }}",
               "commit": "${{ env.COMMIT }}",
               "check_id": "${{ steps.create-check.outputs.check_id }}"
             }
