@@ -37,7 +37,9 @@ jobs:
         id: generate-token
         uses: actions/create-github-app-token@v2
         with:
-          repositories: [dice, '${{ matrix.dependant }}']
+          repositories: |
+            dice
+            ${{ matrix.dependant }}
           app-id: ${{ secrets.APP_ID }}
           private-key: ${{ secrets.APP_PRIVATE_KEY }}
       - name: Create empty check
