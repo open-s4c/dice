@@ -33,11 +33,17 @@ jobs:
         id: set-check-name
         run: |
           echo "CHECK_NAME=Test ${{ matrix.dependant }} against commit ${{ env.COMMIT }} (attempt ${{ github.run_attempt }})" >> $GITHUB_ENV
+      - name: Generate a token
+        id: generate-token
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ secrets.APP_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
       - name: Create empty check
         id: create-check
         uses: LouisBrunner/checks-action@v2.0.0
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ steps.generate-token.outputs.token }}
           name: '${{ env.CHECK_NAME }}'
           status: in_progress
       - name: Trigger ${{ matrix.dependant }} workflow
