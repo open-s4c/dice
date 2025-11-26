@@ -50,9 +50,9 @@ jobs:
             const checkRuns = await github.checks.listForRef({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              ref: ${{ env.COMMIT }},
+              ref: '${{ env.COMMIT }}',
             });
-            const checkName = ${{ env.CHECK_NAME }};
+            const checkName = '${{ env.CHECK_NAME }}';
             const check = checkRuns.data.check_runs.find(cr => cr.name === checkName);
             if (check) {
               core.setOutput('check_id', check.id);
