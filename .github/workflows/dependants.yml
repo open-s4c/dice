@@ -58,7 +58,7 @@ jobs:
               core.setOutput('check_id', check.id);
             }
       - name: Create empty check
-        if: steps.get_check.outputs.check_id != ''
+        if: steps.get_check.outputs.check_id == ''
         id: create-check
         uses: LouisBrunner/checks-action@v2.0.0
         with:
