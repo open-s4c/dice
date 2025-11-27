@@ -35,9 +35,12 @@ endif()
 set(INCL_pthread_rwlock ${INCL_pthread_create})
 set(FUNS_pthread_rwlock
     pthread_rwlock_rdlock pthread_rwlock_tryrdlock pthread_rwlock_wrlock
-    pthread_rwlock_trywrlock pthread_rwlock_unlock
-    pthread_spin_lock pthread_spin_trylock pthread_spin_unlock)
+    pthread_rwlock_trywrlock pthread_rwlock_unlock)
 
+if(__GLIBC__)
+  set(FUNS_pthread_rwlock ${FUNS_pthread_rwlock} pthread_spin_lock pthread_spin_trylock 
+                          pthread_spin_unlock)
+endif()
 if(NOT APPLE)
   set(FUNS_pthread_rwlock ${FUNS_pthread_rwlock} pthread_rwlock_timedrdlock
                           pthread_rwlock_timedwrlock)

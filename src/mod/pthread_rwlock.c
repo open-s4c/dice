@@ -130,53 +130,55 @@ INTERPOSE(int, pthread_rwlock_unlock, pthread_rwlock_t *lock)
     return ev.ret;
 }
 
-INTERPOSE(int, pthread_spin_lock, pthread_spinlock_t *lock)
-{
-    struct pthread_spin_lock_event ev = {
-        .pc   = INTERPOSE_PC,
-        .lock = lock,
-        .ret  = 0,
-        .func = REAL_FUNC(pthread_spin_lock),
-    };
+#if defined(__GLIBC__)
+    INTERPOSE(int, pthread_spin_lock, pthread_spinlock_t *lock)
+    {
+        struct pthread_spin_lock_event ev = {
+            .pc   = INTERPOSE_PC,
+            .lock = lock,
+            .ret  = 0,
+            .func = REAL_FUNC(pthread_spin_lock),
+        };
 
-    metadata_t md = {0};
-    PS_PUBLISH(INTERCEPT_BEFORE, EVENT_SPIN_LOCK, &ev, &md);
-    ev.ret = ev.func(lock);
-    PS_PUBLISH(INTERCEPT_AFTER, EVENT_SPIN_LOCK, &ev, &md);
-    return ev.ret;
-}
+        metadata_t md = {0};
+        PS_PUBLISH(INTERCEPT_BEFORE, EVENT_SPIN_LOCK, &ev, &md);
+        ev.ret = ev.func(lock);
+        PS_PUBLISH(INTERCEPT_AFTER, EVENT_SPIN_LOCK, &ev, &md);
+        return ev.ret;
+    }
 
-INTERPOSE(int, pthread_spin_trylock, pthread_spinlock_t *lock)
-{
-    struct pthread_spin_trylock_event ev = {
-        .pc   = INTERPOSE_PC,
-        .lock = lock,
-        .ret  = 0,
-        .func = REAL_FUNC(pthread_spin_trylock),
-    };
+    INTERPOSE(int, pthread_spin_trylock, pthread_spinlock_t *lock)
+    {
+        struct pthread_spin_trylock_event ev = {
+            .pc   = INTERPOSE_PC,
+            .lock = lock,
+            .ret  = 0,
+            .func = REAL_FUNC(pthread_spin_trylock),
+        };
 
-    metadata_t md = {0};
-    PS_PUBLISH(INTERCEPT_BEFORE, EVENT_SPIN_TRYLOCK, &ev, &md);
-    ev.ret = ev.func(lock);
-    PS_PUBLISH(INTERCEPT_AFTER, EVENT_SPIN_TRYLOCK, &ev, &md);
-    return ev.ret;
-}
+        metadata_t md = {0};
+        PS_PUBLISH(INTERCEPT_BEFORE, EVENT_SPIN_TRYLOCK, &ev, &md);
+        ev.ret = ev.func(lock);
+        PS_PUBLISH(INTERCEPT_AFTER, EVENT_SPIN_TRYLOCK, &ev, &md);
+        return ev.ret;
+    }
 
-INTERPOSE(int, pthread_spin_unlock, pthread_spinlock_t *lock)
-{
-    struct pthread_spin_unlock_event ev = {
-        .pc   = INTERPOSE_PC,
-        .lock = lock,
-        .ret  = 0,
-        .func = REAL_FUNC(pthread_spin_unlock),
-    };
+    INTERPOSE(int, pthread_spin_unlock, pthread_spinlock_t *lock)
+    {
+        struct pthread_spin_unlock_event ev = {
+            .pc   = INTERPOSE_PC,
+            .lock = lock,
+            .ret  = 0,
+            .func = REAL_FUNC(pthread_spin_unlock),
+        };
 
-    metadata_t md = {0};
-    PS_PUBLISH(INTERCEPT_BEFORE, EVENT_SPIN_UNLOCK, &ev, &md);
-    ev.ret = ev.func(lock);
-    PS_PUBLISH(INTERCEPT_AFTER, EVENT_SPIN_UNLOCK, &ev, &md);
-    return ev.ret;
-}
+        metadata_t md = {0};
+        PS_PUBLISH(INTERCEPT_BEFORE, EVENT_SPIN_UNLOCK, &ev, &md);
+        ev.ret = ev.func(lock);
+        PS_PUBLISH(INTERCEPT_AFTER, EVENT_SPIN_UNLOCK, &ev, &md);
+        return ev.ret;
+    }
+#endif
 
 /* Advertise event type names for debugging messages */
 PS_ADVERTISE_TYPE(EVENT_PTHREAD_RWLOCK_RDLOCK)
@@ -186,9 +188,11 @@ PS_ADVERTISE_TYPE(EVENT_PTHREAD_RWLOCK_WRLOCK)
 PS_ADVERTISE_TYPE(EVENT_PTHREAD_RWLOCK_TIMEDWRLOCK)
 PS_ADVERTISE_TYPE(EVENT_PTHREAD_RWLOCK_TRYWRLOCK)
 PS_ADVERTISE_TYPE(EVENT_PTHREAD_RWLOCK_UNLOCK)
-PS_ADVERTISE_TYPE(EVENT_PTHREAD_SPIN_LOCK)
-PS_ADVERTISE_TYPE(EVENT_PTHREAD_SPIN_TRYLOCK)
-PS_ADVERTISE_TYPE(EVENT_PTHREAD_SPIN_UNLOCK)
+#if defined(__GLIBC__)
+    PS_ADVERTISE_TYPE(EVENT_PTHREAD_SPIN_LOCK)
+    PS_ADVERTISE_TYPE(EVENT_PTHREAD_SPIN_TRYLOCK)
+    PS_ADVERTISE_TYPE(EVENT_PTHREAD_SPIN_UNLOCK)
+#endif
 
 /* Mark module initialization (optional) */
 DICE_MODULE_INIT()
