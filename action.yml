@@ -1,0 +1,46 @@
+name: 'Publish job results'
+description: 'Publish job results to Dice check'
+inputs:
+  status:
+    description: 'Job status'
+    required: true
+  title:
+    description: 'Job title'
+    required: true
+  summary:
+    description: 'Job summary'
+    required: true
+  commit:
+    description: 'Dice commit'
+    required: true
+  check_id:
+    description: 'The check ID for updating the test status'
+    required: true
+  app_id:
+    description: 'The GitHub App ID for generating a token'
+    required: true
+  private_key:
+    description: 'The GitHub App Private Key for generating a token'
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Generate GitHub Token
+      id: generate-token
+      uses: actions/create-github-app-token@v2
+      with:
+        repositories: dice
+        app-id: ${{ inputs.app_id }}
+        private-key: ${{ inputs.private_key }}
+    - name: Publish Check Status
+      uses: LouisBrunner/checks-action@v2.0.0
+      with:
+        repo: ${{ inputs.repo }}
+        sha: ${{ inputs.commit }}
+        token: ${{ main.generate-token.outputs.token }}
+        check_id: ${{ inputs.check_id }}
+        conclusion: ${{ inputs.status }}
+        status: completed
+        output: |
+          {"title":"${{ inputs.title }}","summary":"${{ inputs.summary }}"}
