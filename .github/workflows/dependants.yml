@@ -1,0 +1,69 @@
+name: Test Dice dependants against the current branch
+on:
+  push:
+    branches:
+    - main
+    tags:
+    - '**'
+  pull_request:
+
+env:
+  OWNER: open-s4c
+
+jobs:
+  run-dependant-actions:
+    strategy:
+      fail-fast: false
+      matrix:
+        dependant: [dice-rs]
+    runs-on: ubuntu-latest
+    permissions:
+      checks: write
+    env:
+      COMMIT: ${{ github.event.pull_request.head.sha || github.event.push.head_commit.id }}
+    steps:
+      - name: Check if COMMIT is available
+        run: |
+          if [ -z "${{ env.COMMIT }}" ]; then
+            echo "Error: COMMIT not found. This workflow only supports push or pull_request events." >&2
+            exit 1
+          fi
+        shell: bash
+      - name: Set CHECK_NAME
+        id: set-check-name
+        run: |
+          echo "CHECK_NAME=Test ${{ matrix.dependant }} against commit ${{ env.COMMIT }}" >> $GITHUB_ENV
+      - name: Generate a token
+        id: generate-token
+        uses: actions/create-github-app-token@v2
+        with:
+          repositories: |
+            dice
+            ${{ matrix.dependant }}
+          app-id: ${{ secrets.APP_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+      - name: Create empty check
+        id: create-check
+        uses: LouisBrunner/checks-action@v2.0.0
+        with:
+          token: ${{ steps.generate-token.outputs.token }}
+          name: '${{ env.CHECK_NAME }}'
+          status: queued
+      - name: Trigger ${{ matrix.dependant }} workflow
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ steps.generate-token.outputs.token }}
+          repository: ${{ env.OWNER }}/${{ matrix.dependant }}
+          event-type: test-dice
+          client-payload: >
+            {
+              "commit": "${{ env.COMMIT }}",
+              "check_id": "${{ steps.create-check.outputs.check_id }}"
+            }
+      - name: Wait for ${{ matrix.dependant }} result
+        uses: lewagon/wait-on-check-action@v1.4.1
+        with:
+          ref: ${{ env.COMMIT }}
+          check-name: '${{ env.CHECK_NAME }}'
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          wait-interval: 10
