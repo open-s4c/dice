@@ -42,38 +42,7 @@ jobs:
             ${{ matrix.dependant }}
           app-id: ${{ secrets.APP_ID }}
           private-key: ${{ secrets.APP_PRIVATE_KEY }}
-      - name: Get check id
-        uses: actions/github-script@v8
-        id: get_check
-        with:
-          github-token: ${{ steps.generate-token.outputs.token }}
-          script: |
-            const checkRuns = await github.rest.checks.listForRef({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              ref: '${{ env.COMMIT }}',
-            });
-            const checkName = '${{ env.CHECK_NAME }}';
-            const check = checkRuns.data.check_runs.find(cr => cr.name === checkName);
-            if (check) {
-              console.log(check);
-              await github.rest.checks.rerequestRun({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                check_run_id: check.id,
-                status: 'in_progress',
-              });
-              console.log(check);
-              await github.rest.checks.update({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                check_run_id: check.id,
-              });
-              console.log(check);
-              core.setOutput('check_id', check.id);
-            }
       - name: Create empty check
-        if: steps.get_check.outputs.check_id == ''
         id: create-check
         uses: LouisBrunner/checks-action@v2.0.0
         with:
@@ -89,7 +58,7 @@ jobs:
           client-payload: >
             {
               "commit": "${{ env.COMMIT }}",
-              "check_id": "${{ steps.get_check.outputs.check_id || steps.create-check.outputs.check_id }}"
+              "check_id": "${{ steps.create-check.outputs.check_id }}"
             }
       - name: Wait for ${{ matrix.dependant }} result
         uses: lewagon/wait-on-check-action@v1.4.1
