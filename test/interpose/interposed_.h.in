@@ -60,6 +60,9 @@ $_map(MM_ARGS_pthread_mutex_trylock, mutex);
 $_map(MM_RETURN_pthread_mutex_timedlock, int);
 $_map(MM_PARAMS_pthread_mutex_timedlock, pthread_mutex_t *mutex, const struct timespec *timeout);
 $_map(MM_ARGS_pthread_mutex_timedlock, mutex, timeout);
+$_map(MM_RETURN_pthread_mutex_clocklock, int);
+$_map(MM_PARAMS_pthread_mutex_clocklock, pthread_mutex_t *mutex, clockid_t clock_id, const struct timespec *abstime);
+$_map(MM_ARGS_pthread_mutex_clocklock, mutex, clock_id, abstime);
 $_dl; // -----------------------------------------------------------------------
 $_dl; // rwlock
 $_dl; // -----------------------------------------------------------------------
@@ -85,6 +88,18 @@ $_map(MM_RETURN_pthread_rwlock_unlock, int);
 $_map(MM_PARAMS_pthread_rwlock_unlock, pthread_rwlock_t *lock);
 $_map(MM_ARGS_pthread_rwlock_unlock, lock);
 $_dl; // -----------------------------------------------------------------------
+$_dl; // spinlock
+$_dl; // -----------------------------------------------------------------------
+$_map(MM_RETURN_pthread_spin_lock, int);
+$_map(MM_PARAMS_pthread_spin_lock, pthread_spinlock_t *lock);
+$_map(MM_ARGS_pthread_spin_lock, lock);
+$_map(MM_RETURN_pthread_spin_trylock, int);
+$_map(MM_PARAMS_pthread_spin_trylock, pthread_spinlock_t *lock);
+$_map(MM_ARGS_pthread_spin_trylock, lock);
+$_map(MM_RETURN_pthread_spin_unlock, int);
+$_map(MM_PARAMS_pthread_spin_unlock, pthread_spinlock_t *lock);
+$_map(MM_ARGS_pthread_spin_unlock, lock);
+$_dl; // -----------------------------------------------------------------------
 $_dl; // cond
 $_dl; // -----------------------------------------------------------------------
 $_map(MM_RETURN_pthread_cond_wait, int);
@@ -99,6 +114,9 @@ $_map(MM_ARGS_pthread_cond_broadcast, cond);
 $_map(MM_RETURN_pthread_cond_timedwait, int);
 $_map(MM_PARAMS_pthread_cond_timedwait, pthread_cond_t *cond, pthread_mutex_t *mutex, const struct timespec *abstime);
 $_map(MM_ARGS_pthread_cond_timedwait, cond, mutex, abstime);
+$_map(MM_RETURN_pthread_cond_clockwait, int);
+$_map(MM_PARAMS_pthread_cond_clockwait, pthread_cond_t *cond, pthread_mutex_t *mutex, clockid_t clock_id, const struct timespec *abstime);
+$_map(MM_ARGS_pthread_cond_clockwait, cond, mutex, clock_id, abstime);
 $_dl; // -----------------------------------------------------------------------
 $_dl; // semaphore
 $_dl; // -----------------------------------------------------------------------

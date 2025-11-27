@@ -28,6 +28,11 @@ set(TSAN_SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/tsan.c)
 file(GLOB SRCS *.c)
 list(REMOVE_ITEM SRCS ${TSAN_SOURCE})
 list(APPEND SRCS ${TSAN_C})
+
+if(APPLE)
+list(REMOVE_ITEM SRCS ${CMAKE_CURRENT_SOURCE_DIR}/pthread_spinlock.c)
+endif()
+
 foreach(SRC ${SRCS})
   get_filename_component(MODULE ${SRC} NAME_WLE)
   set(TARGET dice-${MODULE})

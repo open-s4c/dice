@@ -16,6 +16,11 @@ set(FUNS_pthread_create pthread_create pthread_join)
 set(INCL_pthread_mutex ${INCL_pthread_create})
 set(FUNS_pthread_mutex pthread_mutex_lock pthread_mutex_unlock
                        pthread_mutex_trylock)
+
+if(HAVE_PTHREAD_CLOCKLOCK_CLOCKWAIT)
+  set(FUNS_pthread_mutex ${FUNS_pthread_mutex} pthread_mutex_clocklock)
+endif()
+
 if(NOT APPLE)
   set(FUNS_pthread_mutex ${FUNS_pthread_mutex} pthread_mutex_timedlock)
 endif()
@@ -23,6 +28,10 @@ endif()
 set(INCL_pthread_cond ${INCL_pthread_create})
 set(FUNS_pthread_cond pthread_cond_wait pthread_cond_timedwait
                       pthread_cond_signal pthread_cond_broadcast)
+
+if(HAVE_PTHREAD_CLOCKLOCK_CLOCKWAIT)
+  set(FUNS_pthread_cond ${FUNS_pthread_cond} pthread_cond_clockwait)
+endif()
 
 set(INCL_pthread_rwlock ${INCL_pthread_create})
 set(FUNS_pthread_rwlock
@@ -32,6 +41,9 @@ set(FUNS_pthread_rwlock
 if(NOT APPLE)
   set(FUNS_pthread_rwlock ${FUNS_pthread_rwlock} pthread_rwlock_timedrdlock
                           pthread_rwlock_timedwrlock)
+  set(INCL_pthread_spinlock ${INCL_pthread_create})
+  set(FUNS_pthread_spinlock ${FUNS_pthread_spinlock} pthread_spin_lock pthread_spin_trylock 
+                          pthread_spin_unlock)  
 endif()
 
 set(INCL_sem '<dice/events/semaphore.h>')
@@ -67,7 +79,7 @@ else()
 endif()
 
 if(NOT APPLE)
-  set(MODS ${MODS} memcpy)
+  set(MODS ${MODS} memcpy pthread_spinlock)
 endif()
 
 # generate interpose test source
