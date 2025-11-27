@@ -78,11 +78,35 @@ INTERPOSE(int, pthread_mutex_unlock, pthread_mutex_t *mutex)
     return ev.ret;
 }
 
+#if defined(HAVE_PTHREAD_CLOCKWAIT_LOCK)
+INTERPOSE(int, pthread_mutex_clocklock, pthread_mutex_t *restrict mutex,
+          clockid_t clock_id, const struct timespec *restrict abstime)
+{
+    struct pthread_mutex_clocklock_event ev = {
+        .pc       = INTERPOSE_PC,
+        .mutex    = mutex,
+        .clock_id = clock_id,
+        .abstime  = abstime,
+        .ret      = 0,
+        .func     = REAL_FUNCP(pthread_mutex_clocklock),
+    };
+
+    metadata_t md = {0};
+    PS_PUBLISH(INTERCEPT_BEFORE, EVENT_MUTEX_CLOCKLOCK, &ev, &md);
+    ev.ret = ev.func(mutex, clock_id, abstime);
+    PS_PUBLISH(INTERCEPT_AFTER, EVENT_MUTEX_CLOCKLOCK, &ev, &md);
+    return ev.ret;
+}
+#endif
+
 /* Advertise event type names for debugging messages */
 PS_ADVERTISE_TYPE(EVENT_PTHREAD_MUTEX_LOCK)
 PS_ADVERTISE_TYPE(EVENT_PTHREAD_MUTEX_TIMEDLOCK)
 PS_ADVERTISE_TYPE(EVENT_PTHREAD_MUTEX_TRYLOCK)
 PS_ADVERTISE_TYPE(EVENT_PTHREAD_MUTEX_UNLOCK)
+#ifdef HAVE_PTHREAD_CLOCKWAIT_LOCK
+PS_ADVERTISE_TYPE(EVENT_PTHREAD_MUTEX_CLOCKLOCK)
+#endif
 
 /* Mark module initialization (optional) */
 DICE_MODULE_INIT()
