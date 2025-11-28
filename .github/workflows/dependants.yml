@@ -26,7 +26,7 @@ jobs:
       - name: Check if COMMIT is available
         run: |
           if [ -z "${{ env.COMMIT }}" ]; then
-            echo "Error: COMMIT not found in event ${{ env.event }}." >&2
+            echo "Error: COMMIT not found in event ${{ github.event }}." >&2
             exit 1
           fi
         shell: bash
