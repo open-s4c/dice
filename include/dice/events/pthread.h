@@ -212,7 +212,7 @@ struct pthread_rwlock_unlock_event {
     int (*func)(pthread_rwlock_t *);
 };
 
-#if(__GLIBC__)
+#if defined(__GLIBC__) && (__GLIBC__ >= 2) && (__GLIBC_MINOR__ >= 30)
     struct pthread_spin_lock_event {
         const void *pc;
         pthread_spinlock_t *lock;

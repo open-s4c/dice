@@ -78,7 +78,7 @@ INTERPOSE(int, pthread_cond_broadcast, pthread_cond_t *cond)
     return ev.ret;
 }
 
-#ifdef HAVE_PTHREAD_CLOCKWAIT_LOCK
+#if defined(HAVE_PTHREAD_CLOCKWAIT_LOCK)
 INTERPOSE(int, pthread_cond_clockwait, pthread_cond_t *restrict cond,
           pthread_mutex_t *restrict mutex, clockid_t clock_id,
           const struct timespec *restrict abstime)
