@@ -212,25 +212,27 @@ struct pthread_rwlock_unlock_event {
     int (*func)(pthread_rwlock_t *);
 };
 
-struct pthread_spin_lock_event {
-    const void *pc;
-    pthread_spinlock_t *lock;
-    int ret;
-    int (*func)(pthread_spinlock_t *);
-};
+#if(__GLIBC__)
+    struct pthread_spin_lock_event {
+        const void *pc;
+        pthread_spinlock_t *lock;
+        int ret;
+        int (*func)(pthread_spinlock_t *);
+    };
 
-struct pthread_spin_trylock_event {
-    const void *pc;
-    pthread_spinlock_t *lock;
-    int ret;
-    int (*func)(pthread_spinlock_t *);
-};
+    struct pthread_spin_trylock_event {
+        const void *pc;
+        pthread_spinlock_t *lock;
+        int ret;
+        int (*func)(pthread_spinlock_t *);
+    };
 
-struct pthread_spin_unlock_event {
-    const void *pc;
-    pthread_spinlock_t *lock;
-    int ret;
-    int (*func)(pthread_spinlock_t *);
-};
+    struct pthread_spin_unlock_event {
+        const void *pc;
+        pthread_spinlock_t *lock;
+        int ret;
+        int (*func)(pthread_spinlock_t *);
+    };
+#endif
 
 #endif /* DICE_PTHREAD_H */
