@@ -89,6 +89,7 @@ install(TARGETS dice DESTINATION lib)
 add_library(dice.o OBJECT ${SRCS} ${DISPATCH_SRCS})
 target_link_libraries(dice.o PUBLIC dice.h)
 target_compile_options(dice.o PRIVATE -fPIC)
+target_compile_definitions(dice.o PRIVATE MEMPOOL_SIZE=${DICE_MEMPOOL_SIZE})
 
 # dice-box.o - OBJECT library that seals pubsub, registry, rbtree, and mempool
 # interfaces, disabling callbacks when linked with dice.o. This allows the LTO
