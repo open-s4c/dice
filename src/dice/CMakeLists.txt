@@ -103,6 +103,7 @@ target_link_libraries(dice-box.o PRIVATE dice.h)
 add_library(dice-mempool-box.o OBJECT mempool-box.c)
 target_compile_options(dice-mempool-box.o PRIVATE -fPIC)
 target_link_libraries(dice-mempool-box.o PRIVATE dice.h)
+target_compile_definitions(dice PRIVATE MEMPOOL_SIZE=${DICE_MEMPOOL_SIZE})
 
 # dice-pubsub-box.o - OBJECT library that seals pubsub, registry and rbtree
 # interfaces, disabling callbacks when linked with dice.o.
