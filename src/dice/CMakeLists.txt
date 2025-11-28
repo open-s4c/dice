@@ -79,7 +79,6 @@ set(SRCS mempool.c rbtree.c pubsub.c registry.c memset.c ${DISPATCH_C})
 # the internal initialization with chain 0 (CHAIN_CONTROL).
 add_library(dice SHARED ${SRCS})
 target_link_libraries(dice PUBLIC dice.h pthread)
-target_compile_definitions(dice PRIVATE MEMPOOL_SIZE=${DICE_MEMPOOL_SIZE})
 install(TARGETS dice DESTINATION lib)
 
 # dice.o - OBJECT library providing interface for plugin modules and builtin
@@ -89,7 +88,6 @@ install(TARGETS dice DESTINATION lib)
 add_library(dice.o OBJECT ${SRCS} ${DISPATCH_SRCS})
 target_link_libraries(dice.o PUBLIC dice.h)
 target_compile_options(dice.o PRIVATE -fPIC)
-target_compile_definitions(dice.o PRIVATE MEMPOOL_SIZE=${DICE_MEMPOOL_SIZE})
 
 # dice-box.o - OBJECT library that seals pubsub, registry, rbtree, and mempool
 # interfaces, disabling callbacks when linked with dice.o. This allows the LTO
@@ -103,7 +101,6 @@ target_link_libraries(dice-box.o PRIVATE dice.h)
 add_library(dice-mempool-box.o OBJECT mempool-box.c)
 target_compile_options(dice-mempool-box.o PRIVATE -fPIC)
 target_link_libraries(dice-mempool-box.o PRIVATE dice.h)
-target_compile_definitions(dice PRIVATE MEMPOOL_SIZE=${DICE_MEMPOOL_SIZE})
 
 # dice-pubsub-box.o - OBJECT library that seals pubsub, registry and rbtree
 # interfaces, disabling callbacks when linked with dice.o.

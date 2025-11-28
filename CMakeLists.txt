@@ -77,6 +77,7 @@ set(DICE_LOG_LEVEL
 set(DICE_MEMPOOL_SIZE
     "1024 * 1024 * 200"
     CACHE STRING "Dice mempool size")
+add_compile_definitions(MEMPOOL_SIZE=${DICE_MEMPOOL_SIZE})
 
 add_subdirectory(scripts)
 add_subdirectory(deps)
