@@ -6,6 +6,7 @@ on:
     tags:
     - '**'
   pull_request:
+  workflow_dispatch:
 
 env:
   OWNER: open-s4c
@@ -20,12 +21,12 @@ jobs:
     permissions:
       checks: write
     env:
-      COMMIT: ${{ github.event.pull_request.head.sha || github.event.push.head_commit.id }}
+      COMMIT: ${{ github.event.pull_request.head.sha || github.event.push.head_commit.id || github.sha }}
     steps:
       - name: Check if COMMIT is available
         run: |
           if [ -z "${{ env.COMMIT }}" ]; then
-            echo "Error: COMMIT not found. This workflow only supports push or pull_request events." >&2
+            echo "Error: COMMIT not found in event ${{ github.event }}." >&2
             exit 1
           fi
         shell: bash
