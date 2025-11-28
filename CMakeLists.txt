@@ -73,6 +73,11 @@ set(DICE_LOG_LEVEL
     ""
     CACHE STRING "Log level log_* functions (FATAL|INFO|DEBUG)")
 
+# MEMPOOL_SIZE
+set(DICE_MEMPOOL_SIZE
+    "1024 * 1024 * 200"
+    CACHE STRING "Dice mempool size")
+
 add_subdirectory(scripts)
 add_subdirectory(deps)
 add_subdirectory(include)

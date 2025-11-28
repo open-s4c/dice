@@ -79,6 +79,7 @@ set(SRCS mempool.c rbtree.c pubsub.c registry.c memset.c ${DISPATCH_C})
 # the internal initialization with chain 0 (CHAIN_CONTROL).
 add_library(dice SHARED ${SRCS})
 target_link_libraries(dice PUBLIC dice.h pthread)
+target_compile_definitions(dice PRIVATE MEMPOOL_SIZE=${DICE_MEMPOOL_SIZE})
 install(TARGETS dice DESTINATION lib)
 
 # dice.o - OBJECT library providing interface for plugin modules and builtin
