@@ -78,11 +78,37 @@ INTERPOSE(int, pthread_cond_broadcast, pthread_cond_t *cond)
     return ev.ret;
 }
 
+#if defined(HAVE_PTHREAD_CLOCKWAIT_LOCK)
+INTERPOSE(int, pthread_cond_clockwait, pthread_cond_t *restrict cond,
+          pthread_mutex_t *restrict mutex, clockid_t clock_id,
+          const struct timespec *restrict abstime)
+{
+    struct pthread_cond_clockwait_event ev = {
+        .pc       = INTERPOSE_PC,
+        .cond     = cond,
+        .mutex    = mutex,
+        .clock_id = clock_id,
+        .abstime  = abstime,
+        .ret      = 0,
+        .func     = REAL_FUNCP(pthread_cond_clockwait),
+    };
+
+    metadata_t md = {0};
+    PS_PUBLISH(INTERCEPT_BEFORE, EVENT_COND_CLOCKWAIT, &ev, &md);
+    ev.ret = ev.func(cond, mutex, clock_id, abstime);
+    PS_PUBLISH(INTERCEPT_AFTER, EVENT_COND_CLOCKWAIT, &ev, &md);
+    return ev.ret;
+}
+#endif
+
 /* Advertise event type names for debugging messages */
 PS_ADVERTISE_TYPE(EVENT_PTHREAD_COND_WAIT)
 PS_ADVERTISE_TYPE(EVENT_PTHREAD_COND_TIMEDWAIT)
 PS_ADVERTISE_TYPE(EVENT_PTHREAD_COND_SIGNAL)
 PS_ADVERTISE_TYPE(EVENT_PTHREAD_COND_BROADCAST)
+#ifdef HAVE_PTHREAD_CLOCKWAIT_LOCK
+PS_ADVERTISE_TYPE(EVENT_PTHREAD_COND_CLOCKWAIT)
+#endif
 
 /* Mark module initialization (optional) */
 DICE_MODULE_INIT()
