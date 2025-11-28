@@ -5,10 +5,8 @@ on:
     - main
     tags:
     - '**'
-  pull_request:
   workflow_dispatch:
   pull_request_target:
-    types: [labeled]
 
 env:
   OWNER: open-s4c
@@ -25,6 +23,11 @@ jobs:
     env:
       COMMIT: ${{ github.event.pull_request.head.sha || github.event.push.head_commit.id || github.sha }}
     steps:
+      - name: Check if the pull request is safe to test
+        if: ${{ github.event_name == 'pull_request_target' && !contains(github.event.pull_request.labels.*.name, 'safe to test') }}
+        run: |
+          echo "Error: pull request not labeled with 'safe to test'." >&2
+          exit 1
       - name: Check if COMMIT is available
         run: |
           if [ -z "${{ env.COMMIT }}" ]; then
