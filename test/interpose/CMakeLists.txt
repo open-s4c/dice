@@ -17,7 +17,7 @@ set(INCL_pthread_mutex ${INCL_pthread_create})
 set(FUNS_pthread_mutex pthread_mutex_lock pthread_mutex_unlock
                        pthread_mutex_trylock)
 
-if(UNIX)
+if(UNIX AND NOT APPLE)
     set(FUNS_pthread_mutex ${FUNS_pthread_mutex} pthread_mutex_clocklock)
 endif()
 if(NOT APPLE)
@@ -28,7 +28,7 @@ set(INCL_pthread_cond ${INCL_pthread_create})
 set(FUNS_pthread_cond pthread_cond_wait pthread_cond_timedwait
                       pthread_cond_signal pthread_cond_broadcast)
 
-if(UNIX)
+if(UNIX AND NOT APPLE)
   set(FUNS_pthread_cond ${FUNS_pthread_cond} pthread_cond_clockwait)
 endif()
 
@@ -37,7 +37,7 @@ set(FUNS_pthread_rwlock
     pthread_rwlock_rdlock pthread_rwlock_tryrdlock pthread_rwlock_wrlock
     pthread_rwlock_trywrlock pthread_rwlock_unlock)
 
-if(UNIX)
+if(UNIX AND NOT APPLE)
   set(FUNS_pthread_rwlock ${FUNS_pthread_rwlock} pthread_spin_lock pthread_spin_trylock 
                           pthread_spin_unlock)
 endif()
