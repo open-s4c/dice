@@ -23,8 +23,6 @@ static size_t sizes_[] = {32,
                           8 * 1024 * 1024};
 #define NSTACKS (sizeof(sizes_) / sizeof(size_t))
 
-#define MEMPOOL_SIZE (1024 * 1024 * 200)
-
 static unsigned int
 bucketize_(size_t size)
 {
