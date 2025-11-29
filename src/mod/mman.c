@@ -29,7 +29,7 @@ INTERPOSE(void *, mmap, void *addr, size_t length, int prot, int flags, int fd,
     return ev.ret;
 }
 
-#if !defined(__APPLE__)
+#if !defined(__APPLE__) && !defined(__OHOS__)
 INTERPOSE(void *, mmap64, void *addr, size_t length, int prot, int flags, int fd,
           off_t offset)
 {
