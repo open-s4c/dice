@@ -29,6 +29,11 @@ else()
   add_compile_options(-D_GNU_SOURCE)
 endif()
 
+# fix OHOS build
+if(CMAKE_SYSTEM_NAME MATCHES "OHOS")
+  add_compile_options(-Wno-unused-command-line-argument)
+endif()
+
 find_package(libvsync 4.2 CONFIG)
 if(NOT libvsync_DIR)
   set(CMAKE_FIND_ROOT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/deps/libvsync)
