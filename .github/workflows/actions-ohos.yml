@@ -1,0 +1,31 @@
+name: Build Dice for OHOS
+on:
+  - push
+  - pull_request
+
+env:
+  REGISTRY: ghcr.io
+
+jobs:
+  ohos-build:
+    strategy:
+      matrix:
+        build_type: [ "Debug", "Release" ]
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Setup OpenHarmony SDK
+        id: setup_sdk
+        uses: openharmony-rs/setup-ohos-sdk@v0.2.4
+        with:
+          version: "6.0"
+          fixup-path: true
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Configure
+        run: cmake -Bbuild
+             --toolchain ${{ steps.setup_sdk.outputs.ohos_sdk_native }}/build/cmake/ohos.toolchain.cmake
+             -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
+
+      - name: Build
+        run: cmake --build build
