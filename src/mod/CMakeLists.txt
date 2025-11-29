@@ -72,6 +72,7 @@ foreach(SRC ${SRCS})
   endforeach()
 endforeach()
 
+target_link_libraries(dice-wrap_memset PRIVATE dice-memcpy)
 target_link_libraries(dice-self PRIVATE pthread)
 target_link_libraries(dice-self.o PUBLIC pthread)
 if(APPLE)
