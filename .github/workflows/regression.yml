@@ -29,17 +29,31 @@ jobs:
         run: cmake -Bbuild
              -DCMAKE_C_COMPILER=${{ matrix.cc }}
              -DCMAKE_BUILD_TYPE=Release
+
       - name: Build benchmark with HEAD
-        run: cmake --build build -t micro3
-      - name: Run performance regression tests
+        run: cmake --build build -t micro3 -t micro4
+
+      - name: Run micro3 regression test
         run: scripts/regression.sh
              -c ${{ matrix.cc }}
              -b micro3
              -t HEAD -t main
              run sum
-      - name: Show results
+      - name: Show micro3 results
         run: cat results.csv
-      - name: Ensure HEAD is not slower than main
+      - name: Ensure HEAD is not slower than main on micro3
         run: scripts/regression.sh check HEAD
+
+      - name: Run micro4 regression test
+        run: scripts/regression.sh
+             -c ${{ matrix.cc }}
+             -b micro4
+             -t HEAD -t main
+             run sum
+      - name: Show micro4 results
+        run: cat results.csv
+      - name: Ensure HEAD is not slower than main on micro4
+        run: scripts/regression.sh check HEAD
+
       - run: cd work-HEAD-${{ matrix.cc }} && git rev-parse --short HEAD
       - run: cd work-main-${{ matrix.cc }} && git rev-parse --short HEAD

@@ -42,11 +42,14 @@
 #include <dice/mempool.h>
 #include <dice/module.h>
 #include <dice/pubsub.h>
-#include <dice/rbtree.h>
 #include <dice/self.h>
 #include <vsync/atomic.h>
 #include <vsync/spinlock/caslock.h>
 #include <vsync/stack/quack.h>
+
+#ifndef container_of
+    #define container_of(A, T, M) ((T *)((((size_t)(A)) - offsetof(T, M))))
+#endif
 
 /* self object represents each thread in the CAPTURE chains. */
 struct self {
@@ -55,7 +58,11 @@ struct self {
     uint64_t osid;  // OS-specific thread identifier
     pthread_t ptid; // pthread-specific thread identifier
     thread_id id;   // Dice thread identifier \in 1..MAX_UINT64-1
-    struct rbtree tls;
+    struct {
+        struct tls_item *items;
+        size_t size;
+        size_t cap;
+    } tls;
     int guard;
     bool retired;
 };
@@ -63,7 +70,6 @@ struct self {
 /* tls_item is a memory object allocated in the thread-local storage (tls) */
 struct tls_item {
     uintptr_t key;
-    struct rbnode node;
     struct tls_dtor dtor;
     void *ptr;
 };
@@ -74,32 +80,68 @@ static void cleanup_threads_(pthread_t id);
 // tls items
 // -----------------------------------------------------------------------------
 
-static int
-tls_cmp_(const struct rbnode *a, const struct rbnode *b)
-{
-    const struct tls_item *ea = container_of(a, struct tls_item, node);
-    const struct tls_item *eb = container_of(b, struct tls_item, node);
-    return ea->key > eb->key ? 1 : ea->key < eb->key ? -1 : 0;
-}
-
 static void
 tls_init_(struct self *self)
 {
-    rbtree_init(&self->tls, tls_cmp_);
+    self->tls.cap   = 1024;
+    self->tls.size  = 0;
+    self->tls.items = mempool_alloc(sizeof(struct tls_item) * self->tls.cap);
+    if (self->tls.items == NULL)
+        log_fatal("could not allocate self->tls");
 }
 
 static void
 tls_fini_(struct self *self)
 {
-    while (self->tls.root) {
-        struct rbnode *node = self->tls.root;
-        rbtree_remove(&self->tls, node);
-
-        struct tls_item *item = container_of(node, struct tls_item, node);
-        assert(item->ptr);
+    for (size_t i = 0; i < self->tls.size; i++) {
+        struct tls_item *item = &self->tls.items[i];
         if (item->dtor.free)
             item->dtor.free(item->dtor.arg, item->ptr);
-        mempool_free(item);
+        item->ptr = NULL;
+    }
+    self->tls.size = 0;
+
+    // we cannot guarantee the main thread won't ever come back, so we keep the
+    // pool active to the end of the program
+    if (self->id != MAIN_THREAD) {
+        self->tls.cap = 0;
+        mempool_free(self->tls.items);
+    }
+}
+
+static struct tls_item *
+tls_find_(struct self *self, uintptr_t key)
+{
+    for (size_t i = 0; i < self->tls.size; i++) {
+        struct tls_item *item = &self->tls.items[i];
+        if (item->key == key)
+            return item;
+    }
+    return NULL;
+}
+
+static void
+tls_add_(struct self *self, struct tls_item item)
+{
+    assert(self->tls.cap > self->tls.size);
+    self->tls.items[self->tls.size++] = item;
+}
+
+static void
+tls_del_(struct self *self, uintptr_t key)
+{
+    for (size_t i = 0; i < self->tls.size; i++) {
+        struct tls_item *item = &self->tls.items[i];
+        if (item->key == key) {
+            if (item->dtor.free)
+                item->dtor.free(item->dtor.arg, item->ptr);
+
+            if (self->tls.size > 1 && i < self->tls.size - 1)
+                self->tls.items[i] = self->tls.items[self->tls.size - 1];
+
+            self->tls.size--;
+            return;
+        }
     }
 }
 
@@ -125,18 +167,10 @@ DICE_HIDE void *
 self_tls_get_(metadata_t *md, uintptr_t item_key)
 {
     struct self *self = (struct self *)md;
-
-    // should never be called before the self initialization
     assert(self != NULL);
 
-    struct tls_item key = {.key = item_key};
-    struct rbnode *item = rbtree_find(&self->tls, &key.node);
-
-    if (!item)
-        return NULL;
-
-    struct tls_item *i = container_of(item, struct tls_item, node);
-    return i->ptr;
+    struct tls_item *item = tls_find_(self, item_key);
+    return item ? item->ptr : NULL;
 }
 
 DICE_HIDE void
@@ -144,43 +178,24 @@ self_tls_set_(metadata_t *md, uintptr_t item_key, void *ptr,
               struct tls_dtor dtor)
 {
     struct self *self = (struct self *)md;
-
-    // should never be called before the self initialization
     assert(self != NULL);
 
-    struct tls_item key = {.key = item_key};
-    struct rbnode *item = rbtree_find(&self->tls, &key.node);
-    struct tls_item *i  = NULL;
-
-    if (ptr == NULL && item == NULL)
-        return; // nothing to do
-
-    if (item) {
-        i = container_of(item, struct tls_item, node);
-        if (i->dtor.free)
-            i->dtor.free(i->dtor.arg, i->ptr);
-
-        // remove node if ptr == NULL
-        if (ptr == NULL) {
-            rbtree_remove(&self->tls, &key.node);
-            mempool_free(i);
-            return;
-        }
-
-        // we can reuse the same node (already in the tree)
-        i->ptr  = ptr;
-        i->dtor = dtor;
-    } else {
-        i = mempool_alloc(sizeof(struct tls_item));
-        if (i == NULL)
-            log_fatal("mempool out of memory");
-
-        memset(i, 0, sizeof(struct tls_item));
-        i->key  = item_key;
-        i->ptr  = ptr;
-        i->dtor = dtor;
-        rbtree_insert(&self->tls, &i->node);
+    if (ptr == NULL) {
+        tls_del_(self, item_key);
+        return;
     }
+
+    struct tls_item *old = tls_find_(self, item_key);
+
+    struct tls_item item = {
+        .key  = item_key,
+        .dtor = dtor,
+        .ptr  = ptr,
+    };
+    if (old)
+        *old = item;
+    else
+        tls_add_(self, item);
 }
 
 static void
@@ -411,8 +426,8 @@ get_self_(void)
     // terminating the thread. When the latter happens, we need to look for
     // the thread in the retired stack.
 
-    // Since pthread_self ids can be reused, we use the pair (ptid,osid) ids as
-    // unique identifier.
+    // Since pthread_self ids can be reused, we use the pair (ptid,osid) ids
+    // as unique identifier.
 
     struct self *self = thread_cache_get_();
     if (likely(self))

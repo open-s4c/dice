@@ -1,10 +1,6 @@
 # Copyright (C) 2025 Huawei Technologies Co., Ltd.                             #
 # SPDX-License-Identifier: 0BSD                                                #
 
-add_executable(rbtree_test rbtree_test.c rbtree.c)
-target_link_libraries(rbtree_test PUBLIC dice.h)
-add_test(NAME rbtree_test COMMAND rbtree_test)
-
 # ------------------------------------------------------------------------------
 # dispatchers generation
 # ------------------------------------------------------------------------------
@@ -71,7 +67,7 @@ set(DISPATCH_SRCS ${DISPATCH_SRCS} ${DISPATCH_GENERATED})
 # ------------------------------------------------------------------------------
 # dice libraries
 # ------------------------------------------------------------------------------
-set(SRCS mempool.c rbtree.c pubsub.c registry.c memset.c ${DISPATCH_C})
+set(SRCS mempool.c pubsub.c registry.c memset.c ${DISPATCH_C})
 
 # dice (libdice.so) - SHARED library providing interface for plugin modules.
 # Only contains the core components mempool and pubsub. This library gets
@@ -89,10 +85,10 @@ add_library(dice.o OBJECT ${SRCS} ${DISPATCH_SRCS})
 target_link_libraries(dice.o PUBLIC dice.h)
 target_compile_options(dice.o PRIVATE -fPIC)
 
-# dice-box.o - OBJECT library that seals pubsub, registry, rbtree, and mempool
+# dice-box.o - OBJECT library that seals pubsub, registry, and mempool
 # interfaces, disabling callbacks when linked with dice.o. This allows the LTO
 # steps to be more aggressive.
-add_library(dice-box.o OBJECT pubsub-box.c mempool-box.c rbtree.c)
+add_library(dice-box.o OBJECT pubsub-box.c mempool-box.c)
 target_compile_definitions(dice-box.o PRIVATE DICE_HIDE_ALL)
 target_compile_options(dice-box.o PRIVATE -fPIC)
 target_link_libraries(dice-box.o PRIVATE dice.h)
@@ -102,9 +98,9 @@ add_library(dice-mempool-box.o OBJECT mempool-box.c)
 target_compile_options(dice-mempool-box.o PRIVATE -fPIC)
 target_link_libraries(dice-mempool-box.o PRIVATE dice.h)
 
-# dice-pubsub-box.o - OBJECT library that seals pubsub, registry and rbtree
-# interfaces, disabling callbacks when linked with dice.o.
-add_library(dice-pubsub-box.o OBJECT pubsub-box.c rbtree.c)
+# dice-pubsub-box.o - OBJECT library that seals pubsub and registry interfaces,
+# disabling callbacks when linked with dice.o.
+add_library(dice-pubsub-box.o OBJECT pubsub-box.c)
 target_compile_definitions(dice-pubsub-box.o PRIVATE DICE_HIDE_ALL)
 target_compile_options(dice-pubsub-box.o PRIVATE -fPIC)
 target_link_libraries(dice-pubsub-box.o PRIVATE dice.h)
@@ -134,7 +130,7 @@ if(${DICE_COVERAGE})
 endif()
 
 if(${ENABLE_SANITIZER})
-  set(TARGETS rbtree_test dice.o dice)
+  set(TARGETS dice.o dice)
   foreach(TARGET ${TARGETS})
     target_compile_options(${TARGET} PRIVATE ${LIBSAN_C_FLAGS})
     target_link_options(${TARGET} PUBLIC ${LIBSAN_LD_FLAGS})

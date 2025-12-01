@@ -41,8 +41,6 @@ right building blocks when writing interceptors or subscribers.
   should prefer `mempool_alloc/realloc/free` over `malloc` to avoid reentrancy.
 - `now.h`: monotonic time helpers (`now`, `in_sec`, `to_timespec`) for
   benchmarks or diagnostics.
-- `rbtree.h`: minimal intrusive red-black tree wrapper used by Self and other
-  components that need ordered maps.
 
 ## Interposition and Diagnostics
 
