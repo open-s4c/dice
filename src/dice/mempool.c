@@ -177,9 +177,8 @@ mempool_aligned_alloc_(size_t alignment, size_t n)
         mp->pool.next += size;
         mp->allocated += size;
     }
-    out:
-        caslock_release(&mp->lock);
-
+out:
+    caslock_release(&mp->lock);
     if (likely(e != NULL)) {
         void *result = (void*)(((size_t)e->data + sizeof(entry_t *) + alignment - 1) & ~(alignment - 1));
         *((entry_t **)result - 1) = e;
