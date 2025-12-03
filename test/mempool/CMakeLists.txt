@@ -12,3 +12,7 @@ add_test(NAME mempool-realloc-growth-test COMMAND mempool_realloc_growth_test)
 add_executable(mempool_alignment_test mempool_alignment_test.c)
 target_link_libraries(mempool_alignment_test PRIVATE dice.h dice.o)
 add_test(NAME mempool-alignment-test COMMAND mempool_alignment_test)
+
+add_executable(mempool_align_free_test mempool_align_free_test.c)
+target_link_libraries(mempool_align_free_test PRIVATE dice.h dice.o)
+add_test(NAME mempool-align-free-test COMMAND mempool_align_free_test)

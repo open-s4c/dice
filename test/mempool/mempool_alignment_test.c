@@ -10,8 +10,6 @@
 #include <dice/ensure.h>
 #include <dice/mempool.h>
 
-void *mempool_aligned_alloc(size_t alignment, size_t size);
-
 int
 main(void)
 {

@@ -22,6 +22,7 @@ static size_t sizes_[] = {32,
                           4 * 1024 * 1024,
                           8 * 1024 * 1024};
 #define NSTACKS (sizeof(sizes_) / sizeof(size_t))
+#define HEADER_SIZE (sizeof(entry_t) + sizeof(entry_t *))
 
 static unsigned int
 bucketize_(size_t size)
@@ -126,12 +127,11 @@ mempool_free_(void *ptr)
     mempool_t *mp = &mp_;
     assert(ptr);
     entry_t *e      = *((entry_t **)ptr - 1);
-    size_t size     = e->size + sizeof(entry_t);
+    size_t size     = e->size + HEADER_SIZE;
     unsigned bucket = bucketize_(size);
     size            = sizes_[bucket];
     entry_t **stack = &mp->stack[bucket];
 
-    // Mempool is used from rogue thread, serialization is necessary
     caslock_acquire(&mp->lock);
     mp->allocated -= size;
     assert(stack);
@@ -152,7 +152,7 @@ mempool_aligned_alloc_(size_t alignment, size_t n)
     assert(alignment && !(alignment & (alignment - 1)));
     mempool_t *mp   = &mp_;
     entry_t *e      = NULL;
-    size_t size     = n + sizeof(entry_t) + sizeof(entry_t *) + alignment - 1;
+    size_t size     = n + HEADER_SIZE + alignment - 1;
     unsigned bucket = bucketize_(size);
     size            = sizes_[bucket];
     entry_t **stack = &mp->stack[bucket];
@@ -174,14 +174,14 @@ mempool_aligned_alloc_(size_t alignment, size_t n)
     if (mp->pool.capacity >= mp->pool.next + size) {
         e       = (entry_t *)(mp->pool.memory + mp->pool.next);
         e->next = NULL;
-        e->size = n;
+        e->size = n + alignment - 1;
         mp->pool.next += size;
         mp->allocated += size;
     }
 out:
     caslock_release(&mp->lock);
     if (likely(e != NULL)) {
-        void *result = (void*)(((size_t)e->data + sizeof(entry_t *) + alignment - 1) & ~(alignment - 1));
+        void *result = (void*)(((size_t)e + HEADER_SIZE + alignment - 1) & ~(alignment - 1));
         *((entry_t **)result - 1) = e;
         return result;
     }
