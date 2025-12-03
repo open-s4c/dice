@@ -84,12 +84,74 @@ DICE_MODULE_INIT({
     caslock_release(&mp_.lock);
 })
 
+DICE_HIDE void
+mempool_free_(void *ptr);
+DICE_HIDE void *
+mempool_aligned_alloc_(size_t alignment, size_t n);
+
 DICE_HIDE void *
 mempool_alloc_(size_t n)
 {
+    return mempool_aligned_alloc_(1, n);
+}
+
+DICE_WEAK void *
+mempool_alloc(size_t n)
+{
+    return mempool_alloc_(n);
+}
+
+DICE_HIDE void *
+mempool_realloc_(void *ptr, size_t size)
+{
+    void *p = mempool_alloc_(size);
+    if (!p || !ptr)
+        return p;
+    entry_t *e = (entry_t *)ptr - 1;
+    size       = e->size < size ? e->size : size;
+    memcpy(p, ptr, size);
+    mempool_free_(ptr);
+    return p;
+}
+
+DICE_WEAK void *
+mempool_realloc(void *ptr, size_t size)
+{
+    return mempool_realloc_(ptr, size);
+}
+
+DICE_HIDE void
+mempool_free_(void *ptr)
+{
+    mempool_t *mp = &mp_;
+    assert(ptr);
+    entry_t *e      = *((entry_t **)ptr - 1);
+    size_t size     = e->size + sizeof(entry_t);
+    unsigned bucket = bucketize_(size);
+    size            = sizes_[bucket];
+    entry_t **stack = &mp->stack[bucket];
+
+    // Mempool is used from rogue thread, serialization is necessary
+    caslock_acquire(&mp->lock);
+    mp->allocated -= size;
+    assert(stack);
+    e->next = *stack;
+    *stack  = e;
+    caslock_release(&mp->lock);
+}
+
+DICE_WEAK void
+mempool_free(void *ptr)
+{
+    return mempool_free_(ptr);
+}
+
+DICE_HIDE void *
+mempool_aligned_alloc_(size_t alignment, size_t n)
+{
     mempool_t *mp   = &mp_;
     entry_t *e      = NULL;
-    size_t size     = n + sizeof(entry_t);
+    size_t size     = n + sizeof(entry_t) + sizeof(entry_t *) + alignment - 1;
     unsigned bucket = bucketize_(size);
     size            = sizes_[bucket];
     entry_t **stack = &mp->stack[bucket];
@@ -115,58 +177,19 @@ mempool_alloc_(size_t n)
         mp->pool.next += size;
         mp->allocated += size;
     }
-out:
-    caslock_release(&mp->lock);
-    return e ? e->data : NULL;
+    out:
+        caslock_release(&mp->lock);
+
+    if (likely(e != NULL)) {
+        void *result = (void*)((size_t)e->data + sizeof(entry_t *) + alignment - 1 & ~(alignment - 1));
+        *((entry_t **)result - 1) = e;
+        return result;
+    }
+    return NULL;
 }
 
 DICE_WEAK void *
-mempool_alloc(size_t n)
+mempool_aligned_alloc(size_t alignment, size_t n)
 {
-    return mempool_alloc_(n);
-}
-
-DICE_HIDE void *
-mempool_realloc_(void *ptr, size_t size)
-{
-    void *p = mempool_alloc(size);
-    if (!p || !ptr)
-        return p;
-    entry_t *e = (entry_t *)ptr - 1;
-    size       = e->size < size ? e->size : size;
-    memcpy(p, ptr, size);
-    mempool_free(ptr);
-    return p;
-}
-
-DICE_WEAK void *
-mempool_realloc(void *ptr, size_t size)
-{
-    return mempool_realloc_(ptr, size);
-}
-
-DICE_HIDE void
-mempool_free_(void *ptr)
-{
-    mempool_t *mp = &mp_;
-    assert(ptr);
-    entry_t *e      = (entry_t *)ptr - 1;
-    size_t size     = e->size + sizeof(entry_t);
-    unsigned bucket = bucketize_(size);
-    size            = sizes_[bucket];
-    entry_t **stack = &mp->stack[bucket];
-
-    // Mempool is used from rogue thread, serialization is necessary
-    caslock_acquire(&mp->lock);
-    mp->allocated -= size;
-    assert(stack);
-    e->next = *stack;
-    *stack  = e;
-    caslock_release(&mp->lock);
-}
-
-DICE_WEAK void
-mempool_free(void *ptr)
-{
-    return mempool_free_(ptr);
+    return mempool_aligned_alloc_(alignment, n);
 }
