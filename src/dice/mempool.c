@@ -108,7 +108,7 @@ mempool_alloc_(size_t n)
 
     mempool_ensure_initd();
 
-    if (e == NULL && mp->pool.capacity >= mp->pool.next + size) {
+    if (mp->pool.capacity >= mp->pool.next + size) {
         e       = (entry_t *)(mp->pool.memory + mp->pool.next);
         e->next = NULL;
         e->size = n;
