@@ -149,6 +149,7 @@ mempool_free(void *ptr)
 DICE_HIDE void *
 mempool_aligned_alloc_(size_t alignment, size_t n)
 {
+    assert(alignment && !(alignment & (alignment - 1)));
     mempool_t *mp   = &mp_;
     entry_t *e      = NULL;
     size_t size     = n + sizeof(entry_t) + sizeof(entry_t *) + alignment - 1;
