@@ -2,14 +2,9 @@
  * Copyright (C) 2025 Huawei Technologies Co., Ltd.
  * SPDX-License-Identifier: 0BSD
  */
-#include <stddef.h>
-#include <stdint.h>
-#include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 #include <time.h>
 
-#include "dice/log.h"
 #include <dice/ensure.h>
 #include <dice/mempool.h>
 
