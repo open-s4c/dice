@@ -34,4 +34,11 @@ void *mempool_realloc(void *ptr, size_t size);
  */
 void mempool_free(void *ptr);
 
+/* mempool_aligned_alloc allocates a region of memory of `size` bytes aligned by alignment, which must be a power of 2.
+ *
+ * Returns a pointer to the allocated memory which is multiple of alignment or NULL if out of memory.
+ *
+ */
+void *mempool_aligned_alloc(size_t alignment, size_t size);
+
 #endif /* DICE_MEMPOOL_H */

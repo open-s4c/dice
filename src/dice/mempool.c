@@ -22,6 +22,7 @@ static size_t sizes_[] = {32,
                           4 * 1024 * 1024,
                           8 * 1024 * 1024};
 #define NSTACKS (sizeof(sizes_) / sizeof(size_t))
+#define HEADER_SIZE (sizeof(entry_t) + sizeof(entry_t *))
 
 static unsigned int
 bucketize_(size_t size)
@@ -84,12 +85,74 @@ DICE_MODULE_INIT({
     caslock_release(&mp_.lock);
 })
 
+DICE_HIDE void
+mempool_free_(void *ptr);
+DICE_HIDE void *
+mempool_aligned_alloc_(size_t alignment, size_t n);
+
 DICE_HIDE void *
 mempool_alloc_(size_t n)
 {
+    return mempool_aligned_alloc_(1, n);
+}
+
+DICE_WEAK void *
+mempool_alloc(size_t n)
+{
+    return mempool_alloc_(n);
+}
+
+DICE_HIDE void *
+mempool_realloc_(void *ptr, size_t size)
+{
+    void *p = mempool_alloc_(size);
+    if (!p || !ptr)
+        return p;
+    entry_t *e = (entry_t *)ptr - 1;
+    size       = e->size < size ? e->size : size;
+    memcpy(p, ptr, size);
+    mempool_free_(ptr);
+    return p;
+}
+
+DICE_WEAK void *
+mempool_realloc(void *ptr, size_t size)
+{
+    return mempool_realloc_(ptr, size);
+}
+
+DICE_HIDE void
+mempool_free_(void *ptr)
+{
+    mempool_t *mp = &mp_;
+    assert(ptr);
+    entry_t *e      = *((entry_t **)ptr - 1);
+    size_t size     = e->size + HEADER_SIZE;
+    unsigned bucket = bucketize_(size);
+    size            = sizes_[bucket];
+    entry_t **stack = &mp->stack[bucket];
+
+    caslock_acquire(&mp->lock);
+    mp->allocated -= size;
+    assert(stack);
+    e->next = *stack;
+    *stack  = e;
+    caslock_release(&mp->lock);
+}
+
+DICE_WEAK void
+mempool_free(void *ptr)
+{
+    return mempool_free_(ptr);
+}
+
+DICE_HIDE void *
+mempool_aligned_alloc_(size_t alignment, size_t n)
+{
+    assert(alignment && !(alignment & (alignment - 1)));
     mempool_t *mp   = &mp_;
     entry_t *e      = NULL;
-    size_t size     = n + sizeof(entry_t);
+    size_t size     = n + HEADER_SIZE + alignment - 1;
     unsigned bucket = bucketize_(size);
     size            = sizes_[bucket];
     entry_t **stack = &mp->stack[bucket];
@@ -111,62 +174,22 @@ mempool_alloc_(size_t n)
     if (mp->pool.capacity >= mp->pool.next + size) {
         e       = (entry_t *)(mp->pool.memory + mp->pool.next);
         e->next = NULL;
-        e->size = n;
+        e->size = n + alignment - 1;
         mp->pool.next += size;
         mp->allocated += size;
     }
 out:
     caslock_release(&mp->lock);
-    return e ? e->data : NULL;
+    if (likely(e != NULL)) {
+        void *result = (void*)(((size_t)e + HEADER_SIZE + alignment - 1) & ~(alignment - 1));
+        *((entry_t **)result - 1) = e;
+        return result;
+    }
+    return NULL;
 }
 
 DICE_WEAK void *
-mempool_alloc(size_t n)
+mempool_aligned_alloc(size_t alignment, size_t n)
 {
-    return mempool_alloc_(n);
-}
-
-DICE_HIDE void *
-mempool_realloc_(void *ptr, size_t size)
-{
-    void *p = mempool_alloc(size);
-    if (!p || !ptr)
-        return p;
-    entry_t *e = (entry_t *)ptr - 1;
-    size       = e->size < size ? e->size : size;
-    memcpy(p, ptr, size);
-    mempool_free(ptr);
-    return p;
-}
-
-DICE_WEAK void *
-mempool_realloc(void *ptr, size_t size)
-{
-    return mempool_realloc_(ptr, size);
-}
-
-DICE_HIDE void
-mempool_free_(void *ptr)
-{
-    mempool_t *mp = &mp_;
-    assert(ptr);
-    entry_t *e      = (entry_t *)ptr - 1;
-    size_t size     = e->size + sizeof(entry_t);
-    unsigned bucket = bucketize_(size);
-    size            = sizes_[bucket];
-    entry_t **stack = &mp->stack[bucket];
-
-    // Mempool is used from rogue thread, serialization is necessary
-    caslock_acquire(&mp->lock);
-    mp->allocated -= size;
-    assert(stack);
-    e->next = *stack;
-    *stack  = e;
-    caslock_release(&mp->lock);
-}
-
-DICE_WEAK void
-mempool_free(void *ptr)
-{
-    return mempool_free_(ptr);
+    return mempool_aligned_alloc_(alignment, n);
 }
