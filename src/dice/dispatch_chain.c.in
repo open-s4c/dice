@@ -3,19 +3,17 @@
  * SPDX-License-Identifier: 0BSD
  */
 #include <dice/pubsub.h>
-#define _tmpl_mute
-#define _tmpl_begin(...)
-#define _tmpl_map(...)
-#define _tmpl_end()
-#define _tmpl2_begin(...)
-#define _tmpl2_end()
-#define _tmpl3_begin(...)
-#define _tmpl3_end()
+#define $_mute
+#define $_begin(...)
+#define $_map(...)
+#define $_end()
+#define $2_begin(...)
+#define $2_end()
 #define CCC 0
 #define EEE 0
 #define SSS 0
-#define _tmpl_unmute
-_tmpl_begin(CCC = CHAINS, SSS = SLOTS);
+#define $_unmute
+$_begin(CCC = CHAINS, SSS = SLOTS);
 DICE_WEAK DICE_HIDE enum ps_err
 ps_dispatch_CCC_0_SSS_(const chain_id chain, const type_id type, void *event,
                        metadata_t *md)
@@ -26,9 +24,9 @@ ps_dispatch_CCC_0_SSS_(const chain_id chain, const type_id type, void *event,
     (void)md;
     return PS_HANDLER_OFF;
 }
-_tmpl_end();
+$_end();
 
-_tmpl_begin(CCC = CHAINS, EEE = EVENTS, SSS = SLOTS);
+$_begin(CCC = CHAINS, EEE = EVENTS, SSS = SLOTS);
 DICE_WEAK DICE_HIDE enum ps_err
 ps_dispatch_CCC_EEE_SSS_(const chain_id chain, const type_id type, void *event,
                          metadata_t *md)
@@ -39,15 +37,15 @@ ps_dispatch_CCC_EEE_SSS_(const chain_id chain, const type_id type, void *event,
     (void)md;
     return PS_HANDLER_OFF;
 }
-_tmpl_end();
+$_end();
 
-_tmpl_begin(CCC = CHAINS, EEE = EVENTS);
+$_begin(CCC = CHAINS, EEE = EVENTS);
 static enum ps_err
 ps_dispatch_CCC_EEE_(const chain_id chain, const type_id type, void *event,
                      metadata_t *md)
 {
     enum ps_err err;
-    _tmpl2_begin(SSS = SLOTS);
+    $2_begin(SSS = SLOTS);
     {
         err = ps_dispatch_CCC_EEE_SSS_(chain, type, event, md);
         if (err == PS_HANDLER_OFF)
@@ -55,13 +53,13 @@ ps_dispatch_CCC_EEE_(const chain_id chain, const type_id type, void *event,
         if (err == PS_STOP_CHAIN)
             return PS_STOP_CHAIN;
     }
-    _tmpl2_end();
+    $2_end();
     return PS_OK;
 }
-_tmpl_end();
+$_end();
 
 /* chain dispatcher prototypes */
-_tmpl_begin(CCC = CHAINS);
+$_begin(CCC = CHAINS);
 DICE_HIDE enum ps_err
 ps_dispatch_CCC_(const chain_id chain, const type_id type, void *event,
                  metadata_t *md)
@@ -69,10 +67,10 @@ ps_dispatch_CCC_(const chain_id chain, const type_id type, void *event,
     switch (type) {
         default:
             return PS_HANDLER_OFF;
-            _tmpl2_begin(EEE = EVENTS);
+            $2_begin(EEE = EVENTS);
         case EEE:
             return ps_dispatch_CCC_EEE_(chain, type, event, md);
-            _tmpl2_end();
+            $2_end();
     }
 }
 DICE_HIDE bool
@@ -80,4 +78,4 @@ ps_dispatch_chain_CCC_on_(void)
 {
     return true;
 }
-_tmpl_end();
+$_end();

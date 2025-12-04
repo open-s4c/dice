@@ -7,8 +7,11 @@ project(
   LANGUAGES C CXX ASM
   VERSION 1.2)
 
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+include(GNUInstallDirs)
+include(CheckSymbolExists)
+include(cmake/export.cmake)
 
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 add_compile_options(-Wall -Wextra -Werror)
 
 # LTO setup
@@ -42,9 +45,8 @@ endif()
 message(STATUS "Using libvsync_DIR: ${libvsync_DIR}")
 link_libraries(libvsync::vsync)
 
-include(GNUInstallDirs)
-include(CheckSymbolExists)
-include(cmake/export.cmake)
+# Find tmplr command
+include(cmake/tmplr.cmake)
 
 # Coverage
 option(DICE_COVERAGE "Enable test coverage" off)

@@ -9,7 +9,7 @@ set(TSAN_TEST_C ${CMAKE_CURRENT_BINARY_DIR}/tsan_test.c)
 
 add_custom_command(
   OUTPUT ${TSAN_TEST_C}
-  COMMAND $<TARGET_FILE:tmplr> ${CMAKE_CURRENT_SOURCE_DIR}/tsan_test.c.in >
+  COMMAND ${TMPLR_PROGRAM} ${CMAKE_CURRENT_SOURCE_DIR}/tsan_test.c.in >
           tsan_test.c
   DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/tsan_test.c.in
   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})

@@ -32,7 +32,7 @@ set(DISPATCH_C ${CMAKE_CURRENT_BINARY_DIR}/dispatch.c)
 
 add_custom_command(
   OUTPUT ${DISPATCH_C}
-  COMMAND $<TARGET_FILE:tmplr> "-DCCC=${CCC}" "-DSSS=${SSX}" -s
+  COMMAND ${TMPLR_PROGRAM} "-DCCC=${CCC}" "-DSSS=${SSX}" -s
           ${CMAKE_CURRENT_SOURCE_DIR}/dispatch.c.in > dispatch.c
   DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/dispatch.c.in
   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
@@ -54,8 +54,8 @@ foreach(CHAIN ${CHAINS})
     OUTPUT ${DISPATCH_CHAIN_C}
     COMMAND
       cat ${CMAKE_CURRENT_SOURCE_DIR}/dispatch_chain.c.in | #
-      $<TARGET_FILE:tmplr> "-DCCC=${CHAIN}" "-DEEE='${eee}'" "-DSSS='${SSS}'" -i
-      | $<TARGET_FILE:tmplr> "-DEEE='${eee}'" "-DSSS='${SSS}'" -P_tmpl2 -i >
+      ${TMPLR_PROGRAM} "-DCCC=${CHAIN}" "-DEEE='${eee}'" "-DSSS='${SSS}'" -i |
+      ${TMPLR_PROGRAM} "-DEEE='${eee}'" "-DSSS='${SSS}'" -P\$2 -i >
       dispatch_${CHAIN}.c
     DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/dispatch_chain.c.in
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
