@@ -84,38 +84,32 @@ install(TARGETS dice DESTINATION lib)
 # details on the chains, events and slots handled by dispatch and callbacks.
 add_library(dice.o OBJECT ${SRCS} ${DISPATCH_SRCS})
 target_link_libraries(dice.o PUBLIC dice.h)
-target_compile_options(dice.o PRIVATE -fPIC)
 
 # dice-box.o - OBJECT library that seals pubsub, registry, and mempool
 # interfaces, disabling callbacks when linked with dice.o. This allows the LTO
 # steps to be more aggressive.
 add_library(dice-box.o OBJECT pubsub-box.c mempool-box.c)
 target_compile_definitions(dice-box.o PRIVATE DICE_HIDE_ALL)
-target_compile_options(dice-box.o PRIVATE -fPIC)
 target_link_libraries(dice-box.o PRIVATE dice.h)
 
 # dice-mempool-box.o - OBJECT library that seals mempool interface.
 add_library(dice-mempool-box.o OBJECT mempool-box.c)
-target_compile_options(dice-mempool-box.o PRIVATE -fPIC)
 target_link_libraries(dice-mempool-box.o PRIVATE dice.h)
 
 # dice-pubsub-box.o - OBJECT library that seals pubsub and registry interfaces,
 # disabling callbacks when linked with dice.o.
 add_library(dice-pubsub-box.o OBJECT pubsub-box.c)
 target_compile_definitions(dice-pubsub-box.o PRIVATE DICE_HIDE_ALL)
-target_compile_options(dice-pubsub-box.o PRIVATE -fPIC)
 target_link_libraries(dice-pubsub-box.o PRIVATE dice.h)
 
 # dice-cbonly.o - OBJECT library as dice.o but without dispatchers. Only used
 # for performance testing.
 add_library(dice-cbonly.o OBJECT ${SRCS})
 target_link_libraries(dice-cbonly.o PUBLIC dice.h)
-target_compile_options(dice-cbonly.o PRIVATE -fPIC)
 
 # dice-override.o - OBJECT library to override memset (and potentially others)
 add_library(dice-override.o OBJECT memset.c)
 target_link_libraries(dice-override.o PUBLIC dice.h)
-target_compile_options(dice-override.o PRIVATE -fPIC)
 
 # ------------------------------------------------------------------------------
 # test configuration

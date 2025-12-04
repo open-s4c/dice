@@ -30,7 +30,7 @@ list(REMOVE_ITEM SRCS ${TSAN_SOURCE})
 list(APPEND SRCS ${TSAN_C})
 
 if(APPLE)
-list(REMOVE_ITEM SRCS ${CMAKE_CURRENT_SOURCE_DIR}/pthread_spinlock.c)
+  list(REMOVE_ITEM SRCS ${CMAKE_CURRENT_SOURCE_DIR}/pthread_spinlock.c)
 endif()
 
 foreach(SRC ${SRCS})
@@ -39,7 +39,7 @@ foreach(SRC ${SRCS})
 
   add_library(${TARGET} SHARED ${SRC})
   target_link_libraries(${TARGET} PRIVATE dice dice.h)
-  target_compile_options(${TARGET} PRIVATE -fPIC ${OPTIONS_${MODULE}})
+  target_compile_options(${TARGET} PRIVATE ${OPTIONS_${MODULE}})
   set_target_properties(${TARGET} PROPERTIES PREFIX "")
   if(APPLE)
     # Allow unresolved symbols that will be provided by the sanitizer/runtime at
