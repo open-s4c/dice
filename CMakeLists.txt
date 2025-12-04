@@ -61,6 +61,9 @@ endif()
 message(STATUS "Using libvsync_DIR: ${libvsync_DIR}")
 link_libraries(libvsync::vsync)
 
+# Find tmplr command
+include(cmake/tmplr.cmake)
+
 # ------------------------------------------------------------------------------
 # User configuration
 # ------------------------------------------------------------------------------
