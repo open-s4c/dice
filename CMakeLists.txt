@@ -7,12 +7,26 @@ project(
   LANGUAGES C CXX ASM
   VERSION 1.2)
 
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+# ------------------------------------------------------------------------------
+# Platform and dependencies
+# ------------------------------------------------------------------------------
 
+# Basic configuration
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+include(GNUInstallDirs)
+include(CheckSymbolExists)
+include(cmake/export.cmake)
 add_compile_options(-Wall -Wextra -Werror)
 
-set(HAVE_PTHREAD_CLOCKLOCK_CLOCKWAIT OFF)
+# POSIX extensions
+if(CMAKE_SYSTEM_NAME MATCHES "NetBSD")
+  add_compile_options(-D_XOPEN_SOURCE=700)
+else()
+  add_compile_options(-D_GNU_SOURCE)
+endif()
 
+# Platform specific interfaces
+set(HAVE_PTHREAD_CLOCKLOCK_CLOCKWAIT OFF)
 if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
   file(READ "/etc/os-release" _os)
   string(FIND "${_os}" "ID=alpine" _alpine)
@@ -22,6 +36,34 @@ if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
 elseif(NOT CMAKE_SYSTEM_NAME MATCHES "NetBSD" AND NOT APPLE)
   set(HAVE_PTHREAD_CLOCKLOCK_CLOCKWAIT ON)
 endif()
+
+if(APPLE)
+  set(SO dylib)
+  set(PRELOAD DYLD_INSERT_LIBRARIES)
+  set(LIBRARY_PATH DYLD_LIBRARY_PATH)
+else()
+  set(SO so)
+  set(PRELOAD LD_PRELOAD)
+  set(LIBRARY_PATH LD_LIBRARY_PATH)
+endif()
+
+# Fix OHOS build
+if(CMAKE_SYSTEM_NAME MATCHES "OHOS")
+  add_compile_options(-Wno-unused-command-line-argument)
+endif()
+
+# Ensure we have libvsync installed or we install vendored one
+find_package(libvsync 4.2 CONFIG)
+if(NOT libvsync_DIR)
+  set(CMAKE_FIND_ROOT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/deps/libvsync)
+  find_package(libvsync 4.2 CONFIG REQUIRED)
+endif()
+message(STATUS "Using libvsync_DIR: ${libvsync_DIR}")
+link_libraries(libvsync::vsync)
+
+# ------------------------------------------------------------------------------
+# User configuration
+# ------------------------------------------------------------------------------
 
 # LTO setup
 option(DICE_LTO "Build Dice with LTO" on)
@@ -34,31 +76,14 @@ if(${DICE_LTO})
   endif()
 endif()
 
-# POSIX extensions
-if(CMAKE_SYSTEM_NAME MATCHES "NetBSD")
-  add_compile_options(-D_XOPEN_SOURCE=700)
+# Tests and benchmarks
+if(PROJECT_IS_TOP_LEVEL)
+  set(TESTS_DEFAULT on)
 else()
-  add_compile_options(-D_GNU_SOURCE)
+  set(TESTS_DEFAULT off)
 endif()
-
-# fix OHOS build
-if(CMAKE_SYSTEM_NAME MATCHES "OHOS")
-  add_compile_options(-Wno-unused-command-line-argument)
-endif()
-
-find_package(libvsync 4.2 CONFIG)
-if(NOT libvsync_DIR)
-  set(CMAKE_FIND_ROOT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/deps/libvsync)
-  find_package(libvsync 4.2 CONFIG REQUIRED)
-endif()
-message(STATUS "Using libvsync_DIR: ${libvsync_DIR}")
-link_libraries(libvsync::vsync)
-
-include(GNUInstallDirs)
-include(CheckSymbolExists)
-include(cmake/export.cmake)
-
-# Coverage
+option(DICE_TESTS "Enable Dice tests" ${TESTS_DEFAULT})
+option(DICE_BENCHMARKS "Enable Dice benchmarks" ${TESTS_DEFAULT})
 option(DICE_COVERAGE "Enable test coverage" off)
 
 # TSAN on Clang requires the following flag
@@ -85,6 +110,12 @@ if(NOT "${DICE_SANITIZER}" STREQUAL "")
   set(LIBSAN_LINK ${LIBSAN_${DICE_SANITIZER}})
 endif()
 
+# Maximum slot number of builtin modules
+set(DICE_MAX_BUILTIN_SLOTS
+    16
+    CACHE STRING "Maximum builtin slot number")
+add_compile_definitions(MAX_BUILTIN_SLOTS=${DICE_MAX_BUILTIN_SLOTS})
+
 # LOG_LEVEL
 set(DICE_LOG_LEVEL
     ""
@@ -96,6 +127,9 @@ set(DICE_MEMPOOL_SIZE
     CACHE STRING "Dice mempool size")
 add_compile_definitions(MEMPOOL_SIZE=${DICE_MEMPOOL_SIZE})
 
+# ------------------------------------------------------------------------------
+# Include directories
+# ------------------------------------------------------------------------------
 add_subdirectory(scripts)
 add_subdirectory(deps)
 add_subdirectory(include)
@@ -105,32 +139,18 @@ set(DICE_SCRIPT
     env DICE_BUILD=${PROJECT_BINARY_DIR} DICE_SOURCE=${PROJECT_SOURCE_DIR}
     ${PROJECT_SOURCE_DIR}/scripts/dice)
 
-if(APPLE)
-  set(SO dylib)
-  set(PRELOAD DYLD_INSERT_LIBRARIES)
-  set(LIBRARY_PATH DYLD_LIBRARY_PATH)
-else()
-  set(SO so)
-  set(PRELOAD LD_PRELOAD)
-  set(LIBRARY_PATH LD_LIBRARY_PATH)
-endif()
-
-if(PROJECT_IS_TOP_LEVEL)
-  set(TESTS_DEFAULT on)
-else()
-  set(TESTS_DEFAULT off)
-endif()
-option(DICE_TESTS "Enable Dice tests" ${TESTS_DEFAULT})
 if(${DICE_TESTS})
   include(CTest)
   enable_testing()
   add_subdirectory(test)
 endif()
 
-option(DICE_BENCHMARKS "Enable Dice benchmarks" ${TESTS_DEFAULT})
 if(${DICE_BENCHMARKS})
   add_subdirectory(bench/micro)
   add_subdirectory(bench/lib)
 endif()
 
+# ------------------------------------------------------------------------------
+# Installation
+# ------------------------------------------------------------------------------
 install(TARGETS dice dice.h EXPORT ${PROJECT_TARGETS})

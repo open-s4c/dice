@@ -20,9 +20,10 @@ function(seq OUT FROM TO)
 endfunction()
 
 # define events, slots and chains
+math(EXPR LAST_BUILTIN_SLOT "${DICE_MAX_BUILTIN_SLOTS} - 1")
 seq(EEE 1 128 \;)
-seq(SSS 0 15 \;)
-seq(SSX 0 15 ,)
+seq(SSS 0 ${LAST_BUILTIN_SLOT} \;)
+seq(SSX 0 ${LAST_BUILTIN_SLOT} ,)
 seq(CHAINS 0 6 \;)
 # Manually create the sequencer of chains to ensure 1 and 4 are in the front.
 # That improves the chances of LTO optimizing them.
