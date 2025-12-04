@@ -1,5 +1,5 @@
 /*
- * Copyright (C) Huawei Technologies Co., Ltd. 2023-2025. All rights reserved.
+ * Copyright (C) 2023-2025 Huawei Technologies Co., Ltd.
  * SPDX-License-Identifier: 0BSD
  */
 /*******************************************************************************
@@ -19,13 +19,35 @@ void
 __tsan_init()
 {
 }
+
 void
-__tsan_write_range(void)
+__tsan_read_range(void *addr, unsigned long size)
 {
+    (void)addr;
+    (void)size;
 }
+
 void
-__tsan_read_range(void)
+__tsan_write_range(void *addr, unsigned long size)
 {
+    (void)addr;
+    (void)size;
+}
+
+void
+__tsan_read_range_pc(void *addr, unsigned long size, void *pc)
+{
+    (void)addr;
+    (void)size;
+    (void)pc;
+}
+
+void
+__tsan_write_range_pc(void *addr, unsigned long size, void *pc)
+{
+    (void)addr;
+    (void)size;
+    (void)pc;
 }
 
 /* empty vptr impl */
@@ -542,7 +564,7 @@ __tsan_atomic8_compare_exchange_strong(volatile uint8_t *a, uint8_t *c,
 }
 int
 __tsan_atomic16_compare_exchange_strong(volatile uint16_t *a, uint16_t *c,
-                                        uint16_t v, int mo)
+                                       uint16_t v, int mo)
 {
     (void)mo;
     return __atomic_compare_exchange_n(a, c, v, 0, __ATOMIC_SEQ_CST,
@@ -550,7 +572,7 @@ __tsan_atomic16_compare_exchange_strong(volatile uint16_t *a, uint16_t *c,
 }
 int
 __tsan_atomic32_compare_exchange_strong(volatile uint32_t *a, uint32_t *c,
-                                        uint32_t v, int mo)
+                                       uint32_t v, int mo)
 {
     (void)mo;
     return __atomic_compare_exchange_n(a, c, v, 0, __ATOMIC_SEQ_CST,
@@ -558,15 +580,15 @@ __tsan_atomic32_compare_exchange_strong(volatile uint32_t *a, uint32_t *c,
 }
 int
 __tsan_atomic64_compare_exchange_strong(volatile uint64_t *a, uint64_t *c,
-                                        uint64_t v, int mo)
+                                       uint64_t v, int mo)
 {
     (void)mo;
     return __atomic_compare_exchange_n(a, c, v, 0, __ATOMIC_SEQ_CST,
                                        __ATOMIC_SEQ_CST);
 }
 int
-__tsan_atomic8_compare_exchange_weak(volatile uint8_t *a, uint8_t *c, uint8_t v,
-                                     int mo)
+__tsan_atomic8_compare_exchange_weak(volatile uint8_t *a, uint8_t *c,
+                                       uint8_t v, int mo)
 {
     (void)mo;
     return __atomic_compare_exchange_n(a, c, v, 1, __ATOMIC_SEQ_CST,
@@ -574,7 +596,7 @@ __tsan_atomic8_compare_exchange_weak(volatile uint8_t *a, uint8_t *c, uint8_t v,
 }
 int
 __tsan_atomic16_compare_exchange_weak(volatile uint16_t *a, uint16_t *c,
-                                      uint16_t v, int mo)
+                                       uint16_t v, int mo)
 {
     (void)mo;
     return __atomic_compare_exchange_n(a, c, v, 1, __ATOMIC_SEQ_CST,
@@ -582,7 +604,7 @@ __tsan_atomic16_compare_exchange_weak(volatile uint16_t *a, uint16_t *c,
 }
 int
 __tsan_atomic32_compare_exchange_weak(volatile uint32_t *a, uint32_t *c,
-                                      uint32_t v, int mo)
+                                       uint32_t v, int mo)
 {
     (void)mo;
     return __atomic_compare_exchange_n(a, c, v, 1, __ATOMIC_SEQ_CST,
@@ -590,7 +612,7 @@ __tsan_atomic32_compare_exchange_weak(volatile uint32_t *a, uint32_t *c,
 }
 int
 __tsan_atomic64_compare_exchange_weak(volatile uint64_t *a, uint64_t *c,
-                                      uint64_t v, int mo)
+                                       uint64_t v, int mo)
 {
     (void)mo;
     return __atomic_compare_exchange_n(a, c, v, 1, __ATOMIC_SEQ_CST,
@@ -599,8 +621,8 @@ __tsan_atomic64_compare_exchange_weak(volatile uint64_t *a, uint64_t *c,
 
 /* compare_exchange_val */
 uint8_t
-__tsan_atomic8_compare_exchange_val(volatile uint8_t *a, uint8_t c, uint8_t v,
-                                    int mo)
+__tsan_atomic8_compare_exchange_val(volatile uint8_t *a, uint8_t c,
+                                       uint8_t v, int mo)
 {
     (void)mo;
     (void)__atomic_compare_exchange_n(a, &c, v, 0, __ATOMIC_SEQ_CST,
@@ -609,7 +631,7 @@ __tsan_atomic8_compare_exchange_val(volatile uint8_t *a, uint8_t c, uint8_t v,
 }
 uint16_t
 __tsan_atomic16_compare_exchange_val(volatile uint16_t *a, uint16_t c,
-                                     uint16_t v, int mo)
+                                       uint16_t v, int mo)
 {
     (void)mo;
     (void)__atomic_compare_exchange_n(a, &c, v, 0, __ATOMIC_SEQ_CST,
@@ -618,7 +640,7 @@ __tsan_atomic16_compare_exchange_val(volatile uint16_t *a, uint16_t c,
 }
 uint32_t
 __tsan_atomic32_compare_exchange_val(volatile uint32_t *a, uint32_t c,
-                                     uint32_t v, int mo)
+                                       uint32_t v, int mo)
 {
     (void)mo;
     (void)__atomic_compare_exchange_n(a, &c, v, 0, __ATOMIC_SEQ_CST,
@@ -627,7 +649,7 @@ __tsan_atomic32_compare_exchange_val(volatile uint32_t *a, uint32_t c,
 }
 uint64_t
 __tsan_atomic64_compare_exchange_val(volatile uint64_t *a, uint64_t c,
-                                     uint64_t v, int mo)
+                                       uint64_t v, int mo)
 {
     (void)mo;
     (void)__atomic_compare_exchange_n(a, &c, v, 0, __ATOMIC_SEQ_CST,
@@ -648,355 +670,4 @@ __tsan_atomic_signal_fence(int mo)
 {
     (void)mo;
     __atomic_signal_fence(__ATOMIC_SEQ_CST);
-}
-
-void
-AnnotateHappensBefore(char *f, int l, void *addr)
-{
-    (void)f;
-    (void)l;
-    (void)addr;
-}
-
-void
-AnnotateHappensAfter(char *f, int l, void *addr)
-{
-    (void)f;
-    (void)l;
-    (void)addr;
-}
-
-void
-AnnotateCondVarSignal(char *f, int l, void *cv)
-{
-    (void)f;
-    (void)l;
-    (void)cv;
-}
-
-void
-AnnotateCondVarSignalAll(char *f, int l, void *cv)
-{
-    (void)f;
-    (void)l;
-    (void)cv;
-}
-
-void
-AnnotateMutexIsNotPHB(char *f, int l, void *mu)
-{
-    (void)f;
-    (void)l;
-    (void)mu;
-}
-
-void
-AnnotateCondVarWait(char *f, int l, void *cv, void *lock)
-{
-    (void)f;
-    (void)l;
-    (void)cv;
-    (void)lock;
-}
-
-void
-AnnotateRWLockCreate(char *f, int l, void *m)
-{
-    (void)f;
-    (void)l;
-    (void)m;
-}
-
-void
-AnnotateRWLockCreateStatic(char *f, int l, void *m)
-{
-    (void)f;
-    (void)l;
-    (void)m;
-}
-
-void
-AnnotateRWLockDestroy(char *f, int l, void *m)
-{
-    (void)f;
-    (void)l;
-    (void)m;
-}
-
-void
-AnnotateRWLockAcquired(char *f, int l, void *m, void *is_w)
-{
-    (void)f;
-    (void)l;
-    (void)m;
-    (void)is_w;
-}
-
-void
-AnnotateRWLockReleased(char *f, int l, void *m, void *is_w)
-{
-    (void)f;
-    (void)l;
-    (void)m;
-    (void)is_w;
-}
-
-void
-AnnotateTraceMemory(char *f, int l, void *mem)
-{
-    (void)f;
-    (void)l;
-    (void)mem;
-}
-
-void
-AnnotateFlushState(char *f, int l)
-{
-    (void)f;
-    (void)l;
-}
-
-void
-AnnotateNewMemory(char *f, int l, void *mem, void *size)
-{
-    (void)f;
-    (void)l;
-    (void)mem;
-    (void)size;
-}
-
-void
-AnnotateNoOp(char *f, int l, void *mem)
-{
-    (void)f;
-    (void)l;
-    (void)mem;
-}
-
-void
-AnnotateFlushExpectedRaces(char *f, int l)
-{
-    (void)f;
-    (void)l;
-}
-
-void
-AnnotateEnableRaceDetection(char *f, int l, int enable)
-{
-    (void)f;
-    (void)l;
-    (void)enable;
-}
-
-void
-AnnotateMutexIsUsedAsCondVar(char *f, int l, void *mu)
-{
-    (void)f;
-    (void)l;
-    (void)mu;
-}
-
-void
-AnnotatePCQGet(char *f, int l, void *pcq)
-{
-    (void)f;
-    (void)l;
-    (void)pcq;
-}
-
-void
-AnnotatePCQPut(char *f, int l, void *pcq)
-{
-    (void)f;
-    (void)l;
-    (void)pcq;
-}
-
-void
-AnnotatePCQDestroy(char *f, int l, void *pcq)
-{
-    (void)f;
-    (void)l;
-    (void)pcq;
-}
-
-void
-AnnotatePCQCreate(char *f, int l, void *pcq)
-{
-    (void)f;
-    (void)l;
-    (void)pcq;
-}
-
-void
-AnnotateExpectRace(char *f, int l, void *mem, char *desc)
-{
-    (void)f;
-    (void)l;
-    (void)mem;
-    (void)desc;
-}
-
-void
-AnnotateBenignRaceSized(char *f, int l, void *mem, void *size, char *desc)
-{
-    (void)f;
-    (void)l;
-    (void)mem;
-    (void)size;
-    (void)desc;
-}
-
-void
-AnnotateBenignRace(char *f, int l, void *mem, char *desc)
-{
-    (void)f;
-    (void)l;
-    (void)mem;
-    (void)desc;
-}
-
-void
-AnnotateIgnoreReadsBegin(char *f, int l)
-{
-    (void)f;
-    (void)l;
-}
-
-void
-AnnotateIgnoreReadsEnd(char *f, int l)
-{
-    (void)f;
-    (void)l;
-}
-
-void
-AnnotateIgnoreWritesBegin(char *f, int l)
-{
-    (void)f;
-    (void)l;
-}
-
-void
-AnnotateIgnoreWritesEnd(char *f, int l)
-{
-    (void)f;
-    (void)l;
-}
-
-void
-AnnotateIgnoreSyncBegin(char *f, int l)
-{
-    (void)f;
-    (void)l;
-}
-
-void
-AnnotateIgnoreSyncEnd(char *f, int l)
-{
-    (void)f;
-    (void)l;
-}
-
-void
-AnnotatePublishMemoryRange(char *f, int l, void *addr, void *size)
-{
-    (void)f;
-    (void)l;
-    (void)addr;
-    (void)size;
-}
-
-void
-AnnotateUnpublishMemoryRange(char *f, int l, void *addr, void *size)
-{
-    (void)f;
-    (void)l;
-    (void)addr;
-    (void)size;
-}
-
-void
-AnnotateThreadName(char *f, int l, char *name)
-{
-    (void)f;
-    (void)l;
-    (void)name;
-}
-
-void
-WTFAnnotateHappensBefore(char *f, int l, void *addr)
-{
-    (void)f;
-    (void)l;
-    (void)addr;
-}
-
-void
-WTFAnnotateHappensAfter(char *f, int l, void *addr)
-{
-    (void)f;
-    (void)l;
-    (void)addr;
-}
-
-void
-WTFAnnotateBenignRaceSized(char *f, int l, void *mem, void *sz, char *desc)
-{
-    (void)f;
-    (void)l;
-    (void)mem;
-    (void)sz;
-    (void)desc;
-}
-
-void
-AnnotateMemoryIsInitialized(char *f, int l, void *mem, void *sz)
-{
-    (void)f;
-    (void)l;
-    (void)mem;
-    (void)sz;
-}
-
-void
-AnnotateMemoryIsUninitialized(char *f, int l, void *mem, void *sz)
-{
-    (void)f;
-    (void)l;
-    (void)mem;
-    (void)sz;
-}
-
-void *
-__tsan_get_current_fiber(void)
-{
-    return (void *)0;
-}
-
-void *
-__tsan_create_fiber(unsigned flags)
-{
-    (void)flags;
-    return (void *)0;
-}
-
-void
-__tsan_destroy_fiber(void *fiber)
-{
-    (void)fiber;
-}
-
-void
-__tsan_switch_to_fiber(void *fiber, unsigned flags)
-{
-    (void)fiber;
-    (void)flags;
-}
-
-void
-__tsan_set_fiber_name(void *fiber, const char *name)
-{
-    (void)fiber;
-    (void)name;
 }
