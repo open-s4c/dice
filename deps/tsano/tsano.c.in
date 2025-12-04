@@ -1,5 +1,5 @@
 /*
- * Copyright (C) Huawei Technologies Co., Ltd. 2023-2025. All rights reserved.
+ * Copyright (C) 2023-2025 Huawei Technologies Co., Ltd.
  * SPDX-License-Identifier: 0BSD
  */
 /*******************************************************************************
@@ -13,28 +13,55 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define _tmpl_mute // ----------- simple empty macros to make clangd happy -----
-#define _tmpl_map(...)
-#define _tmpl_begin(...)
-#define _tmpl_end(...)
+#define $_mute // ----------- simple empty macros to make clangd happy -----
+#define $_map(...)
+#define $_begin(...)
+#define $_end(...)
 #define __atomic_fetch_OP __atomic_exchange_n
-#define uintBITS_t        int
+#define uBITS_t           int
 #define PARAM_SUF         0
 #define BITS
-#define _tmpl_unmute // --------------------------------------------------------
+#define $_unmute // --------------------------------------------------------
+$_map(u8, uint8);
+$_map(u16, uint16);
+$_map(u32, uint32);
+$_map(u64, uint64);
+$_map(u128, __uint128);
 
 /* empty tsan initialization */
 void
 __tsan_init()
 {
 }
+
 void
-__tsan_write_range(void)
+__tsan_read_range(void *addr, unsigned long size)
 {
+    (void)addr;
+    (void)size;
 }
+
 void
-__tsan_read_range(void)
+__tsan_write_range(void *addr, unsigned long size)
 {
+    (void)addr;
+    (void)size;
+}
+
+void
+__tsan_read_range_pc(void *addr, unsigned long size, void *pc)
+{
+    (void)addr;
+    (void)size;
+    (void)pc;
+}
+
+void
+__tsan_write_range_pc(void *addr, unsigned long size, void *pc)
+{
+    (void)addr;
+    (void)size;
+    (void)pc;
 }
 
 /* empty vptr impl */
@@ -151,94 +178,94 @@ _ZdaPv(void *ptr)
 }
 
 /* plain reads and writes */
-_tmpl_map(nix, );
-_tmpl_begin(PFX = [[nix; unaligned_]], FUNC = [[read; write]],
-            SZ = [[1; 2; 4; 8; 16]]);
+$_map(nix, );
+$_begin(PFX = [[nix; unaligned_]], FUNC = [[read; write]],
+        SZ = [[1; 2; 4; 8; 16]]);
 __attribute__((weak)) void
 __tsan_PFXFUNCSZ(void *a)
 {
     (void)a;
 }
-_tmpl_end();
+$_end();
 
 /* plain reads and writes 2 values */
-_tmpl_begin(FUNC = [[read; write]], SZ = [[1; 2; 4; 8; 16]]);
+$_begin(FUNC = [[read; write]], SZ = [[1; 2; 4; 8; 16]]);
 void
 __tsan_FUNCSZ_pc(void *a, void *b)
 {
     (void)a;
     (void)b;
 }
-_tmpl_end();
+$_end();
 
 /* atomic loads */
-_tmpl_begin(BITS = [[8; 16; 32; 64]]);
-uintBITS_t
-__tsan_atomicBITS_load(const volatile uintBITS_t *a, int mo)
+$_begin(BITS = [[8; 16; 32; 64; 128]]);
+uBITS_t
+__tsan_atomicBITS_load(const volatile uBITS_t *a, int mo)
 {
     (void)mo;
     return __atomic_load_n(a, __ATOMIC_SEQ_CST);
 }
-_tmpl_end();
+$_end();
 
 /* atomic stores */
-_tmpl_begin(BITS = [[8; 16; 32; 64]]);
+$_begin(BITS = [[8; 16; 32; 64; 128]]);
 void
-__tsan_atomicBITS_store(volatile uintBITS_t *a, uintBITS_t v, int mo)
+__tsan_atomicBITS_store(volatile uBITS_t *a, uBITS_t v, int mo)
 {
     (void)mo;
     __atomic_store_n(a, v, __ATOMIC_SEQ_CST);
 }
-_tmpl_end();
+$_end();
 
 
 /* xchg */
-_tmpl_begin(BITS = [[8; 16; 32; 64]]);
-uintBITS_t
-__tsan_atomicBITS_exchange(volatile uintBITS_t *a, uintBITS_t v, int mo)
+$_begin(BITS = [[8; 16; 32; 64; 128]]);
+uBITS_t
+__tsan_atomicBITS_exchange(volatile uBITS_t *a, uBITS_t v, int mo)
 {
     (void)mo;
     return __atomic_exchange_n(a, v, __ATOMIC_SEQ_CST);
 }
-_tmpl_end();
+$_end();
 
 /* fetch_RMW */
-_tmpl_begin(OP = [[add; sub; and; or ; xor; nand]], BITS = [[8; 16; 32; 64]]);
-uintBITS_t
-__tsan_atomicBITS_fetch_OP(volatile uintBITS_t *a, uintBITS_t v, int mo)
+$_begin(OP = [[add; sub; and; or ; xor; nand]], BITS = [[8; 16; 32; 64; 128]]);
+uBITS_t
+__tsan_atomicBITS_fetch_OP(volatile uBITS_t *a, uBITS_t v, int mo)
 {
     (void)mo;
     return __atomic_fetch_OP(a, v, __ATOMIC_SEQ_CST);
 }
-_tmpl_end();
+$_end();
 
 
 /* compare_exchange_{strong,weak} */
-_tmpl_map(PARAM_strong, 0);
-_tmpl_map(PARAM_weak, 1);
-_tmpl_begin(SUF = [[strong; weak]], BITS = [[8; 16; 32; 64]]);
+$_map(PARAM_strong, 0);
+$_map(PARAM_weak, 1);
+$_begin(SUF = [[strong; weak]], BITS = [[8; 16; 32; 64; 128]]);
 int
-__tsan_atomicBITS_compare_exchange_SUF(volatile uintBITS_t *a, uintBITS_t *c,
-                                       uintBITS_t v, int mo)
+__tsan_atomicBITS_compare_exchange_SUF(volatile uBITS_t *a, uBITS_t *c,
+                                       uBITS_t v, int mo)
 {
     (void)mo;
     return __atomic_compare_exchange_n(a, c, v, PARAM_SUF, __ATOMIC_SEQ_CST,
                                        __ATOMIC_SEQ_CST);
 }
-_tmpl_end();
+$_end();
 
 /* compare_exchange_val */
-_tmpl_begin(BITS = [[8; 16; 32; 64]]);
-uintBITS_t
-__tsan_atomicBITS_compare_exchange_val(volatile uintBITS_t *a, uintBITS_t c,
-                                       uintBITS_t v, int mo)
+$_begin(BITS = [[8; 16; 32; 64; 128]]);
+uBITS_t
+__tsan_atomicBITS_compare_exchange_val(volatile uBITS_t *a, uBITS_t c,
+                                       uBITS_t v, int mo)
 {
     (void)mo;
     (void)__atomic_compare_exchange_n(a, &c, v, 0, __ATOMIC_SEQ_CST,
                                       __ATOMIC_SEQ_CST);
     return c;
 }
-_tmpl_end();
+$_end();
 
 /* atomic fences */
 void
@@ -253,355 +280,4 @@ __tsan_atomic_signal_fence(int mo)
 {
     (void)mo;
     __atomic_signal_fence(__ATOMIC_SEQ_CST);
-}
-
-void
-AnnotateHappensBefore(char *f, int l, void *addr)
-{
-    (void)f;
-    (void)l;
-    (void)addr;
-}
-
-void
-AnnotateHappensAfter(char *f, int l, void *addr)
-{
-    (void)f;
-    (void)l;
-    (void)addr;
-}
-
-void
-AnnotateCondVarSignal(char *f, int l, void *cv)
-{
-    (void)f;
-    (void)l;
-    (void)cv;
-}
-
-void
-AnnotateCondVarSignalAll(char *f, int l, void *cv)
-{
-    (void)f;
-    (void)l;
-    (void)cv;
-}
-
-void
-AnnotateMutexIsNotPHB(char *f, int l, void *mu)
-{
-    (void)f;
-    (void)l;
-    (void)mu;
-}
-
-void
-AnnotateCondVarWait(char *f, int l, void *cv, void *lock)
-{
-    (void)f;
-    (void)l;
-    (void)cv;
-    (void)lock;
-}
-
-void
-AnnotateRWLockCreate(char *f, int l, void *m)
-{
-    (void)f;
-    (void)l;
-    (void)m;
-}
-
-void
-AnnotateRWLockCreateStatic(char *f, int l, void *m)
-{
-    (void)f;
-    (void)l;
-    (void)m;
-}
-
-void
-AnnotateRWLockDestroy(char *f, int l, void *m)
-{
-    (void)f;
-    (void)l;
-    (void)m;
-}
-
-void
-AnnotateRWLockAcquired(char *f, int l, void *m, void *is_w)
-{
-    (void)f;
-    (void)l;
-    (void)m;
-    (void)is_w;
-}
-
-void
-AnnotateRWLockReleased(char *f, int l, void *m, void *is_w)
-{
-    (void)f;
-    (void)l;
-    (void)m;
-    (void)is_w;
-}
-
-void
-AnnotateTraceMemory(char *f, int l, void *mem)
-{
-    (void)f;
-    (void)l;
-    (void)mem;
-}
-
-void
-AnnotateFlushState(char *f, int l)
-{
-    (void)f;
-    (void)l;
-}
-
-void
-AnnotateNewMemory(char *f, int l, void *mem, void *size)
-{
-    (void)f;
-    (void)l;
-    (void)mem;
-    (void)size;
-}
-
-void
-AnnotateNoOp(char *f, int l, void *mem)
-{
-    (void)f;
-    (void)l;
-    (void)mem;
-}
-
-void
-AnnotateFlushExpectedRaces(char *f, int l)
-{
-    (void)f;
-    (void)l;
-}
-
-void
-AnnotateEnableRaceDetection(char *f, int l, int enable)
-{
-    (void)f;
-    (void)l;
-    (void)enable;
-}
-
-void
-AnnotateMutexIsUsedAsCondVar(char *f, int l, void *mu)
-{
-    (void)f;
-    (void)l;
-    (void)mu;
-}
-
-void
-AnnotatePCQGet(char *f, int l, void *pcq)
-{
-    (void)f;
-    (void)l;
-    (void)pcq;
-}
-
-void
-AnnotatePCQPut(char *f, int l, void *pcq)
-{
-    (void)f;
-    (void)l;
-    (void)pcq;
-}
-
-void
-AnnotatePCQDestroy(char *f, int l, void *pcq)
-{
-    (void)f;
-    (void)l;
-    (void)pcq;
-}
-
-void
-AnnotatePCQCreate(char *f, int l, void *pcq)
-{
-    (void)f;
-    (void)l;
-    (void)pcq;
-}
-
-void
-AnnotateExpectRace(char *f, int l, void *mem, char *desc)
-{
-    (void)f;
-    (void)l;
-    (void)mem;
-    (void)desc;
-}
-
-void
-AnnotateBenignRaceSized(char *f, int l, void *mem, void *size, char *desc)
-{
-    (void)f;
-    (void)l;
-    (void)mem;
-    (void)size;
-    (void)desc;
-}
-
-void
-AnnotateBenignRace(char *f, int l, void *mem, char *desc)
-{
-    (void)f;
-    (void)l;
-    (void)mem;
-    (void)desc;
-}
-
-void
-AnnotateIgnoreReadsBegin(char *f, int l)
-{
-    (void)f;
-    (void)l;
-}
-
-void
-AnnotateIgnoreReadsEnd(char *f, int l)
-{
-    (void)f;
-    (void)l;
-}
-
-void
-AnnotateIgnoreWritesBegin(char *f, int l)
-{
-    (void)f;
-    (void)l;
-}
-
-void
-AnnotateIgnoreWritesEnd(char *f, int l)
-{
-    (void)f;
-    (void)l;
-}
-
-void
-AnnotateIgnoreSyncBegin(char *f, int l)
-{
-    (void)f;
-    (void)l;
-}
-
-void
-AnnotateIgnoreSyncEnd(char *f, int l)
-{
-    (void)f;
-    (void)l;
-}
-
-void
-AnnotatePublishMemoryRange(char *f, int l, void *addr, void *size)
-{
-    (void)f;
-    (void)l;
-    (void)addr;
-    (void)size;
-}
-
-void
-AnnotateUnpublishMemoryRange(char *f, int l, void *addr, void *size)
-{
-    (void)f;
-    (void)l;
-    (void)addr;
-    (void)size;
-}
-
-void
-AnnotateThreadName(char *f, int l, char *name)
-{
-    (void)f;
-    (void)l;
-    (void)name;
-}
-
-void
-WTFAnnotateHappensBefore(char *f, int l, void *addr)
-{
-    (void)f;
-    (void)l;
-    (void)addr;
-}
-
-void
-WTFAnnotateHappensAfter(char *f, int l, void *addr)
-{
-    (void)f;
-    (void)l;
-    (void)addr;
-}
-
-void
-WTFAnnotateBenignRaceSized(char *f, int l, void *mem, void *sz, char *desc)
-{
-    (void)f;
-    (void)l;
-    (void)mem;
-    (void)sz;
-    (void)desc;
-}
-
-void
-AnnotateMemoryIsInitialized(char *f, int l, void *mem, void *sz)
-{
-    (void)f;
-    (void)l;
-    (void)mem;
-    (void)sz;
-}
-
-void
-AnnotateMemoryIsUninitialized(char *f, int l, void *mem, void *sz)
-{
-    (void)f;
-    (void)l;
-    (void)mem;
-    (void)sz;
-}
-
-void *
-__tsan_get_current_fiber(void)
-{
-    return (void *)0;
-}
-
-void *
-__tsan_create_fiber(unsigned flags)
-{
-    (void)flags;
-    return (void *)0;
-}
-
-void
-__tsan_destroy_fiber(void *fiber)
-{
-    (void)fiber;
-}
-
-void
-__tsan_switch_to_fiber(void *fiber, unsigned flags)
-{
-    (void)fiber;
-    (void)flags;
-}
-
-void
-__tsan_set_fiber_name(void *fiber, const char *name)
-{
-    (void)fiber;
-    (void)name;
 }
