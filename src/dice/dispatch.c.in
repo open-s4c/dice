@@ -3,21 +3,19 @@
  * SPDX-License-Identifier: 0BSD
  */
 #include <dice/pubsub.h>
-#define _tmpl_mute
-#define _tmpl_begin(...)
-#define _tmpl_map(...)
-#define _tmpl_end()
-#define _tmpl2_begin(...)
-#define _tmpl2_end()
-#define _tmpl3_begin(...)
-#define _tmpl3_end()
+#define $_mute
+#define $_begin(...)
+#define $_map(...)
+#define $_end()
+#define $2_begin(...)
+#define $2_end()
 #define CCC 0
 #define EEE 0
 #define SSS 0
-#define _tmpl_unmute
+#define $_unmute
 
 /* chain dispatcher prototypes */
-_tmpl_begin(CCC = CHAINS);
+$_begin(CCC = CHAINS);
 DICE_WEAK DICE_HIDE enum ps_err
 ps_dispatch_CCC_(const chain_id chain, const type_id type, void *event,
                  metadata_t *md)
@@ -34,7 +32,7 @@ ps_dispatch_chain_CCC_on_(void)
 {
     return false;
 }
-_tmpl_end();
+$_end();
 
 DICE_HIDE bool
 ps_dispatch_chain_on_(const chain_id chain)
@@ -42,10 +40,10 @@ ps_dispatch_chain_on_(const chain_id chain)
     switch (chain) {
         default:
             return false;
-            _tmpl_begin(CCC = CHAINS);
+            $_begin(CCC = CHAINS);
         case CCC:
             return ps_dispatch_chain_CCC_on_();
-            _tmpl_end();
+            $_end();
     }
 }
 
@@ -54,29 +52,29 @@ DICE_HIDE enum ps_err
 ps_dispatch_(const chain_id chain, const type_id type, void *event,
              metadata_t *md)
 {
-    _tmpl_begin(CCC = CHAINS);
+    $_begin(CCC = CHAINS);
     if (likely(chain == CCC))
         return ps_dispatch_CCC_(chain, type, event, md);
-    _tmpl_end();
+    $_end();
     return PS_HANDLER_OFF;
 }
 
-_tmpl_begin(SSS = SLOTS);
+$_begin(SSS = SLOTS);
 DICE_WEAK DICE_HIDE bool
 ps_dispatch_slot_SSS_on_(void)
 {
     return false;
 }
-_tmpl_end();
+$_end();
 
 DICE_HIDE int
 ps_dispatch_max(void)
 {
     int max = -1;
-    _tmpl_begin(SSS = SLOTS);
+    $_begin(SSS = SLOTS);
     if (ps_dispatch_slot_SSS_on_())
         max = max < SSS ? SSS : max;
-    _tmpl_end();
+    $_end();
 
     return max;
 }

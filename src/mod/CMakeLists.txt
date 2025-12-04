@@ -6,12 +6,11 @@ set(TSAN_C_IN ${CMAKE_CURRENT_SOURCE_DIR}/tsan.c.in)
 
 add_custom_command(
   OUTPUT ${TSAN_C}
-  COMMAND $<TARGET_FILE:tmplr> ${TSAN_C_IN} > tsan.c
+  COMMAND ${TMPLR_PROGRAM} ${TSAN_C_IN} > tsan.c
   DEPENDS ${TSAN_C_IN}
   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
 
 add_custom_target(expand-tsan.c DEPENDS ${TSAN_C})
-add_dependencies(expand-tsan.c tmplr)
 
 set(OVERRIDE_TYPES "" "Debug")
 if("${CMAKE_BUILD_TYPE}" IN_LIST OVERRIDE_TYPES)
