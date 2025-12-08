@@ -1,3 +1,4 @@
+#include "dice/types.h"
 #include "tweaks.h"
 #include <dice/pubsub.h>
 
@@ -7,6 +8,8 @@
 
 bool ps_initd_(void);
 enum ps_err ps_dispatch_(const chain_id, const type_id, void *, metadata_t *);
+int ps_dispatch_max(void);
+bool ps_dispatch_chain_on_(chain_id);
 
 DICE_HIDE enum ps_err
 ps_publish(const chain_id chain, const type_id type, void *event,
@@ -30,11 +33,24 @@ ps_publish(const chain_id chain, const type_id type, void *event,
 DICE_HIDE int
 ps_subscribe(chain_id chain, type_id type, ps_callback_f cb, int slot)
 {
-    (void)chain;
     (void)type;
     (void)cb;
-    (void)slot;
-    return PS_OK;
+    if (ps_dispatch_chain_on_(chain) && slot <= ps_dispatch_max()) {
+        // Ignore the subscription of dispatch handlers. publications reach them
+        // via dispatch functions.
+        return PS_OK;
+    }
+
+    if (chain == CHAIN_CONTROL) {
+        // Ignore any subscription of callback handlers for control chain. This
+        // is only valid for builtin modules.
+        return PS_OK;
+    }
+
+    // Abort if trying to subscribe a non-dispatch handler. Abort early with
+    // precise error message.
+    log_fatal("cannot subscribe callback: library compiled with pubsub-box");
+    return PS_ERROR;
 }
 
 // -----------------------------------------------------------------------------

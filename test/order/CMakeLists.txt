@@ -94,3 +94,30 @@ add_test(
   COMMAND
     env ${LIBRARY_PATH}=${CMAKE_CURRENT_BINARY_DIR}
     ${PRELOAD}=libsubscriber3.${SO}:libsubscriber21f.${SO} ./order_test 3 303)
+
+# box tests
+add_library(subscriber21box SHARED)
+target_link_libraries(
+  subscriber21box PRIVATE publisher.o subscriber2.o subscriber1.o dice.o
+                          dice-pubsub-box.o)
+target_link_libraries(subscriber21box PRIVATE mock_publisher)
+
+add_test(NAME preload-21box-test
+         COMMAND env ${LIBRARY_PATH}=${CMAKE_CURRENT_BINARY_DIR}
+                 ${PRELOAD}=libsubscriber21box.${SO} ./order_test 2 202)
+
+# because both subscribers have SLOT higher than DICE_MAX_BUILTIN_SLOTS,
+# pubsub-box's subscribe will abort the process
+set_tests_properties(preload-21box-test PROPERTIES WILL_FAIL TRUE)
+
+# every interceptor also subscribes for the chain 0 via MODULE_INIT. Since this
+# is also called via translation unit constructor, we can safely ignore such
+# subscriptions, even when boxed
+add_library(box-pthread SHARED)
+target_link_libraries(box-pthread PRIVATE publisher.o dice.o dice-pubsub-box.o
+                                          dice-pthread_create.o)
+target_link_libraries(box-pthread PRIVATE mock_publisher)
+
+add_test(NAME preload-box-pthread-test
+         COMMAND env ${LIBRARY_PATH}=${CMAKE_CURRENT_BINARY_DIR}
+                 ${PRELOAD}=libbox-pthread.${SO} ./order_test 0 0)
