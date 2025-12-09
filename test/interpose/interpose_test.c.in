@@ -43,7 +43,7 @@ $_dl(); // ---------------------------------------------------------------------
 #include <dice/chains/intercept.h>
 #include <dice/ensure.h>
 #include <dice/interpose.h>
-#include <dice/pubsub.h>
+#include <dice/module.h>
 $_begin(INCL = [[stdio.h]]);
 #include INCL
 $_end();

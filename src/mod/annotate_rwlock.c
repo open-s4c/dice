@@ -7,8 +7,7 @@
 #include <dice/chains/intercept.h>
 #include <dice/events/annotate_rwlock.h>
 #include <dice/interpose.h>
-#include <dice/pubsub.h>
-
+#include <dice/module.h>
 
 INTERPOSE(void, AnnotateRWLockCreate, const char *file, int line,
           const volatile void *lock)

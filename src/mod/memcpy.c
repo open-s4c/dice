@@ -5,7 +5,7 @@
 #include <dice/chains/intercept.h>
 #include <dice/events/memcpy.h>
 #include <dice/interpose.h>
-#include <dice/pubsub.h>
+#include <dice/module.h>
 
 INTERPOSE(void *, memcpy, void *dest, const void *src, size_t num)
 {

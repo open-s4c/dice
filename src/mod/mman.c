@@ -5,7 +5,7 @@
 #include <dice/chains/intercept.h>
 #include <dice/events/mman.h>
 #include <dice/interpose.h>
-#include <dice/pubsub.h>
+#include <dice/module.h>
 
 INTERPOSE(void *, mmap, void *addr, size_t length, int prot, int flags, int fd,
           off_t offset)
@@ -30,8 +30,8 @@ INTERPOSE(void *, mmap, void *addr, size_t length, int prot, int flags, int fd,
 }
 
 #if !defined(__APPLE__) && !defined(__OHOS__)
-INTERPOSE(void *, mmap64, void *addr, size_t length, int prot, int flags, int fd,
-          off_t offset)
+INTERPOSE(void *, mmap64, void *addr, size_t length, int prot, int flags,
+          int fd, off_t offset)
 {
     struct mmap_event ev = {
         .pc     = INTERPOSE_PC,

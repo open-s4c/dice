@@ -28,7 +28,7 @@
 #include <stddef.h>
 #include <stdio.h>
 
-#include <dice/module.h>
+#include <dice/compiler.h>
 
 #if !(defined(__linux__) || defined(__NetBSD__) || defined(__APPLE__))
     #error Unsupported platform
