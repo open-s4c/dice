@@ -30,7 +30,7 @@ jobs:
              uuid-runtime
 
       - name: Create smolBSD image
-        run: sudo scripts/create-smolbsd.sh cicd smolBSD
+        run: sudo .github/smol/scripts/create-smolbsd.sh cicd smolBSD
       - name: Remove unnecessary files
         run: sudo rm -rf smolBSD/sets smolBSD/pkgs
       - name: Save image
