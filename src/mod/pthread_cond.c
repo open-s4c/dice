@@ -90,7 +90,7 @@ INTERPOSE(int, pthread_cond_clockwait, pthread_cond_t *restrict cond,
         .clock_id = clock_id,
         .abstime  = abstime,
         .ret      = 0,
-        .func     = REAL_FUNCP(pthread_cond_clockwait),
+        .func     = REAL_FUNC(pthread_cond_clockwait),
     };
 
     metadata_t md = {0};
