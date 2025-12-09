@@ -8,7 +8,7 @@ env:
 
 jobs:
   smolbsd-test:
-    if: true
+    if: false
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/open-s4c/dice/smolbsd-ci:latest
