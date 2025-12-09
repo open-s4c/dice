@@ -8,7 +8,7 @@ env:
 
 jobs:
   smolbsd-test:
-    if: false
+    if: true
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/open-s4c/dice/smolbsd-ci:latest
@@ -24,21 +24,20 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Copy scripts to data
-        run: cp -r scripts /data
+      - name: Tar example
+        run: tar cf project.tar .
 
-      - name: Add code
-        run: |
-          cd /data
-          scripts/smolbsd/add2img.sh smolBSD/smolbsd.img $GITHUB_WORKSPACE
+      - name: Create payload image
+        run: .github/smol/scripts/pack-payload.sh payload.img .github/smol/run.sh project.tar
 
-      - name: Build and run
-        run: |
-          cd /data/smolBSD
-          ./startnb.sh -k netbsd-SMOL -i smolbsd.img -m 2048 -x "-no-reboot"
+      - name: Run payload
+        run: .github/smol/scripts/run-payload.sh /smolBSD cicd payload.img
+
+      - name: Unpack payload
+        run: .github/smol/scripts/unpack-payload.sh payload.img results
+
+      - name: List files in unpacked image
+        run: ls results
 
       - name: Ensure tests passed
-        run: |
-          cd /data
-          scripts/smolbsd/get_results.sh /data/smolBSD/smolbsd.img
-
+        run: .github/smol/check-results.sh results
