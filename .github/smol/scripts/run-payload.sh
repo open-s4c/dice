@@ -20,6 +20,7 @@ fi
 (
 	cd $SMOLDIR
 	./startnb.sh \
+		-m 1024 \
 		-k kernels/netbsd-SMOL \
 		-i images/$SERVICE-$ARCH.img \
 		-l $PAYLOAD_IMG \
