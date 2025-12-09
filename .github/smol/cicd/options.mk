@@ -1,4 +1,4 @@
-IMGSIZE=	1024
+IMGSIZE=	2048
 SETS=		etc.tar.xz comp.tar.xz base.tar.xz
 ADDPKGS=	pkgin curl
 ADDPKGS+=	cmake rhash libuv nghttp2 libidn2 libunistring
