@@ -9,12 +9,14 @@ jobs:
 
   # Create VM image with all dependencies
   create-vm:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+      - name: Update Ubuntu dependencies
+        run: sudo apt update
       - name: Install Ubuntu dependencies
         run: |
           sudo apt install -y \
@@ -22,25 +24,20 @@ jobs:
              curl             \
              git              \
              libarchive-tools \
+             qemu-system      \
              rsync            \
+             bmake            \
              uuid-runtime
 
-      - name: Get smolBSD and sets
-        run: scripts/smolbsd/get_smolBSD.sh
-      - name: Get pkgsrc and dependency packages (eg, cmake)
-        run: scripts/smolbsd/get_pkgsrc.sh cmake
-      - name: Create image
-        run: |
-          cd smolBSD
-          sudo ADDPKGS=../pkgsrc/downloads/*.tgz       \
-              ./mkimg.sh -s base -i smolbsd.img        \
-               -x "base.tar.xz etc.tar.xz comp.tar.xz" \
-               -m 2048
+      - name: Create smolBSD image
+        run: sudo scripts/create-smolbsd.sh cicd smolBSD
+      - name: Remove unnecessary files
+        run: sudo rm -rf smolBSD/sets smolBSD/pkgs
       - name: Save image
         uses: actions/upload-artifact@v4
         with:
-          path: smolBSD/smolbsd.img
-          name: image
+          path: smolBSD
+          name: data
 
   # Pack VM image inside a container image
   create-docker:
@@ -60,7 +57,10 @@ jobs:
       - name: Download image
         uses: actions/download-artifact@v5
         with:
-          name: image
+          name: data
+          path: smolBSD
+      - name: Display structure of downloaded files
+        run: ls -R smolBSD
 
       - name: Log in to the Container registry
         uses: docker/login-action@v3.0.0
