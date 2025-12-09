@@ -88,7 +88,7 @@ INTERPOSE(int, pthread_mutex_clocklock, pthread_mutex_t *restrict mutex,
         .clock_id = clock_id,
         .abstime  = abstime,
         .ret      = 0,
-        .func     = REAL_FUNCP(pthread_mutex_clocklock),
+        .func     = REAL_FUNC(pthread_mutex_clocklock),
     };
 
     metadata_t md = {0};
