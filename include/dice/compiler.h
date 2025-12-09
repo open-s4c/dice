@@ -7,8 +7,6 @@
 
 #include <stddef.h>
 
-#include <vsync/atomic.h>
-
 #ifndef DICE_XTOR_PRIO
     #define DICE_XTOR_PRIO
 #endif

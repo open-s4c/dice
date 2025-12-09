@@ -7,7 +7,7 @@
 #include <dice/chains/intercept.h>
 #include <dice/events/semaphore.h>
 #include <dice/interpose.h>
-#include <dice/pubsub.h>
+#include <dice/module.h>
 
 INTERPOSE(int, sem_post, sem_t *sem)
 {

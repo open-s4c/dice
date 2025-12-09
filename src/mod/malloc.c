@@ -5,7 +5,7 @@
 #include <dice/chains/intercept.h>
 #include <dice/events/malloc.h>
 #include <dice/interpose.h>
-#include <dice/pubsub.h>
+#include <dice/module.h>
 
 INTERPOSE(void *, malloc, size_t size)
 {

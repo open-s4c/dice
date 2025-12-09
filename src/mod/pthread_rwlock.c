@@ -8,7 +8,7 @@
 #include <dice/chains/intercept.h>
 #include <dice/events/pthread.h>
 #include <dice/interpose.h>
-#include <dice/pubsub.h>
+#include <dice/module.h>
 
 INTERPOSE(int, pthread_rwlock_rdlock, pthread_rwlock_t *lock)
 {

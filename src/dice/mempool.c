@@ -10,6 +10,7 @@
 
 #include <dice/interpose.h>
 #include <dice/mempool.h>
+#include <dice/module.h>
 #include <vsync/spinlock/caslock.h>
 
 static size_t sizes_[] = {32,
