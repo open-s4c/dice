@@ -42,8 +42,8 @@ if(NOT APPLE)
   set(FUNS_pthread_rwlock ${FUNS_pthread_rwlock} pthread_rwlock_timedrdlock
                           pthread_rwlock_timedwrlock)
   set(INCL_pthread_spinlock ${INCL_pthread_create})
-  set(FUNS_pthread_spinlock ${FUNS_pthread_spinlock} pthread_spin_lock pthread_spin_trylock 
-                          pthread_spin_unlock)  
+  set(FUNS_pthread_spinlock ${FUNS_pthread_spinlock} pthread_spin_lock
+                            pthread_spin_trylock pthread_spin_unlock)
 endif()
 
 set(INCL_sem '<dice/events/semaphore.h>')
@@ -98,7 +98,10 @@ foreach(MOD ${MODS})
       $<TARGET_FILE:tmplr> -sP\\$$_ "-DFOO=${FUNS_${MOD}}"
       ${CMAKE_CURRENT_SOURCE_DIR}/interposed__.h.in ${TARGET}_.c #
       > ${TARGET}.c
-    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
+    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+    DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/interpose_test.c.in
+            ${CMAKE_CURRENT_SOURCE_DIR}/interposed_.h.in
+            ${CMAKE_CURRENT_SOURCE_DIR}/interposed__.h.in)
   add_custom_target(expand-test-${MOD} DEPENDS ${TARGET_SRC})
   add_dependencies(expand-tests expand-test-${MOD})
 endforeach()

@@ -22,7 +22,7 @@ static size_t sizes_[] = {32,
                           1 * 1024 * 1024,
                           4 * 1024 * 1024,
                           8 * 1024 * 1024};
-#define NSTACKS (sizeof(sizes_) / sizeof(size_t))
+#define NSTACKS     (sizeof(sizes_) / sizeof(size_t))
 #define HEADER_SIZE (sizeof(entry_t) + sizeof(entry_t *))
 
 static unsigned int
@@ -86,10 +86,8 @@ DICE_MODULE_INIT({
     caslock_release(&mp_.lock);
 })
 
-DICE_HIDE void
-mempool_free_(void *ptr);
-DICE_HIDE void *
-mempool_aligned_alloc_(size_t alignment, size_t n);
+DICE_HIDE void mempool_free_(void *ptr);
+DICE_HIDE void *mempool_aligned_alloc_(size_t alignment, size_t n);
 
 DICE_HIDE void *
 mempool_alloc_(size_t n)
@@ -182,7 +180,8 @@ mempool_aligned_alloc_(size_t alignment, size_t n)
 out:
     caslock_release(&mp->lock);
     if (likely(e != NULL)) {
-        void *result = (void*)(((size_t)e + HEADER_SIZE + alignment - 1) & ~(alignment - 1));
+        void *result = (void *)(((size_t)e + HEADER_SIZE + alignment - 1) &
+                                ~(alignment - 1));
         *((entry_t **)result - 1) = e;
         return result;
     }
