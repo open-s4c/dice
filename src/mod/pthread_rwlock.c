@@ -21,7 +21,7 @@ INTERPOSE(int, pthread_rwlock_rdlock, pthread_rwlock_t *lock)
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_RWLOCK_RDLOCK, &ev, &md);
-    ev.ret = ev.func(lock);
+    ev.ret = ev.func(ev.lock);
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_RWLOCK_RDLOCK, &ev, &md);
     return ev.ret;
 }
@@ -40,7 +40,7 @@ INTERPOSE(int, pthread_rwlock_timedrdlock, pthread_rwlock_t *lock,
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_RWLOCK_TIMEDRDLOCK, &ev, &md);
-    ev.ret = ev.func(lock, abstime);
+    ev.ret = ev.func(ev.lock, ev.abstime);
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_RWLOCK_TIMEDRDLOCK, &ev, &md);
     return ev.ret;
 }
@@ -57,7 +57,7 @@ INTERPOSE(int, pthread_rwlock_tryrdlock, pthread_rwlock_t *lock)
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_RWLOCK_TRYRDLOCK, &ev, &md);
-    ev.ret = ev.func(lock);
+    ev.ret = ev.func(ev.lock);
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_RWLOCK_TRYRDLOCK, &ev, &md);
     return ev.ret;
 }
@@ -73,7 +73,7 @@ INTERPOSE(int, pthread_rwlock_wrlock, pthread_rwlock_t *lock)
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_RWLOCK_WRLOCK, &ev, &md);
-    ev.ret = ev.func(lock);
+    ev.ret = ev.func(ev.lock);
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_RWLOCK_WRLOCK, &ev, &md);
     return ev.ret;
 }
@@ -92,7 +92,7 @@ INTERPOSE(int, pthread_rwlock_timedwrlock, pthread_rwlock_t *lock,
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_RWLOCK_TIMEDWRLOCK, &ev, &md);
-    ev.ret = ev.func(lock, abstime);
+    ev.ret = ev.func(ev.lock, ev.abstime);
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_RWLOCK_TIMEDWRLOCK, &ev, &md);
     return ev.ret;
 }
@@ -109,7 +109,7 @@ INTERPOSE(int, pthread_rwlock_trywrlock, pthread_rwlock_t *lock)
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_RWLOCK_TRYWRLOCK, &ev, &md);
-    ev.ret = ev.func(lock);
+    ev.ret = ev.func(ev.lock);
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_RWLOCK_TRYWRLOCK, &ev, &md);
     return ev.ret;
 }
@@ -125,7 +125,7 @@ INTERPOSE(int, pthread_rwlock_unlock, pthread_rwlock_t *lock)
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_RWLOCK_UNLOCK, &ev, &md);
-    ev.ret = ev.func(lock);
+    ev.ret = ev.func(ev.lock);
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_RWLOCK_UNLOCK, &ev, &md);
     return ev.ret;
 }

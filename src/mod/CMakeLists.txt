@@ -22,6 +22,8 @@ endif()
 set(TSAN_MODULES tsan stacktrace)
 
 # Compile options to modules can be set like this: set(OPTIONS_memcpy -O2)
+set(OPTIONS_memcpy -fno-builtin-memcpy -fno-builtin-memset
+                   -fno-builtin-memmmove)
 
 set(TSAN_SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/tsan.c)
 

@@ -20,7 +20,7 @@ INTERPOSE(void *, memcpy, void *dest, const void *src, size_t num)
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_MEMCPY, &ev, &md);
-    ev.ret = ev.func(dest, src, num);
+    ev.ret = ev.func(ev.dest, ev.src, ev.num);
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_MEMCPY, &ev, &md);
     return ev.ret;
 }
@@ -38,7 +38,7 @@ INTERPOSE(void *, memmove, void *dest, const void *src, size_t count)
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_MEMMOVE, &ev, &md);
-    ev.ret = ev.func(dest, src, count);
+    ev.ret = ev.func(ev.dest, ev.src, ev.count);
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_MEMMOVE, &ev, &md);
     return ev.ret;
 }
@@ -62,7 +62,7 @@ dice___memset(void *ptr, int value, size_t num)
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_MEMSET, &ev, &md);
-    ev.ret = ev.func(ptr, value, num);
+    ev.ret = ev.func(ev.ptr, ev.value, ev.num);
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_MEMSET, &ev, &md);
     return ev.ret;
 }

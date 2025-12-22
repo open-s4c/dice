@@ -19,7 +19,7 @@ INTERPOSE(int, __cxa_guard_acquire, void *addr)
     };
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_CXA_GUARD_ACQUIRE, &ev, &md);
-    ev.ret = ev.func(addr);
+    ev.ret = ev.func(ev.addr);
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_CXA_GUARD_ACQUIRE, &ev, &md);
     return ev.ret;
 }
@@ -34,7 +34,7 @@ INTERPOSE(int, __cxa_guard_release, void *addr)
     };
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_CXA_GUARD_RELEASE, &ev, &md);
-    ev.ret = ev.func(addr);
+    ev.ret = ev.func(ev.addr);
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_CXA_GUARD_RELEASE, &ev, &md);
     return ev.ret;
 }
@@ -48,7 +48,7 @@ INTERPOSE(void, __cxa_guard_abort, void *addr)
     };
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_CXA_GUARD_ABORT, &ev, &md);
-    ev.func(addr);
+    ev.func(ev.addr);
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_CXA_GUARD_ABORT, &ev, &md);
 }
 

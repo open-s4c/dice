@@ -24,7 +24,7 @@ INTERPOSE(void *, mmap, void *addr, size_t length, int prot, int flags, int fd,
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_MMAP, &ev, &md);
-    ev.ret = ev.func(addr, length, prot, flags, fd, offset);
+    ev.ret = ev.func(ev.addr, ev.length, ev.prot, ev.flags, ev.fd, ev.offset);
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_MMAP, &ev, &md);
     return ev.ret;
 }
@@ -47,7 +47,7 @@ INTERPOSE(void *, mmap64, void *addr, size_t length, int prot, int flags,
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_MMAP, &ev, &md);
-    ev.ret = ev.func(addr, length, prot, flags, fd, offset);
+    ev.ret = ev.func(ev.addr, ev.length, ev.prot, ev.flags, ev.fd, ev.offset);
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_MMAP, &ev, &md);
     return ev.ret;
 }
@@ -65,7 +65,7 @@ INTERPOSE(int, munmap, void *addr, size_t length)
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_MUNMAP, &ev, &md);
-    ev.ret = ev.func(addr, length);
+    ev.ret = ev.func(ev.addr, ev.length);
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_MUNMAP, &ev, &md);
     return ev.ret;
 }
