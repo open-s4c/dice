@@ -9,7 +9,8 @@
 #define ensure(COND)                                                           \
     {                                                                          \
         if (!(COND)) {                                                         \
-            log_abort("cannot ensure: %s", #COND);                             \
+            log_abort("%s:%d: cannot ensure: %s", __FILE__, (int)(__LINE__),   \
+                      #COND);                                                  \
         }                                                                      \
     }
 

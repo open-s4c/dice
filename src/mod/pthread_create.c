@@ -27,7 +27,7 @@ INTERPOSE(void, pthread_exit, void *ptr)
         .func = REAL_FUNC(pthread_exit),
     };
     PS_PUBLISH(INTERCEPT_EVENT, EVENT_THREAD_EXIT, &ev, 0);
-    ev.func(ptr);
+    ev.func(ev.ptr);
     exit(1); // unreachable
 }
 
@@ -64,7 +64,7 @@ INTERPOSE(int, pthread_create, pthread_t *thread, const pthread_attr_t *attr,
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_THREAD_CREATE, &ev, &md);
-    ev.ret = ev.func(thread, attr, trampoline_, t);
+    ev.ret = ev.func(ev.thread, ev.attr, trampoline_, t);
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_THREAD_CREATE, &ev, &md);
     return ev.ret;
 }
@@ -80,7 +80,7 @@ INTERPOSE(int, pthread_join, pthread_t thread, void **ptr)
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_THREAD_JOIN, &ev, &md);
-    ev.ret = ev.func(thread, ptr);
+    ev.ret = ev.func(ev.thread, ev.ptr);
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_THREAD_JOIN, &ev, &md);
 
     return ev.ret;

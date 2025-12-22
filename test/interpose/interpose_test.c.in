@@ -48,6 +48,14 @@ $_begin(INCL = [[stdio.h]]);
 #include INCL
 $_end();
 
+static void
+event_init(void *ptr, size_t n)
+{
+    char *buf = ptr;
+    for (size_t i = 0; i < n; i++)
+        buf[i] = rand() % 256;
+}
+
 static void *symbol;
 static bool called;
 /* we need to declare this as noinline, otherwise the optimization of the
@@ -117,14 +125,38 @@ $_begin(FOO = [[foo]]);
 PS_SUBSCRIBE(INTERCEPT_BEFORE, MAKE_UPCASE, {
     if (!enabled())
         return PS_STOP_CHAIN;
+
+    /* check fields match expectations */
     struct FOO_event *ev = EVENT_PAYLOAD(ev);
     $__begin(AA = MM_ARGS_FOO);
     $__UNLESS_FOO_AA; // should skip check?
     ASSERT_FIELD_EQ(&E_FOO, AA);
     $__end();
 
-    // must be enabled.
-    ensure(enabled());
+    /* reinitialize the expected with new content to ensure the interceptor
+     * is using the arguments of the event instead of the function parameters.
+     */
+    event_init(&E_FOO, sizeof(struct FOO_event));
+
+
+    /* rollback ret if it should be equal to something else, fixing problem with
+     * clang and mem operations */
+    $__begin(AA = FOO);
+    E_FOO.__FOO_ret_SAME_AS = ev->__FOO_ret_SAME_AS;
+    E_FOO.ret               = E_FOO.__FOO_ret_SAME_AS;
+    $__end();
+
+    /* ensure fields are the same if they should */
+    $__begin(AA = MM_ARGS_FOO);
+    E_FOO.AA = E_FOO.__FOO_AA_SAME_AS;
+    $__end();
+
+    /* manual memcpy to avoid recursion */
+    $__begin(AA = MM_ARGS_FOO);
+    ev->AA = E_FOO.AA;
+    $__end();
+
+    /* finally let the function be FOO */
     ev->func = fake_FOO;
 })
 
@@ -139,15 +171,6 @@ PS_SUBSCRIBE(INTERCEPT_AFTER, MAKE_UPCASE, {
     $_returns MM_RETURN_FOO $.? ASSERT_FIELD_EQ(&E_FOO, ret);
 })
 $_end();
-
-
-static void
-event_init(void *ptr, size_t n)
-{
-    char *buf = ptr;
-    for (size_t i = 0; i < n; i++)
-        buf[i] = rand() % 256;
-}
 
 /* test case */
 
