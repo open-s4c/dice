@@ -34,7 +34,7 @@
     #error Unsupported platform
 #endif
 
-void *real_sym(const char *, const char *);
+void *real_sym(const char *name, const char *ver);
 
 /* REAL_NAME(F) is the function pointer for the real function F. */
 #define REAL_NAME(F) dice_real_##F##_

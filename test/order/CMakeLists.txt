@@ -35,7 +35,7 @@ add_library(publisher SHARED)
 target_link_libraries(publisher PRIVATE publisher.o dice)
 
 add_executable(order_test order_test.c)
-target_link_libraries(order_test PRIVATE dice.h mock_publisher)
+target_link_libraries(order_test PRIVATE dice mock_publisher)
 
 set(DICESO ${CMAKE_CURRENT_BINARY_DIR}/../../src/dice/libdice.${SO})
 
