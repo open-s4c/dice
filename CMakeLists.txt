@@ -5,7 +5,7 @@ cmake_minimum_required(VERSION 3.20)
 project(
   dice
   LANGUAGES C CXX ASM
-  VERSION 1.2)
+  VERSION 1.4)
 
 # ------------------------------------------------------------------------------
 # Platform and dependencies
@@ -109,23 +109,6 @@ if(NOT "${DICE_SANITIZER}" STREQUAL "")
   set(LIBSAN_LD_FLAGS ${LIBSAN_SHARED})
   set(LIBSAN_LINK ${LIBSAN_${DICE_SANITIZER}})
 endif()
-
-# Maximum slot number of builtin modules
-set(DICE_MAX_BUILTIN_SLOTS
-    16
-    CACHE STRING "Maximum builtin slot number")
-add_compile_definitions(MAX_BUILTIN_SLOTS=${DICE_MAX_BUILTIN_SLOTS})
-
-# LOG_LEVEL
-set(DICE_LOG_LEVEL
-    ""
-    CACHE STRING "Log level log_* functions (FATAL|INFO|DEBUG)")
-
-# MEMPOOL_SIZE
-set(DICE_MEMPOOL_SIZE
-    "1024 * 1024 * 200"
-    CACHE STRING "Dice mempool size")
-add_compile_definitions(MEMPOOL_SIZE=${DICE_MEMPOOL_SIZE})
 
 # ------------------------------------------------------------------------------
 # Include directories

@@ -36,4 +36,12 @@
     #define unlikely(x) __builtin_expect(!!(x), 0)
 #endif
 
+#ifndef STATIC_ASSERT
+    #if defined(__cplusplus)
+        #define STATIC_ASSERT(c, m) static_assert(c, m)
+    #else
+        #define STATIC_ASSERT(c, m) _Static_assert(c, m)
+    #endif
+#endif
+
 #endif /* DICE_COMPILER_H */

@@ -8,12 +8,17 @@
 #include <stdbool.h>
 #include <stdint.h>
 
+#include <dice/compiler.h>
+
 /* type_id represents the type of an event. Modules declare their own event
  * identifiers in the headers under include/dice/events/. */
 typedef uint16_t type_id;
 
-/* MAX_TYPES determines the maximum number of event types. */
-#define MAX_TYPES 256
+/* MAX_TYPES determines maximum number of event types: 0..MAX_TYPES-1 */
+#ifndef MAX_TYPES
+    #define MAX_TYPES 128
+#endif
+STATIC_ASSERT(MAX_TYPES > 0, "invalid number of event types");
 
 /* ANY_EVENT indicates any event type. */
 #define ANY_EVENT 0
@@ -22,8 +27,11 @@ typedef uint16_t type_id;
  * See include/dice/chains/ for the predefined chain identifiers. */
 typedef uint16_t chain_id;
 
-/* MAX_CHAINS determines the maximum number of chains */
-#define MAX_CHAINS 16
+/* MAX_CHAINS determines the maximum number of chains: 0..MAX_CHAINS-1 */
+#ifndef MAX_CHAINS
+    #define MAX_CHAINS 16
+#endif
+STATIC_ASSERT(MAX_CHAINS > 0, "invalid number of chains");
 
 /* CHAIN_CONTROL is a chain_id reserved for internal events of the pubsub
  * system, for example, initialization of modules. */
@@ -35,10 +43,6 @@ typedef uint16_t chain_id;
 typedef struct metadata {
     bool drop;
 } __attribute__((aligned(8))) metadata_t;
-
-/* MAX_BUILTIN_SLOTS determines the maximum number of builtin slots. The range
- * 0..MAX_BUILTIN_SLOTS-1 is reserved for builtin modules. */
-#define MAX_BUILTIN_SLOTS 16
 
 /* Dice assigns compact thread identifiers that remain stable for the lifetime
  * of a thread.
