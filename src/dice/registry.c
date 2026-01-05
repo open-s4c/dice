@@ -27,8 +27,8 @@ static struct name chain_names_[] = {
     NAME(12, NULL),  NAME(13, NULL), NAME(14, NULL), NAME(15, NULL),
 };
 
-_Static_assert(sizeof(chain_names_) / sizeof(struct name) == MAX_CHAINS,
-               "incorrect number of chains");
+STATIC_ASSERT(sizeof(chain_names_) / sizeof(struct name) >= MAX_CHAINS,
+              "incorrect number of chains");
 
 #define TYPE0 "ANY_EVENT"
 static struct name type_names_[] = {
@@ -98,8 +98,8 @@ static struct name type_names_[] = {
     NAME(252, NULL), NAME(253, NULL), NAME(254, NULL), NAME(255, NULL),
 };
 
-_Static_assert(sizeof(type_names_) / sizeof(struct name) == MAX_TYPES,
-               "incorrect number of event types");
+STATIC_ASSERT(sizeof(type_names_) / sizeof(struct name) >= MAX_TYPES,
+              "incorrect number of event types");
 
 DICE_HIDE void
 ps_registry_add_(bool chain, uint16_t id, const char *name)

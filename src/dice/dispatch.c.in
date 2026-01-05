@@ -69,6 +69,19 @@ ps_dispatch_slot_SSS_on_(void)
 }
 _tmpl_end();
 
+DICE_HIDE bool
+ps_dispatch_slot_on_(int slot)
+{
+    switch (slot) {
+        default:
+            return false;
+            _tmpl_begin(SSS = SLOTS);
+        case SSS:
+            return ps_dispatch_slot_SSS_on_();
+            _tmpl_end();
+    }
+}
+
 DICE_HIDE int
 ps_dispatch_max(void)
 {

@@ -21,6 +21,12 @@
 #include <dice/log.h>
 #include <dice/pubsub.h>
 
+/* MAX_BUILTIN_SLOTS determines the maximum number of builtin slots. The range
+ * 0..MAX_BUILTIN_SLOTS-1 is reserved for builtin modules. */
+#ifndef MAX_BUILTIN_SLOTS
+    #define MAX_BUILTIN_SLOTS 6
+#endif
+STATIC_ASSERT(MAX_BUILTIN_SLOTS > 0, "Slot 0 is always builtin");
 
 #ifndef DICE_MODULE_SLOT
     /* Subscription slot for the current translation unit. Lower values run
