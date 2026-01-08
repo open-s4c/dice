@@ -38,6 +38,12 @@ void *self_tls(metadata_t *self, const void *global, size_t size);
  */
 void *self_tls_get(metadata_t *self, uintptr_t key);
 
+/* Return self object as opaque metadata.
+ *
+ * Return NULL if no self object is registered for current thread.
+ */
+metadata_t *self_md(void);
+
 struct tls_dtor {
     void (*free)(void *arg, void *ptr);
     void *arg;
