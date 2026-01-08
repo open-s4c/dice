@@ -74,7 +74,7 @@ struct tls_item {
     void *ptr;
 };
 
-static void cleanup_threads_(pthread_t id);
+static void cleanup_threads_(struct self *own, pthread_t ptid);
 
 // -----------------------------------------------------------------------------
 // tls items
@@ -538,9 +538,10 @@ PS_SUBSCRIBE(INTERCEPT_EVENT, ANY_EVENT, {
     return self_handle_event_(chain, type, event, get_or_create_self_(true));
 })
 PS_SUBSCRIBE(INTERCEPT_BEFORE, ANY_EVENT, {
+    struct self *self = get_or_create_self_(true);
     if (unlikely(type == EVENT_THREAD_CREATE))
-        cleanup_threads_(0);
-    return self_handle_before_(chain, type, event, get_or_create_self_(true));
+        cleanup_threads_(self, 0);
+    return self_handle_before_(chain, type, event, self);
 })
 PS_SUBSCRIBE(INTERCEPT_AFTER, ANY_EVENT, {
     return self_handle_after_(chain, type, event, get_or_create_self_(true));
@@ -564,8 +565,16 @@ self_fini_(struct self *self)
 }
 
 static void
-cleanup_threads_(pthread_t ptid)
+cleanup_threads_(struct self *own, pthread_t ptid)
 {
+    // Once the current thread calls self_fini_() below, it will emit a message
+    // on the behalf of another thread. The subscribers might be again
+    // intercepted by Dice. When that happens, this thread will query for its
+    // self object without knowing it is finilizing another thread. To stop the
+    // recursion we use the same guard mechanism of normal publications.
+    if (own)
+        own->guard++;
+
     caslock_acquire(&threads_.lock);
     struct quack_node_s *item = quack_popall(&threads_.retired);
     struct quack_node_s *next = NULL;
@@ -582,6 +591,8 @@ cleanup_threads_(pthread_t ptid)
             quack_push(&threads_.retired, item);
     }
     caslock_release(&threads_.lock);
+    if (own)
+        own->guard--;
 }
 
 PS_SUBSCRIBE(INTERCEPT_EVENT, EVENT_THREAD_EXIT, {
@@ -600,8 +611,9 @@ PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_THREAD_JOIN, {
 
 DICE_MODULE_INIT({ init_threads_(); })
 DICE_MODULE_FINI({
-    cleanup_threads_(0);
-    self_fini_(get_self_());
+    struct self *self = get_self_();
+    cleanup_threads_(self, 0);
+    self_fini_(self);
 })
 
 PS_ADVERTISE_TYPE(EVENT_SELF_INIT)

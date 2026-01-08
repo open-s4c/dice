@@ -5,7 +5,7 @@ cmake_minimum_required(VERSION 3.20)
 project(
   dice
   LANGUAGES C CXX ASM
-  VERSION 1.4)
+  VERSION 1.3)
 
 # ------------------------------------------------------------------------------
 # Platform and dependencies
