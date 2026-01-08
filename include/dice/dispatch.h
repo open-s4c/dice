@@ -21,7 +21,8 @@
  * which in turn contains the user code. */
 #define PS_DISPATCH_DEF(CHAIN, TYPE, SLOT)                                     \
     DICE_HIDE enum ps_err PS_DISPATCH(CHAIN, TYPE, SLOT)(                      \
-        const chain_id chain, const type_id type, void *event, metadata_t *md) \
+        const chain_id chain, const type_id type, void *event,                 \
+        struct metadata *md)                                                   \
     {                                                                          \
         return PS_HANDLER(CHAIN, TYPE, SLOT)(chain, type, event, md);          \
     }

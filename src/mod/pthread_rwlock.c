@@ -19,7 +19,7 @@ INTERPOSE(int, pthread_rwlock_rdlock, pthread_rwlock_t *lock)
         .func = REAL_FUNC(pthread_rwlock_rdlock),
     };
 
-    metadata_t md = {0};
+    struct metadata md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_RWLOCK_RDLOCK, &ev, &md);
     ev.ret = ev.func(ev.lock);
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_RWLOCK_RDLOCK, &ev, &md);
@@ -38,7 +38,7 @@ INTERPOSE(int, pthread_rwlock_timedrdlock, pthread_rwlock_t *lock,
         .func    = REAL_FUNC(pthread_rwlock_timedrdlock),
     };
 
-    metadata_t md = {0};
+    struct metadata md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_RWLOCK_TIMEDRDLOCK, &ev, &md);
     ev.ret = ev.func(ev.lock, ev.abstime);
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_RWLOCK_TIMEDRDLOCK, &ev, &md);
@@ -55,7 +55,7 @@ INTERPOSE(int, pthread_rwlock_tryrdlock, pthread_rwlock_t *lock)
         .func = REAL_FUNC(pthread_rwlock_tryrdlock),
     };
 
-    metadata_t md = {0};
+    struct metadata md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_RWLOCK_TRYRDLOCK, &ev, &md);
     ev.ret = ev.func(ev.lock);
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_RWLOCK_TRYRDLOCK, &ev, &md);
@@ -71,7 +71,7 @@ INTERPOSE(int, pthread_rwlock_wrlock, pthread_rwlock_t *lock)
         .func = REAL_FUNC(pthread_rwlock_wrlock),
     };
 
-    metadata_t md = {0};
+    struct metadata md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_RWLOCK_WRLOCK, &ev, &md);
     ev.ret = ev.func(ev.lock);
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_RWLOCK_WRLOCK, &ev, &md);
@@ -90,7 +90,7 @@ INTERPOSE(int, pthread_rwlock_timedwrlock, pthread_rwlock_t *lock,
         .func    = REAL_FUNC(pthread_rwlock_timedwrlock),
     };
 
-    metadata_t md = {0};
+    struct metadata md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_RWLOCK_TIMEDWRLOCK, &ev, &md);
     ev.ret = ev.func(ev.lock, ev.abstime);
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_RWLOCK_TIMEDWRLOCK, &ev, &md);
@@ -107,7 +107,7 @@ INTERPOSE(int, pthread_rwlock_trywrlock, pthread_rwlock_t *lock)
         .func = REAL_FUNC(pthread_rwlock_trywrlock),
     };
 
-    metadata_t md = {0};
+    struct metadata md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_RWLOCK_TRYWRLOCK, &ev, &md);
     ev.ret = ev.func(ev.lock);
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_RWLOCK_TRYWRLOCK, &ev, &md);
@@ -123,7 +123,7 @@ INTERPOSE(int, pthread_rwlock_unlock, pthread_rwlock_t *lock)
         .func = REAL_FUNC(pthread_rwlock_unlock),
     };
 
-    metadata_t md = {0};
+    struct metadata md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_RWLOCK_UNLOCK, &ev, &md);
     ev.ret = ev.func(ev.lock);
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_RWLOCK_UNLOCK, &ev, &md);

@@ -62,7 +62,7 @@ INTERPOSE(int, pthread_create, pthread_t *thread, const pthread_attr_t *attr,
         .func   = REAL_FUNC(pthread_create),
     };
 
-    metadata_t md = {0};
+    struct metadata md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_THREAD_CREATE, &ev, &md);
     ev.ret = ev.func(ev.thread, ev.attr, trampoline_, t);
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_THREAD_CREATE, &ev, &md);
@@ -78,7 +78,7 @@ INTERPOSE(int, pthread_join, pthread_t thread, void **ptr)
         .func   = REAL_FUNC(pthread_join),
     };
 
-    metadata_t md = {0};
+    struct metadata md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_THREAD_JOIN, &ev, &md);
     ev.ret = ev.func(ev.thread, ev.ptr);
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_THREAD_JOIN, &ev, &md);

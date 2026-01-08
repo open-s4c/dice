@@ -21,7 +21,8 @@
  * ps_err. */
 #define PS_HANDLER_DEF(CHAIN, TYPE, SLOT, CODE)                                \
     static inline enum ps_err PS_HANDLER(CHAIN, TYPE, SLOT)(                   \
-        const chain_id chain, const type_id type, void *event, metadata_t *md) \
+        const chain_id chain, const type_id type, void *event,                 \
+        struct metadata *md)                                                   \
     {                                                                          \
         /* Parameters are marked as unused to silence warnings. */             \
         /* Nevertheless, the callback can use parameters without issues. */    \

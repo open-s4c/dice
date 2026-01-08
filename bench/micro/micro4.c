@@ -14,7 +14,7 @@ vatomic32_t stop;
 vatomic32_t start;
 vatomic64_t count;
 void intercept(const chain_id chain, const type_id type, void *event,
-               metadata_t *md);
+               struct metadata *md);
 
 void *
 run_time(void *_)

@@ -25,7 +25,8 @@ PS_SUBSCRIBE(CAPTURE_EVENT, EVENT_MA_AWRITE, {
 })
 
 void
-intercept(const chain_id chain, const type_id type, void *event, metadata_t *md)
+intercept(const chain_id chain, const type_id type, void *event,
+          struct metadata *md)
 {
     PS_PUBLISH(chain, type, event, md);
 }

@@ -18,7 +18,7 @@
 _tmpl_begin(CCC = CHAINS, SSS = SLOTS);
 DICE_WEAK DICE_HIDE enum ps_err
 ps_dispatch_CCC_0_SSS_(const chain_id chain, const type_id type, void *event,
-                       metadata_t *md)
+                       struct metadata *md)
 {
     (void)chain;
     (void)type;
@@ -31,7 +31,7 @@ _tmpl_end();
 _tmpl_begin(CCC = CHAINS, EEE = EVENTS, SSS = SLOTS);
 DICE_WEAK DICE_HIDE enum ps_err
 ps_dispatch_CCC_EEE_SSS_(const chain_id chain, const type_id type, void *event,
-                         metadata_t *md)
+                         struct metadata *md)
 {
     (void)chain;
     (void)type;
@@ -44,7 +44,7 @@ _tmpl_end();
 _tmpl_begin(CCC = CHAINS, EEE = EVENTS);
 static enum ps_err
 ps_dispatch_CCC_EEE_(const chain_id chain, const type_id type, void *event,
-                     metadata_t *md)
+                     struct metadata *md)
 {
     enum ps_err err;
     _tmpl2_begin(SSS = SLOTS);
@@ -64,7 +64,7 @@ _tmpl_end();
 _tmpl_begin(CCC = CHAINS);
 DICE_HIDE enum ps_err
 ps_dispatch_CCC_(const chain_id chain, const type_id type, void *event,
-                 metadata_t *md)
+                 struct metadata *md)
 {
     switch (type) {
         default:

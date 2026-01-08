@@ -33,11 +33,11 @@ osid_(void)
 #endif
 
 static uint64_t
-self_osid_(metadata_t *md)
+self_osid_(struct metadata *md)
 {
-    uint8_t *ptr = (uint8_t *)md; // start with the self object
-    ptr += sizeof(metadata_t);    // add metadata field
-    ptr += sizeof(void *);        // add quack_node, which is a pointer
+    uint8_t *ptr = (uint8_t *)md;   // start with the self object
+    ptr += sizeof(struct metadata); // add metadata field
+    ptr += sizeof(void *);          // add quack_node, which is a pointer
     uint64_t *osid_field = (uint64_t *)ptr;
     return *osid_field;
 }

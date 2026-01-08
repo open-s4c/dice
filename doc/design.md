@@ -1,7 +1,5 @@
 ---
 title: Dice Design Document
-author: Diogo Behrens
-version: "1.2"
 ---
 
 # 1. Overview
@@ -158,8 +156,8 @@ The Pubsub system introduces several key advantages:
 
 2. **Publishing**: Publishers (such as intercept modules or the Self module)
    publish events by calling `PS_PUBLISH(chain_id, type_id, void*,
-   metadata_t*)`. The publisher specifies the chain, event type, event payload,
-   and a potentially `NULL` metadata object.
+   struct metadata*)`. The publisher specifies the chain, event type, event
+   payload, and a potentially `NULL` metadata object.
 
 3. **Event handlers**: The event handler function is where the action happens
    for the subscriber. Upon receiving an event, the handler can inspect and
@@ -173,7 +171,7 @@ The Pubsub system introduces several key advantages:
     or **payload**. The actual type of this pointer must be agreed between
     publisher and subscriber and can be determined from `type`. The
     Pubsub module is oblivious to the particular event type.
-  - `metadata_t *md`: An opaque data structure used by each chain to send
+  - `struct metadata *md`: An opaque data structure used by each chain to send
     metadata to the subscribers. Actual type defined by `chain`.
 
 4. **Chain broadcast**: The ordering of delivery of events to handlers is
@@ -464,9 +462,9 @@ events in equivalent **capture chains**: `CAPTURE_BEFORE`, `CAPTURE_AFTER`,
 by any subscriber to query for TLS data as well as thread ID without any extra
 cost.  The functions provided for these functionalities are in `dice/self.h`:
 
-- `self_id(metadata_t *md)` returns the Dice's thread ID (starting from 1).
-- `self_tls(metadata_t *md, const void *key, size_t size)` returns a pointer to
-  a thread-local memory of `size` identified by `key`.
+- `self_id(struct metadata *md)` returns the Dice's thread ID (starting from 1).
+- `self_tls(struct metadata *md, const void *key, size_t size)` returns a
+  pointer to a thread-local memory of `size` identified by `key`.
 
 Unless the user is deploying a component reimplementing the functionality of
 the Self module, user modules should subscribe to `CAPTURE_` chains instead of

@@ -22,7 +22,7 @@ INTERPOSE(void *, mmap, void *addr, size_t length, int prot, int flags, int fd,
         .func   = REAL_FUNC(mmap),
     };
 
-    metadata_t md = {0};
+    struct metadata md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_MMAP, &ev, &md);
     ev.ret = ev.func(ev.addr, ev.length, ev.prot, ev.flags, ev.fd, ev.offset);
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_MMAP, &ev, &md);
@@ -45,7 +45,7 @@ INTERPOSE(void *, mmap64, void *addr, size_t length, int prot, int flags,
         .func   = REAL_FUNC(mmap64),
     };
 
-    metadata_t md = {0};
+    struct metadata md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_MMAP, &ev, &md);
     ev.ret = ev.func(ev.addr, ev.length, ev.prot, ev.flags, ev.fd, ev.offset);
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_MMAP, &ev, &md);
@@ -63,7 +63,7 @@ INTERPOSE(int, munmap, void *addr, size_t length)
         .func   = REAL_FUNC(munmap),
     };
 
-    metadata_t md = {0};
+    struct metadata md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_MUNMAP, &ev, &md);
     ev.ret = ev.func(ev.addr, ev.length);
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_MUNMAP, &ev, &md);

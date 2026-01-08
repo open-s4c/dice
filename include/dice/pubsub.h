@@ -54,7 +54,7 @@ enum ps_err {
  * - PS_HANDLER_OFF: handler is disabled
  */
 typedef enum ps_err (*ps_callback_f)(const chain_id, const type_id, void *event,
-                                     metadata_t *md);
+                                     struct metadata *md);
 
 /* ps_publish publishes an event to a chain.
  *
@@ -65,14 +65,14 @@ typedef enum ps_err (*ps_callback_f)(const chain_id, const type_id, void *event,
  * Returns one of the PS_ error codes above.
  */
 enum ps_err ps_publish(const chain_id chain, const type_id type, void *event,
-                       metadata_t *md);
+                       struct metadata *md);
 
 
 /* PS_PUBLISH simplifies the publication and drop mechanism of metadata. */
 #define PS_PUBLISH(chain, type, event, md)                                     \
     do {                                                                       \
-        metadata_t __md = {0};                                                 \
-        metadata_t *_md = (md) != NULL ? (metadata_t *)(md) : &__md;           \
+        struct metadata __md = {0};                                            \
+        struct metadata *_md = (md) != NULL ? (struct metadata *)(md) : &__md; \
         if (_md->drop)                                                         \
             break;                                                             \
         enum ps_err err = ps_publish(chain, type, event, md);                  \
