@@ -37,18 +37,18 @@ DICE_MODULE_INIT()
 #define _tmpl_map(...)
 #define _tmpl_begin(...)
 #define _tmpl_end(...)
-#define __atomic_fetch_Op __atomic_exchange_n
-#define uintBITS_t        int
-#define PARAM_SUF         0
-#define EV_TYPE(...)      EVENT_MA_READ
-#define UPCASE
-#define SZ 0
-#define FUNC
-#define BITS          0
-#define uBITS         u8
-#define ma_FUNC_event ma_read_event
+#define __atomic_fetch_Op   __atomic_exchange_n
+#define uintBITS_t          int
+#define PARAM_SUF           0
+#define EV_TYPE(...)        EVENT_MA_READ
+#define SZ                  0
+#define BITS                0
+#define uBITS               u8
+#define ma_FUNC_event       ma_read_event
 #define ma_FUNC_range_event ma_read_range_event
-#define _tmpl_unmute  // --------------------------------------------------------
+#define UPCASE
+#define FUNC
+#define _tmpl_unmute // --------------------------------------------------------
 _tmpl_map(nix, );
 _tmpl_map(UPCASE, _tmpl_upcase);
 _tmpl_map(EV_TYPE, EVENT_MA_UPCASE);
@@ -78,9 +78,8 @@ __tsan_FUNC_range(void *addr, unsigned long size)
 }
 _tmpl_end()
 
-/* empty vptr impl */
-void
-__tsan_vptr_read(void **vptr_p)
+    /* empty vptr impl */
+    void __tsan_vptr_read(void **vptr_p)
 {
     (void)vptr_p;
 }
@@ -204,7 +203,7 @@ __tsan_atomicBITS_load(const volatile uintBITS_t *a, int mo)
         .val.u64 = 0,
     };
 
-    metadata_t md = {0};
+    struct metadata md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EV_TYPE(AREAD), &ev, &md);
     ev.val.uBITS = __atomic_load_n(a, __ATOMIC_SEQ_CST);
     PS_PUBLISH(INTERCEPT_AFTER, EV_TYPE(AREAD), &ev, &md);
@@ -228,7 +227,7 @@ __tsan_atomicBITS_store(volatile uintBITS_t *a, uintBITS_t v, int mo)
         .val.uBITS = v,
     };
 
-    metadata_t md = {0};
+    struct metadata md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EV_TYPE(AWRITE), &ev, &md);
     __atomic_store_n(a, v, __ATOMIC_SEQ_CST);
     PS_PUBLISH(INTERCEPT_AFTER, EV_TYPE(AWRITE), &ev, &md);
@@ -252,7 +251,7 @@ __tsan_atomicBITS_exchange(volatile uintBITS_t *a, uintBITS_t v, int mo)
         .old.u64   = 0,
     };
 
-    metadata_t md = {0};
+    struct metadata md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EV_TYPE(XCHG), &ev, &md);
     ev.old.uBITS = __atomic_exchange_n(a, v, __ATOMIC_SEQ_CST);
     PS_PUBLISH(INTERCEPT_AFTER, EV_TYPE(XCHG), &ev, &md);
@@ -277,7 +276,7 @@ __tsan_atomicBITS_fetch_Op(volatile uintBITS_t *a, uintBITS_t v, int mo)
         .old.u64   = 0,
     };
 
-    metadata_t md = {0};
+    struct metadata md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EV_TYPE(RMW), &ev, &md);
     ev.old.uBITS = __atomic_fetch_Op(a, v, __ATOMIC_SEQ_CST);
     PS_PUBLISH(INTERCEPT_AFTER, EV_TYPE(RMW), &ev, &md);
@@ -305,7 +304,7 @@ __tsan_atomicBITS_compare_exchange_SUF(volatile uintBITS_t *a, uintBITS_t *c,
         .ok        = 0,
     };
 
-    metadata_t md = {0};
+    struct metadata md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EV_TYPE(CMPXCHG), &ev, &md);
     ev.ok = __atomic_compare_exchange_n(a, c, v, PARAM_SUF, __ATOMIC_SEQ_CST,
                                         __ATOMIC_SEQ_CST);
@@ -334,7 +333,7 @@ __tsan_atomicBITS_compare_exchange_val(volatile uintBITS_t *a, uintBITS_t c,
         .old.u64   = 0,
         .ok        = 0,
     };
-    metadata_t md = {0};
+    struct metadata md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EV_TYPE(CMPXCHG), &ev, &md);
     ev.ok        = __atomic_compare_exchange_n(a, &c, v, 0, __ATOMIC_SEQ_CST,
                                                __ATOMIC_SEQ_CST);
@@ -356,7 +355,7 @@ __tsan_atomic_thread_fence(int mo)
         .mo   = mo,
     };
 
-    metadata_t md = {0};
+    struct metadata md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_MA_FENCE, &ev, &md);
     __atomic_thread_fence(__ATOMIC_SEQ_CST);
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_MA_FENCE, &ev, &md);
@@ -371,7 +370,7 @@ __tsan_atomic_signal_fence(int mo)
         .mo   = mo,
     };
 
-    metadata_t md = {0};
+    struct metadata md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_MA_FENCE, &ev, &md);
     __atomic_signal_fence(__ATOMIC_SEQ_CST);
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_MA_FENCE, &ev, &md);

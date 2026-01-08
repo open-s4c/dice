@@ -20,7 +20,7 @@ INTERPOSE(int, pthread_cond_wait, pthread_cond_t *cond, pthread_mutex_t *mutex)
         .func  = REAL_FUNCP(pthread_cond_wait),
     };
 
-    metadata_t md = {0};
+    struct metadata md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_COND_WAIT, &ev, &md);
     ev.ret = ev.func(ev.cond, ev.mutex);
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_COND_WAIT, &ev, &md);
@@ -39,7 +39,7 @@ INTERPOSE(int, pthread_cond_timedwait, pthread_cond_t *cond,
         .func    = REAL_FUNCP(pthread_cond_timedwait),
     };
 
-    metadata_t md = {0};
+    struct metadata md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_COND_TIMEDWAIT, &ev, &md);
     ev.ret = ev.func(ev.cond, ev.mutex, ev.abstime);
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_COND_TIMEDWAIT, &ev, &md);
@@ -55,7 +55,7 @@ INTERPOSE(int, pthread_cond_signal, pthread_cond_t *cond)
         .func = REAL_FUNCP(pthread_cond_signal),
     };
 
-    metadata_t md = {0};
+    struct metadata md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_COND_SIGNAL, &ev, &md);
     ev.ret = ev.func(ev.cond);
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_COND_SIGNAL, &ev, &md);
@@ -71,7 +71,7 @@ INTERPOSE(int, pthread_cond_broadcast, pthread_cond_t *cond)
         .func = REAL_FUNCP(pthread_cond_broadcast),
     };
 
-    metadata_t md = {0};
+    struct metadata md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_COND_BROADCAST, &ev, &md);
     ev.ret = ev.func(ev.cond);
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_COND_BROADCAST, &ev, &md);
@@ -93,7 +93,7 @@ INTERPOSE(int, pthread_cond_clockwait, pthread_cond_t *restrict cond,
         .func     = REAL_FUNC(pthread_cond_clockwait),
     };
 
-    metadata_t md = {0};
+    struct metadata md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_COND_CLOCKWAIT, &ev, &md);
     ev.ret = ev.func(ev.cond, ev.mutex, ev.clock_id, ev.abstime);
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_COND_CLOCKWAIT, &ev, &md);

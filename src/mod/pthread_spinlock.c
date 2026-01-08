@@ -19,7 +19,7 @@ INTERPOSE(int, pthread_spin_lock, pthread_spinlock_t *lock)
         .func = REAL_FUNC(pthread_spin_lock),
     };
 
-    metadata_t md = {0};
+    struct metadata md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_SPIN_LOCK, &ev, &md);
     ev.ret = ev.func(ev.lock);
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_SPIN_LOCK, &ev, &md);
@@ -35,7 +35,7 @@ INTERPOSE(int, pthread_spin_trylock, pthread_spinlock_t *lock)
         .func = REAL_FUNC(pthread_spin_trylock),
     };
 
-    metadata_t md = {0};
+    struct metadata md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_SPIN_TRYLOCK, &ev, &md);
     ev.ret = ev.func(ev.lock);
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_SPIN_TRYLOCK, &ev, &md);
@@ -51,7 +51,7 @@ INTERPOSE(int, pthread_spin_unlock, pthread_spinlock_t *lock)
         .func = REAL_FUNC(pthread_spin_unlock),
     };
 
-    metadata_t md = {0};
+    struct metadata md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_SPIN_UNLOCK, &ev, &md);
     ev.ret = ev.func(ev.lock);
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_SPIN_UNLOCK, &ev, &md);

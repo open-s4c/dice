@@ -16,7 +16,7 @@ INTERPOSE(void *, malloc, size_t size)
         .func = REAL_FUNC(malloc),
     };
 
-    metadata_t md = {0};
+    struct metadata md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_MALLOC, &ev, &md);
     ev.ret = ev.func(ev.size);
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_MALLOC, &ev, &md);
@@ -33,7 +33,7 @@ INTERPOSE(void *, calloc, size_t number, size_t size)
         .func   = REAL_FUNC(calloc),
     };
 
-    metadata_t md = {0};
+    struct metadata md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_CALLOC, &ev, &md);
     ev.ret = ev.func(ev.number, ev.size);
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_CALLOC, &ev, &md);
@@ -50,7 +50,7 @@ INTERPOSE(void *, realloc, void *ptr, size_t size)
         .func = REAL_FUNC(realloc),
     };
 
-    metadata_t md = {0};
+    struct metadata md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_REALLOC, &ev, &md);
     ev.ret = ev.func(ev.ptr, ev.size);
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_REALLOC, &ev, &md);
@@ -72,7 +72,7 @@ INTERPOSE(void, free, void *ptr)
         return;
     }
 #endif
-    metadata_t md = {0};
+    struct metadata md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_FREE, &ev, &md);
     ev.func(ev.ptr);
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_FREE, &ev, &md);
@@ -89,7 +89,7 @@ INTERPOSE(int, posix_memalign, void **ptr, size_t alignment, size_t size)
         .func      = REAL_FUNC(posix_memalign),
     };
 
-    metadata_t md = {0};
+    struct metadata md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_POSIX_MEMALIGN, &ev, &md);
     ev.ret = ev.func(ev.ptr, ev.alignment, ev.size);
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_POSIX_MEMALIGN, &ev, &md);
@@ -106,7 +106,7 @@ INTERPOSE(void *, aligned_alloc, size_t alignment, size_t size)
         .func      = REAL_FUNC(aligned_alloc),
     };
 
-    metadata_t md = {0};
+    struct metadata md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_ALIGNED_ALLOC, &ev, &md);
     ev.ret = ev.func(ev.alignment, ev.size);
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_ALIGNED_ALLOC, &ev, &md);

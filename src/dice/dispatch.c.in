@@ -20,7 +20,7 @@
 _tmpl_begin(CCC = CHAINS);
 DICE_WEAK DICE_HIDE enum ps_err
 ps_dispatch_CCC_(const chain_id chain, const type_id type, void *event,
-                 metadata_t *md)
+                 struct metadata *md)
 {
     (void)chain;
     (void)type;
@@ -52,7 +52,7 @@ ps_dispatch_chain_on_(const chain_id chain)
 /* main dispatcher */
 DICE_HIDE enum ps_err
 ps_dispatch_(const chain_id chain, const type_id type, void *event,
-             metadata_t *md)
+             struct metadata *md)
 {
     _tmpl_begin(CCC = CHAINS);
     if (likely(chain == CCC))

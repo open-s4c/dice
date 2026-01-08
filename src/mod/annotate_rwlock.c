@@ -18,7 +18,7 @@ INTERPOSE(void, AnnotateRWLockCreate, const char *file, int line,
         .lock = lock,
     };
 
-    metadata_t md = {0};
+    struct metadata md = {0};
     PS_PUBLISH(INTERCEPT_EVENT, EVENT_ANNOTATE_RWLOCK_CREATE, &ev, &md);
 }
 
@@ -31,7 +31,7 @@ INTERPOSE(void, AnnotateRWLockDestroy, const char *file, int line,
         .lock = lock,
     };
 
-    metadata_t md = {0};
+    struct metadata md = {0};
     PS_PUBLISH(INTERCEPT_EVENT, EVENT_ANNOTATE_RWLOCK_DESTROY, &ev, &md);
 }
 
@@ -43,7 +43,7 @@ INTERPOSE(void, AnnotateRWLockAcquired, const char *file, int line,
                                               .lock = lock,
                                               .is_w = is_w};
 
-    metadata_t md = {0};
+    struct metadata md = {0};
     PS_PUBLISH(INTERCEPT_EVENT, EVENT_ANNOTATE_RWLOCK_ACQ, &ev, &md);
 }
 
@@ -55,7 +55,7 @@ INTERPOSE(void, AnnotateRWLockReleased, const char *file, int line,
                                               .lock = lock,
                                               .is_w = is_w};
 
-    metadata_t md = {0};
+    struct metadata md = {0};
     PS_PUBLISH(INTERCEPT_EVENT, EVENT_ANNOTATE_RWLOCK_REL, &ev, &md);
 }
 

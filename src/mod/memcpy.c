@@ -18,7 +18,7 @@ INTERPOSE(void *, memcpy, void *dest, const void *src, size_t num)
         .func = REAL_FUNC(memcpy),
     };
 
-    metadata_t md = {0};
+    struct metadata md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_MEMCPY, &ev, &md);
     ev.ret = ev.func(ev.dest, ev.src, ev.num);
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_MEMCPY, &ev, &md);
@@ -36,7 +36,7 @@ INTERPOSE(void *, memmove, void *dest, const void *src, size_t count)
         .func  = REAL_FUNC(memmove),
     };
 
-    metadata_t md = {0};
+    struct metadata md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_MEMMOVE, &ev, &md);
     ev.ret = ev.func(ev.dest, ev.src, ev.count);
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_MEMMOVE, &ev, &md);
@@ -60,7 +60,7 @@ dice___memset(void *ptr, int value, size_t num)
         .func  = REAL_FUNC(memset),
     };
 
-    metadata_t md = {0};
+    struct metadata md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_MEMSET, &ev, &md);
     ev.ret = ev.func(ev.ptr, ev.value, ev.num);
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_MEMSET, &ev, &md);

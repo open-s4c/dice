@@ -7,13 +7,14 @@
 // -----------------------------------------------------------------------------
 
 bool ps_initd_(void);
-enum ps_err ps_dispatch_(const chain_id, const type_id, void *, metadata_t *);
+enum ps_err ps_dispatch_(const chain_id, const type_id, void *,
+                         struct metadata *);
 int ps_dispatch_max(void);
 bool ps_dispatch_chain_on_(chain_id);
 
 DICE_HIDE enum ps_err
 ps_publish(const chain_id chain, const type_id type, void *event,
-           metadata_t *md)
+           struct metadata *md)
 {
     if (PS_NOT_INITD_())
         return PS_DROP_EVENT;

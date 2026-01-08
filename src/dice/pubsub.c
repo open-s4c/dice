@@ -181,7 +181,7 @@ ps_subscribe(chain_id chain, type_id type, ps_callback_f cb, int slot)
 
 static enum ps_err
 ps_callback_(const chain_id chain, const type_id type, void *event,
-             metadata_t *md)
+             struct metadata *md)
 {
     if (unlikely(chain >= MAX_CHAINS))
         return PS_INVALID;
@@ -205,7 +205,7 @@ ps_callback_(const chain_id chain, const type_id type, void *event,
 
 DICE_WEAK DICE_HIDE enum ps_err
 ps_dispatch_(const chain_id chain, const type_id type, void *event,
-             metadata_t *md)
+             struct metadata *md)
 {
     (void)chain;
     (void)type;
@@ -216,7 +216,7 @@ ps_dispatch_(const chain_id chain, const type_id type, void *event,
 
 DICE_WEAK enum ps_err
 ps_publish(const chain_id chain, const type_id type, void *event,
-           metadata_t *md)
+           struct metadata *md)
 {
     if (PS_NOT_INITD_())
         return PS_DROP_EVENT;

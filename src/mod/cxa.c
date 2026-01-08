@@ -17,7 +17,7 @@ INTERPOSE(int, __cxa_guard_acquire, void *addr)
         .ret  = 0,
         .func = REAL_FUNC(__cxa_guard_acquire),
     };
-    metadata_t md = {0};
+    struct metadata md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_CXA_GUARD_ACQUIRE, &ev, &md);
     ev.ret = ev.func(ev.addr);
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_CXA_GUARD_ACQUIRE, &ev, &md);
@@ -32,7 +32,7 @@ INTERPOSE(int, __cxa_guard_release, void *addr)
         .ret  = 0,
         .func = REAL_FUNC(__cxa_guard_release),
     };
-    metadata_t md = {0};
+    struct metadata md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_CXA_GUARD_RELEASE, &ev, &md);
     ev.ret = ev.func(ev.addr);
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_CXA_GUARD_RELEASE, &ev, &md);
@@ -46,7 +46,7 @@ INTERPOSE(void, __cxa_guard_abort, void *addr)
         .addr = addr,
         .func = REAL_FUNC(__cxa_guard_abort),
     };
-    metadata_t md = {0};
+    struct metadata md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_CXA_GUARD_ABORT, &ev, &md);
     ev.func(ev.addr);
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_CXA_GUARD_ABORT, &ev, &md);

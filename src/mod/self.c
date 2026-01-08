@@ -51,7 +51,7 @@
 
 /* self object represents each thread in the CAPTURE chains. */
 struct self {
-    metadata_t md;
+    struct metadata md;
     struct quack_node_s retired_node;
     uint64_t osid;  // OS-specific thread identifier
     pthread_t ptid; // pthread-specific thread identifier
@@ -149,21 +149,21 @@ tls_del_(struct self *self, uintptr_t key)
 // -----------------------------------------------------------------------------
 
 DICE_HIDE thread_id
-self_id_(metadata_t *md)
+self_id_(struct metadata *md)
 {
     struct self *self = (struct self *)md;
     return likely(self) ? self->id : NO_THREAD;
 }
 
 DICE_HIDE bool
-self_retired_(metadata_t *md)
+self_retired_(struct metadata *md)
 {
     struct self *self = (struct self *)md;
     return likely(self) ? self->retired : false;
 }
 
 DICE_HIDE void *
-self_tls_get_(metadata_t *md, uintptr_t item_key)
+self_tls_get_(struct metadata *md, uintptr_t item_key)
 {
     struct self *self = (struct self *)md;
     assert(self != NULL);
@@ -173,7 +173,7 @@ self_tls_get_(metadata_t *md, uintptr_t item_key)
 }
 
 DICE_HIDE void
-self_tls_set_(metadata_t *md, uintptr_t item_key, void *ptr,
+self_tls_set_(struct metadata *md, uintptr_t item_key, void *ptr,
               struct tls_dtor dtor)
 {
     struct self *self = (struct self *)md;
@@ -205,7 +205,7 @@ mempool_free_dtor_(void *arg, void *ptr)
 }
 
 DICE_HIDE void *
-self_tls_(metadata_t *md, const void *global, size_t size)
+self_tls_(struct metadata *md, const void *global, size_t size)
 {
     uintptr_t item_key = (uintptr_t)global;
 
@@ -228,32 +228,32 @@ self_tls_(metadata_t *md, const void *global, size_t size)
 }
 
 DICE_WEAK thread_id
-self_id(metadata_t *md)
+self_id(struct metadata *md)
 {
     return self_id_(md);
 }
 
 DICE_WEAK bool
-self_retired(metadata_t *md)
+self_retired(struct metadata *md)
 {
     return self_retired_(md);
 }
 
 DICE_WEAK void *
-self_tls_get(metadata_t *md, uintptr_t item_key)
+self_tls_get(struct metadata *md, uintptr_t item_key)
 {
     return self_tls_get_(md, item_key);
 }
 
 DICE_WEAK void
-self_tls_set(metadata_t *md, uintptr_t item_key, void *ptr,
+self_tls_set(struct metadata *md, uintptr_t item_key, void *ptr,
              struct tls_dtor dtor)
 {
     self_tls_set_(md, item_key, ptr, dtor);
 }
 
 DICE_WEAK void *
-self_tls(metadata_t *md, const void *global, size_t size)
+self_tls(struct metadata *md, const void *global, size_t size)
 {
     return self_tls_(md, global, size);
 }
@@ -457,7 +457,7 @@ retire_self_(struct self *self)
 #define self_guard(chain, type, event, self)                                   \
     do {                                                                       \
         self->guard++;                                                         \
-        self->md = (metadata_t){0};                                            \
+        self->md = (struct metadata){0};                                       \
         log_debug(">> [%" PRIu64 ":0x%" PRIx64 ":%" PRIu64 "] %s/%s: %d",      \
                   self_id(&self->md), (uint64_t)self->ptid, self->osid,        \
                   ps_chain_str(chain), ps_type_str(type), self->guard);        \

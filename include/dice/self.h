@@ -19,30 +19,30 @@
 /* Returns the Dice-assigned thread identifier for the current handler
  * invocation. IDs start at 1; `NO_THREAD` is reserved for representing no
  * thread and should never be returned. */
-thread_id self_id(metadata_t *self);
+thread_id self_id(struct metadata *self);
 
 /* True when the backing TLS object has been retired (for example, after a
  * thread exit). */
-bool self_retired(metadata_t *self);
+bool self_retired(struct metadata *self);
 
 /* Get or allocate a memory area in TLS.
  *
  * `global` must be a unique pointer, typically a global variable of the desired
  * type.
  */
-void *self_tls(metadata_t *self, const void *global, size_t size);
+void *self_tls(struct metadata *self, const void *global, size_t size);
 
 /* Get pointer mapped to key if any.
  *
  * If no memory area is mapped to key, return NULL.
  */
-void *self_tls_get(metadata_t *self, uintptr_t key);
+void *self_tls_get(struct metadata *self, uintptr_t key);
 
 /* Return self object as opaque metadata.
  *
  * Return NULL if no self object is registered for current thread.
  */
-metadata_t *self_md(void);
+struct metadata *self_md(void);
 
 struct tls_dtor {
     void (*free)(void *arg, void *ptr);
@@ -54,7 +54,7 @@ struct tls_dtor {
  * Replaces any existing mapping and installs an optional destructor that runs
  * when the TLS slot is reclaimed.
  */
-void self_tls_set(metadata_t *self, uintptr_t key, void *ptr,
+void self_tls_set(struct metadata *self, uintptr_t key, void *ptr,
                   struct tls_dtor dtor);
 
 
