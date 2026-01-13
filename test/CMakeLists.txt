@@ -17,8 +17,8 @@ set(DICE_simple on)
 set(DICE_intercept_event on)
 
 # Test cases in these lists will be compiled but not ran with sanitizers
-set(IGNORE_address "pthread_exit_window")
-set(IGNORE_thread "pthread_exit_window")
+set(IGNORE_address pthread_exit_window ensure_self_fini ensure_self_fini_detach)
+set(IGNORE_thread pthread_exit_window)
 set(IGNORE_undefined)
 
 # Dice script options
@@ -29,6 +29,8 @@ set(DICE_OPTS_pthread_create_join -pthread)
 set(DICE_OPTS_pthread_create_exit -pthread)
 set(DICE_OPTS_pthread_create_detach -pthread)
 set(DICE_OPTS_pthread_exit_window -pthread -malloc -self)
+set(DICE_OPTS_ensure_self_fini -pthread -malloc -self)
+set(DICE_OPTS_ensure_self_fini_detach -pthread -malloc -self)
 
 # tsano script path
 set(TSANOSH env TSANO_LIBDIR=${CMAKE_CURRENT_BINARY_DIR}/../deps/tsano/
@@ -55,6 +57,8 @@ endforeach()
 
 # Additional configuration of some tests
 target_link_libraries(pthread_exit_window PRIVATE dice-self)
+target_link_libraries(ensure_self_fini PRIVATE dice-self)
+target_link_libraries(ensure_self_fini_detach PRIVATE dice-self)
 
 # handle TASN sanitizer
 foreach(TARGET ${TARGETS})

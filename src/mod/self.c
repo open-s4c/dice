@@ -271,6 +271,8 @@ self_md(void)
 static struct {
     caslock_t lock;
     vatomic64_t count;
+    vatomic64_t created;
+    vatomic64_t dead;
     pthread_key_t cache_key;
     quack_t retired;
 } threads_;
@@ -549,6 +551,11 @@ PS_SUBSCRIBE(INTERCEPT_BEFORE, ANY_EVENT, {
     return self_handle_before_(chain, type, event, self);
 })
 PS_SUBSCRIBE(INTERCEPT_AFTER, ANY_EVENT, {
+    if (unlikely(type == EVENT_THREAD_CREATE)) {
+        struct pthread_create_event *ev = EVENT_PAYLOAD(ev);
+        if (ev->ret == 0)
+            vatomic_inc(&threads_.created);
+    };
     return self_handle_after_(chain, type, event, get_or_create_self_(true));
 })
 
@@ -590,10 +597,12 @@ cleanup_threads_(struct self *own, pthread_t ptid)
         struct self *self = container_of(item, struct self, retired_node);
 
         if ((ptid != 0 && self->ptid == ptid) ||
-            (ptid == 0 && thread_dead_(self)))
+            (ptid == 0 && thread_dead_(self))) {
             self_fini_(self);
-        else
+            vatomic_inc(&threads_.dead);
+        } else {
             quack_push(&threads_.retired, item);
+        }
     }
     caslock_release(&threads_.lock);
     if (own)
@@ -617,7 +626,16 @@ PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_THREAD_JOIN, {
 DICE_MODULE_INIT({ init_threads_(); })
 DICE_MODULE_FINI({
     struct self *self = get_self_();
-    cleanup_threads_(self, 0);
+
+    assert(vatomic_read(&threads_.count) >= 1 &&
+           "main thread did not increment count?");
+
+    for (uint64_t born, dead; (dead = vatomic_read(&threads_.dead)) <
+                              (born = vatomic_read(&threads_.created));) {
+        log_debug("waiting for %" PRIu64 " threads to die", (born - dead));
+        cleanup_threads_(self, 0);
+    }
+
     self_fini_(self);
 })
 
