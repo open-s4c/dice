@@ -6,9 +6,10 @@
 #define DICE_LOG_H
 
 #include <inttypes.h>
-#include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+
+#include <dice/utils.h>
 
 #ifdef LOG_UNLOCKED
     #define LOG_LOCK_ACQUIRE
@@ -45,7 +46,7 @@ DICE_WEAK caslock_t log_lock;
 #define log_printf(fmt, ...)                                                   \
     do {                                                                       \
         char msg[LOG_MAX_LEN];                                                 \
-        int n = snprintf(msg, LOG_MAX_LEN, fmt, ##__VA_ARGS__);                \
+        int n = snprintf_s(msg, LOG_MAX_LEN, fmt, ##__VA_ARGS__);                \
         if (write(STDOUT_FILENO, msg, n) == -1) {                              \
             perror("write stdout");                                            \
             exit(EXIT_FAILURE);                                                \

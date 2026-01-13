@@ -75,7 +75,7 @@ set(DISPATCH_SRCS ${DISPATCH_SRCS} ${DISPATCH_GENERATED})
 # ------------------------------------------------------------------------------
 # dice libraries
 # ------------------------------------------------------------------------------
-set(SRCS mempool.c pubsub.c registry.c memset.c ${DISPATCH_C})
+set(SRCS mempool.c pubsub.c registry.c memset.c utils.c ${DISPATCH_C})
 
 # dice (libdice.so) - SHARED library providing interface for plugin modules.
 # Only contains the core components mempool and pubsub. This library gets

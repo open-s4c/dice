@@ -19,7 +19,7 @@ foreach(SRC ${SRCS})
     target_compile_options(${TARGET} PRIVATE -std=c++11)
   endif()
 
-  target_link_libraries(${TARGET} PRIVATE mock_checker tsano pthread)
+  target_link_libraries(${TARGET} PRIVATE mock_checker tsano pthread dice)
 
   add_test(
     NAME ${TARGET}-test
