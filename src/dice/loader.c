@@ -30,6 +30,7 @@ init_()
     ps_init_();
 }
 
+#ifndef DICE_DISABLE_LOADER
 static void
 load_plugin_(const char *path)
 {
@@ -75,3 +76,4 @@ PS_SUBSCRIBE(CHAIN_CONTROL, EVENT_DICE_INIT, {
     }
     log_debug("[%4d] DONE: %s", DICE_MODULE_SLOT, __FILE__);
 })
+#endif
