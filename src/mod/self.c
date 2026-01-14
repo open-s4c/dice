@@ -626,15 +626,21 @@ PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_THREAD_JOIN, {
 DICE_MODULE_INIT({ init_threads_(); })
 DICE_MODULE_FINI({
     struct self *self = get_self_();
+    thread_id tid     = self ? self->id : MAIN_THREAD;
 
     assert(vatomic_read(&threads_.count) >= 1 &&
            "main thread did not increment count?");
 
-    for (uint64_t born, dead; (dead = vatomic_read(&threads_.dead)) <
-                              (born = vatomic_read(&threads_.created));) {
-        log_debug("waiting for %" PRIu64 " threads to die", (born - dead));
+    uint64_t born = 0;
+    uint64_t dead = 0;
+
+    do {
         cleanup_threads_(self, 0);
-    }
+        dead = vatomic_read(&threads_.dead);
+        born = vatomic_read(&threads_.created);
+        if (tid == MAIN_THREAD)
+            log_debug("waiting for %" PRIu64 " threads to die", (born - dead));
+    } while (tid == MAIN_THREAD && dead < born);
 
     self_fini_(self);
 })
