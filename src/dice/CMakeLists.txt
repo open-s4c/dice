@@ -7,6 +7,11 @@ set(DICE_DISPATCH_CHAINS
     "1,4,2,3,5,6,0"
     CACHE STRING "List of dispatch chains and their evaluation order")
 
+option(DICE_DISABLE_LOADER off "Disable plugin loader")
+if(DICE_DISABLE_LOADER)
+  add_compile_definitions(DICE_DISABLE_LOADER)
+endif()
+
 # ------------------------------------------------------------------------------
 # dispatchers generation
 # ------------------------------------------------------------------------------
