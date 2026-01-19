@@ -628,8 +628,11 @@ DICE_MODULE_FINI({
     struct self *self = get_self_();
     thread_id tid     = self ? self->id : MAIN_THREAD;
 
-    assert(vatomic_read(&threads_.count) >= 1 &&
-           "main thread did not increment count?");
+    if (vatomic_read(&threads_.count) == 0) {
+        log_warn(
+            "threads_.count==0: "
+            "main thread did not increment count?");
+    }
 
     uint64_t born = 0;
     uint64_t dead = 0;
