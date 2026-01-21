@@ -5,7 +5,10 @@ set(INCL_malloc '<dice/events/malloc.h>')
 set(FUNS_malloc malloc calloc realloc free posix_memalign aligned_alloc)
 
 set(INCL_memcpy '<dice/events/memcpy.h>')
-set(FUNS_memcpy memcpy memmove memset)
+set(FUNS_memcpy memcpy memmove)
+if(${DICE_MEMSET})
+  set(FUNS_memcpy ${FUNS_memcpy} memset)
+endif()
 
 set(INCL_mman '<dice/events/mman.h>')
 set(FUNS_mman mmap munmap)
@@ -117,7 +120,7 @@ foreach(MOD ${MODS})
 
   set(PRELOAD $<TARGET_FILE:dice-${MOD}>)
 
-  if(${MOD} STREQUAL "memcpy")
+  if(${MOD} STREQUAL "memcpy" AND ${DICE_MEMSET})
     set(PRELOAD "$<TARGET_FILE:dice-wrap_memset>:${PRELOAD}")
   endif()
 

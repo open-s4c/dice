@@ -76,6 +76,9 @@ if(${DICE_LTO})
   endif()
 endif()
 
+# memcpy wrapper
+option(DICE_MEMSET "Build Dice with memset wrapper" off)
+
 # Tests and benchmarks
 if(PROJECT_IS_TOP_LEVEL)
   set(TESTS_DEFAULT on)
