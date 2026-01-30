@@ -8,7 +8,7 @@ else
     SO=so
 fi
 
-ARCH=$(uname -p)
+ARCH=$(uname -m)
 
 # find libtsano
 CURDIR=$(readlink -f $(dirname "$0"))
