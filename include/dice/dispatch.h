@@ -7,11 +7,11 @@
 #include <dice/compiler.h>
 #include <dice/pubsub.h>
 
-/* NOTE: Do not include this file or call its macros. Instead, please include
- * dice/module.h and use the macros provided there. */
+/* NOTE: Do not include this file or call its macros. Instead, please
+ * include dice/module.h and use the macros provided there. */
 
-/* PS_DISPATCH builds the canonical name of dispatchers associated with a given
- * chain/type/slot triple. The resulting name  follows the pattern
+/* PS_DISPATCH builds the canonical name of dispatchers associated with a
+ * given chain/type/slot triple. The resulting name  follows the pattern
  * ps_dispatch_CHAIN_TYPE_SLOT_, where CHAIN, TYPE and SLOT are resolved to
  * their underlying numbers. */
 #define PS_DISPATCH(CHAIN, TYPE, SLOT)                                         \
@@ -31,10 +31,18 @@
  * module calls this function to determine if the main Dice library has a
  * builtin module for this slot. It overwrites a weakly defined symbol in the
  * dispatcher module, which always return false. */
-DICE_HIDE bool
-V_JOIN(V_JOIN(ps_dispatch_slot, DICE_MODULE_SLOT), on_)(void)
-{
-    return true;
-}
+#define PS_DISPATCH_SLOT_ON(SLOT)                                              \
+    DICE_HIDE bool V_JOIN(V_JOIN(ps_dispatch_slot, SLOT), on_)(void)           \
+    {                                                                          \
+        return true;                                                           \
+    }
+
+#ifndef DICE_MULTIFILE_MODULE
+
+PS_DISPATCH_SLOT_ON(DICE_MODULE_SLOT)
+
+    #undef PS_DISPATCH_SLOT_ON
+    #define PS_DISPATCH_SLOT_ON(_)
+#endif
 
 #endif /* DICE_DISPATCH_H */
