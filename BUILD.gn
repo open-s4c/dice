@@ -54,7 +54,7 @@ config("dice_stdcpp") {
 }
 
 action("gen_dice_sources") {
-  script = "//build/scripts/gen_dice_sources.py"
+  script = "//gn/scripts/gen_dice_sources.py"
   sources = [
     "//deps/dice/src/dice/dispatch.c.in",
     "//deps/dice/src/dice/dispatch_chain.c.in",
