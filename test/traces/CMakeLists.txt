@@ -17,6 +17,8 @@ foreach(SRC ${SRCS})
   endif()
   if(${SRC} MATCHES ".*\.cpp")
     target_compile_options(${TARGET} PRIVATE -std=c++11)
+  elseif(${SRC} MATCHES ".*\.c")
+    target_compile_options(${TARGET} PRIVATE -Wno-incompatible-pointer-types)
   endif()
 
   target_link_libraries(${TARGET} PRIVATE mock_checker tsano pthread)
