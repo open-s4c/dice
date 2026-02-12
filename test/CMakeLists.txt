@@ -56,6 +56,7 @@ foreach(SRC ${SRCS})
   if(NOT ${TARGET} IN_LIST IGNORE_${DICE_SANITIZER})
     add_test(NAME ${TARGET} COMMAND ${DICE_SCRIPT} ${DICE_OPTS_${TEST}}
                                     ${CMAKE_CURRENT_BINARY_DIR}/${TARGET})
+    target_compile_options(${TARGET} PRIVATE -Wno-incompatible-pointer-types)
     if(WILL_FAIL_${TARGET})
       set_property(TEST ${TARGET} PROPERTY WILL_FAIL TRUE)
     endif()
