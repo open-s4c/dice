@@ -15,10 +15,17 @@
 
 static size_t sizes_[] = {32,
                           128,
+                          256,
                           512,
-                          1024,
-                          2048,
-                          8192,
+                          1 * 1024,
+                          4 * 1024,
+                          8 * 10244,
+                          16 * 1024,
+                          32 * 1024,
+                          64 * 1024,
+                          128 * 1024,
+                          256 * 1024,
+                          512 * 1024,
                           1 * 1024 * 1024,
                           4 * 1024 * 1024,
                           8 * 1024 * 1024,
@@ -85,7 +92,7 @@ mempool_ensure_initd(void)
 {
     // assumes protected by lock
     if (unlikely(mp_.pool.memory == NULL))
-        mempool_init(MEMPOOL_SIZE);
+        mempool_init((size_t)MEMPOOL_SIZE);
 }
 
 DICE_MODULE_INIT({
