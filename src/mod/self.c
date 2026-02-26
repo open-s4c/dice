@@ -155,6 +155,13 @@ self_id_(struct metadata *md)
     return likely(self) ? self->id : NO_THREAD;
 }
 
+DICE_HIDE uint64_t
+os_id_(struct metadata *md)
+{
+    struct self *self = (struct self *)md;
+    return likely(self) ? self->osid : NO_THREAD;
+}
+
 DICE_HIDE bool
 self_retired_(struct metadata *md)
 {
@@ -231,6 +238,12 @@ DICE_WEAK thread_id
 self_id(struct metadata *md)
 {
     return self_id_(md);
+}
+
+DICE_WEAK uint64_t
+os_id(struct metadata *md)
+{
+    return os_id_(md);
 }
 
 DICE_WEAK bool

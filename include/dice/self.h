@@ -21,6 +21,9 @@
  * thread and should never be returned. */
 thread_id self_id(struct metadata *self);
 
+/* Returns the OS's thread identifier for the current handler. */
+uint64_t os_id(struct metadata *self);
+
 /* True when the backing TLS object has been retired (for example, after a
  * thread exit). */
 bool self_retired(struct metadata *self);
