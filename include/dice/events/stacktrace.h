@@ -8,10 +8,12 @@
 #define EVENT_STACKTRACE_ENTER 41
 #define EVENT_STACKTRACE_EXIT  42
 
-typedef struct {
+struct stacktrace_event {
     const void *pc;
     const void *caller;
     const char *fname;
-} stacktrace_event_t;
+};
+
+typedef struct stacktrace_event stacktrace_event_t;
 
 #endif /* DICE_STACKTRACE_H */
