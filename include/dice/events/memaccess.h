@@ -24,6 +24,15 @@
 #define EVENT_MA_WRITE_RANGE  40
 #define LAST_MA_EVENT         EVENT_MA_WRITE_RANGE
 
+enum rmw_op {
+    RMW_OP_ADD,
+    RMW_OP_SUB,
+    RMW_OP_AND,
+    RMW_OP_OR,
+    RMW_OP_XOR,
+    RMW_OP_NAND,
+};
+
 static inline bool
 is_memaccess(type_id type)
 {
@@ -95,6 +104,7 @@ struct ma_xchg_event {
 struct ma_rmw_event {
     const void *pc;
     const char *func;
+    enum rmw_op op;
     void *addr;
     size_t size;
     int mo;
@@ -148,15 +158,15 @@ struct ma_fence_event {
 struct ma_read_range_event {
     const void *pc;
     const char *func;
-    void *addr;        
+    void *addr;
     size_t size;
 };
 
 struct ma_write_range_event {
     const void *pc;
     const char *func;
-    void *addr;         
-    size_t size; 
+    void *addr;
+    size_t size;
 };
 
 #endif /* DICE_MEMACCESS_H */

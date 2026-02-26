@@ -262,13 +262,14 @@ _tmpl_end();
 /* -----------------------------------------------------------------------------
  * fetch_RMW
  * -------------------------------------------------------------------------- */
-_tmpl_begin(Op = [[add; sub; and; or ; xor; nand]], BITS = [[8; 16; 32; 64]]);
+_tmpl_begin(Op = [[add; sub; and; or ; xor ; nand]], BITS = [[8; 16; 32; 64]]);
 uintBITS_t
 __tsan_atomicBITS_fetch_Op(volatile uintBITS_t *a, uintBITS_t v, int mo)
 {
     struct ma_rmw_event ev = {
         .pc        = INTERPOSE_PC,
         .func      = "atomicBITS_fetch_Op",
+        .op        = RMW_OP__tmpl_upcase(Op),
         .addr      = (void *)a,
         .size      = (BITS >> 3),
         .mo        = mo,
