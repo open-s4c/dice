@@ -459,7 +459,6 @@ retire_self_(struct self *self)
 #define self_guard(chain, type, event, self)                                   \
     do {                                                                       \
         self->guard++;                                                         \
-        self->md = (struct metadata){0};                                       \
         log_debug(">> [%" PRIu64 ":0x%" PRIx64 ":%" PRIu64 "] %s/%s: %d",      \
                   self_id(&self->md), (uint64_t)self->ptid, self->osid,        \
                   ps_chain_str(chain), ps_type_str(type), self->guard);        \
@@ -485,7 +484,7 @@ self_handle_before_(const chain_id chain, const type_id type, void *event,
                   ps_chain_str(chain), ps_type_str(type), self->guard);
 
     assert(self->guard >= 0);
-    return PS_STOP_CHAIN;
+    return self->md.drop ? PS_DROP_EVENT : PS_STOP_CHAIN;
 }
 
 static enum ps_err
@@ -503,7 +502,7 @@ self_handle_after_(const chain_id chain, const type_id type, void *event,
                   ps_chain_str(chain), ps_type_str(type), self->guard);
 
     assert(self->guard >= 0);
-    return PS_STOP_CHAIN;
+    return self->md.drop ? PS_DROP_EVENT : PS_STOP_CHAIN;
 }
 
 static enum ps_err
@@ -521,7 +520,7 @@ self_handle_event_(const chain_id chain, const type_id type, void *event,
                   ps_chain_str(chain), ps_type_str(type), self->guard);
 
     assert(self->guard >= 0);
-    return PS_STOP_CHAIN;
+    return self->md.drop ? PS_DROP_EVENT : PS_STOP_CHAIN;
 }
 
 static inline struct self *
@@ -542,21 +541,29 @@ get_or_create_self_(bool publish)
 }
 
 PS_SUBSCRIBE(INTERCEPT_EVENT, ANY_EVENT, {
-    return self_handle_event_(chain, type, event, get_or_create_self_(true));
+    struct self *self = get_or_create_self_(true);
+    self->md          = md ? *md : (struct metadata){0};
+
+    return self_handle_event_(chain, type, event, self);
 })
 PS_SUBSCRIBE(INTERCEPT_BEFORE, ANY_EVENT, {
     struct self *self = get_or_create_self_(true);
+    self->md          = md ? *md : (struct metadata){0};
+
     if (unlikely(type == EVENT_THREAD_CREATE))
         cleanup_threads_(self, 0);
     return self_handle_before_(chain, type, event, self);
 })
 PS_SUBSCRIBE(INTERCEPT_AFTER, ANY_EVENT, {
+    struct self *self = get_or_create_self_(true);
+    self->md          = md ? *md : (struct metadata){0};
+
     if (unlikely(type == EVENT_THREAD_CREATE)) {
         struct pthread_create_event *ev = EVENT_PAYLOAD(ev);
         if (ev->ret == 0)
             vatomic_inc(&threads_.created);
     };
-    return self_handle_after_(chain, type, event, get_or_create_self_(true));
+    return self_handle_after_(chain, type, event, self);
 })
 
 // -----------------------------------------------------------------------------
@@ -611,16 +618,20 @@ cleanup_threads_(struct self *own, pthread_t ptid)
 
 PS_SUBSCRIBE(INTERCEPT_EVENT, EVENT_THREAD_EXIT, {
     struct self *self = get_or_create_self_(true);
+    self->md          = md ? *md : (struct metadata){0};
+
     self_handle_event_(chain, type, event, self);
     retire_self_(self);
-    return PS_STOP_CHAIN;
+    return self->md.drop ? PS_DROP_EVENT : PS_STOP_CHAIN;
 })
 
 PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_THREAD_JOIN, {
-    struct self *self             = get_or_create_self_(true);
+    struct self *self = get_or_create_self_(true);
+    self->md          = md ? *md : (struct metadata){0};
+
     struct pthread_join_event *ev = EVENT_PAYLOAD(ev);
     self_handle_after_(chain, type, event, self);
-    return PS_STOP_CHAIN;
+    return self->md.drop ? PS_DROP_EVENT : PS_STOP_CHAIN;
 })
 
 DICE_MODULE_INIT({ init_threads_(); })
