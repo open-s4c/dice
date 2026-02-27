@@ -54,6 +54,12 @@ ps_subscribe(chain_id chain, type_id type, ps_callback_f cb, int slot)
     return PS_ERROR;
 }
 
+DICE_HIDE void
+ps_init(void)
+{
+    (void)ps_initd_();
+}
+
 // -----------------------------------------------------------------------------
 // registry interface
 // -----------------------------------------------------------------------------

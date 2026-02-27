@@ -36,7 +36,7 @@ static size_t sizes_[] = {32,
                           256 * 1024 * 1024,
                           512 * 1024 * 1024,
                           1024 * 1024 * 1024,
-                          (size_t) 2 * 1024 * 1024 * 1024};
+                          (size_t)2 * 1024 * 1024 * 1024};
 #define NSTACKS     (sizeof(sizes_) / sizeof(size_t))
 #define HEADER_SIZE (sizeof(entry_t) + sizeof(entry_t *))
 
@@ -74,9 +74,18 @@ static mempool_t mp_;
 /* bypass malloc interceptor */
 REAL_DECL(void *, malloc, size_t n);
 
-DICE_HIDE void
+static bool
+is_initd_()
+{
+    return mp_.pool.memory != NULL;
+}
+
+DICE_WEAK DICE_HIDE void
 mempool_init(size_t cap)
 {
+    if (likely(is_initd_()))
+        return;
+
     memset(&mp_.stack, 0, sizeof(entry_t *) * NSTACKS);
     mp_.allocated     = 0;
     mp_.pool.capacity = cap;
@@ -91,15 +100,8 @@ static inline void
 mempool_ensure_initd(void)
 {
     // assumes protected by lock
-    if (unlikely(mp_.pool.memory == NULL))
-        mempool_init((size_t)MEMPOOL_SIZE);
+    mempool_init((size_t)MEMPOOL_SIZE);
 }
-
-DICE_MODULE_INIT({
-    caslock_acquire(&mp_.lock);
-    mempool_ensure_initd();
-    caslock_release(&mp_.lock);
-})
 
 DICE_HIDE void mempool_free_(void *ptr);
 DICE_HIDE void *mempool_aligned_alloc_(size_t alignment, size_t n);
