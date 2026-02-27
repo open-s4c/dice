@@ -51,6 +51,7 @@ STATIC_ASSERT(MAX_BUILTIN_SLOTS > 0, "Slot 0 is always builtin");
         static bool done_ = false;                                             \
         if (!done_) {                                                          \
             done_ = true;                                                      \
+            ps_init();                                                         \
             do {                                                               \
                 CODE                                                           \
             } while (0);                                                       \

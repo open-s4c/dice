@@ -77,8 +77,8 @@ ps_initd_(void)
     }
 }
 
-DICE_HIDE void
-ps_init_(void)
+DICE_WEAK void
+ps_init(void)
 {
     (void)ps_initd_();
 }
@@ -145,7 +145,7 @@ ps_subscribe_type_(chain_id chain, type_id type, ps_callback_f cb, int slot,
 static int
 ps_subscribe_(chain_id chain, type_id type, ps_callback_f cb, int slot)
 {
-    ps_init_(); // ensure initialized
+    ps_init(); // ensure initialized
 
     log_debug("Subscribe %s/%s/%d", ps_chain_str(chain), ps_type_str(type),
               slot);
