@@ -29,7 +29,7 @@ void
 __tsan_func_entry(void *caller)
 {
     check_main_start_(INTERPOSE_PC);
-    stacktrace_event_t ev = {.caller = caller, .pc = INTERPOSE_PC};
+    struct stacktrace_event ev = {.caller = caller, .pc = INTERPOSE_PC};
 
     struct metadata md = {0};
     PS_PUBLISH(INTERCEPT_EVENT, EVENT_STACKTRACE_ENTER, &ev, &md);
@@ -37,7 +37,7 @@ __tsan_func_entry(void *caller)
 void
 __tsan_func_exit(void)
 {
-    stacktrace_event_t ev = {.pc = INTERPOSE_PC};
+    struct stacktrace_event ev = {.pc = INTERPOSE_PC};
 
     struct metadata md = {0};
     PS_PUBLISH(INTERCEPT_EVENT, EVENT_STACKTRACE_EXIT, &ev, &md);
