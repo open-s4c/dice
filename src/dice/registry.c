@@ -114,7 +114,7 @@ ps_registry_add_(bool chain, uint16_t id, const char *name)
     if (names[id].assigned == NULL) {
         names[id].assigned = name;
     } else if (strcmp(names[id].assigned, name) == 0) {
-        log_debug("adding %s %u again", what, id);
+        log_print(ULTRA, "adding %s %u again", what, id);
     } else {
         log_fatal("cannot add %s %u again: %s != %s", what, id,
                   names[id].assigned, name);

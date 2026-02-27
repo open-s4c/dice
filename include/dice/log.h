@@ -24,6 +24,7 @@ DICE_WEAK caslock_t log_lock;
 #define LOG_LEVEL_FATAL 0
 #define LOG_LEVEL_INFO  1
 #define LOG_LEVEL_DEBUG 2
+#define LOG_LEVEL_ULTRA 3
 
 #ifndef LOG_LEVEL
     #define LOG_LEVEL INFO
@@ -50,6 +51,17 @@ DICE_WEAK caslock_t log_lock;
             perror("write stdout");                                            \
             exit(EXIT_FAILURE);                                                \
         }                                                                      \
+    } while (0)
+
+#define log_print(level, fmt, ...)                                             \
+    do {                                                                       \
+        if (LOG_LEVEL_ >= LOG_EXPAND(level)) { \
+       LOG_LOCK_ACQUIRE;                                                      \
+        log_printf(LOG_PREFIX);                                                \
+        log_printf(fmt, ##__VA_ARGS__);                                        \
+        log_printf(LOG_SUFFIX);                                                \
+        LOG_LOCK_RELEASE;                                                      \
+        } \
     } while (0)
 
 #define log_warn(fmt, ...)                                                     \
