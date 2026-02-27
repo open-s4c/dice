@@ -68,7 +68,9 @@ foreach(SRC ${SRCS})
   endif()
 
   foreach(ENDING ${ENDINGS})
-    if(NOT "${MODULE}" IN_LIST TSAN_MODULES)
+    if("${MODULE}" IN_LIST TSAN_MODULES)
+      add_dependencies(${TARGET}${ENDING} expand-tsan.c)
+    else()
       if(NOT "${DICE_SANITIZER}" STREQUAL "")
         target_compile_options(${TARGET}${ENDING}
                                PUBLIC -fsanitize=${DICE_SANITIZER})
