@@ -40,6 +40,7 @@ STATIC_ASSERT(MAX_BUILTIN_SLOTS > 0, "Slot 0 is always builtin");
     #include <dice/dispatch.h>
 #else
     #define PS_DISPATCH_DEF(CHAIN, TYPE, SLOT)
+    #define PS_DISPATCH_SLOT_ON(SLOT)
 #endif
 
 /* DICE_MODULE_INIT wraps the constructor logic of a module. The callback runs
@@ -66,7 +67,8 @@ STATIC_ASSERT(MAX_BUILTIN_SLOTS > 0, "Slot 0 is always builtin");
     PS_SUBSCRIBE(CHAIN_CONTROL, EVENT_DICE_INIT, {                             \
         if (module_init_())                                                    \
             log_debug("[%4d] INIT! %s", DICE_MODULE_SLOT, __FILE__);           \
-    })
+    })                                                                         \
+    PS_DISPATCH_SLOT_ON(DICE_MODULE_SLOT)
 
 
 /* DICE_MODULE_FINI marks a destructor hook. Use it for cleanup that must run
