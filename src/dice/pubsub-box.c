@@ -17,16 +17,13 @@ ps_publish(const chain_id chain, const type_id type, void *event,
            struct metadata *md)
 {
     if (PS_NOT_INITD_())
-        return PS_DROP_EVENT;
+        return PS_STOP_CHAIN;
 
     log_debug("Dispatch %s/%s", ps_chain_str(chain), ps_type_str(type));
     enum ps_err err = ps_dispatch_(chain, type, event, md);
 
     if (likely(err == PS_STOP_CHAIN))
-        return PS_OK;
-
-    if (likely(err == PS_DROP_EVENT))
-        return PS_DROP_EVENT;
+        return err;
 
     return PS_OK;
 }

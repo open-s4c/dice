@@ -38,8 +38,7 @@
 enum ps_err {
     PS_OK          = 0,
     PS_STOP_CHAIN  = 1,
-    PS_DROP_EVENT  = 2,
-    PS_HANDLER_OFF = 3,
+    PS_HANDLER_OFF = 2,
     PS_INVALID     = -1,
     PS_ERROR       = -2,
 };
@@ -50,7 +49,6 @@ enum ps_err {
  * - PS_OK: event handled successfully
  * - PS_STOP_CHAIN: event handled successfully, but chain should be
  *   interrupted
- * - PS_DROP_EVENT: event not handled and chain should be interrupted
  * - PS_HANDLER_OFF: handler is disabled
  */
 typedef enum ps_err (*ps_callback_f)(const chain_id, const type_id, void *event,
@@ -71,15 +69,11 @@ enum ps_err ps_publish(const chain_id chain, const type_id type, void *event,
 /* PS_PUBLISH simplifies the publication and drop mechanism of metadata. */
 #define PS_PUBLISH(chain, type, event, md)                                     \
     do {                                                                       \
-        struct metadata __md = {0};                                            \
+        struct metadata __md = {};                                             \
         struct metadata *_md = (md) != NULL ? (struct metadata *)(md) : &__md; \
-        if (_md->drop)                                                         \
-            break;                                                             \
-        enum ps_err err = ps_publish(chain, type, event, md);                  \
-        if (err == PS_DROP_EVENT)                                              \
-            _md->drop = true;                                                  \
-        if (err != PS_OK && err != PS_DROP_EVENT)                              \
-            log_fatal("could not publish");                                    \
+        enum ps_err err      = ps_publish(chain, type, event, _md);            \
+        if (err < 0)                                                           \
+            log_fatal("could not publish: %d", err);                           \
     } while (0)
 
 /* ps_subscribe subscribes a callback in a chain for an event.
