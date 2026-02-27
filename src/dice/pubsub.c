@@ -147,10 +147,10 @@ ps_subscribe_(chain_id chain, type_id type, ps_callback_f cb, int slot)
 {
     ps_init(); // ensure initialized
 
-    log_debug("Subscribe %s/%s/%d", ps_chain_str(chain), ps_type_str(type),
-              slot);
+    log_print(ULTRA, "Subscribe %s/%s/%d", ps_chain_str(chain),
+              ps_type_str(type), slot);
     if (ps_dispatch_chain_on_(chain) && slot <= ps_dispatch_max()) {
-        log_debug("Ignore subscription %s/%s/%d", ps_chain_str(chain),
+        log_print(ULTRA, "Ignore subscription %s/%s/%d", ps_chain_str(chain),
                   ps_type_str(type), slot);
         return PS_OK;
     }
@@ -221,7 +221,7 @@ ps_publish(const chain_id chain, const type_id type, void *event,
     if (PS_NOT_INITD_())
         return PS_DROP_EVENT;
 
-    log_debug("Publish %s/%s", ps_chain_str(chain), ps_type_str(type));
+    log_print(ULTRA, "Publish %s/%s", ps_chain_str(chain), ps_type_str(type));
     enum ps_err err = ps_dispatch_(chain, type, event, md);
 
     if (likely(err == PS_STOP_CHAIN))
