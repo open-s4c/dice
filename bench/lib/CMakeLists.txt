@@ -27,4 +27,4 @@ target_link_libraries(
 # dice-bundle-cbonly - does not contain the dispatchers. It should only be used
 # to measure the overhead of having callbacks and dispatchers in dice-bundle.
 add_library(dice-bundle-cbonly SHARED)
-target_link_libraries(dice-bundle-cbonly PRIVATE dice-cbonly.o ${MODS})
+target_link_libraries(dice-bundle-cbonly PRIVATE dice-core.o ${MODS})
