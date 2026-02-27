@@ -146,4 +146,11 @@ chain_id ps_chain_lookup(const char *name);
  */
 type_id ps_type_lookup(const char *name);
 
+
+/* ps_init ensures the pubsub is initialized.
+ *
+ * Typically, this can be called from a module intializer.
+ */
+void ps_init(void);
+
 #endif /* DICE_PUBSUB_H */

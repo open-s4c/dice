@@ -22,13 +22,6 @@
 #endif
 
 int ps_dispatch_max(void);
-void ps_init_();
-
-static DICE_CTOR void
-init_()
-{
-    ps_init_();
-}
 
 #ifndef DICE_DISABLE_LOADER
 static void
