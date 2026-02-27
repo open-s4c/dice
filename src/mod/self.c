@@ -460,7 +460,6 @@ retire_self_(struct self *self)
 #define self_guard(chain, type, event, self)                                   \
     do {                                                                       \
         self->guard++;                                                         \
-        self->md = (struct metadata){0};                                       \
         log_debug(">> [%" PRIu64 ":0x%" PRIx64 ":%" PRIu64 "] %s/%s: %d",      \
                   self_id(&self->md), (uint64_t)self->ptid, self->osid,        \
                   ps_chain_str(chain), ps_type_str(type), self->guard);        \
@@ -543,21 +542,34 @@ get_or_create_self_(bool publish)
 }
 
 PS_SUBSCRIBE(INTERCEPT_EVENT, ANY_EVENT, {
-    return self_handle_event_(chain, type, event, get_or_create_self_(true));
+    struct self *self = get_or_create_self_(true);
+    self->md          = md ? *md : (struct metadata){};
+    enum ps_err err   = self_handle_event_(chain, type, event, self);
+    *md               = self->md;
+    return err;
 })
 PS_SUBSCRIBE(INTERCEPT_BEFORE, ANY_EVENT, {
     struct self *self = get_or_create_self_(true);
+    self->md          = md ? *md : (struct metadata){};
+
     if (unlikely(type == EVENT_THREAD_CREATE))
         cleanup_threads_(self, 0);
-    return self_handle_before_(chain, type, event, self);
+    enum ps_err err = self_handle_before_(chain, type, event, self);
+    *md             = self->md;
+    return err;
 })
 PS_SUBSCRIBE(INTERCEPT_AFTER, ANY_EVENT, {
+    struct self *self = get_or_create_self_(true);
+    self->md          = md ? *md : (struct metadata){};
+
     if (unlikely(type == EVENT_THREAD_CREATE)) {
         struct pthread_create_event *ev = EVENT_PAYLOAD(ev);
         if (ev->ret == 0)
             vatomic_inc(&threads_.created);
     };
-    return self_handle_after_(chain, type, event, get_or_create_self_(true));
+    enum ps_err err = self_handle_after_(chain, type, event, self);
+    *md             = self->md;
+    return err;
 })
 
 // -----------------------------------------------------------------------------
@@ -612,16 +624,20 @@ cleanup_threads_(struct self *own, pthread_t ptid)
 
 PS_SUBSCRIBE(INTERCEPT_EVENT, EVENT_THREAD_EXIT, {
     struct self *self = get_or_create_self_(true);
-    self_handle_event_(chain, type, event, self);
+    self->md          = md ? *md : (struct metadata){};
+    enum ps_err err   = self_handle_event_(chain, type, event, self);
     retire_self_(self);
-    return PS_STOP_CHAIN;
+    *md = self->md;
+    return err;
 })
 
 PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_THREAD_JOIN, {
     struct self *self             = get_or_create_self_(true);
+    self->md                      = md ? *md : (struct metadata){};
     struct pthread_join_event *ev = EVENT_PAYLOAD(ev);
-    self_handle_after_(chain, type, event, self);
-    return PS_STOP_CHAIN;
+    enum ps_err err = self_handle_after_(chain, type, event, self);
+    *md             = self->md;
+    return err;
 })
 
 DICE_MODULE_INIT({ init_threads_(); })
