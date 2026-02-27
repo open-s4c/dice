@@ -113,6 +113,11 @@ if(NOT "${DICE_SANITIZER}" STREQUAL "")
   set(LIBSAN_LINK ${LIBSAN_${DICE_SANITIZER}})
 endif()
 
+option(DICE_MAIN_HOOKS "Try to inject enter/exit hooks on main()" on)
+if(NOT "${DICE_MAIN_HOOKS}")
+  add_compile_definitions(DICE_MAIN_START_DISABLE)
+endif()
+
 # ------------------------------------------------------------------------------
 # Include directories
 # ------------------------------------------------------------------------------
