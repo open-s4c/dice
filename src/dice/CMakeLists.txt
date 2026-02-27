@@ -117,10 +117,10 @@ add_library(dice-pubsub-box.o OBJECT pubsub-box.c)
 target_compile_definitions(dice-pubsub-box.o PRIVATE DICE_HIDE_ALL)
 target_link_libraries(dice-pubsub-box.o PRIVATE dice.h)
 
-# dice-cbonly.o - OBJECT library as dice.o but without dispatchers. Only used
-# for performance testing.
-add_library(dice-cbonly.o OBJECT ${SRCS})
-target_link_libraries(dice-cbonly.o PUBLIC dice.h)
+# dice-core.o - OBJECT library as dice.o but without dispatchers. Can be used
+# for perfomance testing or to link with custom dispatchers.
+add_library(dice-core.o OBJECT ${SRCS})
+target_link_libraries(dice-core.o PUBLIC dice.h)
 
 # dice-override.o - OBJECT library to override memset (and potentially others)
 add_library(dice-override.o OBJECT memset.c)
