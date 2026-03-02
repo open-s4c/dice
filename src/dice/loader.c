@@ -2,7 +2,6 @@
  * Copyright (C) 2025 Huawei Technologies Co., Ltd.
  * SPDX-License-Identifier: 0BSD
  */
-#include <assert.h>
 #include <dlfcn.h>
 #include <stddef.h>
 #include <stdlib.h>
@@ -62,10 +61,13 @@ PS_SUBSCRIBE(CHAIN_CONTROL, EVENT_DICE_INIT, {
               ps_dispatch_max());
     if (envvar != NULL) {
         char *plugins = strdup_(envvar);
-        assert(plugins);
+        if (plugins == NULL)
+            log_fatal("could not duplicate string: %s", envvar);
 
         char *path = strtok(plugins, ":");
-        assert(path);
+        if (path == NULL)
+            log_fatal("string tokenizer failed: %s", plugins);
+
         // skip first
         path = strtok(NULL, ":");
         while (path != NULL) {
