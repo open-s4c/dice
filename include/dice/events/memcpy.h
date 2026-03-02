@@ -6,7 +6,6 @@
 #define DICE_MEMCPY_H
 
 #include <stddef.h>
-#include <string.h>
 
 #define EVENT_MEMCPY  100
 #define EVENT_MEMMOVE 101

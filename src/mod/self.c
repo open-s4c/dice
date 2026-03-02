@@ -122,7 +122,8 @@ tls_find_(struct self *self, uintptr_t key)
 static void
 tls_add_(struct self *self, struct tls_item item)
 {
-    assert(self->tls.cap > self->tls.size);
+    if (self->tls.cap <= self->tls.size)
+        log_fatal("cannot add TLS item: TLS array full");
     self->tls.items[self->tls.size++] = item;
 }
 
@@ -215,7 +216,7 @@ self_tls_(struct metadata *md, const void *global, size_t size)
 
     void *ptr = mempool_alloc(size);
     if (ptr == NULL)
-        log_fatal("mempool out of memory");
+        log_fatal("cannot allocate TLS object: mempool out of memory");
     memset(ptr, 0, size);
 
     self_tls_set(md, item_key, ptr,

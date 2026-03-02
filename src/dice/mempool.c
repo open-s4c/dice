@@ -2,7 +2,6 @@
  * Copyright (C) 2025 Huawei Technologies Co., Ltd.
  * SPDX-License-Identifier: 0BSD
  */
-#include <assert.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -46,7 +45,8 @@ bucketize_(size_t size)
     unsigned int i = 0;
     for (; i < NSTACKS && size > sizes_[i]; i++)
         ;
-    assert(i < NSTACKS);
+    if (i >= NSTACKS)
+        log_fatal("could not bucketize %" PRIuPTR " bytes", size);
     return i;
 }
 
@@ -91,7 +91,8 @@ mempool_init(size_t cap)
     mp_.pool.capacity = cap;
     mp_.pool.next     = 0;
     mp_.pool.memory   = REAL_FUNCV(malloc, 0)(cap);
-    assert(mp_.pool.memory);
+    if (mp_.pool.memory == NULL)
+        log_fatal("could not create mempool");
     memset(mp_.pool.memory, 0, cap);
     // caslock already initialized with 0
 }
@@ -141,7 +142,8 @@ DICE_HIDE void
 mempool_free_(void *ptr)
 {
     mempool_t *mp = &mp_;
-    assert(ptr);
+    if (ptr == NULL)
+        return;
     entry_t *e      = *((entry_t **)ptr - 1);
     size_t size     = e->size + HEADER_SIZE;
     unsigned bucket = bucketize_(size);
@@ -150,7 +152,8 @@ mempool_free_(void *ptr)
 
     caslock_acquire(&mp->lock);
     mp->allocated -= size;
-    assert(stack);
+    if (stack == NULL)
+        log_fatal("could not get bucket stack: %" PRIuPTR, size);
     e->next = *stack;
     *stack  = e;
     caslock_release(&mp->lock);
@@ -163,16 +166,19 @@ mempool_free(void *ptr)
 }
 
 DICE_HIDE void *
-mempool_aligned_alloc_(size_t alignment, size_t n)
+mempool_aligned_alloc_(size_t alignment, size_t sz)
 {
-    assert(alignment && !(alignment & (alignment - 1)));
+    if (!alignment || (alignment & (alignment - 1)))
+        log_fatal("mempool misalignment %" PRIuPTR "/%" PRIuPTR, alignment, sz);
+
     mempool_t *mp   = &mp_;
     entry_t *e      = NULL;
-    size_t size     = n + HEADER_SIZE + alignment - 1;
+    size_t size     = sz + HEADER_SIZE + alignment - 1;
     unsigned bucket = bucketize_(size);
     size            = sizes_[bucket];
     entry_t **stack = &mp->stack[bucket];
-    assert(stack);
+    if (stack == NULL)
+        log_fatal("could not get bucket stack: %" PRIuPTR, size);
 
     // Mempool is used from rogue thread, serialization is necessary
     caslock_acquire(&mp->lock);
@@ -190,7 +196,7 @@ mempool_aligned_alloc_(size_t alignment, size_t n)
     if (mp->pool.capacity >= mp->pool.next + size) {
         e       = (entry_t *)(mp->pool.memory + mp->pool.next);
         e->next = NULL;
-        e->size = n + alignment - 1;
+        e->size = sz + alignment - 1;
         mp->pool.next += size;
         mp->allocated += size;
     }
