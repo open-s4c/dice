@@ -62,11 +62,11 @@ STATIC_ASSERT(MAX_BUILTIN_SLOTS > 0, "Slot 0 is always builtin");
     static DICE_CTOR void module_ctr_()                                        \
     {                                                                          \
         if (module_init_())                                                    \
-            log_debug("[%4d] INIT: %s", DICE_MODULE_SLOT, __FILE__);           \
+            log_info("[%4d] INIT: %s", DICE_MODULE_SLOT, __FILE__);           \
     }                                                                          \
     PS_SUBSCRIBE(CHAIN_CONTROL, EVENT_DICE_INIT, {                             \
         if (module_init_())                                                    \
-            log_debug("[%4d] INIT! %s", DICE_MODULE_SLOT, __FILE__);           \
+            log_info("[%4d] INIT! %s", DICE_MODULE_SLOT, __FILE__);           \
     })                                                                         \
     PS_DISPATCH_SLOT_ON(DICE_MODULE_SLOT)
 
