@@ -76,8 +76,9 @@ if(${DICE_LTO})
   endif()
 endif()
 
-# memcpy wrapper
+# memory
 option(DICE_MEMSET "Build Dice with memset wrapper" off)
+option(DICE_MEMPOOL_USE_MMAP "Use mmap for mempool" off)
 
 # Tests and benchmarks
 if(PROJECT_IS_TOP_LEVEL)

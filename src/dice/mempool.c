@@ -12,6 +12,10 @@
 #include <dice/module.h>
 #include <vsync/spinlock/caslock.h>
 
+#ifdef DICE_MEMPOOL_USE_MMAP
+#  include <sys/mman.h>
+#endif
+
 static size_t sizes_[] = {32,
                           128,
                           256,
@@ -71,8 +75,9 @@ typedef struct mempool {
 
 static mempool_t mp_;
 
-/* bypass malloc interceptor */
+/* bypass interceptors */
 REAL_DECL(void *, malloc, size_t n);
+REAL_DECL(void *, mmap, void *, size_t, int, int, int, off_t);
 
 static bool
 is_initd_()
@@ -90,10 +95,19 @@ mempool_init(size_t cap)
     mp_.allocated     = 0;
     mp_.pool.capacity = cap;
     mp_.pool.next     = 0;
+#ifdef DICE_MEMPOOL_USE_MMAP
+    mp_.pool.memory   = REAL_FUNCV(mmap, 0)(NULL, cap,
+        PROT_READ | PROT_WRITE,
+        MAP_PRIVATE | MAP_ANONYMOUS,
+        -1, 0);
+    if (mp_.pool.memory == MAP_FAILED)
+        log_fatal("could not create mempool");
+#else
     mp_.pool.memory   = REAL_FUNCV(malloc, 0)(cap);
     if (mp_.pool.memory == NULL)
         log_fatal("could not create mempool");
     memset(mp_.pool.memory, 0, cap);
+#endif
     // caslock already initialized with 0
 }
 
