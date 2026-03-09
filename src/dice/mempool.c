@@ -52,6 +52,7 @@ bucketize_(size_t size)
 
 typedef struct entry {
     struct entry *next;
+    size_t bucket;
     size_t size;
     char data[];
 } entry_t;
@@ -125,8 +126,9 @@ mempool_realloc_(void *ptr, size_t size)
     void *p = mempool_alloc_(size);
     if (!p || !ptr)
         return p;
-    entry_t *e = (entry_t *)ptr - 1;
-    size       = e->size < size ? e->size : size;
+    entry_t *e      = (entry_t *)ptr - 1;
+    size_t old_size = e->size;
+    size            = old_size < size ? old_size : size;
     memcpy(p, ptr, size);
     mempool_free_(ptr);
     return p;
@@ -145,9 +147,8 @@ mempool_free_(void *ptr)
     if (ptr == NULL)
         return;
     entry_t *e      = *((entry_t **)ptr - 1);
-    size_t size     = e->size + HEADER_SIZE;
-    unsigned bucket = bucketize_(size);
-    size            = sizes_[bucket];
+    size_t bucket   = e->bucket;
+    size_t size     = sizes_[bucket];
     entry_t **stack = &mp->stack[bucket];
 
     caslock_acquire(&mp->lock);
@@ -180,13 +181,13 @@ mempool_aligned_alloc_(size_t alignment, size_t sz)
     if (stack == NULL)
         log_fatal("could not get bucket stack: %" PRIuPTR, size);
 
-    // Mempool is used from rogue thread, serialization is necessary
+    // Mempool is used concurrently, serialization is necessary
     caslock_acquire(&mp->lock);
 
     if (*stack) {
-        e       = *stack;
-        *stack  = e->next;
-        e->next = NULL;
+        e             = *stack;
+        *stack        = e->next;
+        e->next       = NULL;
         mp->allocated += size;
         goto out;
     }
@@ -194,17 +195,18 @@ mempool_aligned_alloc_(size_t alignment, size_t sz)
     mempool_ensure_initd();
 
     if (mp->pool.capacity >= mp->pool.next + size) {
-        e       = (entry_t *)(mp->pool.memory + mp->pool.next);
-        e->next = NULL;
-        e->size = sz + alignment - 1;
+        e             = (entry_t *)(mp->pool.memory + mp->pool.next);
+        e->next       = NULL;
+        e->bucket     = bucket;
         mp->pool.next += size;
         mp->allocated += size;
     }
 out:
     caslock_release(&mp->lock);
     if (likely(e != NULL)) {
-        void *result = (void *)(((size_t)e + HEADER_SIZE + alignment - 1) &
-                                ~(alignment - 1));
+        e->size                   = sz;
+        void *result              = (void *)(((size_t)e + HEADER_SIZE + alignment - 1) &
+                                             ~(alignment - 1));
         *((entry_t **)result - 1) = e;
         return result;
     }
