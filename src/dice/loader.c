@@ -19,6 +19,7 @@
 #else
     #define PRELOAD "LD_PRELOAD"
 #endif
+#define DICE_DSO "DICE_DSO"
 
 int ps_dispatch_max(void);
 void ps_init_();
@@ -68,10 +69,21 @@ PS_SUBSCRIBE(CHAIN_CONTROL, EVENT_DICE_INIT, {
         if (path == NULL)
             log_fatal("string tokenizer failed: %s", plugins);
 
-        // skip first
-        path = strtok(NULL, ":");
+        // we now dlopen every preloaded library to ensure the constructors are
+        // all called before the first event is published. However, we shouldnt
+        // try to dlopen the main dice library, which holds the current code
+        // because some user constructors might not be idempotent. Typically the
+        // main dice library is the first preloaded library. If that is not the
+        // case, we can use the envvar DICE_DSO to identify the exact name
+        // passed to the PRELOAD.
+        envvar = getenv(DICE_DSO);
+        if (envvar == NULL)
+            // skip first library
+            path = strtok(NULL, ":");
+
         while (path != NULL) {
-            load_plugin_(path);
+            if (envvar == NULL || strcmp(path, envvar) != 0)
+                load_plugin_(path);
             path = strtok(NULL, ":");
         }
         mempool_free(plugins);
