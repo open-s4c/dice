@@ -84,6 +84,9 @@ set(SRCS mempool.c pubsub.c registry.c ${DISPATCH_C})
 if(${DICE_MEMSET})
   set(SRCS memset.c ${SRCS})
 endif()
+if(${DICE_MEMPOOL_USE_MMAP})
+  add_compile_definitions(DICE_MEMPOOL_USE_MMAP)
+endif()
 
 # dice (libdice.so) - SHARED library providing interface for plugin modules.
 # Only contains the core components mempool and pubsub. This library gets
