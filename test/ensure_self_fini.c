@@ -13,6 +13,12 @@
 vatomic32_t fini_called;
 vatomic32_t run_called;
 
+PS_SUBSCRIBE(CAPTURE_EVENT, EVENT_SELF_WAIT, {
+    /* wait for all threads to exit */
+    struct self_wait_event *ev = EVENT_PAYLOAD(ev);
+    ev->wait = true;
+})
+
 PS_SUBSCRIBE(CAPTURE_EVENT, EVENT_SELF_FINI, {
     if (self_id(md) == MAIN_THREAD)
         ensure(vatomic_read(&fini_called) == NTHREADS);
