@@ -658,8 +658,14 @@ DICE_MODULE_FINI({
         cleanup_threads_(self, 0);
         dead = vatomic_read(&threads_.dead);
         born = vatomic_read(&threads_.created);
-        if (tid == MAIN_THREAD)
+        if (tid == MAIN_THREAD) {
             log_debug("waiting for %" PRIu64 " threads to die", (born - dead));
+
+            struct self_wait_event ev = { .wait = false };
+            PS_PUBLISH(CAPTURE_EVENT, EVENT_SELF_WAIT, &ev, self ? &self->md : NULL);
+            if (!ev.wait)
+                break;
+        }
     } while (tid == MAIN_THREAD && dead < born);
 
     self_fini_(self);
