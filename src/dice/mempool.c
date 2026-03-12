@@ -13,7 +13,7 @@
 #include <vsync/spinlock/caslock.h>
 
 #ifdef DICE_MEMPOOL_USE_MMAP
-#  include <sys/mman.h>
+    #include <sys/mman.h>
 #endif
 
 static size_t sizes_[] = {32,
@@ -92,19 +92,18 @@ mempool_init(size_t cap)
     if (likely(is_initd_()))
         return;
 
+    log_debug("mempool_init");
     memset(&mp_.stack, 0, sizeof(entry_t *) * NSTACKS);
     mp_.allocated     = 0;
     mp_.pool.capacity = cap;
     mp_.pool.next     = 0;
 #ifdef DICE_MEMPOOL_USE_MMAP
-    mp_.pool.memory   = REAL_FUNCV(mmap, 0)(NULL, cap,
-        PROT_READ | PROT_WRITE,
-        MAP_PRIVATE | MAP_ANONYMOUS,
-        -1, 0);
+    mp_.pool.memory = REAL_FUNCV(mmap, 0)(NULL, cap, PROT_READ | PROT_WRITE,
+                                          MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
     if (mp_.pool.memory == MAP_FAILED)
         log_fatal("could not create mempool");
 #else
-    mp_.pool.memory   = REAL_FUNCV(malloc, 0)(cap);
+    mp_.pool.memory = REAL_FUNCV(malloc, 0)(cap);
     if (mp_.pool.memory == NULL)
         log_fatal("could not create mempool");
     memset(mp_.pool.memory, 0, cap);
@@ -199,9 +198,9 @@ mempool_aligned_alloc_(size_t alignment, size_t sz)
     caslock_acquire(&mp->lock);
 
     if (*stack) {
-        e             = *stack;
-        *stack        = e->next;
-        e->next       = NULL;
+        e       = *stack;
+        *stack  = e->next;
+        e->next = NULL;
         mp->allocated += size;
         goto out;
     }
@@ -209,18 +208,18 @@ mempool_aligned_alloc_(size_t alignment, size_t sz)
     mempool_ensure_initd();
 
     if (mp->pool.capacity >= mp->pool.next + size) {
-        e             = (entry_t *)(mp->pool.memory + mp->pool.next);
-        e->next       = NULL;
-        e->bucket     = bucket;
+        e         = (entry_t *)(mp->pool.memory + mp->pool.next);
+        e->next   = NULL;
+        e->bucket = bucket;
         mp->pool.next += size;
         mp->allocated += size;
     }
 out:
     caslock_release(&mp->lock);
     if (likely(e != NULL)) {
-        e->size                   = sz;
-        void *result              = (void *)(((size_t)e + HEADER_SIZE + alignment - 1) &
-                                             ~(alignment - 1));
+        e->size      = sz;
+        void *result = (void *)(((size_t)e + HEADER_SIZE + alignment - 1) &
+                                ~(alignment - 1));
         *((entry_t **)result - 1) = e;
         return result;
     }
