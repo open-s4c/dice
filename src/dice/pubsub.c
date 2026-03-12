@@ -59,6 +59,7 @@ ps_initd_(void)
     switch (state_) {
         case NONE:
             // This must be the main thread, at latest the thread creation.
+            log_debug("ps_init");
             state_ = START;
             PS_PUBLISH(CHAIN_CONTROL, EVENT_DICE_INIT, 0, 0);
             ready_ = true;
@@ -144,19 +145,18 @@ ps_subscribe_type_(chain_id chain, type_id type, ps_callback_f cb, int slot,
 static int
 ps_subscribe_(chain_id chain, type_id type, ps_callback_f cb, int slot)
 {
-    ps_init_(); // ensure initialized
-
-    log_debug("Subscribe %s/%s/%d", ps_chain_str(chain), ps_type_str(type),
-              slot);
-    if (ps_dispatch_chain_on_(chain) && slot <= ps_dispatch_max()) {
-        log_debug("Ignore subscription %s/%s/%d", ps_chain_str(chain),
-                  ps_type_str(type), slot);
-        return PS_OK;
-    }
     if (chain == CHAIN_CONTROL)
         return PS_OK;
+
     if (chain > MAX_CHAINS)
         return PS_INVALID;
+
+    if (ps_dispatch_chain_on_(chain) && slot <= ps_dispatch_max())
+        return PS_OK;
+
+    log_debug("=== subscribe %s/%s/%d", ps_chain_str(chain), ps_type_str(type),
+              slot);
+
     if (type != ANY_EVENT)
         return ps_subscribe_type_(chain, type, cb, slot, false);
 
@@ -215,14 +215,18 @@ DICE_WEAK enum ps_err
 ps_publish(const chain_id chain, const type_id type, void *event,
            struct metadata *md)
 {
+    log_debug("=== ps_publish %s/%s", ps_chain_str(chain), ps_type_str(type));
     if (PS_NOT_INITD_())
         return PS_STOP_CHAIN;
 
-    log_debug("Publish %s/%s", ps_chain_str(chain), ps_type_str(type));
+    log_debug("=> publishing %s/%s...", ps_chain_str(chain), ps_type_str(type));
     enum ps_err err = ps_dispatch_(chain, type, event, md);
 
     if (likely(err == PS_STOP_CHAIN))
-        return err;
+        goto end;
 
-    return ps_callback_(chain, type, event, md);
+    err = ps_callback_(chain, type, event, md);
+end:
+    log_debug("<= published %s/%s", ps_chain_str(chain), ps_type_str(type));
+    return err;
 }
