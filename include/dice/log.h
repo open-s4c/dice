@@ -6,6 +6,7 @@
 #define DICE_LOG_H
 
 #include <inttypes.h>
+#include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -42,15 +43,31 @@ DICE_WEAK caslock_t log_lock;
 #define LOG_LEVEL_        LOG_EXPAND(LOG_LEVEL)
 
 #define LOG_MAX_LEN 1024
-#define log_printf(fmt, ...)                                                   \
-    do {                                                                       \
-        char msg[LOG_MAX_LEN];                                                 \
-        int n = snprintf(msg, LOG_MAX_LEN, fmt, ##__VA_ARGS__);                \
-        if (write(STDOUT_FILENO, msg, n) == -1) {                              \
-            perror("write stdout");                                            \
-            exit(EXIT_FAILURE);                                                \
-        }                                                                      \
-    } while (0)
+
+static void __attribute__((noinline, unused, format(printf, 1, 2)))
+dice_log_printf_(const char *fmt, ...)
+{
+    char msg[LOG_MAX_LEN];
+    va_list ap;
+    va_start(ap, fmt);
+    int n = vsnprintf(msg, sizeof(msg), fmt, ap);
+    va_end(ap);
+    if (n < 0) {
+        perror("vsnprintf");
+        exit(EXIT_FAILURE);
+    }
+
+    size_t len = (size_t)n;
+    if (len >= sizeof(msg))
+        len = sizeof(msg) - 1;
+
+    if (write(STDOUT_FILENO, msg, len) == -1) {
+        perror("write stdout");
+        exit(EXIT_FAILURE);
+    }
+}
+
+#define log_printf(...) dice_log_printf_(__VA_ARGS__)
 
 #define log_warn(fmt, ...)                                                     \
     do {                                                                       \
