@@ -8,6 +8,7 @@
 #include <inttypes.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <unistd.h>
 
 #ifdef LOG_UNLOCKED
@@ -45,8 +46,8 @@ DICE_WEAK caslock_t log_lock;
 #define log_printf(fmt, ...)                                                   \
     do {                                                                       \
         char msg[LOG_MAX_LEN];                                                 \
-        int n = snprintf(msg, LOG_MAX_LEN, fmt, ##__VA_ARGS__);                \
-        if (write(STDOUT_FILENO, msg, n) == -1) {                              \
+        snprintf(msg, LOG_MAX_LEN, fmt, ##__VA_ARGS__);                        \
+        if (write(STDOUT_FILENO, msg, strlen(msg)) == -1) {                    \
             perror("write stdout");                                            \
             exit(EXIT_FAILURE);                                                \
         }                                                                      \
