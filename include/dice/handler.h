@@ -19,7 +19,7 @@
 
 /* PS_HANDLER_DEF defines an inline handler that wraps user code and returns a
  * ps_err. */
-#define PS_HANDLER_DEF(CHAIN, TYPE, SLOT, CODE)                                \
+#define PS_HANDLER_DEF(CHAIN, TYPE, SLOT, ...)                                 \
     static inline enum ps_err PS_HANDLER(CHAIN, TYPE, SLOT)(                   \
         const chain_id chain, const type_id type, void *event,                 \
         struct metadata *md)                                                   \
@@ -31,7 +31,7 @@
         (void)event;                                                           \
         (void)md;                                                              \
                                                                                \
-        CODE;                                                                  \
+        __VA_ARGS__;                                                           \
                                                                                \
         /* By default, callbacks return OK to continue chain publishing. */    \
         return PS_OK;                                                          \
