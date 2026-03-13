@@ -26,7 +26,7 @@
 #ifndef MAX_BUILTIN_SLOTS
     #define MAX_BUILTIN_SLOTS 6
 #endif
-STATIC_ASSERT(MAX_BUILTIN_SLOTS > 0, "Slot 0 is always builtin");
+STATIC_ASSERT(MAX_BUILTIN_SLOTS > 0, "slot 0 is always builtin");
 
 #ifndef DICE_MODULE_SLOT
     /* Subscription slot for the current translation unit. Lower values run
@@ -46,14 +46,14 @@ STATIC_ASSERT(MAX_BUILTIN_SLOTS > 0, "Slot 0 is always builtin");
 /* DICE_MODULE_INIT wraps the constructor logic of a module. The callback runs
  * exactly once even if the module is linked multiple times (e.g., builtin plus
  * plugin builds). */
-#define DICE_MODULE_INIT(CODE)                                                 \
+#define DICE_MODULE_INIT(...)                                                  \
     static bool module_init_()                                                 \
     {                                                                          \
         static bool done_ = false;                                             \
         if (!done_) {                                                          \
             done_ = true;                                                      \
             do {                                                               \
-                CODE                                                           \
+                __VA_ARGS__                                                    \
             } while (0);                                                       \
             return true;                                                       \
         }                                                                      \
@@ -62,22 +62,22 @@ STATIC_ASSERT(MAX_BUILTIN_SLOTS > 0, "Slot 0 is always builtin");
     static DICE_CTOR void module_ctr_()                                        \
     {                                                                          \
         if (module_init_())                                                    \
-            log_info("[%4d] INIT: %s", DICE_MODULE_SLOT, __FILE__);           \
+            log_info("[%4d] INIT: %s", DICE_MODULE_SLOT, __FILE__);            \
     }                                                                          \
     PS_SUBSCRIBE(CHAIN_CONTROL, EVENT_DICE_INIT, {                             \
         if (module_init_())                                                    \
-            log_info("[%4d] INIT! %s", DICE_MODULE_SLOT, __FILE__);           \
+            log_info("[%4d] INIT! %s", DICE_MODULE_SLOT, __FILE__);            \
     })                                                                         \
     PS_DISPATCH_SLOT_ON(DICE_MODULE_SLOT)
 
 
 /* DICE_MODULE_FINI marks a destructor hook. Use it for cleanup that must run
  * when the module is unloaded. */
-#define DICE_MODULE_FINI(CODE)                                                 \
+#define DICE_MODULE_FINI(...)                                                  \
     static DICE_DTOR void module_fini_()                                       \
     {                                                                          \
         if (1) {                                                               \
-            CODE                                                               \
+            __VA_ARGS__                                                        \
         }                                                                      \
     }
 
@@ -91,13 +91,15 @@ STATIC_ASSERT(MAX_BUILTIN_SLOTS > 0, "Slot 0 is always builtin");
  * order of shared libraries in LD_PRELOAD.
  *
  * The PS_SUBSCRIBE macro also registers the chain and type names in the pubsub.
- * This is helpful for debugging.
+ * This is helpful for debugging. The handler body is variadic so subscribers
+ * can pass arbitrary statements, including expressions that contain commas.
  */
-#define PS_SUBSCRIBE(CHAIN, TYPE, HANDLER)                                     \
-    PS_SUBSCRIBE_SLOT(CHAIN, #CHAIN, TYPE, #TYPE, DICE_MODULE_SLOT, HANDLER)
+#define PS_SUBSCRIBE(CHAIN, TYPE, ...)                                         \
+    PS_SUBSCRIBE_SLOT(CHAIN, #CHAIN, TYPE, #TYPE, DICE_MODULE_SLOT,            \
+                      __VA_ARGS__)
 
-#define PS_SUBSCRIBE_SLOT(CHAIN, CNAME, TYPE, TNAME, SLOT, HANDLER)            \
-    PS_HANDLER_DEF(CHAIN, TYPE, SLOT, HANDLER)                                 \
+#define PS_SUBSCRIBE_SLOT(CHAIN, CNAME, TYPE, TNAME, SLOT, ...)                \
+    PS_HANDLER_DEF(CHAIN, TYPE, SLOT, __VA_ARGS__)                             \
     PS_DISPATCH_DEF(CHAIN, TYPE, SLOT)                                         \
     static void DICE_CTOR ps_subscribe_##CHAIN##_##TYPE##_(void)               \
     {                                                                          \
