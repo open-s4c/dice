@@ -145,9 +145,6 @@ ps_subscribe_type_(chain_id chain, type_id type, ps_callback_f cb, int slot,
 static int
 ps_subscribe_(chain_id chain, type_id type, ps_callback_f cb, int slot)
 {
-    if (chain == CHAIN_CONTROL)
-        return PS_OK;
-
     if (chain > MAX_CHAINS)
         return PS_INVALID;
 
