@@ -7,7 +7,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define DICE_MODULE_SLOT 1
 #include <dice/events/dice.h>
 #include <dice/log.h>
 #include <dice/mempool.h>
@@ -24,8 +23,9 @@
 int ps_dispatch_max(void);
 void ps_init_();
 
-static DICE_CTOR void
-init_()
+/* Force pubsub init in a constructor without priority, ensuring this
+ * constructor is last */
+static void __attribute__((constructor)) init_()
 {
     ps_init_();
 }
