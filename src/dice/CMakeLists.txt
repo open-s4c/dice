@@ -87,6 +87,7 @@ endif()
 if(${DICE_MEMPOOL_USE_MMAP})
   add_compile_definitions(DICE_MEMPOOL_USE_MMAP)
 endif()
+add_compile_definitions(DICE_MULTIFILE_MODULE DICE_MODULE_SLOT=0)
 
 # dice (libdice.so) - SHARED library providing interface for plugin modules.
 # Only contains the core components mempool and pubsub. This library gets
