@@ -95,15 +95,13 @@ STATIC_ASSERT(MAX_BUILTIN_SLOTS > 0, "slot 0 is always builtin");
  * can pass arbitrary statements, including expressions that contain commas.
  */
 #define PS_SUBSCRIBE(CHAIN, TYPE, ...)                                         \
-    PS_SUBSCRIBE_SLOT(CHAIN, #CHAIN, TYPE, #TYPE, DICE_MODULE_SLOT,            \
-                      __VA_ARGS__)
+    PS_SUBSCRIBE_SLOT(CHAIN, TYPE, DICE_MODULE_SLOT, __VA_ARGS__)
 
-#define PS_SUBSCRIBE_SLOT(CHAIN, CNAME, TYPE, TNAME, SLOT, ...)                \
+#define PS_SUBSCRIBE_SLOT(CHAIN, TYPE, SLOT, ...)                              \
     PS_HANDLER_DEF(CHAIN, TYPE, SLOT, __VA_ARGS__)                             \
     PS_DISPATCH_DEF(CHAIN, TYPE, SLOT)                                         \
     static void DICE_CTOR ps_subscribe_##CHAIN##_##TYPE##_(void)               \
     {                                                                          \
-        ps_register_chain(CHAIN, CNAME);                                       \
         int err =                                                              \
             ps_subscribe(CHAIN, TYPE, PS_HANDLER(CHAIN, TYPE, SLOT), SLOT);    \
         if (err != PS_OK)                                                      \
