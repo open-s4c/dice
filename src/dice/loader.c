@@ -24,12 +24,15 @@
 int ps_dispatch_max(void);
 void ps_init_();
 
+#ifndef DICE_DISABLE_PUBUSB_CTOR_INIT
 /* Force pubsub init in a constructor without priority, ensuring this
  * constructor is last */
-static void __attribute__((constructor)) init_()
+static void __attribute__((constructor))
+init_()
 {
     ps_init_();
 }
+#endif
 
 #ifndef DICE_DISABLE_LOADER
 static void
@@ -58,8 +61,9 @@ strdup_(const char *str)
 
 PS_SUBSCRIBE(CHAIN_CONTROL, EVENT_DICE_INIT, {
     log_debug("[%4d] INIT: %s ...", DICE_MODULE_SLOT, __FILE__);
-    const char *envvar = getenv(DICE_PLUGIN_MODULES);
-    if (envvar == NULL || envvar[0] == '\0')
+    const char *envvar     = getenv(DICE_PLUGIN_MODULES);
+    const int from_preload = (envvar == NULL || envvar[0] == '\0');
+    if (from_preload)
         envvar = getenv(PRELOAD);
     log_debug("[%4d] LOAD: builtin modules: 0..%d", DICE_MODULE_SLOT,
               ps_dispatch_max());
@@ -80,8 +84,8 @@ PS_SUBSCRIBE(CHAIN_CONTROL, EVENT_DICE_INIT, {
         // case, we can use the envvar DICE_DSO to identify the exact name
         // passed to the PRELOAD.
         envvar = getenv(DICE_DSO);
-        if (envvar == NULL)
-            // skip first library
+        if (envvar == NULL && from_preload)
+            // skip first library only for PRELOAD-based lists
             path = strtok(NULL, ":");
 
         while (path != NULL) {
