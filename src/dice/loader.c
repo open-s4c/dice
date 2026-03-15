@@ -18,7 +18,8 @@
 #else
     #define PRELOAD "LD_PRELOAD"
 #endif
-#define DICE_DSO "DICE_DSO"
+#define DICE_DSO            "DICE_DSO"
+#define DICE_PLUGIN_MODULES "DICE_PLUGIN_MODULES"
 
 int ps_dispatch_max(void);
 void ps_init_();
@@ -57,10 +58,12 @@ strdup_(const char *str)
 
 PS_SUBSCRIBE(CHAIN_CONTROL, EVENT_DICE_INIT, {
     log_debug("[%4d] INIT: %s ...", DICE_MODULE_SLOT, __FILE__);
-    const char *envvar = getenv(PRELOAD);
+    const char *envvar = getenv(DICE_PLUGIN_MODULES);
+    if (envvar == NULL || envvar[0] == '\0')
+        envvar = getenv(PRELOAD);
     log_debug("[%4d] LOAD: builtin modules: 0..%d", DICE_MODULE_SLOT,
               ps_dispatch_max());
-    if (envvar != NULL) {
+    if (envvar != NULL && envvar[0] != '\0') {
         char *plugins = strdup_(envvar);
         if (plugins == NULL)
             log_fatal("could not duplicate string: %s", envvar);
