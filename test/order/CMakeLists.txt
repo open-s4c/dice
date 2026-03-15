@@ -106,7 +106,7 @@ add_test(NAME preload-21box-test
          COMMAND env ${LIBRARY_PATH}=${CMAKE_CURRENT_BINARY_DIR}
                  ${PRELOAD}=libsubscriber21box.${SO} ./order_test 2 202)
 
-# because both subscribers have SLOT higher than DICE_MAX_BUILTIN_SLOTS,
+# because both subscribers have SLOT greater than DICE_LAST_DISPATCH_SLOT,
 # pubsub-box's subscribe will abort the process
 set_tests_properties(preload-21box-test PROPERTIES WILL_FAIL TRUE)
 

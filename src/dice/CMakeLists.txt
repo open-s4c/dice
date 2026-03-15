@@ -33,14 +33,13 @@ function(seq OUT FROM TO)
 endfunction()
 
 # define events, slots and chains
-math(EXPR LAST_BUILTIN_SLOT "${DICE_MAX_BUILTIN_SLOTS} - 1")
 seq(EEE 1 ${DICE_MAX_TYPES} \;)
-seq(SSS 0 ${LAST_BUILTIN_SLOT} \;)
-seq(SSX 0 ${LAST_BUILTIN_SLOT} ,)
+seq(SSS 0 ${DICE_LAST_DISPATCH_SLOT} \;)
+seq(SSX 0 ${DICE_LAST_DISPATCH_SLOT} ,)
 set(CCC ${DICE_DISPATCH_CHAINS})
 string(REGEX REPLACE "[,]" ";" CHAINS ${CCC})
 message(STATUS "Dispatch chains: ${CHAINS}")
-message(STATUS "Builtin slots: ${SSS}")
+message(STATUS "Dispatch slots: ${SSS}")
 
 set(DISPATCH_C ${CMAKE_CURRENT_BINARY_DIR}/dispatch.c)
 add_custom_command(

@@ -29,12 +29,16 @@ set(DICE_MAX_CHAINS
     CACHE STRING "Maximum number of chains")
 target_compile_definitions(dice.h PUBLIC MAX_CHAINS=${DICE_MAX_CHAINS})
 
-# Maximum slot number of builtin modules
-set(DICE_MAX_BUILTIN_SLOTS
-    16
-    CACHE STRING "Maximum builtin slot number")
-target_compile_definitions(dice.h
-                           PUBLIC MAX_BUILTIN_SLOTS=${DICE_MAX_BUILTIN_SLOTS})
+# Highest slot covered by generated dispatch tables
+if(NOT DEFINED DICE_LAST_DISPATCH_SLOT
+   OR "${DICE_LAST_DISPATCH_SLOT}" STREQUAL "")
+  set(DICE_LAST_DISPATCH_SLOT 15)
+endif()
+set(DICE_LAST_DISPATCH_SLOT
+    "${DICE_LAST_DISPATCH_SLOT}"
+    CACHE STRING "Highest dispatch slot covered by generated dispatch tables"
+          FORCE)
+target_compile_definitions(dice.h PUBLIC LAST_DISPATCH_SLOT=${DICE_LAST_DISPATCH_SLOT})
 
 # LOG_LEVEL
 set(DICE_LOG_LEVEL
