@@ -24,12 +24,14 @@
 int ps_dispatch_max(void);
 void ps_init_();
 
+#ifndef DICE_DISABLE_PUBUSB_CTOR_INIT
 /* Force pubsub init in a constructor without priority, ensuring this
  * constructor is last */
 static void __attribute__((constructor)) init_()
 {
     ps_init_();
 }
+#endif
 
 #ifndef DICE_DISABLE_LOADER
 static void
