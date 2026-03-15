@@ -576,10 +576,11 @@ env LD_PRELOAD=/path/to/libdice.so:/path/to/dice-pthread_create.so foo <arg1>
 macOS users should swap `LD_PRELOAD` for `DYLD_INSERT_LIBRARIES`. Module
 constructors register their subscribers during load, so the order of
 initialization is controlled via the `DICE_MODULE_SLOT` macro instead of
-relying on linker quirks. Lower slots run first, and builtin modules reserve
-the range `0..MAX_BUILTIN_SLOTS-1`. Plugin authors should pick slots greater
-than that so the core interceptors and the Self module execute before
-user code.
+relying on linker quirks. Lower slots run first. When dispatch tables are
+generated, the range `0..LAST_DISPATCH_SLOT` is reserved for dispatch-based
+handlers, so plugin authors should pick slots greater than that range to avoid
+collisions and keep the core interceptors and the Self module ahead of user
+code.
 
 For tighter deployments you can link Dice core and a curated set of modules into
 a single shared object, e.g.:
@@ -616,17 +617,17 @@ Dice supports two types of subscription:
 
 - **Dispatch-based subscriptions**: Modules define a handler function following
   the naming convention `ps_dispatch_CCC_EEE_SSS`, where `CCC` is a chain ID,
-  `EEE` is a event type ID, and `SSS` is a slot. Among the builtin range of
-  slots, only one module can occupy one slot, i.e., no two modules can use
-  the same value `SSS`.
+  `EEE` is a event type ID, and `SSS` is a slot. Within the generated dispatch
+  range, only one module can occupy one slot, i.e., no two modules can use the
+  same value `SSS`.
 
 In practice, subscriptions are implemented using the `PS_SUBSCRIBE` macro
 from the `dice/module.h` header file.  This macro will provide both types
 of subscription. The compile-time constant `DICE_MODULE_SLOT` constant is
 the slot of the module.  The subscription mechanism used in runtime depends
 on whether the module is compiled together with Dice **and** whether
-the slot is within the builtin slot range, i.e.,  `DICE_MODULE_SLOT <
-MAX_BUILTIN_SLOTS`. If that is the case, then the Pubsub will prefer calling
+the slot is within the generated dispatch range, i.e., `DICE_MODULE_SLOT <=
+LAST_DISPATCH_SLOT`. If that is the case, then the Pubsub will prefer calling
 the defined dispatch function directly instead of using the callback function
 pointers.
 

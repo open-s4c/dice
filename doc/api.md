@@ -28,8 +28,9 @@ right building blocks when writing interceptors or subscribers.
   (`DICE_MODULE_SLOT` defaults to 9999).
 - `handler.h`: emits the inline handler stubs used by `PS_SUBSCRIBE`. Most code
   relies on this indirectly via `module.h`.
-- `dispatch.h`: declares the fast-path dispatch hooks that builtin modules use.
-  When you compile a module with `DICE_MODULE_SLOT < MAX_BUILTIN_SLOTS`
+- `dispatch.h`: declares the fast-path dispatch hooks that dispatch-enabled
+  builds use. When you compile a module with
+  `DICE_MODULE_SLOT <= LAST_DISPATCH_SLOT`
   the generated dispatch tables call your handler without going through the
   callback list.
 

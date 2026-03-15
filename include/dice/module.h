@@ -21,22 +21,21 @@
 #include <dice/log.h>
 #include <dice/pubsub.h>
 
-/* MAX_BUILTIN_SLOTS determines the maximum number of builtin slots. The range
- * 0..MAX_BUILTIN_SLOTS-1 is reserved for builtin modules. */
-#ifndef MAX_BUILTIN_SLOTS
-    #define MAX_BUILTIN_SLOTS 6
+/* LAST_DISPATCH_SLOT marks the inclusive end of the generated dispatch range. */
+#ifndef LAST_DISPATCH_SLOT
+    #define LAST_DISPATCH_SLOT 5
 #endif
-STATIC_ASSERT(MAX_BUILTIN_SLOTS > 0, "slot 0 is always builtin");
+STATIC_ASSERT(LAST_DISPATCH_SLOT >= 0, "slot 0 is always dispatch-capable");
 
 #ifndef DICE_MODULE_SLOT
     /* Subscription slot for the current translation unit. Lower values run
-     * first. Builtin modules reserve slots 0..MAX_BUILTIN_SLOTS-1; plugin
-     * modules should stay above that range. */
+     * first. Dispatch-enabled builds reserve slots 0..LAST_DISPATCH_SLOT;
+     * plugin modules should stay above that range. */
     #define DICE_MODULE_SLOT 9999
 #endif
 
-/* Enable ps_dispatch if within the maximum number of builtin slots */
-#if DICE_MODULE_SLOT < MAX_BUILTIN_SLOTS
+/* Enable ps_dispatch if within the generated dispatch range. */
+#if DICE_MODULE_SLOT <= LAST_DISPATCH_SLOT
     #include <dice/dispatch.h>
 #else
     #define PS_DISPATCH_DEF(CHAIN, TYPE, SLOT)
