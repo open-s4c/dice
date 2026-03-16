@@ -16,7 +16,7 @@ vatomic32_t run_called;
 PS_SUBSCRIBE(CAPTURE_EVENT, EVENT_SELF_WAIT, {
     /* wait for all threads to exit */
     struct self_wait_event *ev = EVENT_PAYLOAD(ev);
-    ev->wait = true;
+    ev->wait                   = true;
 })
 
 PS_SUBSCRIBE(CAPTURE_EVENT, EVENT_SELF_FINI, {

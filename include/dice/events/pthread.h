@@ -58,8 +58,11 @@
 #define EVENT_PTHREAD_SPIN_TRYLOCK       EVENT_SPIN_TRYLOCK
 #define EVENT_PTHREAD_SPIN_UNLOCK        EVENT_SPIN_UNLOCK
 
-#if !defined(__APPLE__) && !defined(__NetBSD__) && !(defined(__linux__) && !defined(__GLIBC__)) || defined(__OHOS__)
-    // pthread_cond_clockwait and pthread_mutex_clocklock are not available in macos, netbsd and alpine
+#if !defined(__APPLE__) && !defined(__NetBSD__) &&                             \
+        !(defined(__linux__) && !defined(__GLIBC__)) ||                        \
+    defined(__OHOS__)
+    // pthread_cond_clockwait and pthread_mutex_clocklock are not available in
+    // macos, netbsd and alpine
     #define HAVE_PTHREAD_CLOCKWAIT_LOCK
 #endif
 
@@ -218,26 +221,26 @@ struct pthread_rwlock_unlock_event {
 };
 
 #if !defined(__APPLE__)
-    struct pthread_spin_lock_event {
-        const void *pc;
-        pthread_spinlock_t *lock;
-        int ret;
-        int (*func)(pthread_spinlock_t *);
-    };
+struct pthread_spin_lock_event {
+    const void *pc;
+    pthread_spinlock_t *lock;
+    int ret;
+    int (*func)(pthread_spinlock_t *);
+};
 
-    struct pthread_spin_trylock_event {
-        const void *pc;
-        pthread_spinlock_t *lock;
-        int ret;
-        int (*func)(pthread_spinlock_t *);
-    };
+struct pthread_spin_trylock_event {
+    const void *pc;
+    pthread_spinlock_t *lock;
+    int ret;
+    int (*func)(pthread_spinlock_t *);
+};
 
-    struct pthread_spin_unlock_event {
-        const void *pc;
-        pthread_spinlock_t *lock;
-        int ret;
-        int (*func)(pthread_spinlock_t *);
-    };
+struct pthread_spin_unlock_event {
+    const void *pc;
+    pthread_spinlock_t *lock;
+    int ret;
+    int (*func)(pthread_spinlock_t *);
+};
 #endif
 
 #endif /* DICE_PTHREAD_H */

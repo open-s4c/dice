@@ -2,10 +2,10 @@
  * Copyright (C) Huawei Technologies Co., Ltd. 2025. All rights reserved.
  * SPDX-License-Identifier: 0BSD
  */
-#include <dice/ensure.h>
 #include <pthread.h>
 #include <stdlib.h>
 
+#include <dice/ensure.h>
 #include <vsync/atomic.h>
 
 vatomic32_t count = VATOMIC_INIT(4);

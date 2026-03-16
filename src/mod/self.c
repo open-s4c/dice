@@ -661,8 +661,9 @@ DICE_MODULE_FINI({
         if (tid == MAIN_THREAD) {
             log_debug("waiting for %" PRIu64 " threads to die", (born - dead));
 
-            struct self_wait_event ev = { .wait = false };
-            PS_PUBLISH(CAPTURE_EVENT, EVENT_SELF_WAIT, &ev, self ? &self->md : NULL);
+            struct self_wait_event ev = {.wait = false};
+            PS_PUBLISH(CAPTURE_EVENT, EVENT_SELF_WAIT, &ev,
+                       self ? &self->md : NULL);
             if (!ev.wait)
                 break;
         }
