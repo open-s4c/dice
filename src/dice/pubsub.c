@@ -65,7 +65,6 @@ ps_initd_(void)
             assert(ps_dispatch_max() >= 0);
             PS_PUBLISH(CHAIN_CONTROL, EVENT_DICE_INIT, 0, 0);
             ready_ = true;
-            PS_PUBLISH(CHAIN_CONTROL, EVENT_DICE_READY, 0, 0);
             return true;
         case START:
             state_ = BLOCK;
@@ -86,7 +85,7 @@ ps_init_(void)
 }
 
 /* Advertise event type names for debugging messages */
-PS_ADVERTISE_TYPE(EVENT_DICE_READY)
+PS_ADVERTISE_TYPE(EVENT_DICE_NOP)
 PS_ADVERTISE_TYPE(EVENT_DICE_INIT)
 PS_DISPATCH_SLOT_ON(DICE_MODULE_SLOT)
 

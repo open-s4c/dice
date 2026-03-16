@@ -1,7 +1,7 @@
-#ifndef dice_h_INCLUDED
-#define dice_h_INCLUDED
+#ifndef DICE_EVENTS_DICE_H
+#define DICE_EVENTS_DICE_H
 
-#define EVENT_DICE_INIT  99
-#define EVENT_DICE_READY 98
+#define EVENT_DICE_INIT 99
+#define EVENT_DICE_NOP  98
 
-#endif // dice_h_INCLUDED
+#endif // DICE_EVENTS_DICE_H
