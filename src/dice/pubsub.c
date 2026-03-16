@@ -63,7 +63,6 @@ ps_initd_(void)
             log_debug("[%4d] INIT: %s ...", DICE_MODULE_SLOT, __FILE__);
             PS_PUBLISH(CHAIN_CONTROL, EVENT_DICE_INIT, 0, 0);
             ready_ = true;
-            PS_PUBLISH(CHAIN_CONTROL, EVENT_DICE_READY, 0, 0);
             return true;
         case START:
             state_ = BLOCK;
@@ -84,7 +83,7 @@ ps_init_(void)
 }
 
 /* Advertise event type names for debugging messages */
-PS_ADVERTISE_TYPE(EVENT_DICE_READY)
+PS_ADVERTISE_TYPE(EVENT_DICE_NOP)
 PS_ADVERTISE_TYPE(EVENT_DICE_INIT)
 
 // -----------------------------------------------------------------------------
