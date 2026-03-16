@@ -121,7 +121,7 @@ endif()
 
 option(DICE_PUBSUB_CTOR_INIT "Ensure pubsub is eventually initd via constructor" on)
 if(NOT "${DICE_PUBSUB_CTOR_INIT}")
-  add_compile_definitions(DICE_DISABLE_PUBUSB_CTOR_INIT)
+  add_compile_definitions(DICE_DISABLE_PUBSUB_CTOR_INIT)
 endif()
 
 # ------------------------------------------------------------------------------

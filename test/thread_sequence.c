@@ -1,4 +1,5 @@
 #include <pthread.h>
+
 #include <vsync/atomic.h>
 
 #define NTHREADS 16

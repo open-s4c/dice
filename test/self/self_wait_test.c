@@ -2,8 +2,8 @@
 
 #include <dice/chains/capture.h>
 #include <dice/chains/intercept.h>
-#include <dice/events/self.h>
 #include <dice/ensure.h>
+#include <dice/events/self.h>
 #include <dice/module.h>
 
 #define NTHREADS 20

@@ -2,11 +2,11 @@
  * Copyright (C) Huawei Technologies Co., Ltd. 2025. All rights reserved.
  * SPDX-License-Identifier: 0BSD
  */
-#include <dice/ensure.h>
 #include <pthread.h>
 #include <stdio.h>
 
 #include <dice/chains/intercept.h>
+#include <dice/ensure.h>
 #include <dice/events/memaccess.h>
 #include <dice/pubsub.h>
 #include <vsync/atomic.h>

@@ -21,7 +21,8 @@
 #include <dice/log.h>
 #include <dice/pubsub.h>
 
-/* LAST_DISPATCH_SLOT marks the inclusive end of the generated dispatch range. */
+/* LAST_DISPATCH_SLOT marks the inclusive end of the generated dispatch range.
+ */
 #ifndef LAST_DISPATCH_SLOT
     #define LAST_DISPATCH_SLOT 5
 #endif
