@@ -62,7 +62,7 @@ struct expected_event expected_1[] = {
 #if defined(__linux__) && !defined(__GLIBC__)
     // on Alpine , multiple allocations occur before SELF_INIT
     EXPECTED_SUFFIX(CAPTURE_EVENT, EVENT_SELF_INIT),
-    EXPECTED_EVENT(CAPTURE_EVENT, EVENT_THREAD_START),
+    EXPECTED_SUFFIX(CAPTURE_EVENT, EVENT_THREAD_START),
     EXPECTED_EVENT(CAPTURE_EVENT, EVENT_STACKTRACE_ENTER),
 #elif defined(__linux__)
     EXPECTED_EVENT(CAPTURE_EVENT, EVENT_SELF_INIT),

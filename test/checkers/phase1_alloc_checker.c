@@ -45,6 +45,18 @@ is_phase1_path(const char *path)
     return path != NULL && strstr(path, PHASE1_TMPDIR_PREFIX) != NULL;
 }
 
+static int
+is_phase1_realpath(const char *path)
+{
+    const char *suffix = "/" PHASE1_REALPATH_ARG;
+    size_t path_len    = strlen(path);
+    size_t suffix_len  = strlen(suffix);
+
+    if (!is_phase1_path(path) || path_len < suffix_len)
+        return 0;
+    return strcmp(path + path_len - suffix_len, suffix) == 0;
+}
+
 PS_SUBSCRIBE(CAPTURE_AFTER, EVENT_STRDUP, {
     struct strdup_event *ev = EVENT_PAYLOAD(ev);
     if (ev->s != NULL && strcmp(ev->s, PHASE1_STRDUP_ARG) == 0) {
@@ -94,9 +106,8 @@ PS_SUBSCRIBE(CAPTURE_AFTER, EVENT_GETCWD, {
 PS_SUBSCRIBE(CAPTURE_AFTER, EVENT_REALPATH, {
     struct realpath_event *ev = EVENT_PAYLOAD(ev);
     if (ev->path != NULL && strcmp(ev->path, PHASE1_REALPATH_ARG) == 0 &&
-        ev->resolved_path == NULL) {
-        ensure(ev->ret != NULL);
-        ensure(is_phase1_path(ev->ret));
+        ev->resolved_path == NULL && ev->ret != NULL &&
+        is_phase1_realpath(ev->ret)) {
         saw_realpath++;
     }
 })

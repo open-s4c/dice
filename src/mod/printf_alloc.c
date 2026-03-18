@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: 0BSD
  */
 #include <stdarg.h>
+#include <stdio.h>
 
 #include <dice/chains/intercept.h>
 #include <dice/events/printf_alloc.h>

@@ -17,6 +17,7 @@
 #include <dice/events/string_alloc.h>
 #include <dice/phase1_alloc.h>
 
+#ifdef HAVE_VASPRINTF
 static char *
 call_vasprintf(const char *fmt, ...)
 {
@@ -28,6 +29,7 @@ call_vasprintf(const char *fmt, ...)
     va_end(ap);
     return buf;
 }
+#endif
 
 int
 main(void)

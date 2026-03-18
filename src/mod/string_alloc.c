@@ -2,6 +2,8 @@
  * Copyright (C) 2026 Huawei Technologies Co., Ltd.
  * SPDX-License-Identifier: 0BSD
  */
+#include <string.h>
+
 #include <dice/chains/intercept.h>
 #include <dice/events/string_alloc.h>
 #include <dice/interpose.h>
