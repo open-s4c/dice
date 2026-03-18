@@ -40,6 +40,7 @@ INTERPOSE(char *, strndup, const char *s, size_t n)
     return ev.ret;
 }
 
+#ifdef HAVE_WCSDUP
 INTERPOSE(wchar_t *, wcsdup, const wchar_t *s)
 {
     struct wcsdup_event ev = {
@@ -55,9 +56,12 @@ INTERPOSE(wchar_t *, wcsdup, const wchar_t *s)
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_WCSDUP, &ev, &md);
     return ev.ret;
 }
+#endif
 
 PS_ADVERTISE_TYPE(EVENT_STRDUP)
 PS_ADVERTISE_TYPE(EVENT_STRNDUP)
+#ifdef HAVE_WCSDUP
 PS_ADVERTISE_TYPE(EVENT_WCSDUP)
+#endif
 
 DICE_MODULE_INIT()

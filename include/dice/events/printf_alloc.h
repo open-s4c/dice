@@ -7,9 +7,15 @@
 
 #include <stdarg.h>
 
+#if !defined(__NetBSD__)
+    #define HAVE_ASPRINTF
+    #define HAVE_VASPRINTF
+#endif
+
 #define EVENT_ASPRINTF  67
 #define EVENT_VASPRINTF 68
 
+#ifdef HAVE_ASPRINTF
 struct asprintf_event {
     const void *pc;
     char **strp;
@@ -18,7 +24,9 @@ struct asprintf_event {
     int (*func)(char **, const char *, ...);
     int (*vfunc)(char **, const char *, va_list);
 };
+#endif
 
+#ifdef HAVE_VASPRINTF
 struct vasprintf_event {
     const void *pc;
     char **strp;
@@ -27,5 +35,6 @@ struct vasprintf_event {
     int ret;
     int (*func)(char **, const char *, va_list);
 };
+#endif
 
 #endif /* DICE_PRINTF_ALLOC_H */

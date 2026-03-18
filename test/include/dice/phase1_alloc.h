@@ -12,7 +12,7 @@
 #define PHASE1_TMPDIR_PREFIX   "dice-phase1."
 #define PHASE1_TMPDIR_TEMPLATE "/tmp/dice-phase1.XXXXXX"
 #define PHASE1_GETCWD_SIZE     128
-#define PHASE1_REALPATH_ARG    "."
+#define PHASE1_REALPATH_ARG    "phase1-realpath-target"
 #define PHASE1_TEMPNAM_PFX     "p1tmp"
 #define PHASE1_ASPRINTF_FMT    "phase1-asprintf-%d"
 #define PHASE1_ASPRINTF_ARG    7

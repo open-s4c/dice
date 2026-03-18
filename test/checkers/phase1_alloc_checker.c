@@ -18,14 +18,26 @@
 
 static int saw_strdup;
 static int saw_strndup;
+#ifdef HAVE_WCSDUP
 static int saw_wcsdup;
+#endif
+#ifdef HAVE_GET_CURRENT_DIR_NAME
 static int saw_get_current_dir_name;
+#endif
 static int saw_getcwd;
 static int saw_realpath;
+#ifdef HAVE_TEMPNAM
 static int saw_tempnam;
+#endif
+#ifdef HAVE_ASPRINTF
 static int saw_asprintf;
+#endif
+#ifdef HAVE_VASPRINTF
 static int saw_vasprintf;
+#endif
+#ifdef HAVE_SCHED_CPUALLOC
 static int saw_sched_cpualloc;
+#endif
 
 static int
 is_phase1_path(const char *path)
@@ -50,6 +62,7 @@ PS_SUBSCRIBE(CAPTURE_AFTER, EVENT_STRNDUP, {
     }
 })
 
+#ifdef HAVE_WCSDUP
 PS_SUBSCRIBE(CAPTURE_AFTER, EVENT_WCSDUP, {
     struct wcsdup_event *ev = EVENT_PAYLOAD(ev);
     if (ev->s != NULL && wcscmp(ev->s, PHASE1_WCSDUP_ARG) == 0) {
@@ -57,6 +70,7 @@ PS_SUBSCRIBE(CAPTURE_AFTER, EVENT_WCSDUP, {
         saw_wcsdup++;
     }
 })
+#endif
 
 #ifdef HAVE_GET_CURRENT_DIR_NAME
 PS_SUBSCRIBE(CAPTURE_AFTER, EVENT_GET_CURRENT_DIR_NAME, {
@@ -87,6 +101,7 @@ PS_SUBSCRIBE(CAPTURE_AFTER, EVENT_REALPATH, {
     }
 })
 
+#ifdef HAVE_TEMPNAM
 PS_SUBSCRIBE(CAPTURE_AFTER, EVENT_TEMPNAM, {
     struct tempnam_event *ev = EVENT_PAYLOAD(ev);
     if (ev->dir == NULL && ev->pfx != NULL &&
@@ -95,7 +110,9 @@ PS_SUBSCRIBE(CAPTURE_AFTER, EVENT_TEMPNAM, {
         saw_tempnam++;
     }
 })
+#endif
 
+#ifdef HAVE_ASPRINTF
 PS_SUBSCRIBE(CAPTURE_AFTER, EVENT_ASPRINTF, {
     struct asprintf_event *ev = EVENT_PAYLOAD(ev);
     if (ev->fmt != NULL && strcmp(ev->fmt, PHASE1_ASPRINTF_FMT) == 0) {
@@ -104,7 +121,9 @@ PS_SUBSCRIBE(CAPTURE_AFTER, EVENT_ASPRINTF, {
         saw_asprintf++;
     }
 })
+#endif
 
+#ifdef HAVE_VASPRINTF
 PS_SUBSCRIBE(CAPTURE_AFTER, EVENT_VASPRINTF, {
     struct vasprintf_event *ev = EVENT_PAYLOAD(ev);
     if (ev->fmt != NULL && strcmp(ev->fmt, PHASE1_VASPRINTF_FMT) == 0) {
@@ -113,6 +132,7 @@ PS_SUBSCRIBE(CAPTURE_AFTER, EVENT_VASPRINTF, {
         saw_vasprintf++;
     }
 })
+#endif
 
 #ifdef HAVE_SCHED_CPUALLOC
 PS_SUBSCRIBE(CAPTURE_AFTER, EVENT_SCHED_CPUALLOC, {
@@ -127,15 +147,23 @@ PS_SUBSCRIBE(CAPTURE_AFTER, EVENT_SCHED_CPUALLOC, {
 DICE_MODULE_FINI({
     ensure(saw_strdup == 1);
     ensure(saw_strndup == 1);
+#ifdef HAVE_WCSDUP
     ensure(saw_wcsdup == 1);
+#endif
 #ifdef HAVE_GET_CURRENT_DIR_NAME
     ensure(saw_get_current_dir_name == 1);
 #endif
     ensure(saw_getcwd == 1);
     ensure(saw_realpath == 1);
+#ifdef HAVE_TEMPNAM
     ensure(saw_tempnam == 1);
+#endif
+#ifdef HAVE_ASPRINTF
     ensure(saw_asprintf == 1);
+#endif
+#ifdef HAVE_VASPRINTF
     ensure(saw_vasprintf == 1);
+#endif
 #ifdef HAVE_SCHED_CPUALLOC
     ensure(saw_sched_cpualloc == 1);
 #endif

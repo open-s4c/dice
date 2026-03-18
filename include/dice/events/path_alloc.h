@@ -11,6 +11,10 @@
     #define HAVE_GET_CURRENT_DIR_NAME
 #endif
 
+#if !defined(__APPLE__)
+    #define HAVE_TEMPNAM
+#endif
+
 #define EVENT_GET_CURRENT_DIR_NAME 63
 #define EVENT_GETCWD               64
 #define EVENT_REALPATH             65
@@ -40,6 +44,7 @@ struct realpath_event {
     char *(*func)(const char *, char *);
 };
 
+#ifdef HAVE_TEMPNAM
 struct tempnam_event {
     const void *pc;
     const char *dir;
@@ -47,5 +52,6 @@ struct tempnam_event {
     char *ret;
     char *(*func)(const char *, const char *);
 };
+#endif
 
 #endif /* DICE_PATH_ALLOC_H */

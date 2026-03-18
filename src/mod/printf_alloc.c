@@ -9,6 +9,7 @@
 #include <dice/interpose.h>
 #include <dice/module.h>
 
+#ifdef HAVE_VASPRINTF
 INTERPOSE(int, vasprintf, char **strp, const char *fmt, va_list ap)
 {
     struct vasprintf_event ev = {
@@ -28,7 +29,9 @@ INTERPOSE(int, vasprintf, char **strp, const char *fmt, va_list ap)
     va_end(ev.ap);
     return ev.ret;
 }
+#endif
 
+#ifdef HAVE_ASPRINTF
 INTERPOSE(int, asprintf, char **strp, const char *fmt, ...)
 {
     struct asprintf_event ev = {
@@ -49,8 +52,13 @@ INTERPOSE(int, asprintf, char **strp, const char *fmt, ...)
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_ASPRINTF, &ev, &md);
     return ev.ret;
 }
+#endif
 
+#ifdef HAVE_ASPRINTF
 PS_ADVERTISE_TYPE(EVENT_ASPRINTF)
+#endif
+#ifdef HAVE_VASPRINTF
 PS_ADVERTISE_TYPE(EVENT_VASPRINTF)
+#endif
 
 DICE_MODULE_INIT()

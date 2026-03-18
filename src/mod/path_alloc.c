@@ -58,6 +58,7 @@ INTERPOSE(char *, realpath, const char *path, char *resolved_path)
     return ev.ret;
 }
 
+#ifdef HAVE_TEMPNAM
 INTERPOSE(char *, tempnam, const char *dir, const char *pfx)
 {
     struct tempnam_event ev = {
@@ -74,12 +75,15 @@ INTERPOSE(char *, tempnam, const char *dir, const char *pfx)
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_TEMPNAM, &ev, &md);
     return ev.ret;
 }
+#endif
 
 #ifdef HAVE_GET_CURRENT_DIR_NAME
 PS_ADVERTISE_TYPE(EVENT_GET_CURRENT_DIR_NAME)
 #endif
 PS_ADVERTISE_TYPE(EVENT_GETCWD)
 PS_ADVERTISE_TYPE(EVENT_REALPATH)
+#ifdef HAVE_TEMPNAM
 PS_ADVERTISE_TYPE(EVENT_TEMPNAM)
+#endif
 
 DICE_MODULE_INIT()
