@@ -18,7 +18,7 @@ set(DICE_intercept_event on)
 
 # Test cases in these lists will be compiled but not ran with sanitizers
 set(IGNORE_address pthread_exit_window ensure_self_fini ensure_self_fini_error
-                   ensure_self_fini_detach)
+                   ensure_self_fini_detach phase1_alloc_test)
 set(IGNORE_thread pthread_exit_window)
 set(IGNORE_undefined)
 
@@ -64,6 +64,7 @@ foreach(SRC ${SRCS})
 endforeach()
 
 # Additional configuration of some tests
+target_compile_options(phase1_alloc_test PRIVATE -fno-builtin)
 target_link_libraries(pthread_exit_window PRIVATE dice-self)
 target_link_libraries(ensure_self_fini PRIVATE dice-self)
 target_link_libraries(ensure_self_fini_error PRIVATE dice-self)

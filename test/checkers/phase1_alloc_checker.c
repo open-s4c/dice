@@ -3,6 +3,9 @@
  * SPDX-License-Identifier: 0BSD
  */
 
+#include <string.h>
+#include <wchar.h>
+
 #include <dice/chains/capture.h>
 #include <dice/ensure.h>
 #include <dice/events/cpuset_alloc.h>
@@ -10,6 +13,7 @@
 #include <dice/events/printf_alloc.h>
 #include <dice/events/string_alloc.h>
 #include <dice/module.h>
+#include <dice/phase1_alloc.h>
 #include <dice/pubsub.h>
 
 static int saw_strdup;
@@ -23,77 +27,116 @@ static int saw_asprintf;
 static int saw_vasprintf;
 static int saw_sched_cpualloc;
 
+static int
+is_phase1_path(const char *path)
+{
+    return path != NULL && strstr(path, PHASE1_TMPDIR_PREFIX) != NULL;
+}
+
 PS_SUBSCRIBE(CAPTURE_AFTER, EVENT_STRDUP, {
     struct strdup_event *ev = EVENT_PAYLOAD(ev);
-    ensure(ev->ret != NULL);
-    saw_strdup++;
+    if (ev->s != NULL && strcmp(ev->s, PHASE1_STRDUP_ARG) == 0) {
+        ensure(ev->ret != NULL);
+        saw_strdup++;
+    }
 })
 
 PS_SUBSCRIBE(CAPTURE_AFTER, EVENT_STRNDUP, {
     struct strndup_event *ev = EVENT_PAYLOAD(ev);
-    ensure(ev->ret != NULL);
-    saw_strndup++;
+    if (ev->s != NULL && strcmp(ev->s, PHASE1_STRNDUP_ARG) == 0 &&
+        ev->n == PHASE1_STRNDUP_N) {
+        ensure(ev->ret != NULL);
+        saw_strndup++;
+    }
 })
 
 PS_SUBSCRIBE(CAPTURE_AFTER, EVENT_WCSDUP, {
     struct wcsdup_event *ev = EVENT_PAYLOAD(ev);
-    ensure(ev->ret != NULL);
-    saw_wcsdup++;
+    if (ev->s != NULL && wcscmp(ev->s, PHASE1_WCSDUP_ARG) == 0) {
+        ensure(ev->ret != NULL);
+        saw_wcsdup++;
+    }
 })
 
+#ifdef HAVE_GET_CURRENT_DIR_NAME
 PS_SUBSCRIBE(CAPTURE_AFTER, EVENT_GET_CURRENT_DIR_NAME, {
     struct get_current_dir_name_event *ev = EVENT_PAYLOAD(ev);
-    ensure(ev->ret != NULL);
-    saw_get_current_dir_name++;
+    if (is_phase1_path(ev->ret)) {
+        ensure(ev->ret != NULL);
+        saw_get_current_dir_name++;
+    }
 })
+#endif
 
 PS_SUBSCRIBE(CAPTURE_AFTER, EVENT_GETCWD, {
     struct getcwd_event *ev = EVENT_PAYLOAD(ev);
-    ensure(ev->ret != NULL);
-    saw_getcwd++;
+    if (ev->buf == NULL && ev->size == PHASE1_GETCWD_SIZE) {
+        ensure(ev->ret != NULL);
+        ensure(is_phase1_path(ev->ret));
+        saw_getcwd++;
+    }
 })
 
 PS_SUBSCRIBE(CAPTURE_AFTER, EVENT_REALPATH, {
     struct realpath_event *ev = EVENT_PAYLOAD(ev);
-    ensure(ev->ret != NULL);
-    saw_realpath++;
+    if (ev->path != NULL && strcmp(ev->path, PHASE1_REALPATH_ARG) == 0 &&
+        ev->resolved_path == NULL) {
+        ensure(ev->ret != NULL);
+        ensure(is_phase1_path(ev->ret));
+        saw_realpath++;
+    }
 })
 
 PS_SUBSCRIBE(CAPTURE_AFTER, EVENT_TEMPNAM, {
     struct tempnam_event *ev = EVENT_PAYLOAD(ev);
-    ensure(ev->ret != NULL);
-    saw_tempnam++;
+    if (ev->dir == NULL && ev->pfx != NULL &&
+        strcmp(ev->pfx, PHASE1_TEMPNAM_PFX) == 0) {
+        ensure(ev->ret != NULL);
+        saw_tempnam++;
+    }
 })
 
 PS_SUBSCRIBE(CAPTURE_AFTER, EVENT_ASPRINTF, {
     struct asprintf_event *ev = EVENT_PAYLOAD(ev);
-    ensure(ev->ret >= 0);
-    ensure(ev->strp != NULL && *ev->strp != NULL);
-    saw_asprintf++;
+    if (ev->fmt != NULL && strcmp(ev->fmt, PHASE1_ASPRINTF_FMT) == 0) {
+        ensure(ev->ret >= 0);
+        ensure(ev->strp != NULL && *ev->strp != NULL);
+        saw_asprintf++;
+    }
 })
 
 PS_SUBSCRIBE(CAPTURE_AFTER, EVENT_VASPRINTF, {
     struct vasprintf_event *ev = EVENT_PAYLOAD(ev);
-    ensure(ev->ret >= 0);
-    ensure(ev->strp != NULL && *ev->strp != NULL);
-    saw_vasprintf++;
+    if (ev->fmt != NULL && strcmp(ev->fmt, PHASE1_VASPRINTF_FMT) == 0) {
+        ensure(ev->ret >= 0);
+        ensure(ev->strp != NULL && *ev->strp != NULL);
+        saw_vasprintf++;
+    }
 })
 
+#ifdef HAVE_SCHED_CPUALLOC
 PS_SUBSCRIBE(CAPTURE_AFTER, EVENT_SCHED_CPUALLOC, {
     struct sched_cpualloc_event *ev = EVENT_PAYLOAD(ev);
-    ensure(ev->ret != NULL);
-    saw_sched_cpualloc++;
+    if (ev->count == PHASE1_CPUSET_COUNT) {
+        ensure(ev->ret != NULL);
+        saw_sched_cpualloc++;
+    }
 })
+#endif
 
 DICE_MODULE_FINI({
     ensure(saw_strdup == 1);
     ensure(saw_strndup == 1);
     ensure(saw_wcsdup == 1);
+#ifdef HAVE_GET_CURRENT_DIR_NAME
     ensure(saw_get_current_dir_name == 1);
+#endif
     ensure(saw_getcwd == 1);
     ensure(saw_realpath == 1);
     ensure(saw_tempnam == 1);
     ensure(saw_asprintf == 1);
     ensure(saw_vasprintf == 1);
+#ifdef HAVE_SCHED_CPUALLOC
     ensure(saw_sched_cpualloc == 1);
+#endif
 })

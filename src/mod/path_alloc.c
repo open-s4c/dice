@@ -7,6 +7,7 @@
 #include <dice/interpose.h>
 #include <dice/module.h>
 
+#ifdef HAVE_GET_CURRENT_DIR_NAME
 INTERPOSE(char *, get_current_dir_name, void)
 {
     struct get_current_dir_name_event ev = {
@@ -21,6 +22,7 @@ INTERPOSE(char *, get_current_dir_name, void)
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_GET_CURRENT_DIR_NAME, &ev, &md);
     return ev.ret;
 }
+#endif
 
 INTERPOSE(char *, getcwd, char *buf, size_t size)
 {
@@ -73,7 +75,9 @@ INTERPOSE(char *, tempnam, const char *dir, const char *pfx)
     return ev.ret;
 }
 
+#ifdef HAVE_GET_CURRENT_DIR_NAME
 PS_ADVERTISE_TYPE(EVENT_GET_CURRENT_DIR_NAME)
+#endif
 PS_ADVERTISE_TYPE(EVENT_GETCWD)
 PS_ADVERTISE_TYPE(EVENT_REALPATH)
 PS_ADVERTISE_TYPE(EVENT_TEMPNAM)

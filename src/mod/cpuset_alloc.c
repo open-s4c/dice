@@ -7,6 +7,7 @@
 #include <dice/interpose.h>
 #include <dice/module.h>
 
+#ifdef HAVE_SCHED_CPUALLOC
 INTERPOSE(cpu_set_t *, __sched_cpualloc, size_t count)
 {
     struct sched_cpualloc_event ev = {
@@ -24,5 +25,6 @@ INTERPOSE(cpu_set_t *, __sched_cpualloc, size_t count)
 }
 
 PS_ADVERTISE_TYPE(EVENT_SCHED_CPUALLOC)
+#endif
 
 DICE_MODULE_INIT()

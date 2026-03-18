@@ -7,16 +7,22 @@
 
 #include <stddef.h>
 
+#if !defined(__APPLE__) && !defined(__NetBSD__) && !defined(__OHOS__)
+    #define HAVE_GET_CURRENT_DIR_NAME
+#endif
+
 #define EVENT_GET_CURRENT_DIR_NAME 63
 #define EVENT_GETCWD               64
 #define EVENT_REALPATH             65
 #define EVENT_TEMPNAM              66
 
+#ifdef HAVE_GET_CURRENT_DIR_NAME
 struct get_current_dir_name_event {
     const void *pc;
     char *ret;
     char *(*func)(void);
 };
+#endif
 
 struct getcwd_event {
     const void *pc;
