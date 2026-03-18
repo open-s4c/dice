@@ -51,6 +51,10 @@ while [ "$#" != "0" ]; do
         ;;
         -malloc)
             PRELOAD="$PRELOAD:$DICE_DIR/dice-malloc.$SO"
+            PRELOAD="$PRELOAD:$DICE_DIR/dice-string_alloc.$SO"
+            PRELOAD="$PRELOAD:$DICE_DIR/dice-path_alloc.$SO"
+            PRELOAD="$PRELOAD:$DICE_DIR/dice-printf_alloc.$SO"
+            PRELOAD="$PRELOAD:$DICE_DIR/dice-cpuset_alloc.$SO"
         ;;
         -tsan)
             PRELOAD="$PRELOAD:$DICE_DIR/dice-tsan.$SO"

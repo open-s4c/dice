@@ -6,7 +6,7 @@ target_include_directories(
   dice-checkers.h INTERFACE "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>"
                             "$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>")
 
-set(SRCS trace_checker.c malloc_free_checker.c id_checker.c)
+set(SRCS trace_checker.c malloc_free_checker.c id_checker.c phase1_alloc_checker.c)
 foreach(SRC ${SRCS})
   get_filename_component(TEST ${SRC} NAME_WLE)
   set(TARGET ${TEST})
