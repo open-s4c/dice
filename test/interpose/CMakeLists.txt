@@ -4,6 +4,18 @@
 set(INCL_malloc '<dice/events/malloc.h>')
 set(FUNS_malloc malloc calloc realloc free posix_memalign aligned_alloc)
 
+set(INCL_string_alloc '<dice/events/string_alloc.h>')
+set(FUNS_string_alloc strdup strndup)
+if(NOT CMAKE_SYSTEM_NAME MATCHES "NetBSD")
+  set(FUNS_string_alloc ${FUNS_string_alloc} wcsdup)
+endif()
+
+set(INCL_path_alloc '<dice/events/path_alloc.h>')
+set(FUNS_path_alloc getcwd realpath)
+if(NOT APPLE)
+  set(FUNS_path_alloc ${FUNS_path_alloc} tempnam)
+endif()
+
 set(INCL_memcpy '<dice/events/memcpy.h>')
 set(FUNS_memcpy memcpy memmove memset)
 
@@ -75,7 +87,7 @@ if(${ENABLE_SANITIZER})
   message(STATUS "Ignoring malloc tests")
 else()
   # malloc does not play well with the sanitizers
-  set(MODS ${MODS} malloc)
+  set(MODS ${MODS} malloc string_alloc path_alloc)
 endif()
 
 if(NOT APPLE)

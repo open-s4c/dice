@@ -39,6 +39,7 @@ $_dl(); // ---------------------------------------------------------------------
 #include <stddef.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 
 #include <dice/chains/intercept.h>
 #include <dice/ensure.h>
