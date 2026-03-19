@@ -65,6 +65,7 @@ endforeach()
 
 # Additional configuration of some tests
 target_compile_options(phase1_alloc_test PRIVATE -fno-builtin)
+target_compile_definitions(phase1_alloc_test PRIVATE _FORTIFY_SOURCE=0)
 target_link_libraries(pthread_exit_window PRIVATE dice-self)
 target_link_libraries(ensure_self_fini PRIVATE dice-self)
 target_link_libraries(ensure_self_fini_error PRIVATE dice-self)

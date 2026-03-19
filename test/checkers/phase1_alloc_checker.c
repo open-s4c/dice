@@ -105,7 +105,7 @@ PS_SUBSCRIBE(CAPTURE_AFTER, EVENT_GETCWD, {
 
 PS_SUBSCRIBE(CAPTURE_AFTER, EVENT_REALPATH, {
     struct realpath_event *ev = EVENT_PAYLOAD(ev);
-    if (ev->path != NULL && strcmp(ev->path, PHASE1_REALPATH_ARG) == 0 &&
+    if (ev->path != NULL && is_phase1_realpath(ev->path) &&
         ev->resolved_path == NULL && ev->ret != NULL &&
         is_phase1_realpath(ev->ret)) {
         saw_realpath++;

@@ -34,14 +34,26 @@ call_vasprintf(const char *fmt, ...)
 int
 main(void)
 {
-    char *saved_cwd = getcwd(NULL, 0);
-    char tmpdir[]   = PHASE1_TMPDIR_TEMPLATE;
+    char *saved_cwd    = getcwd(NULL, 0);
+    char tmpdir[]      = PHASE1_TMPDIR_TEMPLATE;
+    char *tmpdir_path  = NULL;
+    char *realpath_arg = NULL;
     FILE *realpath_file;
 
     ensure(saved_cwd != NULL);
     ensure(mkdtemp(tmpdir) != NULL);
     ensure(chdir(tmpdir) == 0);
-    realpath_file = fopen(PHASE1_REALPATH_ARG, "w");
+    tmpdir_path = getcwd(NULL, 0);
+    ensure(tmpdir_path != NULL);
+
+    realpath_arg =
+        malloc(strlen(tmpdir_path) + strlen(PHASE1_REALPATH_ARG) + 2);
+    ensure(realpath_arg != NULL);
+    ensure(snprintf(realpath_arg,
+                    strlen(tmpdir_path) + strlen(PHASE1_REALPATH_ARG) + 2,
+                    "%s/%s", tmpdir_path, PHASE1_REALPATH_ARG) > 0);
+
+    realpath_file = fopen(realpath_arg, "w");
     ensure(realpath_file != NULL);
     ensure(fclose(realpath_file) == 0);
 
@@ -69,7 +81,7 @@ main(void)
     ensure(cwd != NULL);
     free(cwd);
 
-    char *resolved = realpath(PHASE1_REALPATH_ARG, NULL);
+    char *resolved = realpath(realpath_arg, NULL);
     ensure(resolved != NULL);
     free(resolved);
 
@@ -97,9 +109,11 @@ main(void)
     CPU_FREE(set);
 #endif
 
-    ensure(unlink(PHASE1_REALPATH_ARG) == 0);
+    ensure(unlink(realpath_arg) == 0);
     ensure(chdir(saved_cwd) == 0);
     ensure(rmdir(tmpdir) == 0);
+    free(realpath_arg);
+    free(tmpdir_path);
     free(saved_cwd);
 
     return 0;
