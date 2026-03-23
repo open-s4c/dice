@@ -53,7 +53,7 @@ endif()
 set(DICE_MEMPOOL_SIZE
     "1024 * 1024 * 200"
     CACHE STRING "Dice mempool size")
-target_compile_definitions(dice.h PUBLIC MEMPOOL_SIZE=${DICE_MEMPOOL_SIZE})
+target_compile_options(dice.h PUBLIC "-DMEMPOOL_SIZE=(${DICE_MEMPOOL_SIZE})")
 
 # All modules created with dice can land in shared libraries and have to be
 # compiled with -fPIC.
