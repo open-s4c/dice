@@ -73,7 +73,8 @@ enum ps_err ps_publish(const chain_id chain, const type_id type, void *event,
         struct metadata *_md = (md) != NULL ? (struct metadata *)(md) : &__md; \
         enum ps_err err      = ps_publish(chain, type, event, _md);            \
         if (err < 0)                                                           \
-            log_fatal("could not publish: %d", err);                           \
+            log_fatal("could not publish %s/%s: %d", ps_chain_str(chain),      \
+                      ps_type_str(type), err);                                 \
     } while (0)
 
 /* ps_subscribe subscribes a callback in a chain for an event.
