@@ -25,6 +25,33 @@ $_map(MM_RETURN_aligned_alloc, void *);
 $_map(MM_PARAMS_aligned_alloc, size_t alignment, size_t size);
 $_map(MM_ARGS_aligned_alloc, alignment, size);
 $_dl; // -----------------------------------------------------------------------
+$_dl; // string_alloc
+$_dl; // -----------------------------------------------------------------------
+$_map(MM_RETURN_strdup, char *);
+$_map(MM_PARAMS_strdup, const char *s);
+$_map(MM_ARGS_strdup, s);
+$_map(MM_RETURN_strndup, char *);
+$_map(MM_PARAMS_strndup, const char *s, size_t n);
+$_map(MM_ARGS_strndup, s, n);
+$_map(MM_RETURN_wcsdup, wchar_t *);
+$_map(MM_PARAMS_wcsdup, const wchar_t *s);
+$_map(MM_ARGS_wcsdup, s);
+$_dl; // -----------------------------------------------------------------------
+$_dl; // path_alloc
+$_dl; // -----------------------------------------------------------------------
+$_map(MM_RETURN_get_current_dir_name, char *);
+$_map(MM_PARAMS_get_current_dir_name, void);
+$_map(MM_ARGS_get_current_dir_name, $__kill);
+$_map(MM_RETURN_getcwd, char *);
+$_map(MM_PARAMS_getcwd, char *buf, size_t size);
+$_map(MM_ARGS_getcwd, buf, size);
+$_map(MM_RETURN_realpath, char *);
+$_map(MM_PARAMS_realpath, const char *path, char *resolved_path);
+$_map(MM_ARGS_realpath, path, resolved_path);
+$_map(MM_RETURN_tempnam, char *);
+$_map(MM_PARAMS_tempnam, const char *dir, const char *pfx);
+$_map(MM_ARGS_tempnam, dir, pfx);
+$_dl; // -----------------------------------------------------------------------
 $_dl; // mman
 $_dl; // -----------------------------------------------------------------------
 $_map(MM_RETURN_mmap, void *);

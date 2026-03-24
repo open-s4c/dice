@@ -8,7 +8,11 @@
 #include <dice/chains/capture.h>
 #include <dice/chains/intercept.h>
 #include <dice/ensure.h>
+#include <dice/events/cpuset_alloc.h>
 #include <dice/events/malloc.h>
+#include <dice/events/path_alloc.h>
+#include <dice/events/printf_alloc.h>
+#include <dice/events/string_alloc.h>
 #include <dice/module.h>
 #include <dice/pubsub.h>
 
@@ -27,6 +31,16 @@ PS_SUBSCRIBE(CAPTURE_BEFORE, ANY_EVENT, {
         case EVENT_CALLOC:
         case EVENT_ALIGNED_ALLOC:
         case EVENT_POSIX_MEMALIGN:
+        case EVENT_STRDUP:
+        case EVENT_STRNDUP:
+        case EVENT_WCSDUP:
+        case EVENT_GET_CURRENT_DIR_NAME:
+        case EVENT_GETCWD:
+        case EVENT_REALPATH:
+        case EVENT_TEMPNAM:
+        case EVENT_ASPRINTF:
+        case EVENT_VASPRINTF:
+        case EVENT_SCHED_CPUALLOC:
             captured[EVENT_MALLOC]++;
             break;
         case EVENT_FREE: {
