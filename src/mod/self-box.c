@@ -13,6 +13,13 @@ self_id(struct metadata *md)
     return self_id_(md);
 }
 
+enum self_guard self_guard_get_(struct metadata *md);
+DICE_HIDE enum self_guard
+self_guard_get(struct metadata *md)
+{
+    return self_guard_get_(md);
+}
+
 bool self_retired_(struct metadata *md);
 DICE_HIDE bool
 self_retired(struct metadata *md)

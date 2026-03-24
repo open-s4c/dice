@@ -61,6 +61,8 @@ struct self {
         size_t size;
         size_t cap;
     } tls;
+    /* Bit 0 marks a BEFORE/AFTER pair in flight. Publication and recursion
+     * suppression bump the counter in steps of 2. */
     int guard;
     bool retired;
 };
@@ -156,6 +158,18 @@ self_id_(struct metadata *md)
     return likely(self) ? self->id : NO_THREAD;
 }
 
+DICE_HIDE enum self_guard
+self_guard_get_(struct metadata *md)
+{
+    struct self *self = (struct self *)md;
+
+    if (unlikely(self == NULL || self->guard <= 0))
+        return SELF_GUARD_NONE;
+    if (self->guard == 1)
+        return SELF_GUARD_BETWEEN;
+    return SELF_GUARD_SERVING;
+}
+
 DICE_HIDE bool
 self_retired_(struct metadata *md)
 {
@@ -232,6 +246,12 @@ DICE_WEAK thread_id
 self_id(struct metadata *md)
 {
     return self_id_(md);
+}
+
+DICE_WEAK enum self_guard
+self_guard_get(struct metadata *md)
+{
+    return self_guard_get_(md);
 }
 
 DICE_WEAK bool
@@ -457,18 +477,20 @@ retire_self_(struct self *self)
 //  pubsub handler
 // -----------------------------------------------------------------------------
 
-#define self_guard(chain, type, event, self)                                   \
-    do {                                                                       \
-        self->guard++;                                                         \
-        log_debug(">> [%" PRIu64 ":0x%" PRIx64 ":%" PRIu64 "] %s/%s: %d",      \
-                  self_id(&self->md), (uint64_t)self->ptid, self->osid,        \
-                  ps_chain_str(chain), ps_type_str(type), self->guard);        \
-        PS_PUBLISH(chain, type, event, &self->md);                             \
-        log_debug("<< [%" PRIu64 ":0x%" PRIx64 ":%" PRIu64 "] %s/%s: %d",      \
-                  self_id(&self->md), (uint64_t)self->ptid, self->osid,        \
-                  ps_chain_str(chain), ps_type_str(type), self->guard);        \
-        self->guard--;                                                         \
-    } while (0)
+static void
+self_publish_(const chain_id chain, const type_id type, void *event,
+              struct self *self)
+{
+    self->guard += 2;
+    log_debug(">> [%" PRIu64 ":0x%" PRIx64 ":%" PRIu64 "] %s/%s: %d",
+              self_id(&self->md), (uint64_t)self->ptid, self->osid,
+              ps_chain_str(chain), ps_type_str(type), self->guard);
+    PS_PUBLISH(chain, type, event, &self->md);
+    log_debug("<< [%" PRIu64 ":0x%" PRIx64 ":%" PRIu64 "] %s/%s: %d",
+              self_id(&self->md), (uint64_t)self->ptid, self->osid,
+              ps_chain_str(chain), ps_type_str(type), self->guard);
+    self->guard -= 2;
+}
 
 static enum ps_err
 self_handle_before_(const chain_id chain, const type_id type, void *event,
@@ -478,7 +500,7 @@ self_handle_before_(const chain_id chain, const type_id type, void *event,
     assert(self);
 
     if (likely(self->guard++ == 0))
-        self_guard(CAPTURE_BEFORE, type, event, self);
+        self_publish_(CAPTURE_BEFORE, type, event, self);
     else
         log_debug(">>> [%" PRIu64 ":0x%" PRIx64 ":%" PRIu64 "] %s/%s: %d",
                   self_id(&self->md), (uint64_t)self->ptid, self->osid,
@@ -495,13 +517,14 @@ self_handle_after_(const chain_id chain, const type_id type, void *event,
     (void)chain;
     assert(self);
 
-    if (likely(self->guard-- == 1))
-        self_guard(CAPTURE_AFTER, type, event, self);
+    if (likely(self->guard == 1))
+        self_publish_(CAPTURE_AFTER, type, event, self);
     else
         log_debug("<<< [%" PRIu64 ":0x%" PRIx64 ":%" PRIu64 "] %s/%s: %d",
                   self_id(&self->md), (uint64_t)self->ptid, self->osid,
                   ps_chain_str(chain), ps_type_str(type), self->guard);
 
+    self->guard--;
     assert(self->guard >= 0);
     return PS_STOP_CHAIN;
 }
@@ -514,7 +537,7 @@ self_handle_event_(const chain_id chain, const type_id type, void *event,
     assert(self);
 
     if (likely(self->guard == 0))
-        self_guard(CAPTURE_EVENT, type, event, self);
+        self_publish_(CAPTURE_EVENT, type, event, self);
     else
         log_debug("!!! [%" PRIu64 ":0x%" PRIx64 ":%" PRIu64 "] %s/%s: %d",
                   self_id(&self->md), (uint64_t)self->ptid, self->osid,
@@ -598,7 +621,7 @@ cleanup_threads_(struct self *own, pthread_t ptid)
     // self object without knowing it is finilizing another thread. To stop the
     // recursion we use the same guard mechanism of normal publications.
     if (own)
-        own->guard++;
+        own->guard += 2;
 
     caslock_acquire(&threads_.lock);
     struct quack_node_s *item = quack_popall(&threads_.retired);
@@ -619,7 +642,7 @@ cleanup_threads_(struct self *own, pthread_t ptid)
     }
     caslock_release(&threads_.lock);
     if (own)
-        own->guard--;
+        own->guard -= 2;
 }
 
 PS_SUBSCRIBE(INTERCEPT_EVENT, EVENT_THREAD_EXIT, {
