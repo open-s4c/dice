@@ -16,10 +16,20 @@
 #include <dice/events/self.h>
 #include <dice/pubsub.h>
 
+enum self_guard {
+    SELF_GUARD_NONE = 0,
+    SELF_GUARD_BETWEEN,
+    SELF_GUARD_SERVING,
+};
+
 /* Returns the Dice-assigned thread identifier for the current handler
  * invocation. IDs start at 1; `NO_THREAD` is reserved for representing no
  * thread and should never be returned. */
 thread_id self_id(struct metadata *self);
+
+/* Returns whether Dice is currently idle, serving a handler, or between a
+ * matching INTERCEPT_BEFORE/INTERCEPT_AFTER pair for the current thread. */
+enum self_guard self_guard_get(struct metadata *self);
 
 /* True when the backing TLS object has been retired (for example, after a
  * thread exit). */
