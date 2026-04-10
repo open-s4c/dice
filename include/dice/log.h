@@ -22,6 +22,10 @@
 DICE_WEAK caslock_t log_lock;
 #endif
 
+#ifndef LOG_FILENO
+    #define LOG_FILENO STDOUT_FILENO
+#endif
+
 #define LOG_LEVEL_FATAL 0
 #define LOG_LEVEL_INFO  1
 #define LOG_LEVEL_DEBUG 2
@@ -44,14 +48,11 @@ DICE_WEAK caslock_t log_lock;
 
 #define LOG_MAX_LEN 1024
 
-static void __attribute__((noinline, unused, format(printf, 1, 2)))
-dice_log_printf_(const char *fmt, ...)
+static void __attribute__((noinline, unused))
+dice_log_vprintf_(const char *fmt, va_list ap)
 {
     char msg[LOG_MAX_LEN];
-    va_list ap;
-    va_start(ap, fmt);
     int n = vsnprintf(msg, sizeof(msg), fmt, ap);
-    va_end(ap);
     if (n < 0) {
         perror("vsnprintf");
         exit(EXIT_FAILURE);
@@ -61,10 +62,19 @@ dice_log_printf_(const char *fmt, ...)
     if (len >= sizeof(msg))
         len = sizeof(msg) - 1;
 
-    if (write(STDOUT_FILENO, msg, len) == -1) {
+    if (write(LOG_FILENO, msg, len) == -1) {
         perror("write stdout");
         exit(EXIT_FAILURE);
     }
+}
+
+static void __attribute__((noinline, unused, format(printf, 1, 2)))
+dice_log_printf_(const char *fmt, ...)
+{
+    va_list ap;
+    va_start(ap, fmt);
+    dice_log_vprintf_(fmt, ap);
+    va_end(ap);
 }
 
 #define log_printf(...) dice_log_printf_(__VA_ARGS__)
