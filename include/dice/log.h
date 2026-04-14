@@ -54,7 +54,9 @@ dice_log_vprintf_(const char *fmt, va_list ap)
     char msg[LOG_MAX_LEN];
     int n = vsnprintf(msg, sizeof(msg), fmt, ap);
     if (n < 0) {
-        perror("vsnprintf");
+        const char err[] = "vsnprintf failed";
+        ssize_t e = write(STDERR_FILENO, err, sizeof(err) - 1);
+        (void)e;
         exit(EXIT_FAILURE);
     }
 
@@ -62,8 +64,11 @@ dice_log_vprintf_(const char *fmt, va_list ap)
     if (len >= sizeof(msg))
         len = sizeof(msg) - 1;
 
-    if (write(LOG_FILENO, msg, len) == -1) {
-        perror("write stdout");
+    ssize_t w = write(LOG_FILENO, msg, len);
+    if (w < 0 || (size_t)w != len) {
+        const char err[] = "write failed";
+        ssize_t e = write(STDERR_FILENO, err, sizeof(err) - 1);
+        (void)e;
         exit(EXIT_FAILURE);
     }
 }
