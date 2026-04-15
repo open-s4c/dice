@@ -18,7 +18,7 @@
 #else
     #define PRELOAD "LD_PRELOAD"
 #endif
-#define DICE_DSO            "DICE_DSO"
+#define DICE_EXCLUDE_DSO    "DICE_EXCLUDE_DSO"
 #define DICE_PLUGIN_MODULES "DICE_PLUGIN_MODULES"
 
 int ps_dispatch_max(void);
@@ -27,8 +27,7 @@ void ps_init_();
 #ifndef DICE_DISABLE_PUBSUB_CTOR_INIT
 /* Force pubsub init in a constructor without priority, ensuring this
  * constructor is last */
-static void __attribute__((constructor))
-init_()
+static void __attribute__((constructor)) init_()
 {
     ps_init_();
 }
@@ -60,14 +59,26 @@ strdup_(const char *str)
 }
 
 PS_SUBSCRIBE(CHAIN_CONTROL, EVENT_DICE_INIT, {
+    static bool done_ = false;
+    if (done_)
+        return PS_OK;
+    done_ = true;
+
     log_debug("[%4d] INIT: %s ...", DICE_MODULE_SLOT, __FILE__);
-    const char *envvar     = getenv(DICE_PLUGIN_MODULES);
-    const int from_preload = (envvar == NULL || envvar[0] == '\0');
-    if (from_preload)
-        envvar = getenv(PRELOAD);
+    const char *dso        = getenv(DICE_EXCLUDE_DSO);
+    const char *pluginvar  = getenv(DICE_PLUGIN_MODULES);
+    const char *preloadvar = getenv(PRELOAD);
+    const char *envvar     = pluginvar != NULL ? pluginvar : preloadvar;
     log_debug("[%4d] LOAD: builtin modules: 0..%d", DICE_MODULE_SLOT,
               ps_dispatch_max());
+
+    log_debug("[%4d] %s: %s", DICE_MODULE_SLOT, PRELOAD, preloadvar);
+    log_debug("[%4d] DICE_PLUGIN_MODULES: %s", DICE_MODULE_SLOT, pluginvar);
+    log_debug("[%4d] DICE_EXCLUDE_DSO%s: %s", DICE_MODULE_SLOT,
+              pluginvar == NULL ? "" : " (ignored)", dso);
+
     if (envvar != NULL && envvar[0] != '\0') {
+        log_debug("[%4d] plugin modules: %s", DICE_MODULE_SLOT, envvar);
         char *plugins = strdup_(envvar);
         if (plugins == NULL)
             log_fatal("could not duplicate string: %s", envvar);
@@ -76,21 +87,28 @@ PS_SUBSCRIBE(CHAIN_CONTROL, EVENT_DICE_INIT, {
         if (path == NULL)
             log_fatal("string tokenizer failed: %s", plugins);
 
-        // we now dlopen every preloaded library to ensure the constructors are
-        // all called before the first event is published. However, we shouldnt
-        // try to dlopen the main dice library, which holds the current code
-        // because some user constructors might not be idempotent. Typically the
-        // main dice library is the first preloaded library. If that is not the
-        // case, we can use the envvar DICE_DSO to identify the exact name
-        // passed to the PRELOAD.
-        envvar = getenv(DICE_DSO);
-        if (envvar == NULL && from_preload)
-            // skip first library only for PRELOAD-based lists
-            path = strtok(NULL, ":");
+        // We dlopen every module in the selected list to ensure constructors
+        // run before the first Dice event is published.
+        //
+        // Source selection policy:
+        // - If DICE_PLUGIN_MODULES is set, it is authoritative and we load
+        //   exactly those entries.
+        // - Otherwise we use PRELOAD (LD_PRELOAD or
+        //   DYLD_INSERT_LIBRARIES).
+        //
+        // Exclusion policy (PRELOAD fallback only):
+        // - DICE_EXCLUDE_DSO identifies one library to skip while loading.
+        // - If DICE_EXCLUDE_DSO is empty/unset, default it to the first PRELOAD
+        //   entry (typically the main Dice runtime dso) so we avoid
+        //   re-dlopening it.
+        if (pluginvar == NULL && (dso == NULL || dso[0] == '\0'))
+            dso = path;
 
         while (path != NULL) {
-            if (envvar == NULL || strcmp(path, envvar) != 0)
+            if (pluginvar != NULL || dso == NULL || strcmp(path, dso) != 0)
                 load_plugin_(path);
+            else
+                log_debug("[%4d] SKIP: %s", DICE_MODULE_SLOT, path);
             path = strtok(NULL, ":");
         }
         mempool_free(plugins);
