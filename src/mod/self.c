@@ -77,6 +77,11 @@ struct tls_item {
 static void cleanup_threads_(struct self *own, pthread_t ptid);
 static struct self *get_self_(void);
 
+#define SELF_TLS_CAP 1024
+
+static struct self main_self_;
+static struct tls_item main_self_tls_[SELF_TLS_CAP];
+
 // -----------------------------------------------------------------------------
 // tls items
 // -----------------------------------------------------------------------------
@@ -84,7 +89,7 @@ static struct self *get_self_(void);
 static void
 tls_init_(struct self *self)
 {
-    self->tls.cap   = 1024;
+    self->tls.cap   = SELF_TLS_CAP;
     self->tls.size  = 0;
     self->tls.items = mempool_alloc(sizeof(struct tls_item) * self->tls.cap);
     if (self->tls.items == NULL)
@@ -381,13 +386,20 @@ static struct self *
 create_self_()
 {
     struct self *self;
-    self          = mempool_alloc(sizeof(struct self));
+
+    if (main_self_.id == NO_THREAD) {
+        self                 = &main_self_;
+        main_self_.tls.items = main_self_tls_;
+        main_self_.tls.cap   = SELF_TLS_CAP;
+    } else {
+        self = mempool_alloc(sizeof(struct self));
+        tls_init_(self);
+    }
     self->guard   = 0;
     self->id      = vatomic64_inc_get(&threads_.count);
     self->ptid    = pthread_self();
     self->osid    = thread_osid_();
     self->retired = false;
-    tls_init_(self);
     return self;
 }
 
