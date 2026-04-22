@@ -18,14 +18,15 @@ set(DICE_intercept_event on)
 
 # Test cases in these lists will be compiled but not ran with sanitizers
 set(IGNORE_address pthread_exit_window ensure_self_fini ensure_self_fini_error
-                   ensure_self_fini_detach)
-set(IGNORE_thread pthread_exit_window)
+                   ensure_self_fini_detach constructor_malloc_test)
+set(IGNORE_thread pthread_exit_window constructor_malloc_test)
 set(IGNORE_undefined)
 
 # Dice script options
 set(DICE_OPTS_thread_sequence -pthread -self -preload $<TARGET_FILE:id_checker>)
 set(DICE_OPTS_simple -self)
 set(DICE_OPTS_intercept_event -self)
+set(DICE_OPTS_constructor_malloc_test -malloc -self)
 set(DICE_OPTS_pthread_create_join -pthread)
 set(DICE_OPTS_pthread_create_exit -pthread)
 set(DICE_OPTS_pthread_create_detach -pthread)
@@ -62,6 +63,10 @@ foreach(SRC ${SRCS})
     endif()
   endif()
 endforeach()
+
+if(TEST constructor_malloc_test)
+  set_tests_properties(constructor_malloc_test PROPERTIES TIMEOUT 5)
+endif()
 
 # Additional configuration of some tests
 target_link_libraries(pthread_exit_window PRIVATE dice-self)

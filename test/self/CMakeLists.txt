@@ -10,6 +10,7 @@ target_link_libraries(self_guard_test PRIVATE dice-self.o dice dice.h)
 add_test(NAME self-guard-test COMMAND ${DICE_SCRIPT} ./self_guard_test)
 
 add_executable(self_wait_test self_wait_test.c)
-target_link_libraries(self_wait_test PRIVATE dice-self.o dice-pthread_create.o dice dice.h)
+target_link_libraries(self_wait_test PRIVATE dice-self.o dice-pthread_create.o
+                                             dice dice.h)
 add_test(NAME self-wait-test COMMAND ${DICE_SCRIPT} ./self_wait_test)
 set_tests_properties(self-wait-test PROPERTIES TIMEOUT 5)
