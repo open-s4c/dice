@@ -3,8 +3,31 @@
 
 add_subdirectory(tsano)
 
+set(TMPLR_SRCDIR ${CMAKE_CURRENT_SOURCE_DIR}/tmplr)
+set(TMPLR_BINDIR ${CMAKE_CURRENT_BINARY_DIR}/tmplr)
+set(TMPLR_VERSION_H ${TMPLR_BINDIR}/version.h)
+
+file(MAKE_DIRECTORY ${TMPLR_BINDIR})
+
+add_custom_command(
+  OUTPUT ${TMPLR_VERSION_H}
+  COMMAND /bin/sh -c
+          "${TMPLR_SRCDIR}/.versionize.sh -r ${TMPLR_SRCDIR}/version.h.in > ${TMPLR_VERSION_H}"
+  DEPENDS ${TMPLR_SRCDIR}/.versionize.sh ${TMPLR_SRCDIR}/version.h.in
+  WORKING_DIRECTORY ${TMPLR_SRCDIR}
+  VERBATIM)
+
+function(dice_configure_tmplr_target)
+  target_include_directories(tmplr PRIVATE ${TMPLR_SRCDIR}/include
+                                            ${TMPLR_BINDIR})
+  set_target_properties(
+    tmplr
+    PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/bin)
+endfunction()
+
 if(NOT CMAKE_TOOLCHAIN_FILE)
-  add_subdirectory(tmplr)
+  add_executable(tmplr ${TMPLR_SRCDIR}/tmplr.c ${TMPLR_VERSION_H})
+  dice_configure_tmplr_target()
 else()
   # If we are cross-compiling Dice, we still have to ensure tmplr is built with
   # the host compiler since it is used to generate some of Dice's source files.
@@ -14,16 +37,16 @@ else()
   # then overwrite it with a host-compiled one.
 
   # Step 1. build tmplr with cross toolchain
-  add_executable(tmplr tmplr/tmplr.c)
+  add_executable(tmplr ${TMPLR_SRCDIR}/tmplr.c ${TMPLR_VERSION_H})
+  dice_configure_tmplr_target()
 
   # Step 2. prepare tmplr with host default compiler as external project
-  set(TMPLR_SRCDIR ${CMAKE_CURRENT_SOURCE_DIR}/tmplr)
-  set(TMPLR_BINDIR ${CMAKE_CURRENT_BINARY_DIR}/tmplr-host)
+  set(TMPLR_HOST_BINDIR ${CMAKE_CURRENT_BINARY_DIR}/tmplr-host)
   include(ExternalProject)
   ExternalProject_Add(
     tmplr-host
     SOURCE_DIR ${TMPLR_SRCDIR}
-    BINARY_DIR ${TMPLR_BINDIR}
+    BINARY_DIR ${TMPLR_HOST_BINDIR}
     CMAKE_ARGS -DCMAKE_BUILD_TYPE=Release
     INSTALL_COMMAND true)
 
@@ -34,5 +57,6 @@ else()
   add_custom_command(
     TARGET tmplr
     POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy ${TMPLR_BINDIR}/tmplr $<TARGET_FILE:tmplr>)
+    COMMAND ${CMAKE_COMMAND} -E copy ${TMPLR_HOST_BINDIR}/tmplr
+            $<TARGET_FILE:tmplr>)
 endif()
