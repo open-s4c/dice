@@ -6,7 +6,7 @@ set(TSAN_C_IN ${CMAKE_CURRENT_SOURCE_DIR}/tsan.c.in)
 
 add_custom_command(
   OUTPUT ${TSAN_C}
-  COMMAND $<TARGET_FILE:tmplr> ${TSAN_C_IN} > tsan.c
+  COMMAND $<TARGET_FILE:tmplr> -P_tmpl ${TSAN_C_IN} > tsan.c
   DEPENDS ${TSAN_C_IN}
   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
 

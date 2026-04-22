@@ -44,7 +44,7 @@ message(STATUS "Dispatch slots: ${SSS}")
 set(DISPATCH_C ${CMAKE_CURRENT_BINARY_DIR}/dispatch.c)
 add_custom_command(
   OUTPUT ${DISPATCH_C}
-  COMMAND $<TARGET_FILE:tmplr> "-DCCC=${CCC}" "-DSSS=${SSX}" -s
+  COMMAND $<TARGET_FILE:tmplr> -P_tmpl "-DCCC=${CCC}" "-DSSS=${SSX}" -s
           ${CMAKE_CURRENT_SOURCE_DIR}/dispatch.c.in > dispatch.c
   DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/dispatch.c.in
   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
@@ -65,10 +65,11 @@ foreach(CHAIN ${CHAINS})
   add_custom_command(
     OUTPUT ${DISPATCH_CHAIN_C}
     COMMAND
-      cat ${CMAKE_CURRENT_SOURCE_DIR}/dispatch_chain.c.in | #
-      $<TARGET_FILE:tmplr> "-DCCC=${CHAIN}" "-DEEE='${eee}'" "-DSSS='${SSS}'" -i
-      | $<TARGET_FILE:tmplr> "-DEEE='${eee}'" "-DSSS='${SSS}'" -P_tmpl2 -i >
-      dispatch_${CHAIN}.c
+      cat ${CMAKE_CURRENT_SOURCE_DIR}/dispatch_chain.c.in #
+      | $<TARGET_FILE:tmplr> -P_tmpl -l 1024 #
+      "-DCCC=${CHAIN}" "-DEEE='${eee}'" "-DSSS='${SSS}'" -i #
+      | $<TARGET_FILE:tmplr> -P_tmpl2 -l 1024 #
+      "-DEEE='${eee}'" "-DSSS='${SSS}'" -i > dispatch_${CHAIN}.c
     DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/dispatch_chain.c.in
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
   add_custom_target(expand-dispatch_${CHAIN} DEPENDS ${DISPATCH_CHAIN_C})
