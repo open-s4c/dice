@@ -10,14 +10,17 @@ set(TSAN_TEST_C ${CMAKE_CURRENT_BINARY_DIR}/tsan_test.c)
 add_custom_command(
   OUTPUT ${TSAN_TEST_C}
   COMMAND $<TARGET_FILE:tmplr> -P _tmpl ${CMAKE_CURRENT_SOURCE_DIR}/tsan_test.c.in
-          > tsan_test.c
+          > tsan_test.c.tmp
+  COMMAND ${CMAKE_COMMAND} -E rename tsan_test.c.tmp tsan_test.c
   DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/tsan_test.c.in
   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
 add_custom_target(tsan_test-expand DEPENDS ${TSAN_TEST_C})
+set_source_files_properties(${TSAN_TEST_C} PROPERTIES GENERATED TRUE)
 add_dependencies(expand-tests tsan_test-expand)
 
 # compile command
 add_executable(tsan_test ${TSAN_TEST_C})
+add_dependencies(tsan_test tsan_test-expand)
 target_link_libraries(tsan_test PRIVATE dice-tsan.o dice-stacktrace.o)
 target_link_libraries(tsan_test PRIVATE dice.h dice pthread)
 
