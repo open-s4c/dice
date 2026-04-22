@@ -93,7 +93,7 @@ foreach(MOD ${MODS})
   add_custom_command(
     OUTPUT ${TARGET_SRC}
     COMMAND
-      $<TARGET_FILE:tmplr> -P$$ "-DINCL=${INCL_${MOD}}" "-DFOO=${FUNS_${MOD}}"
+      $<TARGET_FILE:tmplr> "-DINCL=${INCL_${MOD}}" "-DFOO=${FUNS_${MOD}}"
       ${CMAKE_CURRENT_SOURCE_DIR}/interposed_.h.in
       ${CMAKE_CURRENT_SOURCE_DIR}/interpose_test.c.in #
       > ${TARGET}_.c
