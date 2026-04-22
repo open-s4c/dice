@@ -49,6 +49,7 @@ add_custom_command(
   DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/dispatch.c.in
   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
 add_custom_target(expand-dispatch DEPENDS tmplr ${DISPATCH_C})
+set_source_files_properties(${DISPATCH_C} PROPERTIES GENERATED TRUE)
 
 # CHAIN_CONTROL has only events 98..99
 set(EEE_0 98 99)
@@ -73,6 +74,7 @@ foreach(CHAIN ${CHAINS})
     DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/dispatch_chain.c.in
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
   add_custom_target(expand-dispatch_${CHAIN} DEPENDS ${DISPATCH_CHAIN_C})
+  set_source_files_properties(${DISPATCH_CHAIN_C} PROPERTIES GENERATED TRUE)
   add_dependencies(expand-dispatch expand-dispatch_${CHAIN})
 endforeach()
 set(DISPATCH_SRCS ${DISPATCH_SRCS} ${DISPATCH_GENERATED})
@@ -94,6 +96,7 @@ add_compile_definitions(DICE_MULTIFILE_MODULE DICE_MODULE_SLOT=0)
 # installed in the system. Dispatch won't be used for this library except for
 # the internal initialization with chain 0 (CHAIN_CONTROL).
 add_library(dice SHARED ${SRCS})
+add_dependencies(dice expand-dispatch)
 target_link_libraries(dice PUBLIC dice.h pthread)
 install(TARGETS dice DESTINATION lib)
 
@@ -102,6 +105,7 @@ install(TARGETS dice DESTINATION lib)
 # can be linked to other modules. See the dispatcher generation above for
 # details on the chains, events and slots handled by dispatch and callbacks.
 add_library(dice.o OBJECT ${SRCS} ${DISPATCH_SRCS})
+add_dependencies(dice.o expand-dispatch)
 target_link_libraries(dice.o PUBLIC dice.h)
 
 # dice-box.o - OBJECT library that seals pubsub, registry, and mempool
@@ -124,6 +128,7 @@ target_link_libraries(dice-pubsub-box.o PRIVATE dice.h)
 # dice-core.o - OBJECT library as dice.o but without dispatchers. Can be used
 # for perfomance testing or to link with custom dispatchers.
 add_library(dice-core.o OBJECT ${SRCS})
+add_dependencies(dice-core.o expand-dispatch)
 target_link_libraries(dice-core.o PUBLIC dice.h)
 
 # dice-override.o - OBJECT library to override memset (and potentially others)

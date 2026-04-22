@@ -6,12 +6,13 @@ set(TSAN_C_IN ${CMAKE_CURRENT_SOURCE_DIR}/tsan.c.in)
 
 add_custom_command(
   OUTPUT ${TSAN_C}
-  COMMAND $<TARGET_FILE:tmplr> -P_tmpl ${TSAN_C_IN} > tsan.c
-  DEPENDS ${TSAN_C_IN}
+  COMMAND $<TARGET_FILE:tmplr> -P_tmpl ${TSAN_C_IN} > tsan.c.tmp
+  COMMAND ${CMAKE_COMMAND} -E rename tsan.c.tmp tsan.c
+  DEPENDS tmplr ${TSAN_C_IN}
   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
 
 add_custom_target(expand-tsan.c DEPENDS ${TSAN_C})
-add_dependencies(expand-tsan.c tmplr)
+set_source_files_properties(${TSAN_C} PROPERTIES GENERATED TRUE)
 
 set(OVERRIDE_TYPES "" "Debug")
 if("${CMAKE_BUILD_TYPE}" IN_LIST OVERRIDE_TYPES)
@@ -28,8 +29,7 @@ set(OPTIONS_memcpy -fno-builtin-memcpy -fno-builtin-memset
 set(TSAN_SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/tsan.c)
 
 file(GLOB SRCS *.c)
-list(REMOVE_ITEM SRCS ${TSAN_SOURCE})
-list(APPEND SRCS ${TSAN_C})
+list(APPEND SRCS ${TSAN_SOURCE})
 
 if(APPLE)
   list(REMOVE_ITEM SRCS ${CMAKE_CURRENT_SOURCE_DIR}/pthread_spinlock.c)
@@ -38,11 +38,15 @@ endif()
 foreach(SRC ${SRCS})
   get_filename_component(MODULE ${SRC} NAME_WLE)
   set(TARGET dice-${MODULE})
+  set(BUILD_SRC ${SRC})
+  if("${MODULE}" STREQUAL "tsan")
+    set(BUILD_SRC ${TSAN_C})
+  endif()
   if(NOT ${DICE_MEMSET} AND ${TARGET} MATCHES "wrap_memset")
     continue()
   endif()
 
-  add_library(${TARGET} SHARED ${SRC})
+  add_library(${TARGET} SHARED ${BUILD_SRC})
   target_link_libraries(${TARGET} PRIVATE dice dice.h)
   target_compile_options(${TARGET} PRIVATE ${OPTIONS_${MODULE}})
   set_target_properties(${TARGET} PROPERTIES PREFIX "")
@@ -58,7 +62,7 @@ foreach(SRC ${SRCS})
       target_link_libraries(${TARGET} PRIVATE dice-override.o)
     endif()
 
-    add_library(${TARGET}.o OBJECT ${SRC})
+    add_library(${TARGET}.o OBJECT ${BUILD_SRC})
     target_link_libraries(${TARGET}.o PRIVATE dice.h)
     target_compile_options(${TARGET}.o PRIVATE)
     target_compile_options(${TARGET}.o PRIVATE ${OPTIONS_${MODULE}})
@@ -68,9 +72,10 @@ foreach(SRC ${SRCS})
   endif()
 
   foreach(ENDING ${ENDINGS})
-    if("${MODULE}" IN_LIST TSAN_MODULES)
+    if("${MODULE}" STREQUAL "tsan")
       add_dependencies(${TARGET}${ENDING} expand-tsan.c)
-    else()
+    endif()
+    if(NOT "${MODULE}" IN_LIST TSAN_MODULES)
       if(NOT "${DICE_SANITIZER}" STREQUAL "")
         target_compile_options(${TARGET}${ENDING}
                                PUBLIC -fsanitize=${DICE_SANITIZER})
