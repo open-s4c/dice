@@ -1,0 +1,368 @@
+.TH TMPLR 1 "__DATE__" "__VERSION__"
+.SH NAME
+tmplr \- minimal template replacement tool
+.SH SYNOPSIS
+.B tmplr
+.RB [ \-v ]
+.RB [ \-i ]
+.RB [ \-P
+.IR prefix ]
+.RB [ \-D
+.IR key = value ]
+.RI [ file ...]
+.SH DESCRIPTION
+.B tmplr
+reads one or more input files (plus optional standard input) and replaces the
+contents of template blocks with concrete values. A template block starts with
+the directive
+.BR $_begin (...)
+and ends with
+.BR $_end .
+Within a block the tool substitutes every mention of a key from the block's
+mapping with the corresponding value.
+.PP
+A
+.I directive
+is the literal text that appears in the template, formed by concatenating the
+current prefix (default
+.BR $ )
+with a command suffix plus any parameters. For instance, the
+.B _map
+command becomes
+.B $_map(KEY,VALUE)
+by default or
+.B TMPL_map(KEY,VALUE)
+after
+.BR \-P TMPL .
+.PP
+Blocks may define multiple comma separated mappings, such as
+.RB \(dq $_begin(keyA=[[foo;bar]], keyB=xyz) \(dq .
+If a mapping contains a list
+.RB ( [[ value1 ; value2 ]] ),
+the block is repeated once for every combination and each iteration uses a
+single scalar value (e.g. first
+.I keyA=foo
+then
+.IR keyA=bar ).
+.PP
+Outside template blocks, persistent mappings can be added through
+.BR TMPL_MAP(key,value)
+(or the configured prefix). Persistent mappings are applied after every
+iteration mapping substitution.
+.SH OPTIONS
+.TP
+.BI \-b " lines"
+Set the maximum number of buffered lines per template block. The default is
+100 lines, but larger blocks require more memory.
+.TP
+.BI \-l " chars"
+Set the maximum length (in characters) of a single template value. The default is
+256 characters with an absolute maximum of 4096 characters.
+.TP
+.B \-v
+Enable verbose logging to standard output.
+.TP
+.B \-i
+Process standard input after all explicit files have been read.
+.TP
+.BI \-P " prefix"
+Change the command prefix.
+For example,
+.B -P TMPL
+turns the `_begin` command into directives such as
+.BR TMPL_begin .
+.TP
+.BI \-D " key=value"
+Redefine the values of a mapping defined inside a block. Supplying a single
+value forces that value, while
+.RB \(dq value1;value2 \(dq
+forces a list of values (the quoting is handled by the shell). The template’s
+original iterator list is ignored once a
+.B \-D
+override is provided.
+.TP
+.BI \-F " key=value"
+Filter the values of a mapping instead of overriding them. The argument accepts
+the same semicolon-separated list syntax as
+.BR \-D .
+Only values present in both the template definition and the filter list are
+kept for iteration; extra values in the filter list are ignored.
+.SH EXIT STATUS
+.TP
+.B 0
+Success.
+.TP
+.B non\-zero
+An error occurred while parsing input, commands, or mappings.
+.SH TEMPLATE COMMANDS
+The default command prefix is
+.BR $ ,
+and the following command suffixes are recognized. A
+.I command
+is the logical operation (e.g.
+.B _begin
+or
+.BR _map ),
+while a
+.I directive
+is the command with the current prefix applied (e.g.
+.B $_begin
+by default or
+.B TMPL_begin
+after
+.BR \-P TMPL ).
+.TP
+.B _begin(...) / _end
+Start or end a template block.
+.TP
+.B _map
+Create a persistent mapping outside template blocks.
+.TP
+.B _mute , _unmute
+Temporarily silence output inside a block.
+.TP
+.B _abort , _skip , _kill , _undo
+Control flow helpers that respectively abort tmplr, skip a block, kill a block,
+or undo the last block emission.
+.TP
+.B _dl , _nl , _upcase , _hook
+Helpers for deleting the rest of the line, inserting a newline, uppercasing the
+next replacement, or invoking a hook command.
+.SS Command contexts
+.PP
+tmplr only looks for structural commands while it is outside of a template
+block. Once a block starts, lines are buffered and later processed by a
+different handler. As a result:
+.TP
+.B Top\-level only
+.B $_begin(...)
+and
+.B $_end
+define block boundaries;
+.B $_map
+adds persistent mappings;
+.B $_hook
+registers
+.I begin ,
+.I end ,
+or
+.I final
+hook bodies;
+.B $_mute ,
+.B $_unmute ,
+and
+.B $_abort
+are also only checked outside of blocks.
+.TP
+.B Block only
+.B $_skip , $_kill , $_undo , $_nl ,
+and
+.B $_upcase
+are evaluated only while expanding buffered block lines (including hook bodies).
+.TP
+.B Both
+.B $_dl
+removes whichever line contains it: a buffered line when used inside a block,
+or a top\-level line before it is printed.
+.SH INPUT FORMAT
+Keys may contain any character except newline, parentheses, commas, semicolons,
+or other tmplr commands. Leading and trailing spaces around a key are discarded
+(`KEY`, ` KEY`, and `KEY ` all match the same identifier), and the same literal
+rules apply to
+.B $_map(...)
+and
+.B $_hook(...)
+declarations. Values cannot contain parentheses, commas, or semicolons; their
+outermost whitespace is trimmed as well, so inject explicit placeholders if the
+expanded text needs padding.
+.SH EXAMPLES
+.SS Expanding a template
+.PP
+Each block iterates over the cartesian product of its keys. With two keywords,
+one carrying two values and the other three, tmplr emits six lines:
+.PP
+.B Save the template as
+.IR animals.tmpl :
+.PP
+.nf
+\&% cat > animals.tmpl <<-'EOF'
+	$_begin(ANIMAL=[[cat;dog]], COLOR=[[red;green;blue]])
+	COLOR ANIMAL
+	$_end
+	EOF
+.fi
+.PP
+.nf
+\&% tmplr animals.tmpl
+red cat
+green cat
+blue cat
+red dog
+green dog
+blue dog
+.fi
+.SS Override vs filter
+.PP
+This example demonstrates how
+.B \-D
+replaces iterator values while
+.B \-F
+filters them:
+.PP
+.B Save the template as
+.IR hut.tmpl :
+.PP
+.nf
+\&% cat > hut.tmpl <<-'EOF'
+	$_begin(AA=[[2;3;4]])
+	Mein Hut hat AA Ecken.
+	$_end
+	EOF
+.fi
+.PP
+.nf
+\&% tmplr hut.tmpl
+Mein Hut hat 2 Ecken.
+Mein Hut hat 3 Ecken.
+Mein Hut hat 4 Ecken.
+
+\&% tmplr -DAA="3;5;7" hut.tmpl
+Mein Hut hat 3 Ecken.
+Mein Hut hat 5 Ecken.
+Mein Hut hat 7 Ecken.
+
+\&% tmplr -FAA="3;5;7" hut.tmpl
+Mein Hut hat 3 Ecken.
+.fi
+.SS Mapping keywords
+.PP
+Persistent mappings combine nicely with block iterations and behave like a tiny
+lookup table:
+.PP
+.B Save the template as
+.IR map-example.tmpl :
+.PP
+.nf
+\&% cat > map-example.tmpl <<-'EOF'
+	$_map(FOO_BAR, one case where foo is a value)
+	$_map(FOO_BAZ, another case where foo is another value)
+
+	$_map(VAL1, BAR)
+	$_map(VAL2, BAZ)
+	$_begin(XYZ=[[VAL1;VAL2]])
+	FOO_XYZ
+	$_end
+	EOF
+.fi
+.PP
+.nf
+\&% tmplr map-example.tmpl
+one case where foo is a value
+another case where foo is another value
+.fi
+.SS Deleting lines from output
+.PP
+A `$_dl` command removes the entire line that contains it, making it easy to add
+inline notes:
+.PP
+.B Save the template as
+.IR delete-example.tmpl :
+.PP
+.nf
+\&% cat > delete-example.tmpl <<-'EOF'
+	Keep this line
+	Second line $_dl and everything here disappears.
+	Still printed
+	EOF
+.fi
+.PP
+.nf
+\&% tmplr delete-example.tmpl
+Keep this line
+Still printed
+.fi
+.SS Kill the remainder of a line
+.PP
+`$_kill` truncates the rest of the current line. Mapping it through an iterator
+lets you keep only the rows you care about:
+.PP
+.B Save the template as
+.IR kill-example.tmpl :
+.PP
+.nf
+\&% cat > kill-example.tmpl <<-'EOF'
+	$_map(WHEN_val1,)
+	$_map(WHEN_, $_kill)
+	$_begin(FOO=[[val1;val2]])
+	WHEN_FOOThis line appears only when val1.
+	$_end
+	EOF
+.fi
+.PP
+.nf
+\&% tmplr kill-example.tmpl
+This line appears only when val1.
+.fi
+.SS Drop rows with delete
+.PP
+Mapping a placeholder to `$_dl` skips entire iterations without touching the
+rest of the block:
+.PP
+.B Save the template as
+.IR drop-example.tmpl :
+.PP
+.nf
+\&% cat > drop-example.tmpl <<-'EOF'
+	$_map(DROP_keep,)
+	$_map(DROP_drop, $_dl)
+	$_begin(ROW=[[keep;drop;keep]])
+	DROP_ROWRow ROW is shown.
+	$_end
+	EOF
+.fi
+.PP
+.nf
+\&% tmplr drop-example.tmpl
+Row keep is shown.
+Row keep is shown.
+.fi
+.SS Nested templates
+.PP
+To expand templates in multiple passes, emit the inner block with a different
+prefix so the first pass leaves its directives untouched. The second pass can
+then target that prefix with
+.BR \-P .
+.PP
+.B Save the template as
+.IR drivers-nested.tmpl :
+.PP
+.nf
+\&% cat > drivers-nested.tmpl <<-'EOF'
+	$_begin(BOARD=[[alpha;bravo]])
+	Board BOARD {
+	  __begin(DRIVER=[[net;storage]])
+	  init_driver(BOARD, DRIVER);
+	  __end
+	}
+	$_end
+	EOF
+.fi
+.PP
+.nf
+\&% cat drivers-nested.tmpl | tmplr -i | tmplr -P '__' -i
+Board alpha {
+  init_driver(alpha, net);
+  init_driver(alpha, storage);
+}
+Board bravo {
+  init_driver(bravo, net);
+  init_driver(bravo, storage);
+}
+.fi
+.PP
+Prefixes that contain the default
+.B $
+(for example `$$`) still include the literal
+.B $_begin
+substring, so the first pass would consume the nested directives. Always pick a
+distinct prefix (such as `__`) for the inner pass.

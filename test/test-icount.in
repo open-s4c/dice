@@ -1,0 +1,3 @@
+_tmpl_begin(AA=1;2;3, BB=a;b;c, CC=x;y)
+_tmpl_icount: AA and BB with CC
+_tmpl_end

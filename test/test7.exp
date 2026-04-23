@@ -1,0 +1,6 @@
+DROP_IF_dog
+after drop
+dog is running.
+DROP_IF_rat
+after drop
+rat is running.

@@ -1,0 +1,2 @@
+static inline TT _vatomic_await_neq_MS(AA *a, TT v);
+

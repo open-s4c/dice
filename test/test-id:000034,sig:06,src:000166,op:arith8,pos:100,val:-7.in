@@ -1,0 +1,11 @@
+_tmpl_begin(TY = [[u32;       OP; set]], MO = [[seq]],
+ r_eq = KEEP,
+   set = KEEP,
+tr = SKIP,
+     K = KEEP,
+    KEEP = _tmpl_dl,
+            S= _tmpl_skip);
+FR_TYD
+FILTEROP
+-P
+_tmpl_end;

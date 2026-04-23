@@ -1,0 +1,6 @@
+_tmpl_map(FILTER_ptr_lt, DROP!);
+_tmpl_begin(TY = [[ptr]],  [[COND = [[neq;lt]], MO = [[_tmpl_mapseq]], 2=_tmpl_s = [[ptr]], 	[[CONDFILTER_TY_COND;
+COND;
+_tmpl_end;
+ 
+ptr]]

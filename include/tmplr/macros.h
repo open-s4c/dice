@@ -1,84 +1,107 @@
 /*
- * Copyright (C) Huawei Technologies Co., Ltd. 2025. All rights reserved.
- * SPDX-License-Identifier: MIT
+ * Copyright (C) 2025-2026 Huawei Technologies Co., Ltd.
+ * SPDX-License-Identifier: 0BSD
+ *
+ * tmplr macros
+ *
+ * These macros expand to nothing so that tmplr commands can live inside C or
+ * C++ sources without confusing the compiler or LSP tooling. See tmplr(1) for
+ * the runtime behaviour; the notes below summarize the user-facing API.
  */
 #ifndef TMPLR_MACROS_H
 #define TMPLR_MACROS_H
 
 /**
- * Marks the begin of a template block.
+ * Marks the beginning of a template block.
  *
- * Takes a comma-separated list of key value pairs, where values can be lists of
- * the form [[val1;val2;val3]] or single values. For example:
+ * Accepts a comma-separated list of key-value pairs, where each value may be a
+ * single literal or a list in the form [[val1;val2;val3]]. tmplr iterates over
+ * the cartesian product of the provided values and emits the block once per
+ * combination. Example:
  *
  * ```c
- * _tmpl_begin(KEY1 = VALUE1, KEY2 = [[VALUE2; VALUE3]]);
+ * $_begin(KEY1 = VALUE1, KEY2 = [[VALUE2; VALUE3]]);
  * KEY1 = KEY2;
- * _tmpl_end;
+ * $_end;
  * ```
  */
-
-#define _tmpl_begin(...)
+#define $_begin(...)
 
 /**
  * Marks the end of a template block.
  */
-#define _tmpl_end
+#define $_end
 
 /**
- * Adds a string to begin or end hook.
+ * Registers content for a block hook.
  *
- * @param HOOK either begin or end
+ * @param HOOK One of begin, end, or final.
  *
- * The string argument may contain commas but no parenthesis.
+ * Hook values are treated as synthetic lines that go through the same mapping
+ * logic as the rest of the block. begin/end hooks run for every iteration,
+ * whereas final runs once after the block is completely processed.
  */
-#define _tmpl_hook(HOOK, ...)
+#define $_hook(HOOK, ...)
 
 /**
  * Stops tmplr processing and output.
  *
- * Until the matching _tmpl_unmute, all text is discarded and all tmplr command
+ * Until the matching $_unmute, all text is discarded and all tmplr command
  * ignored. A muted-block is useful to add includes that help LSP servers.
  */
-#define _tmpl_mute
+#define $_mute
 
 /**
  * Restarts tmplr processing output.
  */
-#define _tmpl_mute
+#define $_unmute
 
 /**
- *  Maps a key K to a value which may contain commas
+ * Adds or overrides a persistent mapping that applies outside of blocks.
+ *
+ * Can only be used when tmplr is not in the middle of a template block.
  */
-#define _tmpl_map(K, ...)
+#define $_map(K, ...)
 
 /**
  * Skips template block iteration.
  *
- * @note This can only be called within _tmpl_begin and _tmpl_end.
+ * When invoked inside a block, the current iteration stops immediately and the
+ * remaining lines of the block are discarded.
  */
-#define _tmpl_skip
+#define $_skip
 
 /**
- * Deletes the line from the template output.
+ * Truncates the rest of the current line at the point of invocation.
  */
-#define _tmpl_dl
+#define $_kill
 
 /**
- * Adds a new line.
+ * Removes everything emitted on the current line prior to the command.
  */
-#define _tmpl_nl
+#define $_undo
+
+/**
+ * Deletes the rest of the current line from the template output.
+ */
+#define $_dl
+
+/**
+ * Inserts an explicit newline in the output.
+ */
+#define $_nl
 
 /**
  * Aborts tmplr execution and exits with error code 1.
  */
-#define _tmpl_abort
+#define $_abort
 
 /**
  * Makes content uppercase.
  *
- * @note This can only be called within _tmpl_begin and _tmpl_end.
+ * Accepts either parentheses or a custom delimiter, e.g. $_upcase(KEY) or
+ * $_upcase%literal%. Useful inside template blocks.
  */
-#define _tmpl_upcase(...)
+#define $_upcase(...)
 
-#endif
+#endif /* TMPLR_MACROS_H */

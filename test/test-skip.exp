@@ -1,0 +1,5 @@
+---> ty = u32, cond = eq, op = sub
+---> ty = u32, cond = eq, op = set
+---> ty = u32, cond = ge, op = sub
+---> ty = u32, cond = ge, op = set
+---> ty = ptr, cond = eq, op = set

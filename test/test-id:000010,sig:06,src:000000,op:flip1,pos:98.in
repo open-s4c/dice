@@ -1,0 +1,6 @@
+_tmpl_map(FILTER_ptr_lt, DROP!);
+_tmpl_begin(TY = [[ptr]], COND = [[neq;lt]], MO = [[seq]], !=_tmp,_skip, FI=_tmpl_dl);
+FILTER_TY_COND;
+COND;
+_tmpl_end;
+ 

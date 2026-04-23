@@ -1,6 +1,17 @@
+_tmpl_dl; ----------------------------------------------------------------------
+_tmpl_dl; This test will generate output for all variants, which are
+_tmpl_dl;     ptr-neq-seq, ptr-lt-seq
+_tmpl_dl;
+_tmpl_dl; The variables DROP and FILTER have only one value and are used to test
+_tmpl_dl; the replacement logic. If the string FILTER_ptr_lt is formed, it will
+_tmpl_dl; be dropped, ie, the output of the whole template iteration will be
+_tmpl_dl; dropped.
+_tmpl_dl;
+_tmpl_dl; We should see as output a single line with ptr-neq-seq.
+_tmpl_dl; ----------------------------------------------------------------------
 _tmpl_map(FILTER_ptr_lt, DROP!);
 _tmpl_begin(TY = [[ptr]], COND = [[neq;lt]], MO = [[seq]], DROP!=_tmpl_skip, FILTER=_tmpl_dl);
 FILTER_TY_COND;
 static inline TT _vatomic_await_COND_MS(AA *a, TT v);
 _tmpl_end;
- 
+

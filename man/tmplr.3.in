@@ -1,0 +1,108 @@
+.TH TMPLR 3 "__DATE__" "__VERSION__" "tmplr library"
+.SH NAME
+tmplr \- Template processing library
+.SH SYNOPSIS
+.B #include <tmplr.h>
+.PP
+.BI "tmplr_ctx *" tmplr_create " (" const tmplr_opts * " opts);"
+.br
+.BI "void " tmplr_destroy " (" tmplr_ctx * " ctx);"
+.br
+.BI "void " tmplr_reset " (" tmplr_ctx * " ctx);"
+.br
+.BI "tmplr_err " tmplr_set_override " (" tmplr_ctx * " ctx, " const char * " key, " const char * " values);"
+.br
+.BI "tmplr_err " tmplr_set_filter " (" tmplr_ctx * " ctx, " const char * " key, " const char * " values);"
+.br
+.BI "tmplr_err " tmplr_process_fp " (" tmplr_ctx * " ctx, " FILE * " in, " const char * " name, " tmplr_sink_fn " sink, " void * " sink_user);"
+.br
+.BI "tmplr_err " tmplr_process_file " (" tmplr_ctx * " ctx, " const char * " path, " tmplr_sink_fn " sink, " void * " sink_user);"
+.br
+.BI "tmplr_err " tmplr_process_string " (" tmplr_ctx * " ctx, " const char * " input, " size_t " len, " tmplr_sink_fn " sink, " void * " sink_user);"
+.br
+.BI "const char *" tmplr_strerror " (" tmplr_err " err);"
+.SH DESCRIPTION
+.B tmplr
+is a lightweight template processing library that allows you to process templates with variable substitution and filtering.
+.PP
+The library provides functions for creating and managing template contexts, setting overrides and filters, and processing input from various sources.
+.SH DATA TYPES
+.TP
+.BI "typedef struct tmplr_ctx tmplr_ctx;"
+Opaque context structure for tmplr operations.
+.TP
+.BI "typedef enum {"
+.TP
+.RS
+.TP
+.B TMPLR_OK
+Success
+.TP
+.B TMPLR_ERR_PARSE
+Parse error
+.TP
+.B TMPLR_ERR_IO
+IO error
+.TP
+.B TMPLR_ERR_OOM
+Out of memory
+.TP
+.B TMPLR_ERR_LIMIT
+Limit exceeded
+.TP
+.B TMPLR_ERR_USAGE
+Usage error
+.RE
+.TP
+.BI "typedef struct {"
+.TP
+.B max_block_lines
+Maximum number of lines in a block
+.TP
+.B max_value_len
+Maximum length of values
+.TP
+.B prefix
+Prefix for template variables
+.TP
+.B item_sep
+Separator for list items
+.TP
+.B iter_sep
+Separator for iteration
+.TP
+.B verbose
+Verbose output flag
+.TP
+.BI "typedef int (*tmplr_sink_fn)(const char *buf, size_t len, void *user);"
+Function pointer type for output sink.
+.SH FUNCTIONS
+.TP
+.BI "tmplr_ctx *" tmplr_create " (" const tmplr_opts * " opts);"
+Create a new tmplr context.
+.TP
+.BI "void " tmplr_destroy " (" tmplr_ctx * " ctx);"
+Destroy a tmplr context.
+.TP
+.BI "void " tmplr_reset " (" tmplr_ctx * " ctx);"
+Reset a tmplr context.
+.TP
+.BI "tmplr_err " tmplr_set_override " (" tmplr_ctx * " ctx, " const char * " key, " const char * " values);"
+Set override values for keys.
+.TP
+.BI "tmplr_err " tmplr_set_filter " (" tmplr_ctx * " ctx, " const char * " key, " const char * " values);"
+Set filter values for keys.
+.TP
+.BI "tmplr_err " tmplr_process_fp " (" tmplr_ctx * " ctx, " FILE * " in, " const char * " name, " tmplr_sink_fn " sink, " void * " sink_user);"
+Process input from a file pointer.
+.TP
+.BI "tmplr_err " tmplr_process_file " (" tmplr_ctx * " ctx, " const char * " path, " tmplr_sink_fn " sink, " void * " sink_user);"
+Process input from a file.
+.TP
+.BI "tmplr_err " tmplr_process_string " (" tmplr_ctx * " ctx, " const char * " input, " size_t " len, " tmplr_sink_fn " sink, " void * " sink_user);"
+Process input from a string.
+.TP
+.BI "const char *" tmplr_strerror " (" tmplr_err " err);"
+Convert error code to string.
+.SH SEE ALSO
+.BR tmplr_macros (3)
