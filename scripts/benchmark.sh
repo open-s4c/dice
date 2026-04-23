@@ -16,6 +16,11 @@ MAKE=make
 if which mlr > /dev/null 2>&1; then
 	HAS_MILLER=yes
 fi
+if [ "$(uname)" = "Darwin" ]; then
+	SOEXT=dylib
+else
+	SOEXT=so
+fi
 DATE=$(date "+%Y-%m-%d")
 TIME=$(date "+%H%M")
 HOST=$(hostname -s)
@@ -49,7 +54,7 @@ while [ $# -gt 0 ]; do
 done
 
 # ENSURE build/ exists
-if [ ! -f build/src/dice/libdice.so ]; then
+if [ ! -f build/src/dice/libdice.$SOEXT ]; then
 	echo "Please build project first"
 	exit 1
 fi
@@ -66,7 +71,7 @@ fi
 
 for bench in $BENCHMARKS; do
     $MAKE -sC bench/$bench run $FR
-    $MAKE -sC bench/$bench process $FP
+    $MAKE -sC bench/$bench summary $FP
 done
 
 # COLLECT RESULTS

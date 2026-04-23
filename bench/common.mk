@@ -13,8 +13,10 @@ DICECMD=	env DICE_BUILD=$(BUILD_DIR) \
 		$(PROJECT)/scripts/dice
 
 # Compiler and linker configuration
-CC=		gcc
-CXX=		g++
+OS!=		uname
+SOEXT!=		if [ "$(OS)" = "Darwin" ]; then echo .dylib; else echo .so; fi
+CC!=		if [ "$(OS)" = "Darwin" ]; then echo clang; else echo gcc; fi
+CXX!=		if [ "$(OS)" = "Darwin" ]; then echo clang++; else echo g++; fi
 CFLAGS_EXTRA=	-fsanitize=thread
 CXXFLAGS_EXTRA=	-fsanitize=thread
 # Force clang++ to link libtsan as shared library. (Yes, the flag is libsan)
@@ -23,8 +25,12 @@ LDFLAGS!=	if [ "$(CXX)" = "clang++" ]; then echo '-shared-libsan'; fi
 # Use timedrun.sh in scripts directory
 TIMED= 		$(PROJECT)/scripts/timedrun.sh \
 			-n $* -o $(WORKDIR)/$*.time
-PARSE=		cat $(WORKDIR)/$*.time \
-		| tee -a $(WORKDIR)/results.csv
+PARSE=		{ \
+			$(PROJECT)/scripts/process-timedrun.sh \
+				"$*" \
+				$(WORKDIR)/$*.time \
+				$(WORKDIR)/$*.run.log; \
+		} | tee -a $(WORKDIR)/results.csv
 
 # Add TARGET+=header to initialize the results.csv file
-PRO.header=	echo 'variant run real user sys' > $(WORKDIR)/results.csv
+SUM.header=	echo 'variant run real user sys' > $(WORKDIR)/results.csv

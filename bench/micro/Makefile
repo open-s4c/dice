@@ -15,7 +15,7 @@ PRFX!=		if [ "$(OS)" = "Darwin" ]; \
 		else echo LD; fi
 
 TARGET+=	summary
-PRO.summary=	echo variant, nthreads, count, time_s > $(WORKDIR)/results.csv
+SUM.summary=	echo variant, nthreads, count, time_s > $(WORKDIR)/results.csv
 
 # ------------------------------------------------------------------------------
 # variants
@@ -24,27 +24,27 @@ PRO.summary=	echo variant, nthreads, count, time_s > $(WORKDIR)/results.csv
 TARGET+=	micro
 DEP.micro=	.summary.run
 RUN.micro=	env $(PRFX)_LIBRARY_PATH=$(LIBPATH) $(BINDIR)/micro
-PRO.micro=	cat $(WORKDIR)/$*.run.log | $(FORMAT) >> $(WORKDIR)/results.csv
+SUM.micro=	cat $(WORKDIR)/$*.run.log | $(FORMAT) >> $(WORKDIR)/results.csv
 
 TARGET+=	micro2
 DEP.micro2=	.summary.run
 RUN.micro2=	env $(PRFX)_LIBRARY_PATH=$(LIBPATH) $(BINDIR)/micro2
-PRO.micro2=	cat $(WORKDIR)/$*.run.log | $(FORMAT) >> $(WORKDIR)/results.csv
+SUM.micro2=	cat $(WORKDIR)/$*.run.log | $(FORMAT) >> $(WORKDIR)/results.csv
 
 TARGET+=	micro3
 DEP.micro3=	.summary.run
 RUN.micro3=	env $(PRFX)_LIBRARY_PATH=$(LIBPATH) $(BINDIR)/micro3
-PRO.micro3=	cat $(WORKDIR)/$*.run.log | $(FORMAT) >> $(WORKDIR)/results.csv
+SUM.micro3=	cat $(WORKDIR)/$*.run.log | $(FORMAT) >> $(WORKDIR)/results.csv
 
 TARGET+=	micro4
 DEP.micro4=	.summary.run
 RUN.micro4=	env $(PRFX)_LIBRARY_PATH=$(LIBPATH) $(BINDIR)/micro4
-PRO.micro4=	cat $(WORKDIR)/$*.run.log | $(FORMAT) >> $(WORKDIR)/results.csv
+SUM.micro4=	cat $(WORKDIR)/$*.run.log | $(FORMAT) >> $(WORKDIR)/results.csv
 
 TARGET+=	micro5
 DEP.micro5=	.summary.run
 RUN.micro5=	env $(PRFX)_LIBRARY_PATH=$(LIBPATH) $(BINDIR)/micro5
-PRO.micro5=	cat $(WORKDIR)/$*.run.log | $(FORMAT) >> $(WORKDIR)/results.csv
+SUM.micro5=	cat $(WORKDIR)/$*.run.log | $(FORMAT) >> $(WORKDIR)/results.csv
 
 # ------------------------------------------------------------------------------
 BENCHMK= ../bench.mk
