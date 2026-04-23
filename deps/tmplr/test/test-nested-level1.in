@@ -1,0 +1,8 @@
+$_begin(BOARD=[[alpha;bravo]])
+Board BOARD {
+  $__begin(DRIVER=[[net;storage]])
+  init_driver(BOARD, DRIVER);
+  $__end
+}
+$_end
+

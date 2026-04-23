@@ -1,0 +1,9 @@
+_tmpl_dlent
+_tmpl_map(OP_seq,OP_seq);
+_tmpl_map(eq, t);
+_tmpl_map(OPacq, ire);
+_e);
+_tmpl_map(OP_acq, ired);
+_tmpl_begin(mo=[[seq;acq;rel]]);
+OP_mo
+_tmpl_end;

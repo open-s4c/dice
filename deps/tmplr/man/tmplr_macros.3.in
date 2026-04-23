@@ -1,0 +1,11 @@
+.TH TMPLR_MACROS 3 "__DATE__" "__VERSION__" "tmplr macros"
+.SH NAME
+tmplr_macros \- Template processing supporting macros
+.SH SYNOPSIS
+.B #include <tmplr/macros.h>
+.PP
+.SH DESCRIPTION
+.B tmplr
+provides several macros for convenient usage of the template processing functionality.
+.SH SEE ALSO
+.BR tmplr (3)

@@ -1,123 +1,103 @@
-//'usr/bin/env' cc -O2 -xc -DSCRIPT -o tmplr "$0" && exec ./tmplr "$@"
 /*
- * Copyright (C) Huawei Technologies Co., Ltd. 2022-2025. All rights reserved.
- * SPDX-License-Identifier: MIT
- */
-#include <assert.h>
-#include <stdbool.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
-
-#define VERSION "1.2"
-
-/*******************************************************************************
+ * Copyright (C) 2022-2026 Huawei Technologies Co., Ltd.
+ * SPDX-License-Identifier: 0BSD
+ *
  * tmplr - a template replacement tool
  *
  * tmplr is a simple tool to achieve a minimum level of genericity without
  * resorting to C preprocessor macros.
  *
- * ## Template blocks
- *
- * tmplr reads input files and replaces mappings in template blocks. Template
- * blocks are marked with _tmpl_begin/_tmpl_end commands (see "Template
- * commands" below).
- *
- * For example:
- *
- *     _tmpl_begin(key=value)
- *     The following word, key, will be replaced by value.
- *     _tmpl_end
- *
- * ## Template mappings
- *
- * The mappings given to _tmpl_begin are called *template mappings*.
- *
- * Iteration mappings may take a single value as in keyA = value1 or multiple
- * values as in keyA = [[value1; value2]]. The list of values is separated by
- * semicolumn and optionally sorrounded by [[ ]]. The list of template mappings
- * is separated by commas, for example:
- *
- *     _tmpl_begin(keyA=[[val1;val2]], keyB=[[val3;val4]])
- *     ...
- *     _tmpl_end
- *
- * ## Block iterations
- *
- * If template mappings contain multiple values, the template block is repeated
- * for each combination of template mappings. Each such instance of template
- * mappings is called *iteration mapping* in the source code.
- *
- * Consider this block example:
- *
- *     _tmpl_begin(key=[[val1;val2]])
- *     Key --> key
- *     _tmpl_end
- *
- * The template mapping consists of key=[[val1;val2]]. In the first iteration
- * of the block, the iteration mapping is key=val1, in the second iteration,
- * the mapping is key=val2.
- *
- * ## Persistent mappings
- *
- * Beyond template mappings, tmplr also support persistent mappings. Outside
- * template blocks, the user can use the command TMPL_MAP(key, value) to add
- * persistent mappings to the tmplr state.
- *
- * During the processing of each line in a block iteration, *after* exhausting
- * the application of iteration mappings, tmplr applies any persistent mapping
- * matches.
- *
- * ## Command line and mapping override
- *
- * tmplr is a CLI program and takes as input a list of files. It provides a few
- * flags:
- * - -v to enable verbose output
- * - -D to select or overwrite a single value or a list of values in an
- *   iteration mapping. For example,
- *      -Dkey=value sets key to `value` and other values will be ignored.
- *      -Dkey="value1;value2" sets key to the list `value1;value2`
- * - -P to set a prefix to commands differnt than `_tmpl`, eg, -PTEMPLATE
- *   assumes commands of the form TEMPLATE_begin, TEMPLATE_end, etc.
- * - -i takes input from stdin in addition to file names. stdin is the last
- *   input to be processed.
- *
- * ## Valid keys and values
- *
- * tmplr **does not** tokenize the input. Hence, a key "two words" is a
- * perfectly valid key. Characters such as $ can also be used in keys and
- * values.
- *
- * The only restriction is that keys cannot contain
- * - new line: \n
- * - parenthesis: ( )
- * - comma: ,
- * - semicolon: ;
- * - nor any tmplr commands
- *
- * Values cannot contain parenthesis, commas nor semicolon.
- *
- * Disclaimer:
- * We are aware of similar, more powerful tools such as Jinja, Mustache and M4.
- * tmplr follows three design principles:
- *
- * - simplicity: as simple and maintainable as possible
- * - dependency freedom: no additonal language which will get deprecated
- * - c-syntax transperency: annotation should not interfer with the LSP
- *   servers such as clangd
- ******************************************************************************/
+ */
+
+#if defined(__linux__) && !defined(_GNU_SOURCE)
+    #define _GNU_SOURCE
+#elif defined(__APPLE__) && !defined(_DARWIN_C_SOURCE)
+    #define _DARWIN_C_SOURCE
+#else
+    #ifndef _XOPEN_SOURCE
+        #define _XOPEN_SOURCE 700
+    #endif
+#endif
+
+#include <assert.h>
+#include <errno.h>
+#include <stdbool.h>
+#include <setjmp.h>
+#include <stdarg.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <tmplr.h>
+#include "version.h"
 
 /*******************************************************************************
  * Logging
  ******************************************************************************/
 
 static bool _verbose;
-#define debugf(fmt, ...)                                                       \
-    do {                                                                       \
-        if (_verbose)                                                          \
-            printf("// " fmt, ##__VA_ARGS__);                                  \
-    } while (0)
+static jmp_buf *trap_env;
+static tmplr_err trap_err = TMPLR_OK;
+static tmplr_sink_fn active_sink;
+static void *active_sink_user;
+
+/* maximum length of a value */
+static size_t max_vlen = 256;
+
+static int
+default_sink(const char *buf, size_t len, void *user)
+{
+    FILE *out = (FILE *)user;
+    if (out == NULL)
+        out = stdout;
+    return fwrite(buf, 1, len, out) == len ? 0 : -1;
+}
+
+static void
+dief(tmplr_err err, const char *fmt, ...)
+{
+    va_list ap;
+    va_start(ap, fmt);
+    vfprintf(stderr, fmt, ap);
+    va_end(ap);
+
+    trap_err = err;
+    if (trap_env != NULL)
+        longjmp(*trap_env, 1);
+    exit(EXIT_FAILURE);
+}
+
+static void
+emit_buf(const char *buf, size_t len)
+{
+    tmplr_sink_fn sink = active_sink ? active_sink : default_sink;
+    void *user         = active_sink ? active_sink_user : stdout;
+    if (sink(buf, len, user) != 0)
+        dief(TMPLR_ERR_IO, "error: output sink failed\n");
+}
+
+static void
+debugf(const char *fmt, ...)
+{
+    if (!_verbose)
+        return;
+    va_list ap;
+    va_start(ap, fmt);
+    emit_buf("// ", 3);
+    va_list ap_copy;
+    va_copy(ap_copy, ap);
+    int need = vsnprintf(NULL, 0, fmt, ap_copy);
+    va_end(ap_copy);
+    if (need >= 0) {
+        char *buf = calloc((size_t)need + 1, 1);
+        if (buf != NULL) {
+            vsnprintf(buf, (size_t)need + 1, fmt, ap);
+            emit_buf(buf, (size_t)need);
+            free(buf);
+        }
+    }
+    va_end(ap);
+}
 
 /*******************************************************************************
  * Maximum line lengths and buffer sizes
@@ -125,7 +105,7 @@ static bool _verbose;
 
 /* maximum length of a line */
 #ifndef MAX_SLEN
-    #define MAX_SLEN 256
+    #define MAX_SLEN 256UL
 #endif
 /* maximum number of lines in a block */
 #ifndef MAX_BLEN
@@ -135,12 +115,6 @@ static bool _verbose;
 #ifndef MAX_KEYS
     #define MAX_KEYS 1024
 #endif
-/* maximum length of a value */
-#ifndef MAX_VLEN
-    #define MAX_VLEN 256
-#endif
-/* Buffer to hold the value */
-#define V_BUF_LEN ((MAX_VLEN) + 1)
 /* maximum length of a key */
 #ifndef MAX_KLEN
     #define MAX_KLEN 64
@@ -151,11 +125,19 @@ static bool _verbose;
 #ifndef MAX_APPLY
     #define MAX_APPLY 32
 #endif
+/* absolute upper bound for max_vlen */
+#ifndef ABSOLUTE_MAX_VLEN
+    #define ABSOLUTE_MAX_VLEN (4096UL)
+#endif
+/* minimum buffer length to hold an int*/
+#ifndef V_MIN_LEN
+    #define V_MIN_LEN 32
+#endif
 
 /*******************************************************************************
  * Template commands
  ******************************************************************************/
-#define TMPL_PREFIX        "_tmpl"
+#define TMPL_PREFIX        "$"
 #define TMPL_SUFFIX_MAP    "_map"
 #define TMPL_SUFFIX_BEGIN  "_begin("
 #define TMPL_SUFFIX_END    "_end"
@@ -169,6 +151,8 @@ static bool _verbose;
 #define TMPL_SUFFIX_NL     "_nl"
 #define TMPL_SUFFIX_UPCASE "_upcase"
 #define TMPL_SUFFIX_HOOK   "_hook"
+#define TMPL_SUFFIX_ICOUNT "_icount"
+#define TMPL_SUFFIX_ISLAST "_islast"
 
 static char *TMPL_MAP;
 static char *TMPL_BEGIN;
@@ -183,6 +167,8 @@ static char *TMPL_DL;
 static char *TMPL_NL;
 static char *TMPL_UPCASE;
 static char *TMPL_HOOK;
+static char *TMPL_ICOUNT;
+static char *TMPL_ISLAST;
 
 /* set prefix of commands. If prefix is NULL, use default TMPL_PREFIX. */
 void
@@ -192,23 +178,25 @@ set_prefix(const char *prefix)
         prefix = TMPL_PREFIX;
     }
 
-#define CMD_PAIR(X) {.cmd = &TMPL_##X, .suffix = TMPL_SUFFIX_##X}
+#define CMD_PAIR(X)                                                            \
+    {                                                                          \
+        .cmd = &TMPL_##X, .suffix = TMPL_SUFFIX_##X                            \
+    }
     struct {
         char **cmd;
         const char *suffix;
     } cmds[] = {
-        CMD_PAIR(MAP),    CMD_PAIR(BEGIN), CMD_PAIR(END),  CMD_PAIR(MUTE),
-        CMD_PAIR(UNMUTE), CMD_PAIR(ABORT), CMD_PAIR(SKIP), CMD_PAIR(KILL),
-        CMD_PAIR(UNDO),   CMD_PAIR(DL),    CMD_PAIR(NL),   CMD_PAIR(UPCASE),
-        CMD_PAIR(HOOK),   {NULL, NULL},
+        CMD_PAIR(MAP),    CMD_PAIR(BEGIN),  CMD_PAIR(END),    CMD_PAIR(MUTE),
+        CMD_PAIR(UNMUTE), CMD_PAIR(ABORT),  CMD_PAIR(SKIP),   CMD_PAIR(KILL),
+        CMD_PAIR(UNDO),   CMD_PAIR(DL),     CMD_PAIR(NL),     CMD_PAIR(UPCASE),
+        CMD_PAIR(HOOK),   CMD_PAIR(ICOUNT), CMD_PAIR(ISLAST), {NULL, NULL},
     };
 
     for (int i = 0; cmds[i].cmd != NULL; i++) {
         const char *suffix = cmds[i].suffix;
         *cmds[i].cmd       = calloc(strlen(suffix) + strlen(prefix) + 1, 1);
         if (*cmds[i].cmd == NULL) {
-            fprintf(stderr, "could not allocate command");
-            exit(EXIT_FAILURE);
+            dief(TMPLR_ERR_OOM, "error: could not allocate command\n");
         }
         strcat(*cmds[i].cmd, prefix);
         strcat(*cmds[i].cmd, suffix);
@@ -224,7 +212,7 @@ set_prefix(const char *prefix)
  */
 typedef struct {
     char key[K_BUF_LEN];
-    char val[V_BUF_LEN];
+    char *val;
 } pair_t;
 
 /* err_t represents an error message */
@@ -244,6 +232,21 @@ typedef struct {
     }
 #define IS_ERROR(err) (err).msg != NULL
 
+typedef struct {
+    char *key;
+    char *val;
+} map_entry_t;
+
+struct tmplr_ctx {
+    tmplr_opts opts;
+    map_entry_t *override_entries;
+    size_t override_len;
+    size_t override_cap;
+    map_entry_t *filter_entries;
+    size_t filter_len;
+    size_t filter_cap;
+};
+
 /*******************************************************************************
  * String functions
  ******************************************************************************/
@@ -252,9 +255,12 @@ void
 trim(char *s, char c)
 {
     assert(s);
+
+    size_t len = strlen(s);
+
     /* remove trailing space */
-    while (s[strlen(s) - 1] == c)
-        s[strlen(s) - 1] = '\0';
+    for (; len > 0 && s[len - 1] == c; len = strlen(s))
+        s[len - 1] = '\0';
 
     /* remove leading space */
     while (s[0] == c)
@@ -285,11 +291,17 @@ pair_t template_map[MAX_KEYS];
  */
 pair_t override_map[MAX_KEYS];
 
+/* template filter mappings : key -> value
+ *
+ * Given via command line -F option. These filter template mapping values
+ */
+pair_t filter_map[MAX_KEYS];
+
 /* iteration mappings: key -> value
  *
  * These are the single values of the template mappings, potentially
- * overriden by override mappings. They are set at each iteration of a
- * template block.
+ * overriden by override_map or filtered by filter_map. They are set at
+ * each iteration of a template block.
  *
  * They precede the persistent mappings.
  */
@@ -314,13 +326,26 @@ remap(pair_t *map, const char *key, const char *val)
     for (int i = 0; i < MAX_KEYS; i++) {
         pair_t *p = map + i;
         if (!p->key[0] || strcmp(p->key, key) == 0) {
-            memset(p->key, 0, MAX_KLEN);
-            strcat(p->key, key);
-            trim(p->key, ' ');
+            memset(p->key, 0, sizeof(p->key));
+            strncat(p->key, key, sizeof(p->key) - 1);
+            trims(p->key, " \t");
 
-            memset(p->val, 0, MAX_VLEN);
-            strcat(p->val, val);
-            trim(p->val, ' ');
+            size_t input_len = strlen(val);
+            if (input_len > max_vlen) {
+                dief(TMPLR_ERR_LIMIT,
+                     "error: value for key '%s' is too long (%zu > %zu)\n", key,
+                     input_len, max_vlen);
+            }
+
+            if (p->val != NULL) {
+                free(p->val);
+                p->val = NULL;
+            }
+
+            p->val = strdup(val);
+
+            trims(p->val, " ");
+
             debugf("[REMAP] %s = %s\n", p->key, p->val);
             return;
         }
@@ -346,7 +371,11 @@ unmap(pair_t *map, char *key)
         return;
 
     memset(p->key, 0, MAX_KLEN);
-    memset(p->val, 0, MAX_VLEN);
+
+    if (p->val != NULL) {
+        free(p->val);
+        p->val = NULL;
+    }
 }
 
 void
@@ -364,6 +393,12 @@ show(pair_t *map, const char *name)
 void
 clean(pair_t *map)
 {
+    for (int i = 0; i < MAX_KEYS; i++) {
+        if (map[i].val != NULL) {
+            free(map[i].val);
+            map[i].val = NULL;
+        }
+    }
     memset(map, 0, sizeof(pair_t) * MAX_KEYS);
 }
 
@@ -390,21 +425,42 @@ set_option(enum options opt, char *val)
  * parse functions
  ******************************************************************************/
 
+#define goto_error(label, error)                                               \
+    {                                                                          \
+        err = ERROR(error);                                                    \
+        goto label;                                                            \
+    }
 err_t
 parse_assign(pair_t *p, char *start, char *end)
 {
-    char key[K_BUF_LEN] = {0};
-    char val[V_BUF_LEN] = {0};
+    char key[K_BUF_LEN + 1] = {0};
+
+    err_t err = NO_ERROR;
+
+    char *val = calloc(max_vlen + 1, sizeof(char));
+    if (!val) {
+        goto_error(cleanup, "out of memory");
+    }
 
     char *comma = strstr(start, OPTION(KV_SEP));
-    if (comma == NULL)
-        return ERROR("expected separator");
+    if (comma == NULL) {
+        goto_error(cleanup, "expected separator");
+    }
     start++;
+    if (comma - start >= K_BUF_LEN) {
+        goto_error(cleanup, "key is too long");
+    }
     strncat(key, start, comma - start);
     comma++;
+    if ((size_t)(end - comma) >= max_vlen) {
+        goto_error(cleanup, "value is too long");
+    }
     strncat(val, comma, end - comma);
     remap(p, key, val);
-    return NO_ERROR;
+
+cleanup:
+    free(val);
+    return err;
 }
 
 err_t
@@ -414,6 +470,10 @@ parse_template_map(char *start, char *end)
     start++;
     *end = '\0';
 
+    char *val = calloc(max_vlen + 1, sizeof(char));
+    if (!val)
+        return ERROR("out of memory");
+
 again:
     next = strstr(start, OPTION(ITEM_SEP));
     if (next) {
@@ -421,21 +481,25 @@ again:
         next++;
     }
     values = strstr(start, "=");
-    if (values == NULL)
+    if (values == NULL) {
+        free(val);
         return ERROR("expected '='");
+    }
     *values = '\0';
     values++;
 
     char key[K_BUF_LEN] = {0};
     strncat(key, start, MAX_KLEN);
 
-    char val[V_BUF_LEN] = {0};
-    size_t src_len      = strlen(values);
-    size_t dst_len      = V_BUF_LEN - 1;
-    if (src_len < dst_len)
+    /* clear the buffer to ensure proper NUL-termination and garbage data */
+    memset(val, 0, max_vlen + 1);
+
+    size_t src_len = strlen(values);
+    if (src_len < max_vlen)
         strcat(val, values);
     else
-        strncat(val, values, dst_len);
+        strncat(val, values, max_vlen);
+
     trims(val, " []");
 
     remap(template_map, key, val);
@@ -445,6 +509,7 @@ again:
         goto again;
     }
 
+    free(val);
     return NO_ERROR;
 }
 
@@ -474,7 +539,6 @@ line_apply(char *line, const char *key, const char *val)
 
     const size_t vlen = strlen(val);
     const size_t klen = strlen(key);
-    const size_t slen = strlen(cur);
 
     const bool is_nl = strcmp(key, TMPL_NL) == 0;
     if (!is_nl)
@@ -483,7 +547,18 @@ line_apply(char *line, const char *key, const char *val)
     /* make space for value */
     if (!is_nl)
         debugf("\tBEFORE: %s", line);
-    memmove(cur + vlen, cur + klen, slen);
+
+    /* prefix length */
+    const size_t prefix = (size_t)(cur - line);
+    /* tail length */
+    const size_t tlen = strlen(cur + klen) + 1;
+
+    if (prefix + vlen + tlen > MAX_SLEN) {
+        dief(TMPLR_ERR_LIMIT, "error: cannot apply beyond line limit (%lu)\n",
+             MAX_SLEN);
+    }
+
+    memmove(cur + vlen, cur + klen, tlen);
     memcpy(cur, val, vlen);
     if (!is_nl)
         debugf("\tAFTER:  %s", line);
@@ -519,7 +594,13 @@ again:
         if ((cur = strstr(buf, TMPL_UNDO))) {
             size_t skip = strlen(TMPL_UNDO);
             size_t len  = strlen(cur);
-            memmove(buf, cur + skip, len - skip + 1);
+            size_t rlen = len - skip + 1;
+            if (rlen > MAX_SLEN) {
+                dief(TMPLR_ERR_LIMIT,
+                     "error: line longer than limit (%lu > %lu)\n", rlen,
+                     MAX_SLEN);
+            }
+            memmove(buf, cur + skip, rlen);
         }
 
         const pair_t *pi = iteration_map + i;
@@ -562,8 +643,10 @@ end:
         ;
 
     /* output and return */
-    printf("%s", buf);
-    assert(cnt < MAX_APPLY);
+    emit_buf(buf, strlen(buf));
+    if (cnt >= MAX_APPLY) {
+        dief(TMPLR_ERR_LIMIT, "error: too many replacements (%d)\n", cnt);
+    }
     return true;
 }
 
@@ -572,7 +655,7 @@ end:
  ******************************************************************************/
 
 void
-process_begin()
+process_begin(void)
 {
     debugf("============================\n");
     debugf("[BLOCK_BEGIN]\n");
@@ -589,66 +672,191 @@ process_begin()
  * content of hte buffer with mappings applied for each value of the mapping
  * iterators.
  ******************************************************************************/
-char save_block[MAX_BLEN][MAX_SLEN];
-int save_k;
+static size_t max_block_lines = MAX_BLEN;
+static char (*save_block)[MAX_SLEN];
+static size_t save_k;
+
+static void
+allocate_block_buffer(void)
+{
+    if (max_block_lines == 0) {
+        dief(TMPLR_ERR_USAGE, "error: block length must be greater than 0\n");
+    }
+    save_block = calloc(max_block_lines, sizeof(*save_block));
+    if (save_block == NULL) {
+        dief(TMPLR_ERR_OOM, "error: could not allocate block buffer\n");
+    }
+}
 
 const char *
-sticking(const char *key)
+get_pair(pair_t map[MAX_KEYS], const char *key)
 {
-    for (int i = 0; i < MAX_KEYS && strlen(override_map[i].key) != 0; i++)
-        if (strcmp(override_map[i].key, key) == 0)
-            return override_map[i].val;
+    for (int i = 0; i < MAX_KEYS && strlen(map[i].key) != 0; i++)
+        if (strcmp(map[i].key, key) == 0)
+            return map[i].val;
     return NULL;
 }
 
+
+/* takes to strings of elements separated by sep and outputs in dst only the
+ * elements that are contained in both strings. The dst string be again of the
+ * form element<sep>element... */
 void
-process_block(int i, const int nvars)
+intersect(char *dst, char *other, const char *sep)
+{
+    if (dst == NULL || other == NULL || sep == NULL)
+        return;
+
+
+    /* dinamically allocate a buffer to support variable length */
+    char *dst_buf   = calloc(max_vlen + 1, sizeof(char));
+    char *other_buf = calloc(max_vlen + 1, sizeof(char));
+
+    char **allowed = calloc(max_vlen + 1, sizeof(char *));
+
+    if (!dst_buf || !other_buf || !allowed) {
+        dief(TMPLR_ERR_OOM, "error: out of memory in intersect\n");
+    }
+
+    strncpy(dst_buf, dst, sizeof(dst_buf) - 1);
+    strncpy(other_buf, other, sizeof(other_buf) - 1);
+
+    size_t allowed_cnt = 0;
+    char *saveptr      = NULL;
+    char *tok          = strtok_r(dst_buf, sep, &saveptr);
+
+    while (tok) {
+        trims(tok, " []");
+        if (tok[0] != '\0')
+            allowed[allowed_cnt++] = tok;
+        tok = strtok_r(NULL, sep, &saveptr);
+    }
+
+    dst[0]            = '\0';
+    bool first_token  = true;
+    const size_t slen = strlen(sep);
+
+    saveptr = NULL;
+    tok     = strtok_r(other_buf, sep, &saveptr);
+    while (tok) {
+        trims(tok, " []");
+        if (tok[0] != '\0') {
+            for (size_t i = 0; i < allowed_cnt; i++) {
+                if (strcmp(tok, allowed[i]) != 0)
+                    continue;
+
+                size_t dst_len = strlen(dst);
+                size_t tok_len = strlen(tok);
+                if (!first_token) {
+                    if (dst_len + slen >= max_vlen)
+                        goto overflow;
+                    strcat(dst, sep);
+                    dst_len += slen;
+                }
+                if (dst_len + tok_len >= max_vlen)
+                    goto overflow;
+                strcat(dst, tok);
+                first_token = false;
+                break;
+            }
+        }
+        tok = strtok_r(NULL, sep, &saveptr);
+    }
+    free(dst_buf);
+    free(other_buf);
+    free(allowed);
+    return;
+
+overflow:
+    dief(TMPLR_ERR_LIMIT,
+         "error: filter intersection exceeds value length (%zu)\n", max_vlen);
+    free(dst_buf);
+    free(other_buf);
+    free(allowed);
+    return;
+}
+
+/* process_block is a recursive function that repeats the block for every
+ * combination of values in the iteratin map.
+ *
+ * The parameter i indicates which variable out of nvars that has we have to
+ * select a value. Once we have selected values for all variables, i == nvars,
+ * and one block iteration is processed. The parameters count and last indicate
+ * the current iteration count and whether the current iteration is the last one
+ * of this template block. */
+void
+process_block(int i, const int nvars, int *count, bool last)
 {
     pair_t *hook = NULL;
+
     if (i == nvars) {
+        char icount[V_MIN_LEN];
+        snprintf(icount, sizeof(icount), "%d", *count);
+
+        remap(iteration_map, TMPL_ICOUNT, icount);
+        remap(iteration_map, TMPL_ISLAST, last ? "true" : "false");
+
         if ((hook = find(block_hooks, "begin")))
             if (!process_block_line(hook->val))
-                return;
+                goto end;
 
-        for (int k = 0; k < save_k && process_block_line(save_block[k]); k++)
+        for (size_t k = 0; k < save_k && process_block_line(save_block[k]); k++)
             ;
 
         if ((hook = find(block_hooks, "end")))
             (void)process_block_line(hook->val);
 
+end:
+        (*count)++;
+        unmap(iteration_map, TMPL_ICOUNT);
+        unmap(iteration_map, TMPL_ISLAST);
+
         return;
     }
-    pair_t *p           = template_map + i;
-    char val[V_BUF_LEN] = {0};
-    strcat(val, p->val);
+
+    pair_t *p = template_map + i;
+
+    char *val = calloc(max_vlen + 1, sizeof(char));
+    if (!val) {
+        dief(TMPLR_ERR_OOM, "error: out of memory\n");
+    }
+
+    strncat(val, p->val, max_vlen);
 
     const char *sep = OPTION(ITER_SEP);
     char *saveptr   = NULL;
 
-    const char *sval_ = sticking(p->key);
-    char *sval        = sval_ ? strdup(sval_) : NULL;
-    char *tok         = strtok_r(val, sep, &saveptr);
+    char *tok         = NULL;
+    const char *oval_ = get_pair(override_map, p->key);
+    const char *fval_ = get_pair(filter_map, p->key);
+    char *oval        = oval_ ? strdup(oval_) : NULL;
+    char *fval        = fval_ ? strdup(fval_) : NULL;
 
-    if (sval != NULL) {
-        /* if there are sticking values, ie, from override_map,
-         * discard all other values of tok and only use sval */
-        while (tok)
-            tok = strtok_r(0, sep, &saveptr);
-
-        saveptr = NULL;
-        tok     = strtok_r(sval, sep, &saveptr);
+    if (oval != NULL) {
+        /* if there are defined values (with -DVAR=VAL1;VAL2),
+        discard all other values of tok and only use those. */
+        tok = strtok_r(oval, sep, &saveptr);
+    } else if (fval != NULL) {
+        intersect(fval, val, sep);
+        tok = strtok_r(fval, sep, &saveptr);
+    } else {
+        tok = strtok_r(val, sep, &saveptr);
     }
 
     while (tok) {
         trims(tok, " ");
         remap(iteration_map, p->key, tok);
-        process_block(i + 1, nvars);
-        unmap(iteration_map, p->key);
         tok = strtok_r(0, sep, &saveptr);
+        process_block(i + 1, nvars, count, last && (!tok));
+        unmap(iteration_map, p->key);
     }
 
-    if (sval != NULL)
-        free(sval);
+    if (oval != NULL)
+        free(oval);
+    if (fval != NULL)
+        free(fval);
+
+    free(val);
 
     if (i == 0 && (hook = find(block_hooks, "final"))) {
         (void)process_block_line(hook->val);
@@ -684,8 +892,7 @@ again:
     switch (S) {
         case TEXT:
             if (!muted && strstr(line, TMPL_ABORT)) {
-                fflush(stdout);
-                abort();
+                dief(TMPLR_ERR_USAGE, "error: aborted by template command\n");
             }
             if (!muted && strstr(line, TMPL_BEGIN)) {
                 S = BLOCK_BEGIN;
@@ -710,7 +917,7 @@ again:
                 break;
             }
             if (!muted && strstr(line, TMPL_DL) == NULL)
-                printf("%s", line);
+                emit_buf(line, strlen(line));
             break;
 
         case BLOCK_BEGIN:
@@ -724,7 +931,7 @@ again:
 
         case BLOCK_BEGIN_ARGS:
             if ((end = strstr(line, ")"))) {
-                err_t err = parse_template_map(line, end);
+                err = parse_template_map(line, end);
                 if (IS_ERROR(err))
                     return err;
                 S = BLOCK_TEXT;
@@ -745,8 +952,8 @@ again:
                 S = BLOCK_END;
                 goto again;
             }
-            if (save_k >= MAX_BLEN)
-                return ERROR("block too long");
+            if (save_k >= max_block_lines)
+                return ERROR("too many lines in block");
 
             memcpy(save_block[save_k++], line, strlen(line) + 1);
             break;
@@ -757,7 +964,8 @@ again:
                 for (int i = 0; i < MAX_KEYS; i++)
                     if (template_map[i].key[0])
                         nvars++;
-                process_block(0, nvars);
+                int count = 0;
+                process_block(0, nvars, &count, true);
             }
             save_k = 0;
             S      = TEXT;
@@ -810,8 +1018,7 @@ process_fp(FILE *fp, const char *fn)
         assert(line);
         err = process_line(line);
         if (IS_ERROR(err)) {
-            fprintf(stderr, "%s:%d: error: %s\n", fn, i + 1, err.msg);
-            abort();
+            dief(TMPLR_ERR_PARSE, "%s:%d: error: %s\n", fn, i + 1, err.msg);
         }
         if (line) {
             free(line);
@@ -826,11 +1033,330 @@ void
 process_file(const char *fn)
 {
     FILE *fp = fopen(fn, "r+");
-    assert(fp);
+    if (!fp) {
+        dief(TMPLR_ERR_IO, "%s: %s\n", fn, strerror(errno));
+    }
     process_fp(fp, fn);
     fclose(fp);
 }
 
+/*******************************************************************************
+ * Library API
+ ******************************************************************************/
+
+static void
+free_entries(map_entry_t *entries, size_t n)
+{
+    if (entries == NULL)
+        return;
+    for (size_t i = 0; i < n; i++) {
+        free(entries[i].key);
+        free(entries[i].val);
+    }
+    free(entries);
+}
+
+static void
+clear_commands(void)
+{
+    char **cmds[] = {&TMPL_MAP,    &TMPL_BEGIN,  &TMPL_END,    &TMPL_MUTE,
+                     &TMPL_UNMUTE, &TMPL_ABORT,  &TMPL_SKIP,   &TMPL_KILL,
+                     &TMPL_UNDO,   &TMPL_DL,     &TMPL_NL,     &TMPL_UPCASE,
+                     &TMPL_HOOK,   &TMPL_ICOUNT, &TMPL_ISLAST, NULL};
+    for (int i = 0; cmds[i] != NULL; i++) {
+        free(*cmds[i]);
+        *cmds[i] = NULL;
+    }
+}
+
+static tmplr_err
+map_set(map_entry_t **entries, size_t *len, size_t *cap, const char *key,
+        const char *val)
+{
+    if (key == NULL || val == NULL)
+        return TMPLR_ERR_USAGE;
+
+    for (size_t i = 0; i < *len; i++) {
+        if (strcmp((*entries)[i].key, key) != 0)
+            continue;
+        char *new_val = strdup(val);
+        if (new_val == NULL)
+            return TMPLR_ERR_OOM;
+        free((*entries)[i].val);
+        (*entries)[i].val = new_val;
+        return TMPLR_OK;
+    }
+
+    if (*len == *cap) {
+        size_t new_cap      = (*cap == 0) ? 8 : (*cap * 2);
+        map_entry_t *newptr = realloc(*entries, new_cap * sizeof(map_entry_t));
+        if (newptr == NULL)
+            return TMPLR_ERR_OOM;
+        *entries = newptr;
+        *cap     = new_cap;
+    }
+    (*entries)[*len].key = strdup(key);
+    (*entries)[*len].val = strdup(val);
+    if ((*entries)[*len].key == NULL || (*entries)[*len].val == NULL) {
+        free((*entries)[*len].key);
+        free((*entries)[*len].val);
+        (*entries)[*len].key = NULL;
+        (*entries)[*len].val = NULL;
+        return TMPLR_ERR_OOM;
+    }
+    (*len)++;
+    return TMPLR_OK;
+}
+
+static void
+clear_runtime_state(void)
+{
+    clean(template_map);
+    clean(override_map);
+    clean(filter_map);
+    clean(iteration_map);
+    clean(persistent_map);
+    clean(block_hooks);
+
+    if (save_block != NULL) {
+        free(save_block);
+        save_block = NULL;
+    }
+    save_k = 0;
+    muted  = false;
+    S      = TEXT;
+    clear_commands();
+}
+
+static void
+prepare_runtime(const tmplr_ctx *ctx)
+{
+    clear_runtime_state();
+
+    _verbose        = ctx->opts.verbose != 0;
+    max_block_lines = ctx->opts.max_block_lines;
+    max_vlen        = ctx->opts.max_value_len;
+
+    if (max_block_lines == 0)
+        dief(TMPLR_ERR_USAGE, "error: block length must be greater than 0\n");
+    if (max_vlen < V_MIN_LEN) {
+        dief(TMPLR_ERR_USAGE, "error: maximum length must be at least %u\n",
+             (unsigned)V_MIN_LEN);
+    }
+    if (max_vlen > ABSOLUTE_MAX_VLEN) {
+        dief(TMPLR_ERR_USAGE, "error: maximum length must be at max %lu\n",
+             (size_t)ABSOLUTE_MAX_VLEN);
+    }
+
+    options[OPT_KV_SEP].val   = ",";
+    options[OPT_ITEM_SEP].val = (char *)ctx->opts.item_sep;
+    options[OPT_ITER_SEP].val = (char *)ctx->opts.iter_sep;
+
+    allocate_block_buffer();
+    set_prefix(ctx->opts.prefix);
+
+    for (size_t i = 0; i < ctx->override_len; i++) {
+        remap(override_map, ctx->override_entries[i].key,
+              ctx->override_entries[i].val);
+    }
+    for (size_t i = 0; i < ctx->filter_len; i++) {
+        remap(filter_map, ctx->filter_entries[i].key,
+              ctx->filter_entries[i].val);
+    }
+}
+
+static void
+cleanup_runtime(void)
+{
+    clear_runtime_state();
+}
+
+tmplr_ctx *
+tmplr_create(const tmplr_opts *opts)
+{
+    tmplr_ctx *ctx = calloc(1, sizeof(*ctx));
+    if (ctx == NULL)
+        return NULL;
+
+    ctx->opts.max_block_lines = (opts && opts->max_block_lines) ?
+                                    opts->max_block_lines :
+                                    (size_t)MAX_BLEN;
+    ctx->opts.max_value_len =
+        (opts && opts->max_value_len) ? opts->max_value_len : (size_t)256;
+    ctx->opts.verbose  = opts ? opts->verbose : 0;
+    ctx->opts.prefix   = NULL;
+    ctx->opts.item_sep = NULL;
+    ctx->opts.iter_sep = NULL;
+
+    if (ctx->opts.max_block_lines == 0 || ctx->opts.max_value_len < V_MIN_LEN ||
+        ctx->opts.max_value_len > ABSOLUTE_MAX_VLEN) {
+        free(ctx);
+        return NULL;
+    }
+
+    const char *prefix   = (opts ? opts->prefix : NULL);
+    const char *item_sep = (opts && opts->item_sep) ? opts->item_sep : ",";
+    const char *iter_sep = (opts && opts->iter_sep) ? opts->iter_sep : ";";
+
+    if (prefix != NULL) {
+        char *copy = strdup(prefix);
+        if (copy == NULL) {
+            free(ctx);
+            return NULL;
+        }
+        ctx->opts.prefix = copy;
+    }
+    ctx->opts.item_sep = strdup(item_sep);
+    ctx->opts.iter_sep = strdup(iter_sep);
+    if (ctx->opts.item_sep == NULL || ctx->opts.iter_sep == NULL) {
+        free((void *)ctx->opts.prefix);
+        free((void *)ctx->opts.item_sep);
+        free((void *)ctx->opts.iter_sep);
+        free(ctx);
+        return NULL;
+    }
+
+    return ctx;
+}
+
+void
+tmplr_destroy(tmplr_ctx *ctx)
+{
+    if (ctx == NULL)
+        return;
+    free_entries(ctx->override_entries, ctx->override_len);
+    free_entries(ctx->filter_entries, ctx->filter_len);
+    free((void *)ctx->opts.prefix);
+    free((void *)ctx->opts.item_sep);
+    free((void *)ctx->opts.iter_sep);
+    free(ctx);
+}
+
+void
+tmplr_reset(tmplr_ctx *ctx)
+{
+    if (ctx == NULL)
+        return;
+    free_entries(ctx->override_entries, ctx->override_len);
+    free_entries(ctx->filter_entries, ctx->filter_len);
+    ctx->override_entries = NULL;
+    ctx->filter_entries   = NULL;
+    ctx->override_len     = 0;
+    ctx->filter_len       = 0;
+    ctx->override_cap     = 0;
+    ctx->filter_cap       = 0;
+}
+
+tmplr_err
+tmplr_set_override(tmplr_ctx *ctx, const char *key, const char *values)
+{
+    if (ctx == NULL)
+        return TMPLR_ERR_USAGE;
+    return map_set(&ctx->override_entries, &ctx->override_len,
+                   &ctx->override_cap, key, values);
+}
+
+tmplr_err
+tmplr_set_filter(tmplr_ctx *ctx, const char *key, const char *values)
+{
+    if (ctx == NULL)
+        return TMPLR_ERR_USAGE;
+    return map_set(&ctx->filter_entries, &ctx->filter_len, &ctx->filter_cap,
+                   key, values);
+}
+
+tmplr_err
+tmplr_process_fp(tmplr_ctx *ctx, FILE *in, const char *name, tmplr_sink_fn sink,
+                 void *sink_user)
+{
+    if (ctx == NULL || in == NULL)
+        return TMPLR_ERR_USAGE;
+
+    jmp_buf env;
+    jmp_buf *prev_env       = trap_env;
+    tmplr_err prev_err      = trap_err;
+    tmplr_sink_fn prev_sink = active_sink;
+    void *prev_sink_user    = active_sink_user;
+
+    trap_env         = &env;
+    trap_err         = TMPLR_OK;
+    active_sink      = sink;
+    active_sink_user = sink_user;
+
+    if (setjmp(env) == 0) {
+        prepare_runtime(ctx);
+        process_fp(in, (name != NULL) ? name : "<input>");
+    }
+    cleanup_runtime();
+
+    tmplr_err err    = trap_err;
+    trap_env         = prev_env;
+    trap_err         = prev_err;
+    active_sink      = prev_sink;
+    active_sink_user = prev_sink_user;
+    return err;
+}
+
+tmplr_err
+tmplr_process_file(tmplr_ctx *ctx, const char *path, tmplr_sink_fn sink,
+                   void *sink_user)
+{
+    if (ctx == NULL || path == NULL)
+        return TMPLR_ERR_USAGE;
+
+    FILE *fp = fopen(path, "r");
+    if (fp == NULL)
+        return TMPLR_ERR_IO;
+
+    tmplr_err err = tmplr_process_fp(ctx, fp, path, sink, sink_user);
+    fclose(fp);
+    return err;
+}
+
+tmplr_err
+tmplr_process_string(tmplr_ctx *ctx, const char *input, size_t len,
+                     tmplr_sink_fn sink, void *sink_user)
+{
+    if (ctx == NULL || input == NULL)
+        return TMPLR_ERR_USAGE;
+    if (len == 0)
+        len = strlen(input);
+
+    FILE *fp = tmpfile();
+    if (fp == NULL)
+        return TMPLR_ERR_IO;
+    if (fwrite(input, 1, len, fp) != len) {
+        fclose(fp);
+        return TMPLR_ERR_IO;
+    }
+    rewind(fp);
+    tmplr_err err = tmplr_process_fp(ctx, fp, "<string>", sink, sink_user);
+    fclose(fp);
+    return err;
+}
+
+const char *
+tmplr_strerror(tmplr_err err)
+{
+    switch (err) {
+        case TMPLR_OK:
+            return "ok";
+        case TMPLR_ERR_PARSE:
+            return "parse error";
+        case TMPLR_ERR_IO:
+            return "io error";
+        case TMPLR_ERR_OOM:
+            return "out of memory";
+        case TMPLR_ERR_LIMIT:
+            return "limit exceeded";
+        case TMPLR_ERR_USAGE:
+            return "invalid usage";
+        default:
+            return "unknown error";
+    }
+}
+
+#ifndef TMPLR_NO_MAIN
 /*******************************************************************************
  * main function with options
  *
@@ -839,21 +1365,67 @@ process_file(const char *fn)
 int
 main(int argc, char *argv[])
 {
-    bool read_stdin    = false;
-    const char *prefix = NULL;
+    bool read_stdin = false;
+    char *prefix    = NULL;
     debugf("vatomic generator\n");
     int c;
     char *k;
-    while ((c = getopt(argc, argv, "hisvP:D:")) != -1) {
+    while ((c = getopt(argc, argv, "b:l:hisvVP:D:F:")) != -1) {
         switch (c) {
+            case 'b': {
+                char *endptr      = NULL;
+                errno             = 0;
+                unsigned long val = strtoul(optarg, &endptr, 10);
+                if (errno != 0 || endptr == optarg || *endptr != '\0' ||
+                    val == 0) {
+                    fprintf(stderr, "error: invalid block length '%s'\n",
+                            optarg);
+                    exit(EXIT_FAILURE);
+                }
+                max_block_lines = val;
+                break;
+            }
             case 'D':
                 k    = strstr(optarg, "=");
                 *k++ = '\0';
                 remap(override_map, optarg, k);
                 break;
+            case 'F':
+                k    = strstr(optarg, "=");
+                *k++ = '\0';
+                remap(filter_map, optarg, k);
+                break;
+            case 'l': {
+                char *endptr      = NULL;
+                errno             = 0;
+                unsigned long val = strtoul(optarg, &endptr, 10);
+                if (errno != 0 || endptr == optarg || *endptr != '\0' ||
+                    val == 0) {
+                    fprintf(stderr, "error: invalid maximum length '%s'\n",
+                            optarg);
+                    exit(EXIT_FAILURE);
+                }
+                if (val > ABSOLUTE_MAX_VLEN) {
+                    fprintf(stderr,
+                            "error: maximum length must be at max %lu\n",
+                            ABSOLUTE_MAX_VLEN);
+                    exit(EXIT_FAILURE);
+                }
+                if (val < V_MIN_LEN) {
+                    fprintf(stderr,
+                            "error: maximum length must be at least %u\n",
+                            (unsigned)V_MIN_LEN);
+                    exit(EXIT_FAILURE);
+                }
+                max_vlen = (size_t)val;
+                break;
+            }
             case 'P':
                 prefix = strdup(optarg);
                 break;
+            case 'V':
+                printf("%s\n", TMPLR_VERSION);
+                exit(0);
             case 'v':
                 _verbose = true;
                 break;
@@ -872,14 +1444,26 @@ main(int argc, char *argv[])
                 set_option(OPT_ITER_SEP, ",");
                 break;
             case 'h':
-                printf("tmplr v%s - a simple templating tool\n\n", VERSION);
+                printf("tmplr v%s - a simple templating tool\n\n",
+                       TMPLR_VERSION);
                 printf("Usage:\n\ttmplr [FLAGS] <FILE> [FILE ...]\n\n");
                 printf("Flags:\n");
-                printf("\t-v            verbose\n");
                 printf("\t-Dkey=value   override template map assignement\n");
-                printf("\t-P PREFIX     use PREFIX instead of _tmpl prefix\n");
+                printf("\t-Fkey=value   filter template map assignement\n");
+                printf(
+                    "\t-b LINES      set maximum lines buffered per block "
+                    "(default %zu)\n",
+                    (size_t)MAX_BLEN);
+                printf(
+                    "\t-l CHARS      set maximum length of a single template "
+                    "value "
+                    "(default %zu)\n",
+                    (size_t)max_vlen);
                 printf("\t-i            read stdin\n");
+                printf("\t-P PREFIX     use PREFIX instead of $ prefix\n");
                 printf("\t-s            swap iterator and item separators\n");
+                printf("\t-v            verbose\n");
+                printf("\t-V            show version\n");
                 exit(0);
             case '?':
                 printf("error");
@@ -888,6 +1472,7 @@ main(int argc, char *argv[])
                 break;
         }
     }
+    allocate_block_buffer();
     set_prefix(prefix);
 
     for (int i = optind; i < argc; i++)
@@ -895,11 +1480,7 @@ main(int argc, char *argv[])
     if (read_stdin)
         process_fp(stdin, "<stdin>");
 
-
-// if started as script, remove tmplr file
-#ifdef SCRIPT
-    return remove(argv[0]);
-#else
+    free(prefix);
     return 0;
-#endif
 }
+#endif

@@ -1,0 +1,11 @@
+Board alpha {
+  $__begin(DRIVER=[[net;storage]])
+  init_driver(alpha, DRIVER);
+  $__end
+}
+Board bravo {
+  $__begin(DRIVER=[[net;storage]])
+  init_driver(bravo, DRIVER);
+  $__end
+}
+

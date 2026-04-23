@@ -1,0 +1,4 @@
+.versionize.sh export-subst
+.gitignore     export-ignore
+.gitattributes export-ignore
+.github/       export-ignore

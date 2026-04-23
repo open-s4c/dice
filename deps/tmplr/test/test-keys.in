@@ -1,0 +1,5 @@
+_tmpl_map(PERSIST key  , prefix-)
+_tmpl_map(LOOKUP multi word, mapped!)
+_tmpl_begin(KEY trailing  =one, two words=[[alpha;beta]], KEY$=[[X]])
+Iteration:<KEY trailing  >|<two words>|<KEY$>|<PERSIST key  >|<LOOKUP multi word>
+_tmpl_end

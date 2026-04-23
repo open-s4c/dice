@@ -1,0 +1,6 @@
+foo_begin(XX=_, YY=[[1;2;3;4]])
+That's YY in XX.
+foo_end
+foo_begin(XX=_, YY=[[1;2]])
+But not XX in YY.
+foo_end

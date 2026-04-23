@@ -1,0 +1,68 @@
+.TH TMPLR 1 "__DATE__" "__VERSION__" "tmplr tool"
+.SH NAME
+tmplr \- Template processing utility
+.SH SYNOPSIS
+.B tmplr
+[\fIOPTIONS\fR] [\fIFILE\fR]
+.SH DESCRIPTION
+.B tmplr
+is a command-line utility for processing templates with variable substitution and filtering.
+.PP
+The utility reads template files and substitutes variables with values, producing the processed output.
+.SH OPTIONS
+.TP
+.BR -h ", " --help
+Show help message and exit.
+.TP
+.BR -V ", " --version
+Show version information and exit.
+.TP
+.BR -l ", " --list
+List all available variables in the template.
+.TP
+.BR -o ", " --output " FILE"
+Write output to FILE instead of stdout.
+.TP
+.BR -v ", " --verbose
+Enable verbose output.
+.TP
+.BR -D " KEY=VALUE"
+Set a variable override.
+.TP
+.BR -F " KEY=VALUE"
+Set a variable filter.
+.TP
+.BR -L " LIMIT"
+Set maximum block lines.
+.TP
+.BR -S " SEPARATOR"
+Set item separator.
+.TP
+.BR -I " SEPARATOR"
+Set iteration separator.
+.TP
+.BR -p " PREFIX"
+Set variable prefix.
+.TP
+.BR -m " MAXLEN"
+Set maximum value length.
+.SH EXAMPLES
+.TP
+.B tmplr template.txt
+Process template.txt and output to stdout.
+.TP
+.B tmplr -D name=World template.txt
+Process template.txt with name=World override.
+.TP
+.B tmplr -F name=World template.txt
+Process template.txt with name=World filter.
+.SH FILES
+.TP
+.I /etc/tmplr.conf
+Global configuration file.
+.TP
+.I ~/.tmplrrc
+User-specific configuration file.
+.SH SEE ALSO
+.BR tmplr (3),
+.BR tmplr_macros (3)

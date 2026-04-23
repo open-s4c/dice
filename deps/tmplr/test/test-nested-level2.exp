@@ -1,0 +1,9 @@
+Board alpha {
+  init_driver(alpha, net);
+  init_driver(alpha, storage);
+}
+Board bravo {
+  init_driver(bravo, net);
+  init_driver(bravo, storage);
+}
+

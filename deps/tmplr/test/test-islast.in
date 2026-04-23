@@ -1,0 +1,6 @@
+_tmpl_map(_UNLESS_true, _tmpl_nl_tmpl_kill)
+_tmpl_map(_UNLESS_false,)
+_tmpl_map(LAST, _tmpl_islast)
+_tmpl_begin(AA=1;2;3, BB=a;b;c, CC=x;y)
+AA and BB with CC_UNLESS_LAST,
+_tmpl_end

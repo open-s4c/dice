@@ -1,0 +1,3 @@
+_tmpl_begin(KEY =one, KEY=[[alpha;beta]])
+Iteration:<KEY >|<KEY>
+_tmpl_end

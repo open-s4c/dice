@@ -1,0 +1,4 @@
+#ifndef TMPLR_VERSION_H
+#define TMPLR_VERSION_H
+#define TMPLR_VERSION "__VERSION__"
+#endif
