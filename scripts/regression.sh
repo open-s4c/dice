@@ -108,7 +108,7 @@ run() {
 			VERBOSE=1 FORCE=1 \
 			LIBPATH=$DIR/build/bench/micro \
 			BINDIR=$CURBUILD/bench/micro \
-			run process
+			run summary
 		cp "$DIR/bench/micro/work/results.csv" "$DIR/results-$i.csv"
 	done
 }

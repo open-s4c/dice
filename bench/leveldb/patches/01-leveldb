@@ -208,3 +208,62 @@ index 6f503f6..121f5ad 100644
    ~Mutex() = default;
  
    Mutex(const Mutex&) = delete;
+diff --git a/third_party/googletest/CMakeLists.txt b/third_party/googletest/CMakeLists.txt
+index bdb0fa4..daa0e6f 100644
+--- a/third_party/googletest/CMakeLists.txt
++++ b/third_party/googletest/CMakeLists.txt
+@@ -1,6 +1,6 @@
+ # Note: CMake support is community-based. The maintainers do not use CMake
+ # internally.
+ 
+-cmake_minimum_required(VERSION 2.8.8)
++cmake_minimum_required(VERSION 3.10...3.31)
+ 
+ if (POLICY CMP0048)
+   cmake_policy(SET CMP0048 NEW)
+diff --git a/third_party/googletest/googlemock/CMakeLists.txt b/third_party/googletest/googlemock/CMakeLists.txt
+index 73a4beb..cac7c1d 100644
+--- a/third_party/googletest/googlemock/CMakeLists.txt
++++ b/third_party/googletest/googlemock/CMakeLists.txt
+@@ -42,7 +42,7 @@ else()
+   cmake_policy(SET CMP0048 NEW)
+   project(gmock VERSION ${GOOGLETEST_VERSION} LANGUAGES CXX C)
+ endif()
+-cmake_minimum_required(VERSION 2.6.4)
++cmake_minimum_required(VERSION 3.10...3.31)
+ 
+ if (COMMAND set_up_hermetic_build)
+   set_up_hermetic_build()
+diff --git a/third_party/googletest/googletest/CMakeLists.txt b/third_party/googletest/googletest/CMakeLists.txt
+index bcb522f..040dfd7 100644
+--- a/third_party/googletest/googletest/CMakeLists.txt
++++ b/third_party/googletest/googletest/CMakeLists.txt
+@@ -53,7 +53,7 @@ else()
+   cmake_policy(SET CMP0048 NEW)
+   project(gtest VERSION ${GOOGLETEST_VERSION} LANGUAGES CXX C)
+ endif()
+-cmake_minimum_required(VERSION 2.6.4)
++cmake_minimum_required(VERSION 3.10...3.31)
+ 
+ if (COMMAND set_up_hermetic_build)
+   set_up_hermetic_build()
+diff --git a/third_party/benchmark/src/complexity.cc b/third_party/benchmark/src/complexity.cc
+index 5a52622..9e52d37 100644
+--- a/third_party/benchmark/src/complexity.cc
++++ b/third_party/benchmark/src/complexity.cc
+@@ -82,15 +82,13 @@ LeastSq MinimalLeastSq(const std::vector<int64_t>& n,
+                        const std::vector<double>& time,
+                        BigOFunc* fitting_curve) {
+-  double sigma_gn = 0.0;
+   double sigma_gn_squared = 0.0;
+   double sigma_time = 0.0;
+   double sigma_time_gn = 0.0;
+ 
+   // Calculate least square fitting parameter
+   for (size_t i = 0; i < n.size(); ++i) {
+     double gn_i = fitting_curve(n[i]);
+-    sigma_gn += gn_i;
+     sigma_gn_squared += gn_i * gn_i;
+     sigma_time += time[i];
+     sigma_time_gn += time[i] * gn_i;
+   }

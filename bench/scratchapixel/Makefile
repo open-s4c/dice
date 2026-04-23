@@ -3,6 +3,7 @@
 # ------------------------------------------------------------------------------
 
 RASTERIZATION=	rasterization-practical-implementation
+BUNDLE_DIR=	$(PROJECT)/build/bench/lib/
 RUNCMD= 	./raster3d
 
 # ------------------------------------------------------------------------------
@@ -48,14 +49,14 @@ TARGET+=	baseline
 DEP.baseline=	.vanilla.bld
 DIR.baseline=	$(DIR.vanilla)
 RUN.baseline=	$(TIMED) -r $(REPEAT) -- $(RUNCMD)
-PRO.baseline=	$(PARSE)
+SUM.baseline=	$(PARSE)
 
 TARGET+=	tsan
 DEP.tsan=	$(DEPBUILD)
 DIR.tsan=	$(DIR.sanitized)
 RUN.tsan=	$(TIMED) -r $(REPEAT) -- \
 			env TSAN_OPTIONS=report_bugs=0 $(RUNCMD)
-PRO.tsan=	$(PARSE)
+SUM.tsan=	$(PARSE)
 # Linux: if TSAN fails with "FATAL: ThreadSanitizer: unexpected memory mapping"
 # Try running this
 #	sudo sysctl vm.mmap_rnd_bits=30
@@ -64,13 +65,13 @@ TARGET+=	tsano
 DEP.tsano=	$(DEPBUILD)
 DIR.tsano=	$(DIR.sanitized)
 RUN.tsano=	$(TIMED) -r $(REPEAT) -- $(TSANOCMD) $(RUNCMD)
-PRO.tsano=	$(PARSE)
+SUM.tsano=	$(PARSE)
 
 TARGET+=	core
 DEP.core=	$(DEPBUILD)
 DIR.core=	$(DIR.sanitized)
 RUN.core=	$(TIMED) -r $(REPEAT) -- $(DICECMD) $(RUNCMD)
-PRO.core=	$(PARSE)
+SUM.core=	$(PARSE)
 
 TARGET+=	intercept
 DEP.intercept=	$(DEPBUILD)
@@ -78,7 +79,7 @@ DIR.intercept=	$(DIR.sanitized)
 RUN.intercept=	$(TIMED) -r $(REPEAT) -- $(DICECMD) \
 			-pthread -malloc -cxa -tsan \
 			$(RUNCMD)
-PRO.intercept=	$(PARSE)
+SUM.intercept=	$(PARSE)
 
 TARGET+=	self
 DEP.self=	$(DEPBUILD)
@@ -86,7 +87,7 @@ DIR.self=	$(DIR.sanitized)
 RUN.self=	$(TIMED) -r $(REPEAT) -- $(DICECMD) \
 			-pthread -malloc -cxa -tsan -self \
 			$(RUNCMD)
-PRO.self=	$(PARSE)
+SUM.self=	$(PARSE)
 
 TARGET+=	bundle
 DEP.bundle=	$(DEPBUILD)
@@ -94,7 +95,7 @@ DIR.bundle=	$(DIR.sanitized)
 RUN.bundle=	$(TIMED) -r $(REPEAT) -- $(DICECMD) \
 			-with $(BUNDLE_DIR)/libdice-bundle$(SOEXT) \
 			$(RUNCMD)
-PRO.bundle=	$(PARSE)
+SUM.bundle=	$(PARSE)
 
 TARGET+=	box
 DEP.box=	$(DEPBUILD)
@@ -102,7 +103,7 @@ DIR.box=	$(DIR.sanitized)
 RUN.box=	$(TIMED) -r $(REPEAT) -- $(DICECMD) \
 			-with $(BUNDLE_DIR)/libdice-bundle-box$(SOEXT) \
 			$(RUNCMD)
-PRO.box=	$(PARSE)
+SUM.box=	$(PARSE)
 
 # ------------------------------------------------------------------------------
 BENCHMK= ../bench.mk
