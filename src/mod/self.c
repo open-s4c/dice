@@ -587,7 +587,7 @@ PS_SUBSCRIBE(INTERCEPT_BEFORE, ANY_EVENT, {
     struct self *self = get_or_create_self_(true);
     self->md          = md ? *md : (struct metadata){};
 
-    if (unlikely(type == EVENT_THREAD_CREATE))
+    if (unlikely(type == EVENT_PTHREAD_CREATE))
         cleanup_threads_(self, 0);
     enum ps_err err = self_handle_before_(chain, type, event, self);
     *md             = self->md;
@@ -597,7 +597,7 @@ PS_SUBSCRIBE(INTERCEPT_AFTER, ANY_EVENT, {
     struct self *self = get_or_create_self_(true);
     self->md          = md ? *md : (struct metadata){};
 
-    if (unlikely(type == EVENT_THREAD_CREATE)) {
+    if (unlikely(type == EVENT_PTHREAD_CREATE)) {
         struct pthread_create_event *ev = EVENT_PAYLOAD(ev);
         if (ev->ret == 0)
             vatomic_inc(&threads_.created);
@@ -657,7 +657,7 @@ cleanup_threads_(struct self *own, pthread_t ptid)
         own->guard -= 2;
 }
 
-PS_SUBSCRIBE(INTERCEPT_EVENT, EVENT_THREAD_EXIT, {
+PS_SUBSCRIBE(INTERCEPT_EVENT, EVENT_PTHREAD_EXIT, {
     struct self *self = get_or_create_self_(true);
     self->md          = md ? *md : (struct metadata){};
     enum ps_err err   = self_handle_event_(chain, type, event, self);
@@ -666,7 +666,7 @@ PS_SUBSCRIBE(INTERCEPT_EVENT, EVENT_THREAD_EXIT, {
     return err;
 })
 
-PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_THREAD_JOIN, {
+PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_PTHREAD_JOIN, {
     struct self *self             = get_or_create_self_(true);
     self->md                      = md ? *md : (struct metadata){};
     struct pthread_join_event *ev = EVENT_PAYLOAD(ev);

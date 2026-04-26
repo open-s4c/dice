@@ -5,13 +5,9 @@
 #ifndef DICE_CXA_H
 #define DICE_CXA_H
 
-#define EVENT_CXA_GUARD_ACQUIRE 60
-#define EVENT_CXA_GUARD_RELEASE 61
-#define EVENT_CXA_GUARD_ABORT   62
-
-#define EVENT___CXA_GUARD_ACQUIRE EVENT_CXA_GUARD_ACQUIRE
-#define EVENT___CXA_GUARD_RELEASE EVENT_CXA_GUARD_RELEASE
-#define EVENT___CXA_GUARD_ABORT   EVENT_CXA_GUARD_ABORT
+#define EVENT___CXA_GUARD_ACQUIRE 60
+#define EVENT___CXA_GUARD_RELEASE 61
+#define EVENT___CXA_GUARD_ABORT   62
 
 int __cxa_guard_acquire(void *addr);
 int __cxa_guard_release(void *addr);

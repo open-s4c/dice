@@ -7,7 +7,6 @@
 #include <dice/chains/intercept.h>
 #include <dice/ensure.h>
 #include <dice/events/pthread.h>
-#include <dice/events/thread.h>
 #include <dice/module.h>
 #include <dice/pubsub.h>
 #include <vsync/atomic.h>
@@ -19,8 +18,8 @@ int run_called;
 vatomic32_t done;
 vatomic32_t start;
 
-PS_SUBSCRIBE(INTERCEPT_EVENT, EVENT_THREAD_START, { start_called++; })
-PS_SUBSCRIBE(INTERCEPT_EVENT, EVENT_THREAD_EXIT, {
+PS_SUBSCRIBE(INTERCEPT_EVENT, EVENT_PTHREAD_START, { start_called++; })
+PS_SUBSCRIBE(INTERCEPT_EVENT, EVENT_PTHREAD_EXIT, {
     exit_called++;
     vatomic_inc(&done);
 })
