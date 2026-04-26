@@ -7,9 +7,9 @@
 
 #include <stddef.h>
 
-#define EVENT_MEMCPY  100
-#define EVENT_MEMMOVE 101
-#define EVENT_MEMSET  102
+#define EVENT_MEMCPY  82
+#define EVENT_MEMMOVE 83
+#define EVENT_MEMSET  84
 
 struct memcpy_event {
     const void *pc;

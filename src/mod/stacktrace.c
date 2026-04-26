@@ -10,8 +10,8 @@
 #include <stdint.h>
 
 #include <dice/chains/intercept.h>
+#include <dice/events/pthread.h>
 #include <dice/events/stacktrace.h>
-#include <dice/events/thread.h>
 #include <dice/interpose.h>
 #include <dice/module.h>
 #include <dice/pubsub.h>
@@ -50,14 +50,14 @@ __tsan_func_exit(void)
 static void
 main_exit_()
 {
-    PS_PUBLISH(INTERCEPT_EVENT, EVENT_THREAD_EXIT, 0, 0);
+    PS_PUBLISH(INTERCEPT_EVENT, EVENT_PTHREAD_EXIT, 0, 0);
     log_debug("main thread exits");
 }
 static void
 main_start_()
 {
     log_debug("main thread starts");
-    PS_PUBLISH(INTERCEPT_EVENT, EVENT_THREAD_START, 0, 0);
+    PS_PUBLISH(INTERCEPT_EVENT, EVENT_PTHREAD_START, 0, 0);
     atexit(main_exit_);
 }
 #endif

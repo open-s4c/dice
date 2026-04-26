@@ -19,7 +19,7 @@ INTERPOSE(void, AnnotateRWLockCreate, const char *file, int line,
     };
 
     struct metadata md = {0};
-    PS_PUBLISH(INTERCEPT_EVENT, EVENT_ANNOTATE_RWLOCK_CREATE, &ev, &md);
+    PS_PUBLISH(INTERCEPT_EVENT, EVENT_ANNOTATERWLOCKCREATE, &ev, &md);
 }
 
 INTERPOSE(void, AnnotateRWLockDestroy, const char *file, int line,
@@ -32,7 +32,7 @@ INTERPOSE(void, AnnotateRWLockDestroy, const char *file, int line,
     };
 
     struct metadata md = {0};
-    PS_PUBLISH(INTERCEPT_EVENT, EVENT_ANNOTATE_RWLOCK_DESTROY, &ev, &md);
+    PS_PUBLISH(INTERCEPT_EVENT, EVENT_ANNOTATERWLOCKDESTROY, &ev, &md);
 }
 
 INTERPOSE(void, AnnotateRWLockAcquired, const char *file, int line,
@@ -44,7 +44,7 @@ INTERPOSE(void, AnnotateRWLockAcquired, const char *file, int line,
                                               .is_w = is_w};
 
     struct metadata md = {0};
-    PS_PUBLISH(INTERCEPT_EVENT, EVENT_ANNOTATE_RWLOCK_ACQ, &ev, &md);
+    PS_PUBLISH(INTERCEPT_EVENT, EVENT_ANNOTATERWLOCKACQUIRED, &ev, &md);
 }
 
 INTERPOSE(void, AnnotateRWLockReleased, const char *file, int line,
@@ -56,7 +56,7 @@ INTERPOSE(void, AnnotateRWLockReleased, const char *file, int line,
                                               .is_w = is_w};
 
     struct metadata md = {0};
-    PS_PUBLISH(INTERCEPT_EVENT, EVENT_ANNOTATE_RWLOCK_REL, &ev, &md);
+    PS_PUBLISH(INTERCEPT_EVENT, EVENT_ANNOTATERWLOCKRELEASED, &ev, &md);
 }
 
 /* Advertise event type names for debugging messages */
