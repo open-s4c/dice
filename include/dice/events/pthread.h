@@ -66,6 +66,11 @@
     #define HAVE_PTHREAD_CLOCKWAIT_LOCK
 #endif
 
+struct pthread_thread_start_event {
+    void *(*run)(void *);
+    void *arg;
+};
+
 struct pthread_create_event {
     const void *pc;
     pthread_t *thread;

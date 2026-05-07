@@ -39,9 +39,14 @@ trampoline_(void *targ)
     void *(*run)(void *) = t->run;
     mempool_free(t);
 
-    PS_PUBLISH(INTERCEPT_EVENT, EVENT_THREAD_START, 0, 0);
+    struct pthread_thread_start_event ev = {
+        .run = t->run,
+        .arg = t->arg,
+    };
+
+    PS_PUBLISH(INTERCEPT_EVENT, EVENT_THREAD_START, &ev, 0);
     void *ret = run(arg);
-    PS_PUBLISH(INTERCEPT_EVENT, EVENT_THREAD_EXIT, 0, 0);
+    PS_PUBLISH(INTERCEPT_EVENT, EVENT_THREAD_EXIT, &ev, 0);
     return ret;
 }
 
