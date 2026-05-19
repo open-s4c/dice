@@ -7,7 +7,7 @@
 
 #include <poll.h>
 
-#define EVENT_POLL   103
+#define EVENT_POLL 103
 
 struct poll_event {
     const void *pc;
