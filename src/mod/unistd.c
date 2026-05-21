@@ -241,7 +241,11 @@ INTERPOSE(int, dup3, int oldfd, int newfd, int flags)
     return ev.ret;
 }
 
+#if defined(__NetBSD__)
+INTERPOSE(void, encrypt, char *block, int edflag)
+#else
 INTERPOSE(void, encrypt, char block[64], int edflag)
+#endif
 {
     struct encrypt_event ev = {
         .pc     = INTERPOSE_PC,
@@ -897,7 +901,11 @@ INTERPOSE(int, pause, void)
     return ev.ret;
 }
 
+#if defined(__NetBSD__)
+INTERPOSE(int, pipe, int *pipefd)
+#else
 INTERPOSE(int, pipe, int pipefd[2])
+#endif
 {
     struct pipe_event ev = {
         .pc = INTERPOSE_PC,
@@ -1124,6 +1132,7 @@ INTERPOSE(int, setpgid, pid_t pid, pid_t pgid)
     return ev.ret;
 }
 
+#if !defined(__NetBSD__)
 INTERPOSE(pid_t, setpgrp, void)
 {
     struct setpgrp_event ev = {
@@ -1138,6 +1147,7 @@ INTERPOSE(pid_t, setpgrp, void)
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_SETPGRP, &ev, &md);
     return ev.ret;
 }
+#endif
 
 INTERPOSE(int, setregid, gid_t rgid, gid_t egid)
 {

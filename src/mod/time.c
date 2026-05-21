@@ -307,6 +307,7 @@ INTERPOSE(size_t, strftime, char *s, size_t max, const char *format, const struc
     return ev.ret;
 }
 
+#if !defined(__APPLE__)
 INTERPOSE(size_t, strftime_l, char *s, size_t max, const char *format, const struct tm *tm, locale_t locale)
 {
     struct strftime_l_event ev = {
@@ -326,6 +327,7 @@ INTERPOSE(size_t, strftime_l, char *s, size_t max, const char *format, const str
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_STRFTIME_L, &ev, &md);
     return ev.ret;
 }
+#endif
 
 INTERPOSE(char *, strptime, const char *s, const char *format, struct tm *tm)
 {
