@@ -5,6 +5,7 @@
 #include <dice/chains/intercept.h>
 #include <dice/events/poll.h>
 #include <dice/interpose.h>
+#include <dice/module.h>
 #include <dice/pubsub.h>
 
 INTERPOSE(int, poll, struct pollfd *fds, nfds_t nfds, int timeout)
@@ -20,7 +21,7 @@ INTERPOSE(int, poll, struct pollfd *fds, nfds_t nfds, int timeout)
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_POLL, &ev, &md);
-    ev.ret = ev.func(fds, nfds, timeout);
+    ev.ret = ev.func(ev.fds, ev.nfds, ev.timeout);
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_POLL, &ev, &md);
     return ev.ret;
 }
