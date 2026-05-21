@@ -253,6 +253,10 @@ struct tzset_event {
     void (*func)(void);
 };
 
+#ifndef __GLIBC__
+typedef int __itimer_which_t;
+#endif
+
 struct getitimer_event {
     const void *pc;
     __itimer_which_t which;
