@@ -197,7 +197,6 @@ INTERPOSE(int, posix_fadvise, int fd, off_t offset, off_t size, int advice)
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_POSIX_FADVISE, &ev, &md);
     return ev.ret;
 }
-#endif
 
 INTERPOSE(int, posix_fallocate, int fd, off_t offset, off_t size)
 {
@@ -215,6 +214,7 @@ INTERPOSE(int, posix_fallocate, int fd, off_t offset, off_t size)
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_POSIX_FALLOCATE, &ev, &md);
     return ev.ret;
 }
+#endif
 
 /* Advertise event types */
 PS_ADVERTISE_TYPE(EVENT_CREAT)
