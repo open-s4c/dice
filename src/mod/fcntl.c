@@ -34,17 +34,20 @@ INTERPOSE(int, fcntl, int fd, int cmd, ...)
     switch (cmd) {
         case F_GETFD:
         case F_GETFL:
-        case F_DUPFD:
-        case F_DUPFD_CLOEXEC:
         case F_SETFD:
         case F_SETFL:
         case F_SETOWN:
+#if !defined(__APPLE__)
+        case F_DUPFD:
+        case F_DUPFD_CLOEXEC:
         case F_SETSIG:
         case F_NOTIFY:
         case F_ADD_SEALS:
         case F_SETPIPE_SZ:
+#endif
             arg = va_arg(ap, int);
             break;
+#if !defined(__APPLE__)
         case F_GETLK:
         case F_SETLK:
         case F_SETLKW:
@@ -62,7 +65,8 @@ INTERPOSE(int, fcntl, int fd, int cmd, ...)
         case F_GET_FILE_RW_HINT:
         case F_SET_FILE_RW_HINT:
             arg = va_arg(ap, uint64_t);
-            break;      
+            break;
+#endif
         default:
             assert(0 && "Unsupported fcntl command");
             arg = 0;
@@ -92,7 +96,12 @@ INTERPOSE(int, open, const char *path, int flags, ...)
     mode_t mode = 0;
     if ((flags & O_CREAT) || (flags & O_TMPFILE)) {
         va_start(ap, flags);
+#ifdef __APPLE__
+        int promoted_mode = va_arg(ap, int);
+        mode = (mode_t)promoted_mode;
+#else
         mode = va_arg(ap, mode_t);
+#endif
         va_end(ap);
     }
 
@@ -139,6 +148,7 @@ INTERPOSE(int, openat, int dirfd, const char *path, int flags, ...)
     return ev.ret;
 }
 
+#if !defined(__APPLE__)
 INTERPOSE(int, openat2, int dirfd, const char *path, const struct open_how *how, size_t size)
 {
     struct openat2_event ev = {
@@ -176,6 +186,7 @@ INTERPOSE(int, posix_fadvise, int fd, off_t offset, off_t size, int advice)
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_POSIX_FADVISE, &ev, &md);
     return ev.ret;
 }
+#endif
 
 INTERPOSE(int, posix_fallocate, int fd, off_t offset, off_t size)
 {
