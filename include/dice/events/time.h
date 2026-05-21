@@ -7,6 +7,10 @@
 
 #include <time.h>
 #include <sys/time.h>
+#ifdef __APPLE__
+#include <xlocale.h>
+typedef int timer_t;
+#endif
 
 #define EVENT_ASCTIME          227
 #define EVENT_ASCTIME_R        228
