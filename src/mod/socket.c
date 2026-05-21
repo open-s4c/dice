@@ -323,7 +323,7 @@ INTERPOSE(int, socket, int domain, int type, int protocol)
     return ev.ret;
 }
 
-#if defined(__NetBSD__))
+#if defined(__NetBSD__)
 INTERPOSE(int, socketpair, int domain, int type, int protocol, int *sv)
 #else
 INTERPOSE(int, socketpair, int domain, int type, int protocol, int sv[2])
