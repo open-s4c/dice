@@ -321,7 +321,7 @@ INTERPOSE(int, socket, int domain, int type, int protocol)
     return ev.ret;
 }
 
-INTERPOSE(int, socketpair, int domain, int type, int protocol, int *sv)
+INTERPOSE(int, socketpair, int domain, int type, int protocol, int sv[2])
 {
     struct socketpair_event ev = {
         .pc       = INTERPOSE_PC,
