@@ -172,6 +172,7 @@ INTERPOSE(struct tm *, getdate, const char *string)
     return ev.ret;
 }
 
+#if !defined(__APPLE__)
 INTERPOSE(int, getdate_r, const char *string, struct tm *res)
 {
     struct getdate_r_event ev = {
@@ -188,6 +189,7 @@ INTERPOSE(int, getdate_r, const char *string, struct tm *res)
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_GETDATE_R, &ev, &md);
     return ev.ret;
 }
+#endif
 
 INTERPOSE(struct tm *, gmtime, const time_t *timep)
 {
@@ -363,6 +365,7 @@ INTERPOSE(time_t, time, time_t *tloc)
     return ev.ret;
 }
 
+#if !defined(__APPLE__)
 INTERPOSE(int, timer_create, clockid_t clockid, struct sigevent *sevp, timer_t *timerid)
 {
     struct timer_create_event ev = {
@@ -380,6 +383,7 @@ INTERPOSE(int, timer_create, clockid_t clockid, struct sigevent *sevp, timer_t *
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_TIMER_CREATE, &ev, &md);
     return ev.ret;
 }
+#endif
 
 INTERPOSE(int, timer_delete, timer_t timerid)
 {
@@ -430,6 +434,7 @@ INTERPOSE(int, timer_getoverrun, timer_t timerid)
     return ev.ret;
 }
 
+#if !defined(__APPLE__)
 INTERPOSE(int, timer_settime, timer_t timerid, int flags, const struct itimerspec *new_value, struct itimerspec *old_value)
 {
     struct timer_settime_event ev = {
@@ -448,6 +453,7 @@ INTERPOSE(int, timer_settime, timer_t timerid, int flags, const struct itimerspe
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_TIMER_SETTIME, &ev, &md);
     return ev.ret;
 }
+#endif
 
 INTERPOSE(void, tzset)
 {
