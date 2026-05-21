@@ -32,7 +32,7 @@ file(GLOB SRCS *.c)
 list(APPEND SRCS ${TSAN_SOURCE})
 
 if(APPLE)
-  list(REMOVE_ITEM SRCS ${CMAKE_CURRENT_SOURCE_DIR}/pthread_spinlock.c)
+  list(REMOVE_ITEM SRCS ${CMAKE_CURRENT_SOURCE_DIR}/pthread_spinlock.c ${CMAKE_CURRENT_SOURCE_DIR}/epoll.c)
 endif()
 
 foreach(SRC ${SRCS})
