@@ -37,7 +37,7 @@ INTERPOSE(int, fcntl, int fd, int cmd, ...)
         case F_SETFD:
         case F_SETFL:
         case F_SETOWN:
-#if !defined(__APPLE__)
+#if !(defined(__NetBSD__) || defined(__APPLE__))
         case F_DUPFD:
         case F_DUPFD_CLOEXEC:
         case F_SETSIG:
@@ -47,7 +47,7 @@ INTERPOSE(int, fcntl, int fd, int cmd, ...)
 #endif
             arg = va_arg(ap, int);
             break;
-#if !defined(__APPLE__)
+#if !(defined(__NetBSD__) || defined(__APPLE__))
         case F_GETLK:
         case F_SETLK:
         case F_SETLKW:
@@ -94,11 +94,14 @@ INTERPOSE(int, open, const char *path, int flags, ...)
 {
     va_list ap;
     mode_t mode = 0;
+#if defined(__NetBSD__) || defined(__APPLE__)
+    if (flags & O_CREAT) {
+#else
     if ((flags & O_CREAT) || (flags & O_TMPFILE)) {
+#endif
         va_start(ap, flags);
 #ifdef __APPLE__
-        int promoted_mode = va_arg(ap, int);
-        mode = (mode_t)promoted_mode;
+        mode = (mode_t)va_arg(ap, int);
 #else
         mode = va_arg(ap, mode_t);
 #endif
@@ -125,9 +128,17 @@ INTERPOSE(int, openat, int dirfd, const char *path, int flags, ...)
 {
     va_list ap;
     mode_t mode = 0;
+#if defined(__NetBSD__) || defined(__APPLE__)
+    if (flags & O_CREAT) {
+#else
     if ((flags & O_CREAT) || (flags & O_TMPFILE)) {
+#endif
         va_start(ap, flags);
+#ifdef __APPLE__
+        mode = (mode_t)va_arg(ap, int);
+#else
         mode = va_arg(ap, mode_t);
+#endif
         va_end(ap);
     }
 
