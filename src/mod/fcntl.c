@@ -65,6 +65,7 @@ INTERPOSE(int, fcntl, int fd, int cmd, ...)
             break;      
         default:
             assert(0 && "Unsupported fcntl command");
+            arg = 0;
             break;
     }
     va_end(ap);
@@ -89,7 +90,7 @@ INTERPOSE(int, open, const char *path, int flags, ...)
 {
     va_list ap;
     mode_t mode = 0;
-    if (__OPEN_NEEDS_MODE(flags)) {
+    if ((flags & O_CREAT) || (flags & O_TMPFILE)) {
         va_start(ap, flags);
         mode = va_arg(ap, mode_t);
         va_end(ap);
@@ -115,7 +116,7 @@ INTERPOSE(int, openat, int dirfd, const char *path, int flags, ...)
 {
     va_list ap;
     mode_t mode = 0;
-    if (__OPEN_NEEDS_MODE(flags)) {
+    if ((flags & O_CREAT) || (flags & O_TMPFILE)) {
         va_start(ap, flags);
         mode = va_arg(ap, mode_t);
         va_end(ap);
