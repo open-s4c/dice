@@ -26,6 +26,7 @@ INTERPOSE(int, accept, int sockfd, struct sockaddr *addr, socklen_t *addrlen)
     return ev.ret;
 }
 
+#if !defined(__APPLE__)
 INTERPOSE(int, accept4, int sockfd, struct sockaddr *addr, socklen_t *addrlen, int flags)
 {
     struct accept4_event ev = {
@@ -44,6 +45,7 @@ INTERPOSE(int, accept4, int sockfd, struct sockaddr *addr, socklen_t *addrlen, i
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_ACCEPT4, &ev, &md);
     return ev.ret;
 }
+#endif
 
 INTERPOSE(int, bind, int sockfd, const struct sockaddr *addr, socklen_t addrlen)
 {
@@ -321,7 +323,11 @@ INTERPOSE(int, socket, int domain, int type, int protocol)
     return ev.ret;
 }
 
+#if defined(__NetBSD__))
+INTERPOSE(int, socketpair, int domain, int type, int protocol, int *sv)
+#else
 INTERPOSE(int, socketpair, int domain, int type, int protocol, int sv[2])
+#endif
 {
     struct socketpair_event ev = {
         .pc       = INTERPOSE_PC,
