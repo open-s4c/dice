@@ -6,6 +6,7 @@
 #include <dice/events/random.h>
 #include <dice/interpose.h>
 #include <dice/pubsub.h>
+#include <dice/module.h>
 
 INTERPOSE(ssize_t, getrandom, void *buf, size_t size, unsigned int flags)
 {
