@@ -35,7 +35,7 @@ if(APPLE)
   list(REMOVE_ITEM SRCS ${CMAKE_CURRENT_SOURCE_DIR}/pthread_spinlock.c ${CMAKE_CURRENT_SOURCE_DIR}/eventfd.c)
 endif()
 
-if(NOT LINUX)
+if(APPLE OR BSD)
   list(REMOVE_ITEM SRCS ${CMAKE_CURRENT_SOURCE_DIR}/epoll.c)
 endif()
 
