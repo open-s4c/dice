@@ -241,11 +241,8 @@ INTERPOSE(int, dup3, int oldfd, int newfd, int flags)
     return ev.ret;
 }
 
-#if defined(__NetBSD__)
-INTERPOSE(void, encrypt, char *block, int edflag)
-#else
+#if !defined(__NetBSD__)
 INTERPOSE(void, encrypt, char block[64], int edflag)
-#endif
 {
     struct encrypt_event ev = {
         .pc     = INTERPOSE_PC,
@@ -263,6 +260,7 @@ INTERPOSE(void, encrypt, char block[64], int edflag)
     /* Copy back result to original block */
     for (int i = 0; i < 64; i++) block[i] = ev.block[i];
 }
+#endif
 
 INTERPOSE(void, _exit, int status)
 {

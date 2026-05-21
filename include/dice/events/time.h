@@ -9,7 +9,7 @@
 #include <sys/time.h>
 #ifdef __APPLE__
 #include <xlocale.h>
-typedef int timer_t;
+typedef clockid_t timer_t;
 #endif
 
 #define EVENT_ASCTIME          227
