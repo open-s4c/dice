@@ -41,6 +41,7 @@ INTERPOSE(unsigned int, alarm, unsigned int seconds)
     return ev.ret;
 }
 
+#if !defined(__APPLE__)
 INTERPOSE(int, brk, void *addr)
 {
     struct brk_event ev = {
@@ -56,6 +57,7 @@ INTERPOSE(int, brk, void *addr)
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_BRK, &ev, &md);
     return ev.ret;
 }
+#endif
 
 INTERPOSE(int, chdir, const char *path)
 {
@@ -174,6 +176,7 @@ INTERPOSE(char *, ctermid, char *s)
     return ev.ret;
 }
 
+#if !defined(__APPLE__)
 INTERPOSE(char *, cuserid, char *string)
 {
     struct cuserid_event ev = {
@@ -189,6 +192,7 @@ INTERPOSE(char *, cuserid, char *string)
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_CUSERID, &ev, &md);
     return ev.ret;
 }
+#endif
 
 INTERPOSE(int, dup, int oldfd)
 {
@@ -223,6 +227,7 @@ INTERPOSE(int, dup2, int oldfd, int newfd)
     return ev.ret;
 }
 
+#if !defined(__APPLE__)
 INTERPOSE(int, dup3, int oldfd, int newfd, int flags)
 {
     struct dup3_event ev = {
@@ -240,6 +245,7 @@ INTERPOSE(int, dup3, int oldfd, int newfd, int flags)
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_DUP3, &ev, &md);
     return ev.ret;
 }
+#endif
 
 #if !defined(__NetBSD__)
 INTERPOSE(void, encrypt, char block[64], int edflag)
@@ -364,6 +370,7 @@ INTERPOSE(uid_t, getuid, void)
     return ev.ret;
 }
 
+#if !defined(__APPLE__)
 INTERPOSE(int, fdatasync, int fd)
 {
     struct fdatasync_event ev = {
@@ -379,6 +386,7 @@ INTERPOSE(int, fdatasync, int fd)
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_FDATASYNC, &ev, &md);
     return ev.ret;
 }
+#endif
 
 INTERPOSE(pid_t, fork, void)
 {
@@ -728,6 +736,7 @@ INTERPOSE(char *, getwd, char *buf)
     return ev.ret;
 }
 
+#if !defined(__APPLE__)
 INTERPOSE(char *, get_current_dir_name, void)
 {
     struct get_current_dir_name_event ev = {
@@ -742,6 +751,7 @@ INTERPOSE(char *, get_current_dir_name, void)
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_GET_CURRENT_DIR_NAME, &ev, &md);
     return ev.ret;
 }
+#endif
 
 INTERPOSE(int, isatty, int fd)
 {
@@ -920,6 +930,7 @@ INTERPOSE(int, pipe, int pipefd[2])
     return ev.ret;
 }
 
+#if !defined(__APPLE__)
 INTERPOSE(int, pipe2, int pipefd[2], int flags)
 {
     struct pipe2_event ev = {
@@ -937,6 +948,7 @@ INTERPOSE(int, pipe2, int pipefd[2], int flags)
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_PIPE2, &ev, &md);
     return ev.ret;
 }
+#endif
 
 INTERPOSE(ssize_t, pread, int fd, void *buf, size_t count, off_t offset)
 {
@@ -957,6 +969,7 @@ INTERPOSE(ssize_t, pread, int fd, void *buf, size_t count, off_t offset)
     return ev.ret;
 }
 
+#if !defined(__APPLE__)
 INTERPOSE(int, pthread_atfork, void (*prepare)(void), void (*parent)(void), void (*child)(void))
 {
     struct pthread_atfork_event ev = {
@@ -974,6 +987,7 @@ INTERPOSE(int, pthread_atfork, void (*prepare)(void), void (*parent)(void), void
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_PTHREAD_ATFORK, &ev, &md);
     return ev.ret;
 }
+#endif
 
 INTERPOSE(ssize_t, pwrite, int fd, const void *buf, size_t count, off_t offset)
 {
@@ -1065,6 +1079,7 @@ INTERPOSE(int, rmdir, const char *path)
     return ev.ret;
 }
 
+#if !defined(__APPLE__)
 INTERPOSE(void *, sbrk, intptr_t increment)
 {
     struct sbrk_event ev = {
@@ -1080,6 +1095,7 @@ INTERPOSE(void *, sbrk, intptr_t increment)
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_SBRK, &ev, &md);
     return ev.ret;
 }
+#endif
 
 INTERPOSE(int, setgid, gid_t gid)
 {
