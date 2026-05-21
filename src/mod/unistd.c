@@ -1113,6 +1113,7 @@ INTERPOSE(int, setgid, gid_t gid)
     return ev.ret;
 }
 
+#if !defined(__APPLE__)
 INTERPOSE(int, sethostid, long hostid)
 {
     struct sethostid_event ev = {
@@ -1128,6 +1129,7 @@ INTERPOSE(int, sethostid, long hostid)
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_SETHOSTID, &ev, &md);
     return ev.ret;
 }
+#endif
 
 INTERPOSE(int, setpgid, pid_t pid, pid_t pgid)
 {
@@ -1308,6 +1310,7 @@ INTERPOSE(void, sync, void)
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_SYNC, &ev, &md);
 }
 
+#if !defined(__APPLE__)
 INTERPOSE(int, syncfs, int fd)
 {
     struct syncfs_event ev = {
@@ -1323,6 +1326,7 @@ INTERPOSE(int, syncfs, int fd)
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_SYNCFS, &ev, &md);
     return ev.ret;
 }
+#endif
 
 INTERPOSE(long, sysconf, int name)
 {
@@ -1491,6 +1495,7 @@ INTERPOSE(int, usleep, useconds_t usec)
     return ev.ret;
 }
 
+#if !defined(__APPLE__)
 INTERPOSE(pid_t, vfork, void)
 {
     struct vfork_event ev = {
@@ -1505,6 +1510,7 @@ INTERPOSE(pid_t, vfork, void)
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_VFORK, &ev, &md);
     return ev.ret;
 }
+#endif
 
 INTERPOSE(ssize_t, write, int fd, const void *buf, size_t count)
 {
