@@ -55,6 +55,174 @@ if(NOT APPLE)
   set(FUNS_sem ${FUNS_sem} sem_timedwait)
 endif()
 
+set(INCL_epoll '<dice/events/epoll.h>')
+set(FUNS_epoll epoll_create #[[epoll_create1]] epoll_ctl epoll_wait epoll_pwait
+               #[[epoll_pwait2]])
+#set(INCL_eventfd '<dice/events/eventfd.h>')
+#set(FUNS_eventfd eventfd)
+#set(INCL_fcntl '<dice/events/fcntl.h>')
+#set(FUNS_fcntl creat fcntl open #[[openat]])
+#if(NOT APPLE)
+#  set(FUNS_fcntl ${FUNS_fcntl} #[[openat2]] posix_fadvise posix_fallocate)
+#endif()
+set(INCL_poll '<dice/events/poll.h>')
+set(FUNS_poll poll)
+set(INCL_random '<dice/events/random.h>')
+set(FUNS_random getrandom)
+set(INCL_socket '<dice/events/socket.h>')
+set(FUNS_socket accept)
+if(NOT APPLE)
+  #set(FUNS_socket ${FUNS_socket} accept4)
+endif()
+list(APPEND FUNS_socket
+    bind
+    connect
+    getpeername
+    getsockname
+    getsockopt
+    setsockopt
+    listen
+    recv
+    #[[recvfrom]]
+    #[[recvmsg]]
+    send
+    #[[sendto]]
+    #[[sendmsg]]
+    shutdown
+    socket
+    #[[socketpair]])
+#[[set(INCL_time '<dice/events/time.h>')
+set(FUNS_time
+    asctime
+    asctime_r
+    clock
+    clock_getres
+    clock_gettime
+    clock_settime
+    ctime
+    ctime_r
+    difftime
+    getdate)
+if(NOT APPLE)
+  list(APPEND FUNS_time getdate_r)
+endif()
+set(FUNS_time
+    ${FUNS_time}
+    gmtime
+    gmtime_r
+    localtime
+    localtime_r
+    mktime
+    nanosleep
+    strftime)
+if(NOT APPLE)
+  list(APPEND FUNS_time strftime_l)
+endif()
+list(APPEND FUNS_time strptime time)
+if(NOT APPLE)
+  list(APPEND FUNS_time timer_create timer_delete timer_gettime
+                timer_getoverrun timer_settime)
+endif()]]
+set(FUNS_time ${FUNS_time} #[[tzset]] getitimer setitimer gettimeofday
+              settimeofday select utimes)
+set(INCL_uio '<dice/events/uio.h>')
+set(FUNS_uio readv writev)
+#[[set(INCL_unistd '<dice/events/unistd.h>')
+set(FUNS_unistd
+    access
+    alarm
+    chdir
+    chroot
+    chown
+    close
+    confstr
+    crypt
+    ctermid
+    dup
+    dup2
+    faccessat
+    fchdir
+    fchown
+    fchownat
+    getuid
+    fork
+    fpathconf
+    fsync
+    ftruncate
+    getcwd
+    getdtablesize
+    getegid
+    geteuid
+    getgid
+    getgroups
+    gethostid
+    getlogin
+    getlogin_r
+    getopt
+    getpagesize
+    getpass
+    getpgid
+    getpgrp
+    getpid
+    getppid
+    getsid
+    getwd
+    isatty
+    lchown
+    link
+    linkat
+    lockf
+    lseek
+    nice
+    pathconf
+    pause
+    pipe
+    pread
+    pwrite
+    read
+    readlink
+    readlinkat
+    rmdir
+    setgid
+    setpgid
+    setregid
+    setreuid
+    setsid
+    setuid
+    sleep
+    swab
+    symlink
+    symlinkat
+    sync
+    sysconf
+    tcgetpgrp
+    tcsetpgrp
+    truncate
+    ttyname
+    ttyname_r
+    ualarm
+    unlink
+    unlinkat
+    usleep
+    write)
+if(NOT APPLE)
+  list(APPEND FUNS_unistd
+      brk
+      cuserid
+      dup3
+      fdatasync
+      get_current_dir_name
+      pipe2
+      pthread_atfork
+      sbrk
+      sethostid
+      syncfs
+      vfork)
+endif()
+if(NOT BSD)
+  list(APPEND FUNS_unistd encrypt setpgrp)
+endif()]]
+
 # TODO: create special tests for INTERCEPT_EVENT chain. Currently, we can only
 # test INTERCEPT_BEFORE and INTERCEPT_AFTER.
 set(INCL_annotate_rwlock '<dice/events/annotate_rwlock.h>')
@@ -66,6 +234,12 @@ set(INCL_cxa '<dice/events/cxa.h>')
 
 set(MODS
     mman
+    #fcntl
+    poll
+    socket
+    #time
+    uio
+    #unistd
     # annotate_rwlock: disabled until INTERCEPT_EVENT can be tested
     pthread_create
     pthread_mutex
@@ -73,6 +247,13 @@ set(MODS
     pthread_rwlock
     sem
     cxa)
+
+if(NOT APPLE)
+  list(APPEND MODS #[[eventfd]] random)
+endif()
+if(NOT APPLE AND NOT CMAKE_SYSTEM_NAME MATCHES "NetBSD")
+  list(APPEND MODS epoll)
+endif()
 
 if(${ENABLE_SANITIZER})
   message(STATUS "Ignoring malloc tests")
@@ -93,13 +274,13 @@ foreach(MOD ${MODS})
   add_custom_command(
     OUTPUT ${TARGET_SRC}
     COMMAND
-      $<TARGET_FILE:tmplr> "-DINCL=${INCL_${MOD}}" "-DFOO=${FUNS_${MOD}}"
+      $<TARGET_FILE:tmplr> -l 1024 "-DINCL=${INCL_${MOD}}" "-DFOO=${FUNS_${MOD}}"
       ${CMAKE_CURRENT_SOURCE_DIR}/interposed_.h.in
       ${CMAKE_CURRENT_SOURCE_DIR}/interpose_test.c.in #
       > ${TARGET}_.c.tmp
     COMMAND ${CMAKE_COMMAND} -E rename ${TARGET}_.c.tmp ${TARGET}_.c
     COMMAND
-      $<TARGET_FILE:tmplr> -sP\\$$_ "-DFOO=${FUNS_${MOD}}"
+      $<TARGET_FILE:tmplr> -l 1024 -sP\\$$_ "-DFOO=${FUNS_${MOD}}"
       ${CMAKE_CURRENT_SOURCE_DIR}/interposed__.h.in ${TARGET}_.c #
       > ${TARGET}.c.tmp
     COMMAND ${CMAKE_COMMAND} -E rename ${TARGET}.c.tmp ${TARGET}.c

@@ -128,13 +128,14 @@ INTERPOSE(char *, ctime_r, const time_t *timep, char buf[])
     struct ctime_r_event ev = {
         .pc = INTERPOSE_PC,
         .timep = timep,
+        .buf = buf,
         .ret = NULL,
         .func = REAL_FUNC(ctime_r)
     };
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_CTIME_R, &ev, &md);
-    ev.ret = ev.func(ev.timep, buf);
+    ev.ret = ev.func(ev.timep, ev.buf);
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_CTIME_R, &ev, &md);
     return ev.ret;
 }
