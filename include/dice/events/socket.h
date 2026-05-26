@@ -13,17 +13,18 @@
 #define EVENT_CONNECT     107
 #define EVENT_GETPEERNAME 108
 #define EVENT_GETSOCKNAME 109
-#define EVENT_SETSOCKOPT  110
-#define EVENT_LISTEN      111
-#define EVENT_RECV        112
-#define EVENT_RECVFROM    113
-#define EVENT_RECVMSG     114
-#define EVENT_SEND        115
-#define EVENT_SENDTO      116
-#define EVENT_SENDMSG     117
-#define EVENT_SHUTDOWN    118
-#define EVENT_SOCKET      119
-#define EVENT_SOCKETPAIR  120
+#define EVENT_GETSOCKOPT  110
+#define EVENT_SETSOCKOPT  111
+#define EVENT_LISTEN      112
+#define EVENT_RECV        113
+#define EVENT_RECVFROM    114
+#define EVENT_RECVMSG     115
+#define EVENT_SEND        116
+#define EVENT_SENDTO      117
+#define EVENT_SENDMSG     118
+#define EVENT_SHUTDOWN    119
+#define EVENT_SOCKET      120
+#define EVENT_SOCKETPAIR  121
 
 struct accept_event {
     const void *pc;
@@ -78,6 +79,17 @@ struct getsockname_event {
     socklen_t *addrlen;
     int ret;
     int(*func)(int, struct sockaddr*, socklen_t*);
+};
+
+struct getsockopt_event {
+    const void *pc;
+    int sockfd;
+    int level;
+    int optname;
+    void *optval;
+    socklen_t *optlen;
+    int ret;
+    int (*func)(int, int, int, void *, socklen_t *);
 };
 
 struct setsockopt_event {

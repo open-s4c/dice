@@ -5,7 +5,7 @@
 #ifndef DICE_EVENTFD_H
 #define DICE_EVENTFD_H
 
-#define EVENT_EVENTFD 127
+#define EVENT_EVENTFD 128
 
 struct eventfd_event {
     const void *pc;

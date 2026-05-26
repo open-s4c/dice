@@ -123,6 +123,28 @@ INTERPOSE(int, getsockname, int sockfd, struct sockaddr *addr, socklen_t *addrle
     return ev.ret;
 }
 
+INTERPOSE(int, getsockopt, int sockfd, int level, int optname, void *optval, socklen_t *optlen)
+{
+    struct getsockopt_event ev = {
+        .pc      = INTERPOSE_PC,
+        .sockfd  = sockfd,
+        .level   = level,
+        .optname = optname,
+        .optval  = optval,
+        .optlen  = optlen,
+        .ret     = 0,
+        .func    = REAL_FUNC(getsockopt),
+    };
+
+    metadata_t md = {0};
+
+    PS_PUBLISH(INTERCEPT_BEFORE, EVENT_GETSOCKOPT, &ev, &md);
+    ev.ret = ev.func(ev.sockfd, ev.level, ev.optname, ev.optval, ev.optlen);
+    PS_PUBLISH(INTERCEPT_AFTER, EVENT_GETSOCKOPT, &ev, &md);
+
+    return ev.ret;
+}
+
 INTERPOSE(int, setsockopt, int sockfd, int level, int optname, const void *optval, socklen_t optlen)
 {
     struct setsockopt_event ev = {

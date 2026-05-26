@@ -8,13 +8,13 @@
 #include <fcntl.h>
 #include <inttypes.h>
 
-#define EVENT_CREAT           128
-#define EVENT_FCNTL           129
-#define EVENT_OPEN            130
-#define EVENT_OPENAT          131
-#define EVENT_OPENAT2         132
-#define EVENT_POSIX_FADVISE   133
-#define EVENT_POSIX_FALLOCATE 134
+#define EVENT_CREAT           129
+#define EVENT_FCNTL           130
+#define EVENT_OPEN            131
+#define EVENT_OPENAT          132
+#define EVENT_OPENAT2         133
+#define EVENT_POSIX_FADVISE   134
+#define EVENT_POSIX_FALLOCATE 135
 
 struct creat_event {
     const void *pc;
