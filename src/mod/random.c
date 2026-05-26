@@ -21,7 +21,7 @@ INTERPOSE(ssize_t, getrandom, void *buf, size_t size, unsigned int flags)
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_GETRANDOM, &ev, &md);
-    ev.ret = ev.func(buf, size, flags);
+    ev.ret = ev.func(ev.buf, ev.size, ev.flags);
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_GETRANDOM, &ev, &md);
     return ev.ret;
 }
