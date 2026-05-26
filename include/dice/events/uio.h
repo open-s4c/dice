@@ -7,8 +7,8 @@
 
 #include <sys/uio.h>
 
-#define EVENT_READV   135
-#define EVENT_WRITEV  136
+#define EVENT_READV   136
+#define EVENT_WRITEV  137
 
 struct readv_event {
     const void *pc;
