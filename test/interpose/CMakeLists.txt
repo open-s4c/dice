@@ -175,7 +175,6 @@ set(FUNS_time
     ctime
     ctime_r
     difftime
-    getdate
     gmtime
     gmtime_r
     localtime
@@ -188,22 +187,31 @@ set(FUNS_time
     getitimer
     setitimer
     gettimeofday
-    settimeofday
     select
     tzset
     utimes)
+
+if (HAVE_GETDATE)
+  list(APPEND FUNS_time getdate)
+endif()
+
+if (HAVE_SETTIMEOFDAY)
+  list(APPEND FUNS_time settimeofday)
+endif()
 
 if(NOT APPLE)
   list(
     APPEND
     FUNS_time
-    getdate_r
     timer_create
     timer_delete
     timer_gettime
     timer_getoverrun
     timer_settime
     strftime_l)
+  if (HAVE_GETDATE_R)
+    list(APPEND FUNS_time getdate_r)
+  endif()
 endif()
 
 # ------------------------------------------------------------------------------
