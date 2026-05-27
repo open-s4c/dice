@@ -107,9 +107,8 @@ if(NOT APPLE AND BSD)
   list(APPEND MODS epoll)
 endif()
 set(INCL_epoll '<dice/events/epoll.h>')
-set(FUNS_epoll epoll_create #[[epoll_create1]] epoll_ctl epoll_wait epoll_pwait
-               #[[epoll_pwait2]]
-)
+set(FUNS_epoll epoll_create epoll_create1 epoll_ctl epoll_wait epoll_pwait
+               epoll_pwait2)
 if(OFF)
 
   if(NOT APPLE)
@@ -141,15 +140,14 @@ set(FUNS_socket
     setsockopt
     listen
     recv
-    # recvfrom
-    #[[recvmsg]]
+    recvfrom
+    recvmsg
     send
-    #[[sendto]]
-    #[[sendmsg]]
+    sendto
+    sendmsg
     shutdown
     socket
-    #[[socketpair]]
-)
+    socketpair)
 if(NOT APPLE)
   list(APPEND FUNS_socket accept4)
 endif()
