@@ -110,8 +110,11 @@ if(NOT APPLE AND NOT BSD)
   list(APPEND MODS epoll)
 endif()
 set(INCL_epoll '<dice/events/epoll.h>')
-set(FUNS_epoll epoll_create epoll_create1 epoll_ctl epoll_wait epoll_pwait
-               epoll_pwait2)
+set(FUNS_epoll epoll_create epoll_create1 epoll_ctl epoll_wait epoll_pwait)
+
+if(HAVE_EPOLL_PWAIT2 AND NOT MUSL)
+  list(APPEND FUNS_epoll epoll_pwait2)
+endif()
 
 if(NOT APPLE)
   list(APPEND MODS eventfd)
@@ -244,7 +247,6 @@ set(FUNS_unistd
     chroot
     close
     confstr
-    crypt
     ctermid
     dup
     dup2
@@ -303,6 +305,7 @@ if(NOT APPLE)
     FUNS_unistd
     brk
     cuserid
+    crypt
     dup3
     fdatasync
     get_current_dir_name
@@ -372,7 +375,10 @@ foreach(MOD ${MODS})
   set(TARGET ${MOD}_test)
   add_executable(${TARGET} ${CMAKE_CURRENT_BINARY_DIR}/${TARGET}.c)
   add_dependencies(${TARGET} expand-test-${MOD})
-  target_link_libraries(${TARGET} PRIVATE dice.h dice tsano pthread crypt)
+  target_link_libraries(${TARGET} PRIVATE dice.h dice tsano pthread)
+  if (NOT APPLE)
+     target_link_libraries(${TARGET} PRIVATE crypt)
+  endif()
   target_compile_options(
     ${TARGET} PRIVATE -fno-builtin-memcpy -fno-builtin-memset
                       -fno-builtin-memmmove -Wno-deprecated-declarations)
