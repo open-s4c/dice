@@ -1,21 +1,43 @@
 # Copyright (C) 2025 Huawei Technologies Co., Ltd.                             #
 # SPDX-License-Identifier: 0BSD                                                #
 
-set(INCL_malloc '<dice/events/malloc.h>')
-set(FUNS_malloc malloc calloc realloc free posix_memalign aligned_alloc)
+set(MODS)
 
-set(INCL_memcpy '<dice/events/memcpy.h>')
-set(FUNS_memcpy memcpy memmove)
-if(${DICE_MEMSET})
-  set(FUNS_memcpy ${FUNS_memcpy} memset)
+# ------------------------------------------------------------------------------
+# malloc, mman and friends
+# ------------------------------------------------------------------------------
+
+if(${ENABLE_SANITIZER})
+  # malloc does not play well with the sanitizers
+  message(STATUS "Ignoring malloc tests")
+else()
+  list(APPEND MODS malloc)
+  set(INCL_malloc '<dice/events/malloc.h>')
+  set(FUNS_malloc malloc calloc realloc free posix_memalign aligned_alloc)
+
+  if(NOT APPLE)
+    list(APPEND MODS memcpy)
+    set(INCL_memcpy '<dice/events/memcpy.h>')
+    set(FUNS_memcpy memcpy memmove)
+    if(${DICE_MEMSET})
+      set(FUNS_memcpy ${FUNS_memcpy} memset)
+    endif()
+  endif()
+
+  list(APPEND MODS mman)
+  set(INCL_mman '<dice/events/mman.h>')
+  set(FUNS_mman mmap munmap)
 endif()
 
-set(INCL_mman '<dice/events/mman.h>')
-set(FUNS_mman mmap munmap)
+# ------------------------------------------------------------------------------
+# pthreads
+# ------------------------------------------------------------------------------
 
+list(APPEND MODS pthread_create)
 set(INCL_pthread_create '<dice/events/pthread.h>')
 set(FUNS_pthread_create pthread_create pthread_join)
 
+list(APPEND MODS pthread_mutex)
 set(INCL_pthread_mutex ${INCL_pthread_create})
 set(FUNS_pthread_mutex pthread_mutex_lock pthread_mutex_unlock
                        pthread_mutex_trylock)
@@ -28,6 +50,7 @@ if(NOT APPLE)
   set(FUNS_pthread_mutex ${FUNS_pthread_mutex} pthread_mutex_timedlock)
 endif()
 
+list(APPEND MODS pthread_cond)
 set(INCL_pthread_cond ${INCL_pthread_create})
 set(FUNS_pthread_cond pthread_cond_wait pthread_cond_timedwait
                       pthread_cond_signal pthread_cond_broadcast)
@@ -36,12 +59,14 @@ if(HAVE_PTHREAD_CLOCKLOCK_CLOCKWAIT)
   set(FUNS_pthread_cond ${FUNS_pthread_cond} pthread_cond_clockwait)
 endif()
 
+list(APPEND MODS pthread_rwlock)
 set(INCL_pthread_rwlock ${INCL_pthread_create})
 set(FUNS_pthread_rwlock
     pthread_rwlock_rdlock pthread_rwlock_tryrdlock pthread_rwlock_wrlock
     pthread_rwlock_trywrlock pthread_rwlock_unlock)
 
 if(NOT APPLE)
+  list(APPEND MODS pthread_spinlock)
   set(FUNS_pthread_rwlock ${FUNS_pthread_rwlock} pthread_rwlock_timedrdlock
                           pthread_rwlock_timedwrlock)
   set(INCL_pthread_spinlock ${INCL_pthread_create})
@@ -49,48 +74,83 @@ if(NOT APPLE)
                             pthread_spin_trylock pthread_spin_unlock)
 endif()
 
+# ------------------------------------------------------------------------------
+# semaphore
+# ------------------------------------------------------------------------------
+
+list(APPEND MODS sem)
 set(INCL_sem '<dice/events/semaphore.h>')
 set(FUNS_sem sem_post sem_wait sem_trywait)
 if(NOT APPLE)
   set(FUNS_sem ${FUNS_sem} sem_timedwait)
 endif()
 
-set(INCL_epoll '<dice/events/epoll.h>')
-set(FUNS_epoll epoll_create #[[epoll_create1]] epoll_ctl epoll_wait epoll_pwait
-               #[[epoll_pwait2]])
-#set(INCL_eventfd '<dice/events/eventfd.h>')
-#set(FUNS_eventfd eventfd)
-#set(INCL_fcntl '<dice/events/fcntl.h>')
-#set(FUNS_fcntl creat fcntl open #[[openat]])
-#if(NOT APPLE)
-#  set(FUNS_fcntl ${FUNS_fcntl} #[[openat2]] posix_fadvise posix_fallocate)
-#endif()
-set(INCL_poll '<dice/events/poll.h>')
-set(FUNS_poll poll)
-set(INCL_random '<dice/events/random.h>')
-set(FUNS_random getrandom)
-set(INCL_socket '<dice/events/socket.h>')
-set(FUNS_socket accept)
+# ------------------------------------------------------------------------------
+# random
+# ------------------------------------------------------------------------------
+
 if(NOT APPLE)
-  #set(FUNS_socket ${FUNS_socket} accept4)
+  list(APPEND MODS random)
+  set(INCL_random '<dice/events/random.h>')
+  set(FUNS_random getrandom)
 endif()
-list(APPEND FUNS_socket
-    bind
-    connect
-    getpeername
-    getsockname
-    getsockopt
-    setsockopt
-    listen
-    recv
-    #[[recvfrom]]
-    #[[recvmsg]]
-    send
-    #[[sendto]]
-    #[[sendmsg]]
-    shutdown
-    socket
-    #[[socketpair]])
+
+if(OFF)
+
+  # ------------------------------------------------------------------------------
+  # poll, epoll, and other fd related
+  # ------------------------------------------------------------------------------
+
+  if(NOT APPLE AND NOT CMAKE_SYSTEM_NAME MATCHES "NetBSD")
+    list(APPEND MODS epoll)
+  endif()
+  set(INCL_epoll '<dice/events/epoll.h>')
+  set(FUNS_epoll
+      epoll_create #[[epoll_create1]] epoll_ctl epoll_wait epoll_pwait
+      #[[epoll_pwait2]]
+  )
+  set(INCL_poll '<dice/events/poll.h>')
+  set(FUNS_poll poll)
+
+  # set(INCL_eventfd '<dice/events/eventfd.h>') set(FUNS_eventfd eventfd)
+
+  # set(INCL_fcntl '<dice/events/fcntl.h>') set(FUNS_fcntl creat fcntl open
+  # #[[openat]]) if(NOT APPLE) set(FUNS_fcntl ${FUNS_fcntl} #[[openat2]]
+  # posix_fadvise posix_fallocate) endif()
+
+  # ------------------------------------------------------------------------------
+  # socket related
+  # ------------------------------------------------------------------------------
+
+  set(INCL_socket '<dice/events/socket.h>')
+  set(FUNS_socket
+      accept
+      bind
+      connect
+      getpeername
+      getsockname
+      getsockopt
+      setsockopt
+      listen
+      recv
+      #[[recvfrom]]
+      #[[recvmsg]]
+      send
+      #[[sendto]]
+      #[[sendmsg]]
+      shutdown
+      socket
+      #[[socketpair]]
+  )
+  if(NOT APPLE)
+    list(APPEND FUNS_socket accept4)
+  endif()
+endif()
+
+# ------------------------------------------------------------------------------
+# time.h
+# ------------------------------------------------------------------------------
+
 #[[set(INCL_time '<dice/events/time.h>')
 set(FUNS_time
     asctime
@@ -102,111 +162,125 @@ set(FUNS_time
     ctime
     ctime_r
     difftime
-    getdate)
-if(NOT APPLE)
-  list(APPEND FUNS_time getdate_r)
-endif()
-set(FUNS_time
-    ${FUNS_time}
-    gmtime
+    getdate
+   gmtime
     gmtime_r
     localtime
     localtime_r
     mktime
     nanosleep
-    strftime)
+    strftime
+strptime
+ time
+      getitimer
+      setitimer
+      gettimeofday
+      settimeofday
+      select
+      utimes)
+
 if(NOT APPLE)
-  list(APPEND FUNS_time strftime_l)
+  list(APPEND FUNS_time getdate_r timer_create timer_delete timer_gettime
+                timer_getoverrun timer_settime
+  strftime_l)
 endif()
-list(APPEND FUNS_time strptime time)
-if(NOT APPLE)
-  list(APPEND FUNS_time timer_create timer_delete timer_gettime
-                timer_getoverrun timer_settime)
-endif()]]
-set(FUNS_time ${FUNS_time} #[[tzset]] getitimer setitimer gettimeofday
-              settimeofday select utimes)
+
+#[[tzset]]
+
+# ------------------------------------------------------------------------------
+# uio.h
+# ------------------------------------------------------------------------------
 set(INCL_uio '<dice/events/uio.h>')
 set(FUNS_uio readv writev)
-#[[set(INCL_unistd '<dice/events/unistd.h>')
-set(FUNS_unistd
-    access
-    alarm
-    chdir
-    chroot
-    chown
-    close
-    confstr
-    crypt
-    ctermid
-    dup
-    dup2
-    faccessat
-    fchdir
-    fchown
-    fchownat
-    getuid
-    fork
-    fpathconf
-    fsync
-    ftruncate
-    getcwd
-    getdtablesize
-    getegid
-    geteuid
-    getgid
-    getgroups
-    gethostid
-    getlogin
-    getlogin_r
-    getopt
-    getpagesize
-    getpass
-    getpgid
-    getpgrp
-    getpid
-    getppid
-    getsid
-    getwd
-    isatty
-    lchown
-    link
-    linkat
-    lockf
-    lseek
-    nice
-    pathconf
-    pause
-    pipe
-    pread
-    pwrite
-    read
-    readlink
-    readlinkat
-    rmdir
-    setgid
-    setpgid
-    setregid
-    setreuid
-    setsid
-    setuid
-    sleep
-    swab
-    symlink
-    symlinkat
-    sync
-    sysconf
-    tcgetpgrp
-    tcsetpgrp
-    truncate
-    ttyname
-    ttyname_r
-    ualarm
-    unlink
-    unlinkat
-    usleep
-    write)
-if(NOT APPLE)
-  list(APPEND FUNS_unistd
+
+# ------------------------------------------------------------------------------
+# unistd.h
+# ------------------------------------------------------------------------------
+
+if(OFF)
+  list(APPEND MODS unistd)
+  #[[set(INCL_unistd '<dice/events/unistd.h>')]]
+  set(FUNS_unistd
+      access
+      alarm
+      chdir
+      chroot
+      chown
+      close
+      confstr
+      crypt
+      ctermid
+      dup
+      dup2
+      faccessat
+      fchdir
+      fchown
+      fchownat
+      getuid
+      fork
+      fpathconf
+      fsync
+      ftruncate
+      getcwd
+      getdtablesize
+      getegid
+      geteuid
+      getgid
+      getgroups
+      gethostid
+      getlogin
+      getlogin_r
+      getopt
+      getpagesize
+      getpass
+      getpgid
+      getpgrp
+      getpid
+      getppid
+      getsid
+      getwd
+      isatty
+      lchown
+      link
+      linkat
+      lockf
+      lseek
+      nice
+      pathconf
+      pause
+      pipe
+      pread
+      pwrite
+      read
+      readlink
+      readlinkat
+      rmdir
+      setgid
+      setpgid
+      setregid
+      setreuid
+      setsid
+      setuid
+      sleep
+      swab
+      symlink
+      symlinkat
+      sync
+      sysconf
+      tcgetpgrp
+      tcsetpgrp
+      truncate
+      ttyname
+      ttyname_r
+      ualarm
+      unlink
+      unlinkat
+      usleep
+      write)
+  if(NOT APPLE)
+    list(
+      APPEND
+      FUNS_unistd
       brk
       cuserid
       dup3
@@ -218,53 +292,34 @@ if(NOT APPLE)
       sethostid
       syncfs
       vfork)
+  endif()
+  if(NOT BSD)
+    list(APPEND FUNS_unistd encrypt setpgrp)
+  endif()
 endif()
-if(NOT BSD)
-  list(APPEND FUNS_unistd encrypt setpgrp)
-endif()]]
 
+# ------------------------------------------------------------------------------
+# Sanitizer's annotate_rwlock
+# ------------------------------------------------------------------------------
 # TODO: create special tests for INTERCEPT_EVENT chain. Currently, we can only
 # test INTERCEPT_BEFORE and INTERCEPT_AFTER.
+
+#[[list(APPEND MODS annotate_rwlock)]]
 set(INCL_annotate_rwlock '<dice/events/annotate_rwlock.h>')
 set(FUNS_annotate_rwlock AnnotateRWLockCreate AnnotateRWLockDestroy
                          AnnotateRWLockAcquired AnnotateRWLockReleased)
 
+# ------------------------------------------------------------------------------
+# C++'s __cxa_guard
+# ------------------------------------------------------------------------------
+
+list(APPEND MODS cxa)
 set(FUNS_cxa __cxa_guard_acquire __cxa_guard_release __cxa_guard_abort)
 set(INCL_cxa '<dice/events/cxa.h>')
 
-set(MODS
-    mman
-    #fcntl
-    poll
-    socket
-    #time
-    uio
-    #unistd
-    # annotate_rwlock: disabled until INTERCEPT_EVENT can be tested
-    pthread_create
-    pthread_mutex
-    pthread_cond
-    pthread_rwlock
-    sem
-    cxa)
-
-if(NOT APPLE)
-  list(APPEND MODS #[[eventfd]] random)
-endif()
-if(NOT APPLE AND NOT CMAKE_SYSTEM_NAME MATCHES "NetBSD")
-  list(APPEND MODS epoll)
-endif()
-
-if(${ENABLE_SANITIZER})
-  message(STATUS "Ignoring malloc tests")
-else()
-  # malloc does not play well with the sanitizers
-  set(MODS ${MODS} malloc)
-endif()
-
-if(NOT APPLE)
-  set(MODS ${MODS} memcpy pthread_spinlock)
-endif()
+# ------------------------------------------------------------------------------
+# Generators and tests
+# ------------------------------------------------------------------------------
 
 # generate interpose test source
 foreach(MOD ${MODS})
@@ -274,8 +329,8 @@ foreach(MOD ${MODS})
   add_custom_command(
     OUTPUT ${TARGET_SRC}
     COMMAND
-      $<TARGET_FILE:tmplr> -l 1024 "-DINCL=${INCL_${MOD}}" "-DFOO=${FUNS_${MOD}}"
-      ${CMAKE_CURRENT_SOURCE_DIR}/interposed_.h.in
+      $<TARGET_FILE:tmplr> -l 1024 "-DINCL=${INCL_${MOD}}"
+      "-DFOO=${FUNS_${MOD}}" ${CMAKE_CURRENT_SOURCE_DIR}/interposed_.h.in
       ${CMAKE_CURRENT_SOURCE_DIR}/interpose_test.c.in #
       > ${TARGET}_.c.tmp
     COMMAND ${CMAKE_COMMAND} -E rename ${TARGET}_.c.tmp ${TARGET}_.c
