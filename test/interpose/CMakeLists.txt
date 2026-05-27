@@ -310,23 +310,21 @@ if(NOT APPLE)
     FUNS_unistd
     brk
     crypt
-    dup3
     fdatasync
     #pipe2
     sbrk
-    syncfs
     vfork)
 endif()
 
 if(NOT APPLE AND NOT BSD)
-  list(APPEND FUNS_unistd setpgrp)
+  list(APPEND FUNS_unistd setpgrp syncfs dup3)
 endif()
 
 if(HAVE_GETHOSTID)
   list(APPEND FUNS_unistd gethostid)
 endif()
 
-if(HAVE_SETHOSTID)
+if(HAVE_SETHOSTID AND NOT APPLE AND NOT BSD)
   list(APPEND FUNS_unistd sethostid)
 endif()
 
