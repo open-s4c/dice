@@ -129,6 +129,7 @@ endif()
 # socket related
 # ------------------------------------------------------------------------------
 
+list(APPEND MODS socket)
 set(INCL_socket '<dice/events/socket.h>')
 set(FUNS_socket
     accept
@@ -140,7 +141,7 @@ set(FUNS_socket
     setsockopt
     listen
     recv
-    #[[recvfrom]]
+    # recvfrom
     #[[recvmsg]]
     send
     #[[sendto]]
