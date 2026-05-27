@@ -160,25 +160,6 @@ INTERPOSE(int, openat, int dirfd, const char *path, int flags, ...)
 }
 
 #if !defined(__APPLE__)
-INTERPOSE(int, openat2, int dirfd, const char *path, const struct open_how *how, size_t size)
-{
-    struct openat2_event ev = {
-        .pc    = INTERPOSE_PC,
-        .dirfd = dirfd,
-        .path  = path,
-        .how   = how,
-        .size  = size,
-        .ret   = 0,
-        .func  = REAL_FUNC(openat2),
-    };
-
-    metadata_t md = {0};
-    PS_PUBLISH(INTERCEPT_BEFORE, EVENT_OPENAT2, &ev, &md);
-    ev.ret = ev.func(ev.dirfd, ev.path, ev.how, ev.size);
-    PS_PUBLISH(INTERCEPT_AFTER, EVENT_OPENAT2, &ev, &md);
-    return ev.ret;
-}
-
 INTERPOSE(int, posix_fadvise, int fd, off_t offset, off_t size, int advice)
 {
     struct posix_fadvise_event ev = {
@@ -221,7 +202,6 @@ PS_ADVERTISE_TYPE(EVENT_CREAT)
 PS_ADVERTISE_TYPE(EVENT_FCNTL)
 PS_ADVERTISE_TYPE(EVENT_OPEN)
 PS_ADVERTISE_TYPE(EVENT_OPENAT)
-PS_ADVERTISE_TYPE(EVENT_OPENAT2)
 PS_ADVERTISE_TYPE(EVENT_POSIX_FADVISE)
 PS_ADVERTISE_TYPE(EVENT_POSIX_FALLOCATE)
 
