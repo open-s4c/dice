@@ -95,63 +95,69 @@ if(NOT APPLE)
   set(FUNS_random getrandom)
 endif()
 
+# ------------------------------------------------------------------------------
+# poll, epoll, and other fd related
+# ------------------------------------------------------------------------------
+
+list(APPEND MODS poll)
+set(INCL_poll '<dice/events/poll.h>')
+set(FUNS_poll poll)
+
+if(NOT APPLE AND BSD)
+  list(APPEND MODS epoll)
+endif()
+set(INCL_epoll '<dice/events/epoll.h>')
+set(FUNS_epoll epoll_create #[[epoll_create1]] epoll_ctl epoll_wait epoll_pwait
+               #[[epoll_pwait2]]
+)
 if(OFF)
 
-  # ------------------------------------------------------------------------------
-  # poll, epoll, and other fd related
-  # ------------------------------------------------------------------------------
-
-  if(NOT APPLE AND NOT CMAKE_SYSTEM_NAME MATCHES "NetBSD")
-    list(APPEND MODS epoll)
+  if(NOT APPLE)
+    list(APPEND MODS eventfd)
   endif()
-  set(INCL_epoll '<dice/events/epoll.h>')
-  set(FUNS_epoll
-      epoll_create #[[epoll_create1]] epoll_ctl epoll_wait epoll_pwait
-      #[[epoll_pwait2]]
-  )
-  set(INCL_poll '<dice/events/poll.h>')
-  set(FUNS_poll poll)
-
   # set(INCL_eventfd '<dice/events/eventfd.h>') set(FUNS_eventfd eventfd)
 
+  if(NOT APPLE)
+    list(APPEND MODS fcntl)
+  endif()
   # set(INCL_fcntl '<dice/events/fcntl.h>') set(FUNS_fcntl creat fcntl open
   # #[[openat]]) if(NOT APPLE) set(FUNS_fcntl ${FUNS_fcntl} #[[openat2]]
   # posix_fadvise posix_fallocate) endif()
+endif()
 
-  # ------------------------------------------------------------------------------
-  # socket related
-  # ------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
+# socket related
+# ------------------------------------------------------------------------------
 
-  set(INCL_socket '<dice/events/socket.h>')
-  set(FUNS_socket
-      accept
-      bind
-      connect
-      getpeername
-      getsockname
-      getsockopt
-      setsockopt
-      listen
-      recv
-      #[[recvfrom]]
-      #[[recvmsg]]
-      send
-      #[[sendto]]
-      #[[sendmsg]]
-      shutdown
-      socket
-      #[[socketpair]]
-  )
-  if(NOT APPLE)
-    list(APPEND FUNS_socket accept4)
-  endif()
+set(INCL_socket '<dice/events/socket.h>')
+set(FUNS_socket
+    accept
+    bind
+    connect
+    getpeername
+    getsockname
+    getsockopt
+    setsockopt
+    listen
+    recv
+    #[[recvfrom]]
+    #[[recvmsg]]
+    send
+    #[[sendto]]
+    #[[sendmsg]]
+    shutdown
+    socket
+    #[[socketpair]]
+)
+if(NOT APPLE)
+  list(APPEND FUNS_socket accept4)
 endif()
 
 # ------------------------------------------------------------------------------
 # time.h
 # ------------------------------------------------------------------------------
 
-#[[set(INCL_time '<dice/events/time.h>')
+#[[set(INCL_time '<dice/events/time.h>')]]
 set(FUNS_time
     asctime
     asctime_r
@@ -163,26 +169,33 @@ set(FUNS_time
     ctime_r
     difftime
     getdate
-   gmtime
+    gmtime
     gmtime_r
     localtime
     localtime_r
     mktime
     nanosleep
     strftime
-strptime
- time
-      getitimer
-      setitimer
-      gettimeofday
-      settimeofday
-      select
-      utimes)
+    strptime
+    time
+    getitimer
+    setitimer
+    gettimeofday
+    settimeofday
+    select
+    utimes)
 
 if(NOT APPLE)
-  list(APPEND FUNS_time getdate_r timer_create timer_delete timer_gettime
-                timer_getoverrun timer_settime
-  strftime_l)
+  list(
+    APPEND
+    FUNS_time
+    getdate_r
+    timer_create
+    timer_delete
+    timer_gettime
+    timer_getoverrun
+    timer_settime
+    strftime_l)
 endif()
 
 #[[tzset]]
