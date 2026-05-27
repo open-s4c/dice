@@ -103,25 +103,26 @@ list(APPEND MODS poll)
 set(INCL_poll '<dice/events/poll.h>')
 set(FUNS_poll poll)
 
-if(NOT APPLE AND BSD)
+if(NOT APPLE AND NOT BSD)
   list(APPEND MODS epoll)
 endif()
 set(INCL_epoll '<dice/events/epoll.h>')
 set(FUNS_epoll epoll_create epoll_create1 epoll_ctl epoll_wait epoll_pwait
                epoll_pwait2)
-if(OFF)
 
-  if(NOT APPLE)
-    list(APPEND MODS eventfd)
-  endif()
-  # set(INCL_eventfd '<dice/events/eventfd.h>') set(FUNS_eventfd eventfd)
+if(NOT APPLE)
+  list(APPEND MODS eventfd)
+  set(INCL_eventfd '<dice/events/eventfd.h>')
+  set(FUNS_eventfd eventfd)
+endif()
 
+if(NOT APPLE)
+  list(APPEND MODS fcntl)
+  set(INCL_fcntl '<dice/events/fcntl.h>')
+  set(FUNS_fcntl creat fcntl open openat)
   if(NOT APPLE)
-    list(APPEND MODS fcntl)
+    set(FUNS_fcntl ${FUNS_fcntl} openat2 posix_fadvise posix_fallocate)
   endif()
-  # set(INCL_fcntl '<dice/events/fcntl.h>') set(FUNS_fcntl creat fcntl open
-  # #[[openat]]) if(NOT APPLE) set(FUNS_fcntl ${FUNS_fcntl} #[[openat2]]
-  # posix_fadvise posix_fallocate) endif()
 endif()
 
 # ------------------------------------------------------------------------------
@@ -156,11 +157,15 @@ endif()
 # time.h
 # ------------------------------------------------------------------------------
 
-#[[set(INCL_time '<dice/events/time.h>')]]
+# missing in interpose_h.in:
+#[[clock]]
+#[[tzset]]
+
+list(APPEND MODS time)
+set(INCL_time '<dice/events/time.h>')
 set(FUNS_time
     asctime
     asctime_r
-    clock
     clock_getres
     clock_gettime
     clock_settime
@@ -197,117 +202,111 @@ if(NOT APPLE)
     strftime_l)
 endif()
 
-#[[tzset]]
-
 # ------------------------------------------------------------------------------
 # uio.h
 # ------------------------------------------------------------------------------
-set(INCL_uio '<dice/events/uio.h>')
-set(FUNS_uio readv writev)
+
+if(NOT APPLE AND NOT BSD)
+  list(APPEND MODS uio)
+  set(INCL_uio '<dice/events/uio.h>')
+  set(FUNS_uio readv writev)
+endif()
 
 # ------------------------------------------------------------------------------
 # unistd.h
 # ------------------------------------------------------------------------------
 
-if(OFF)
-  list(APPEND MODS unistd)
-  #[[set(INCL_unistd '<dice/events/unistd.h>')]]
-  set(FUNS_unistd
-      access
-      alarm
-      chdir
-      chroot
-      chown
-      close
-      confstr
-      crypt
-      ctermid
-      dup
-      dup2
-      faccessat
-      fchdir
-      fchown
-      fchownat
-      getuid
-      fork
-      fpathconf
-      fsync
-      ftruncate
-      getcwd
-      getdtablesize
-      getegid
-      geteuid
-      getgid
-      getgroups
-      gethostid
-      getlogin
-      getlogin_r
-      getopt
-      getpagesize
-      getpass
-      getpgid
-      getpgrp
-      getpid
-      getppid
-      getsid
-      getwd
-      isatty
-      lchown
-      link
-      linkat
-      lockf
-      lseek
-      nice
-      pathconf
-      pause
-      pipe
-      pread
-      pwrite
-      read
-      readlink
-      readlinkat
-      rmdir
-      setgid
-      setpgid
-      setregid
-      setreuid
-      setsid
-      setuid
-      sleep
-      swab
-      symlink
-      symlinkat
-      sync
-      sysconf
-      tcgetpgrp
-      tcsetpgrp
-      truncate
-      ttyname
-      ttyname_r
-      ualarm
-      unlink
-      unlinkat
-      usleep
-      write)
-  if(NOT APPLE)
-    list(
-      APPEND
-      FUNS_unistd
-      brk
-      cuserid
-      dup3
-      fdatasync
-      get_current_dir_name
-      pipe2
-      pthread_atfork
-      sbrk
-      sethostid
-      syncfs
-      vfork)
-  endif()
-  if(NOT BSD)
-    list(APPEND FUNS_unistd encrypt setpgrp)
-  endif()
+# missing in interpose_h.in: all commented out cases below
+
+list(APPEND MODS unistd)
+set(INCL_unistd '<dice/events/unistd.h>')
+set(FUNS_unistd
+    # getdtablesize getegid geteuid getgid getgroups gethostid getlogin
+    # getpagesize
+    # getpgrp getpid getppid
+    # getuid fork
+    # pause pipe
+    # setsid
+    # sync
+    access
+    alarm
+    chdir
+    chown
+    chroot
+    close
+    confstr
+    crypt
+    ctermid
+    dup
+    dup2
+    faccessat
+    fchdir
+    fchown
+    fchownat
+    fpathconf
+    fsync
+    ftruncate
+    getcwd
+    getlogin_r
+    getopt
+    getpass
+    getpgid
+    getsid
+    getwd
+    isatty
+    lchown
+    link
+    linkat
+    lockf
+    lseek
+    nice
+    pathconf
+    pread
+    pwrite
+    read
+    readlink
+    readlinkat
+    rmdir
+    setgid
+    setpgid
+    setregid
+    setreuid
+    setuid
+    sleep
+    swab
+    symlink
+    symlinkat
+    sysconf
+    tcgetpgrp
+    tcsetpgrp
+    truncate
+    ttyname
+    ttyname_r
+    ualarm
+    unlink
+    unlinkat
+    usleep
+    write)
+
+if(NOT APPLE)
+  list(
+    APPEND
+    FUNS_unistd
+    brk
+    cuserid
+    dup3
+    fdatasync
+    get_current_dir_name
+    pipe2
+    pthread_atfork
+    sbrk
+    sethostid
+    syncfs
+    vfork)
+endif()
+
+if(NOT APPLE AND NOT BSD)
+  list(APPEND FUNS_unistd encrypt setpgrp)
 endif()
 
 # ------------------------------------------------------------------------------
