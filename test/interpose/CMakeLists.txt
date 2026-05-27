@@ -26,7 +26,10 @@ else()
 
   list(APPEND MODS mman)
   set(INCL_mman '<dice/events/mman.h>')
-  set(FUNS_mman mmap mmap64 munmap)
+  set(FUNS_mman mmap munmap)
+  if(NOT APPLE)
+    list(APPEND FUNCS_mman mmap64)
+  endif()
 endif()
 
 # ------------------------------------------------------------------------------
