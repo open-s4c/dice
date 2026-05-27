@@ -16,6 +16,8 @@ $__map(WHEN_pthread_create_arg, dl);
 $__dl; // ----------------------------------------------------------------------
 $__dl; // Fallbacks
 $__dl; // ----------------------------------------------------------------------
+$__map(NONE, $__undo$__kill);
+$__map(UNLESS, dl);
 $__map(UNLESS, dl);
 $__map(WHEN, skip);
 $__map(_SAME_AS, $__skip);
