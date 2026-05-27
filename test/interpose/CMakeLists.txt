@@ -191,11 +191,11 @@ set(FUNS_time
     tzset
     utimes)
 
-if (HAVE_GETDATE)
+if (HAVE_GETDATE AND NOT BSD)
   list(APPEND FUNS_time getdate)
 endif()
 
-if (HAVE_SETTIMEOFDAY)
+if (HAVE_SETTIMEOFDAY AND NOT BSD)
   list(APPEND FUNS_time settimeofday)
 endif()
 
@@ -209,9 +209,10 @@ if(NOT APPLE)
     timer_getoverrun
     timer_settime
     strftime_l)
-  if (HAVE_GETDATE_R)
-    list(APPEND FUNS_time getdate_r)
-  endif()
+endif()
+
+if (HAVE_GETDATE_R)
+  list(APPEND FUNS_time getdate_r)
 endif()
 
 # ------------------------------------------------------------------------------
@@ -236,7 +237,6 @@ set(FUNS_unistd
     geteuid
     getgid
     getgroups
-    gethostid
     getlogin
     getpagesize
     getpgrp
@@ -268,10 +268,8 @@ set(FUNS_unistd
     getcwd
     getlogin_r
     getopt
-    getpass
     getpgid
     getsid
-    getwd
     isatty
     lchown
     link
@@ -301,7 +299,6 @@ set(FUNS_unistd
     truncate
     ttyname
     ttyname_r
-    ualarm
     unlink
     unlinkat
     usleep
@@ -312,20 +309,45 @@ if(NOT APPLE)
     APPEND
     FUNS_unistd
     brk
-    cuserid
     crypt
     dup3
     fdatasync
-    get_current_dir_name
     #pipe2
     sbrk
-    sethostid
     syncfs
     vfork)
 endif()
 
 if(NOT APPLE AND NOT BSD)
   list(APPEND FUNS_unistd setpgrp)
+endif()
+
+if(HAVE_GETHOSTID)
+  list(APPEND FUNS_unistd gethostid)
+endif()
+
+if(HAVE_SETHOSTID)
+  list(APPEND FUNS_unistd sethostid)
+endif()
+
+if(HAVE_GETPASS)
+  list(APPEND FUNS_unistd getpass)
+endif()
+
+if(HAVE_GETWD)
+  list(APPEND FUNS_unistd getwd)
+endif()
+
+if(HAVE_GET_CURRENT_DIR_NAME)
+  list(APPEND FUNS_unistd get_current_dir_name)
+endif()
+
+if(HAVE_CUSERID)
+  list(APPEND FUNS_unistd cuserid)
+endif()
+
+if(HAVE_UALARM)
+  list(APPEND FUNS_unistd ualarm)
 endif()
 
 # ------------------------------------------------------------------------------
