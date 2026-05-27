@@ -122,9 +122,9 @@ endif()
 if(NOT APPLE)
   list(APPEND MODS fcntl)
   set(INCL_fcntl '<dice/events/fcntl.h>')
-  set(FUNS_fcntl creat fcntl open openat)
+  set(FUNS_fcntl creat #[[fcntl]] open #[[openat]])
   if(NOT APPLE)
-    set(FUNS_fcntl ${FUNS_fcntl} openat2 posix_fadvise posix_fallocate)
+    set(FUNS_fcntl ${FUNS_fcntl} posix_fadvise posix_fallocate)
   endif()
 endif()
 
@@ -217,18 +217,26 @@ endif()
 # unistd.h
 # ------------------------------------------------------------------------------
 
-# missing in interpose_h.in: all commented out cases below
-
 list(APPEND MODS unistd)
 set(INCL_unistd '<dice/events/unistd.h>')
 set(FUNS_unistd
-    # getdtablesize getegid geteuid getgid getgroups gethostid getlogin
-    # getpagesize
-    # getpgrp getpid getppid
-    # getuid fork
-    # pause pipe
-    # setsid
-    # sync
+    getdtablesize
+    getegid
+    geteuid
+    getgid
+    getgroups
+    gethostid
+    getlogin
+    getpagesize
+    getpgrp
+    getpid
+    getppid
+    getuid
+    fork
+    pause
+    #pipe
+    setsid
+    sync
     access
     alarm
     chdir
@@ -298,8 +306,7 @@ if(NOT APPLE)
     dup3
     fdatasync
     get_current_dir_name
-    pipe2
-    pthread_atfork
+    #pipe2
     sbrk
     sethostid
     syncfs
@@ -307,7 +314,7 @@ if(NOT APPLE)
 endif()
 
 if(NOT APPLE AND NOT BSD)
-  list(APPEND FUNS_unistd encrypt setpgrp)
+  list(APPEND FUNS_unistd setpgrp)
 endif()
 
 # ------------------------------------------------------------------------------
@@ -365,10 +372,10 @@ foreach(MOD ${MODS})
   set(TARGET ${MOD}_test)
   add_executable(${TARGET} ${CMAKE_CURRENT_BINARY_DIR}/${TARGET}.c)
   add_dependencies(${TARGET} expand-test-${MOD})
-  target_link_libraries(${TARGET} PRIVATE dice.h dice tsano pthread)
+  target_link_libraries(${TARGET} PRIVATE dice.h dice tsano pthread crypt)
   target_compile_options(
     ${TARGET} PRIVATE -fno-builtin-memcpy -fno-builtin-memset
-                      -fno-builtin-memmmove)
+                      -fno-builtin-memmmove -Wno-deprecated-declarations)
 
   set(PRELOAD $<TARGET_FILE:dice-${MOD}>)
 

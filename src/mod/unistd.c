@@ -247,27 +247,6 @@ INTERPOSE(int, dup3, int oldfd, int newfd, int flags)
 }
 #endif
 
-#if !defined(__NetBSD__)
-INTERPOSE(void, encrypt, char block[64], int edflag)
-{
-    struct encrypt_event ev = {
-        .pc     = INTERPOSE_PC,
-        .edflag = edflag,
-        .func   = REAL_FUNC(encrypt),
-    };
-    /* Copy the block to the struct */
-    for (int i = 0; i < 64; i++) ev.block[i] = block[i];
-
-    metadata_t md = {0};
-    PS_PUBLISH(INTERCEPT_BEFORE, EVENT_ENCRYPT, &ev, &md);
-    ev.func(ev.block, ev.edflag);
-    PS_PUBLISH(INTERCEPT_AFTER, EVENT_ENCRYPT, &ev, &md);
-
-    /* Copy back result to original block */
-    for (int i = 0; i < 64; i++) block[i] = ev.block[i];
-}
-#endif
-
 INTERPOSE(void, _exit, int status)
 {
     struct _exit_event ev = {
@@ -917,11 +896,10 @@ INTERPOSE(int, pipe, int pipefd[2])
 {
     struct pipe_event ev = {
         .pc = INTERPOSE_PC,
+        .pipefd = pipefd,
         .ret = 0,
         .func = REAL_FUNC(pipe)
     };
-    ev.pipefd[0] = pipefd[0];
-    ev.pipefd[1] = pipefd[1];
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_PIPE, &ev, &md);
@@ -936,11 +914,10 @@ INTERPOSE(int, pipe2, int pipefd[2], int flags)
     struct pipe2_event ev = {
         .pc = INTERPOSE_PC,
         .flags = flags,
+        .pipefd = pipefd,
         .ret = 0,
         .func = REAL_FUNC(pipe2)
     };
-    ev.pipefd[0] = pipefd[0];
-    ev.pipefd[1] = pipefd[1];
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_PIPE2, &ev, &md);
@@ -968,26 +945,6 @@ INTERPOSE(ssize_t, pread, int fd, void *buf, size_t count, off_t offset)
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_PREAD, &ev, &md);
     return ev.ret;
 }
-
-#if !defined(__APPLE__)
-INTERPOSE(int, pthread_atfork, void (*prepare)(void), void (*parent)(void), void (*child)(void))
-{
-    struct pthread_atfork_event ev = {
-        .pc = INTERPOSE_PC,
-        .prepare = prepare,
-        .parent = parent,
-        .child = child,
-        .ret = 0,
-        .func = REAL_FUNC(pthread_atfork)
-    };
-
-    metadata_t md = {0};
-    PS_PUBLISH(INTERCEPT_BEFORE, EVENT_PTHREAD_ATFORK, &ev, &md);
-    ev.ret = ev.func(ev.prepare, ev.parent, ev.child);
-    PS_PUBLISH(INTERCEPT_AFTER, EVENT_PTHREAD_ATFORK, &ev, &md);
-    return ev.ret;
-}
-#endif
 
 INTERPOSE(ssize_t, pwrite, int fd, const void *buf, size_t count, off_t offset)
 {
@@ -1545,7 +1502,6 @@ PS_ADVERTISE_TYPE(EVENT_CUSERID)
 PS_ADVERTISE_TYPE(EVENT_DUP)
 PS_ADVERTISE_TYPE(EVENT_DUP2)
 PS_ADVERTISE_TYPE(EVENT_DUP3)
-PS_ADVERTISE_TYPE(EVENT_ENCRYPT)
 PS_ADVERTISE_TYPE(EVENT__EXIT)
 PS_ADVERTISE_TYPE(EVENT_FACCESSAT)
 PS_ADVERTISE_TYPE(EVENT_FCHDIR)
@@ -1588,7 +1544,6 @@ PS_ADVERTISE_TYPE(EVENT_PAUSE)
 PS_ADVERTISE_TYPE(EVENT_PIPE)
 PS_ADVERTISE_TYPE(EVENT_PIPE2)
 PS_ADVERTISE_TYPE(EVENT_PREAD)
-PS_ADVERTISE_TYPE(EVENT_PTHREAD_ATFORK)
 PS_ADVERTISE_TYPE(EVENT_PWRITE)
 PS_ADVERTISE_TYPE(EVENT_READ)
 PS_ADVERTISE_TYPE(EVENT_READLINK)

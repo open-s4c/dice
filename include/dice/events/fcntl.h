@@ -12,9 +12,8 @@
 #define EVENT_FCNTL           130
 #define EVENT_OPEN            131
 #define EVENT_OPENAT          132
-#define EVENT_OPENAT2         133
-#define EVENT_POSIX_FADVISE   134
-#define EVENT_POSIX_FALLOCATE 135
+#define EVENT_POSIX_FADVISE   133
+#define EVENT_POSIX_FALLOCATE 134
 
 struct creat_event {
     const void *pc;
@@ -50,16 +49,6 @@ struct openat_event {
     mode_t mode;
     int ret;
     int(*func)(int, const char *, int, ...);
-};
-
-struct openat2_event {
-    const void *pc;
-    int dirfd;
-    const char *path;
-    const struct open_how *how;
-    size_t size;
-    int ret;
-    int(*func)(int, const char *, const struct open_how *, size_t);
 };
 
 struct posix_fadvise_event {

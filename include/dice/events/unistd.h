@@ -8,96 +8,94 @@
 #include <stdarg.h>
 #include <unistd.h>
 
-#define EVENT_ACCESS               138
-#define EVENT_ALARM                139
-#define EVENT_BRK                  140
-#define EVENT_CHDIR                141
-#define EVENT_CHROOT               142
-#define EVENT_CHOWN                143
-#define EVENT_CLOSE                144
-#define EVENT_CONFSTR              145
-#define EVENT_CRYPT                146
-#define EVENT_CTERMID              147
-#define EVENT_CUSERID              148
-#define EVENT_DUP                  149
-#define EVENT_DUP2                 150
-#define EVENT_DUP3                 151
-#define EVENT_ENCRYPT              152
-#define EVENT__EXIT                153
-#define EVENT_FACCESSAT            154
-#define EVENT_FCHDIR               155
-#define EVENT_FCHOWN               156
-#define EVENT_FCHOWNAT             157
-#define EVENT_GETUID               158
-#define EVENT_FDATASYNC            159
-#define EVENT_FORK                 160
-#define EVENT_FPATHCONF            161
-#define EVENT_FSYNC                162
-#define EVENT_FTRUNCATE            163
-#define EVENT_GETCWD               164
-#define EVENT_GETDTABLESIZE        165
-#define EVENT_GETEGID              166
-#define EVENT_GETEUID              167
-#define EVENT_GETGID               168
-#define EVENT_GETGROUPS            169
-#define EVENT_GETHOSTID            170
-#define EVENT_GETLOGIN             171
-#define EVENT_GETLOGIN_R           172
-#define EVENT_GETOPT               173
-#define EVENT_GETPAGESIZE          174
-#define EVENT_GETPASS              175
-#define EVENT_GETPGID              176
-#define EVENT_GETPGRP              177
-#define EVENT_GETPID               178
-#define EVENT_GETPPID              179
-#define EVENT_GETSID               180
-#define EVENT_GETWD                181
-#define EVENT_GET_CURRENT_DIR_NAME 182
-#define EVENT_ISATTY               183
-#define EVENT_LCHOWN               184
-#define EVENT_LINK                 185
-#define EVENT_LINKAT               186
-#define EVENT_LOCKF                187
-#define EVENT_LSEEK                188
-#define EVENT_NICE                 189
-#define EVENT_PATHCONF             190
-#define EVENT_PAUSE                191
-#define EVENT_PIPE                 192
-#define EVENT_PIPE2                193
-#define EVENT_PREAD                194
-#define EVENT_PTHREAD_ATFORK       195
-#define EVENT_PWRITE               196
-#define EVENT_READ                 197
-#define EVENT_READLINK             198
-#define EVENT_READLINKAT           199
-#define EVENT_RMDIR                200
-#define EVENT_SBRK                 201
-#define EVENT_SETGID               202
-#define EVENT_SETHOSTID            203
-#define EVENT_SETPGID              204
-#define EVENT_SETPGRP              205
-#define EVENT_SETREGID             206
-#define EVENT_SETREUID             207
-#define EVENT_SETSID               208
-#define EVENT_SETUID               209
-#define EVENT_SLEEP                210
-#define EVENT_SWAB                 211
-#define EVENT_SYMLINK              212
-#define EVENT_SYMLINKAT            213
-#define EVENT_SYNC                 214
-#define EVENT_SYNCFS               215
-#define EVENT_SYSCONF              216
-#define EVENT_TCGETPGRP            217
-#define EVENT_TCSETPGRP            218
-#define EVENT_TRUNCATE             219
-#define EVENT_TTYNAME              220
-#define EVENT_TTYNAME_R            221
-#define EVENT_UALARM               222
-#define EVENT_UNLINK               223
-#define EVENT_UNLINKAT             224
-#define EVENT_USLEEP               225
-#define EVENT_VFORK                226
-#define EVENT_WRITE                227
+#define EVENT_ACCESS               137
+#define EVENT_ALARM                138
+#define EVENT_BRK                  139
+#define EVENT_CHDIR                140
+#define EVENT_CHROOT               141
+#define EVENT_CHOWN                142
+#define EVENT_CLOSE                143
+#define EVENT_CONFSTR              144
+#define EVENT_CRYPT                145
+#define EVENT_CTERMID              146
+#define EVENT_CUSERID              147
+#define EVENT_DUP                  148
+#define EVENT_DUP2                 149
+#define EVENT_DUP3                 150
+#define EVENT__EXIT                151
+#define EVENT_FACCESSAT            152
+#define EVENT_FCHDIR               153
+#define EVENT_FCHOWN               154
+#define EVENT_FCHOWNAT             155
+#define EVENT_GETUID               156
+#define EVENT_FDATASYNC            157
+#define EVENT_FORK                 158
+#define EVENT_FPATHCONF            159
+#define EVENT_FSYNC                160
+#define EVENT_FTRUNCATE            161
+#define EVENT_GETCWD               162
+#define EVENT_GETDTABLESIZE        163
+#define EVENT_GETEGID              164
+#define EVENT_GETEUID              165
+#define EVENT_GETGID               166
+#define EVENT_GETGROUPS            167
+#define EVENT_GETHOSTID            168
+#define EVENT_GETLOGIN             169
+#define EVENT_GETLOGIN_R           170
+#define EVENT_GETOPT               171
+#define EVENT_GETPAGESIZE          172
+#define EVENT_GETPASS              173
+#define EVENT_GETPGID              174
+#define EVENT_GETPGRP              175
+#define EVENT_GETPID               176
+#define EVENT_GETPPID              177
+#define EVENT_GETSID               178
+#define EVENT_GETWD                179
+#define EVENT_GET_CURRENT_DIR_NAME 180
+#define EVENT_ISATTY               181
+#define EVENT_LCHOWN               182
+#define EVENT_LINK                 183
+#define EVENT_LINKAT               184
+#define EVENT_LOCKF                185
+#define EVENT_LSEEK                186
+#define EVENT_NICE                 187
+#define EVENT_PATHCONF             188
+#define EVENT_PAUSE                189
+#define EVENT_PIPE                 190
+#define EVENT_PIPE2                191
+#define EVENT_PREAD                192
+#define EVENT_PWRITE               193
+#define EVENT_READ                 194
+#define EVENT_READLINK             195
+#define EVENT_READLINKAT           196
+#define EVENT_RMDIR                197
+#define EVENT_SBRK                 198
+#define EVENT_SETGID               199
+#define EVENT_SETHOSTID            200
+#define EVENT_SETPGID              201
+#define EVENT_SETPGRP              202
+#define EVENT_SETREGID             203
+#define EVENT_SETREUID             204
+#define EVENT_SETSID               205
+#define EVENT_SETUID               206
+#define EVENT_SLEEP                207
+#define EVENT_SWAB                 208
+#define EVENT_SYMLINK              209
+#define EVENT_SYMLINKAT            210
+#define EVENT_SYNC                 211
+#define EVENT_SYNCFS               212
+#define EVENT_SYSCONF              213
+#define EVENT_TCGETPGRP            214
+#define EVENT_TCSETPGRP            215
+#define EVENT_TRUNCATE             216
+#define EVENT_TTYNAME              217
+#define EVENT_TTYNAME_R            218
+#define EVENT_UALARM               219
+#define EVENT_UNLINK               220
+#define EVENT_UNLINKAT             221
+#define EVENT_USLEEP               222
+#define EVENT_VFORK                223
+#define EVENT_WRITE                224
 
 struct access_event {
     const void *pc;
@@ -204,13 +202,6 @@ struct dup3_event {
     int flags;
     int ret;
     int (*func)(int, int, int);
-};
-
-struct encrypt_event {
-    const void *pc;
-    char block[64];
-    int edflag;
-    void (*func)(char[64], int);
 };
 
 struct _exit_event {
@@ -501,14 +492,14 @@ struct pause_event {
 
 struct pipe_event {
     const void *pc;
-    int pipefd[2];
+    int *pipefd;
     int ret;
     int (*func)(int[2]);
 };
 
 struct pipe2_event {
     const void *pc;
-    int pipefd[2];
+    int *pipefd;
     int flags;
     int ret;
     int (*func)(int[2], int);
@@ -522,15 +513,6 @@ struct pread_event {
     off_t offset;
     ssize_t ret;
     ssize_t (*func)(int, void *, size_t, off_t);
-};
-
-struct pthread_atfork_event {
-    const void *pc;
-    void (*prepare)(void);
-    void (*parent)(void);
-    void (*child)(void);
-    int ret;
-    int (*func)(void (*)(void), void (*)(void), void (*)(void));
 };
 
 struct pwrite_event {
