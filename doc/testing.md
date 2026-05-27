@@ -49,8 +49,8 @@ NOTE: That sanitizer tests do not work in all configurations.
 ## Extending Tests
 
 - **Interpose tests**: add the new function signature to
-  `test/interpose/interposed.h.in` (define `MM_RETURN_<name>`,
-  `MM_PARAMS_<name>`, `MM_ARGS_<name>`). The generator will create a matching
+  `test/interpose/interposed.h.in` (define `MM_<name>_RETURN`,
+  `MM_<name>_PARAMS`, `MM_<name_ARGS>`). The generator will create a matching
   test that publishes events and compares payloads.
 - **Trace tests**: add a new program under `test/traces/` and register it in
   `test/traces/CMakeLists.txt`. Use `scripts/dice` in the test command to load
