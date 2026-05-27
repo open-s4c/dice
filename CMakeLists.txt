@@ -37,6 +37,11 @@ elseif(NOT CMAKE_SYSTEM_NAME MATCHES "NetBSD" AND NOT APPLE)
   set(HAVE_PTHREAD_CLOCKLOCK_CLOCKWAIT ON)
 endif()
 
+check_symbol_exists(epoll_pwait2 "sys/epoll.h" HAVE_EPOLL_PWAIT2)
+check_symbol_exists(getdate "time.h" HAVE_GETDATE)
+check_symbol_exists(getdate_r "time.h" HAVE_GETDATE_R)
+check_symbol_exists(settimeofday "sys/time.h" HAVE_SETTIMEOFDAY)
+
 if(APPLE)
   set(SO dylib)
   set(PRELOAD DYLD_INSERT_LIBRARIES)
