@@ -26,7 +26,7 @@ else()
 
   list(APPEND MODS mman)
   set(INCL_mman '<dice/events/mman.h>')
-  set(FUNS_mman mmap munmap)
+  set(FUNS_mman mmap mmap64 munmap)
 endif()
 
 # ------------------------------------------------------------------------------
@@ -157,15 +157,12 @@ endif()
 # time.h
 # ------------------------------------------------------------------------------
 
-# missing in interpose_h.in:
-#[[clock]]
-#[[tzset]]
-
 list(APPEND MODS time)
 set(INCL_time '<dice/events/time.h>')
 set(FUNS_time
     asctime
     asctime_r
+    clock
     clock_getres
     clock_gettime
     clock_settime
@@ -187,6 +184,7 @@ set(FUNS_time
     gettimeofday
     settimeofday
     select
+    tzset
     utimes)
 
 if(NOT APPLE)
