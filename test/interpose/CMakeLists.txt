@@ -162,13 +162,15 @@ endif()
 # ------------------------------------------------------------------------------
 # time.h
 # ------------------------------------------------------------------------------
-
-list(APPEND MODS time)
+if (NOT (CMAKE_C_COMPILER_ID STREQUAL "Clang" AND CMAKE_BUILD_TYPE STREQUAL "Release"))
+  list(APPEND MODS time)
+endif()
 set(INCL_time '<dice/events/time.h>')
 set(FUNS_time
     asctime
     asctime_r
     clock
+    time
     clock_getres
     clock_gettime
     clock_settime
@@ -183,7 +185,6 @@ set(FUNS_time
     nanosleep
     strftime
     strptime
-    time
     getitimer
     setitimer
     gettimeofday
@@ -228,13 +229,15 @@ endif()
 # ------------------------------------------------------------------------------
 # unistd.h
 # ------------------------------------------------------------------------------
-
-list(APPEND MODS unistd)
+if (NOT (CMAKE_C_COMPILER_ID STREQUAL "Clang" AND CMAKE_BUILD_TYPE STREQUAL "Release"))
+  list(APPEND MODS unistd)
+endif()
 set(INCL_unistd '<dice/events/unistd.h>')
 set(FUNS_unistd
     getdtablesize
     getegid
     geteuid
+    write
     getgid
     getgroups
     getlogin
@@ -301,8 +304,7 @@ set(FUNS_unistd
     ttyname_r
     unlink
     unlinkat
-    usleep
-    write)
+    usleep)
 
 if(NOT APPLE)
   list(
