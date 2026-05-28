@@ -162,7 +162,7 @@ endif()
 # ------------------------------------------------------------------------------
 # time.h
 # ------------------------------------------------------------------------------
-if (NOT (CMAKE_C_COMPILER_ID STREQUAL "Clang" AND CMAKE_BUILD_TYPE STREQUAL "Release"))
+if (NOT (CMAKE_C_COMPILER_ID STREQUAL "Clang" AND CMAKE_BUILD_TYPE STREQUAL "Release") AND NOT BSD)
   list(APPEND MODS time)
 endif()
 set(INCL_time '<dice/events/time.h>')
