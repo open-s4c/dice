@@ -1,7 +1,11 @@
 name: Build and test Dice in smolBSD VM (NetBSD)
 on:
-  - push
-  - pull_request
+  push:
+    branches:
+      - main
+    tags:
+    - '**'
+  pull_request:
 
 env:
   REGISTRY: ghcr.io

@@ -1,7 +1,11 @@
 name: Build Dice for OHOS
 on:
-  - push
-  - pull_request
+  push:
+    branches:
+      - main
+    tags:
+    - '**'
+  pull_request:
 
 env:
   REGISTRY: ghcr.io
