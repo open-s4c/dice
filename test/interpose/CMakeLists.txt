@@ -101,8 +101,9 @@ endif()
 # ------------------------------------------------------------------------------
 # poll, epoll, and other fd related
 # ------------------------------------------------------------------------------
-
+if (NOT (CMAKE_C_COMPILER_ID STREQUAL "GNU" AND CMAKE_BUILD_TYPE STREQUAL "Release"))
 list(APPEND MODS poll)
+endif()
 set(INCL_poll '<dice/events/poll.h>')
 set(FUNS_poll poll)
 
@@ -229,7 +230,7 @@ endif()
 # ------------------------------------------------------------------------------
 # unistd.h
 # ------------------------------------------------------------------------------
-if (NOT (CMAKE_C_COMPILER_ID STREQUAL "Clang" AND CMAKE_BUILD_TYPE STREQUAL "Release"))
+if (NOT CMAKE_BUILD_TYPE STREQUAL "Release")
   list(APPEND MODS unistd)
 endif()
 set(INCL_unistd '<dice/events/unistd.h>')
