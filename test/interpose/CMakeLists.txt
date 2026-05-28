@@ -124,11 +124,11 @@ endif()
 
 if(NOT APPLE)
   list(APPEND MODS fcntl)
-  set(INCL_fcntl '<dice/events/fcntl.h>')
-  set(FUNS_fcntl creat #[[fcntl]] open #[[openat]])
-  if(NOT APPLE)
-    set(FUNS_fcntl ${FUNS_fcntl} posix_fadvise posix_fallocate)
-  endif()
+endif()
+set(INCL_fcntl '<dice/events/fcntl.h>')
+set(FUNS_fcntl creat #[[fcntl]] #[[openat]] posix_fadvise posix_fallocate)
+if (NOT (CMAKE_C_COMPILER_ID STREQUAL "GNU" AND CMAKE_BUILD_TYPE STREQUAL "Release"))
+  list(APPEND FUNS_fcntl open)
 endif()
 
 # ------------------------------------------------------------------------------
