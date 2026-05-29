@@ -85,10 +85,8 @@ STATIC_ASSERT(LAST_DISPATCH_SLOT >= 0, "slot 0 is always dispatch-capable");
  * chain.
  *
  * On load time, a constructor function registers the handler to the
- * chain. The order in which modules are loaded must be considered when
- * planning for the relation between handlers. The order is either given
- * by linking order (if compilation units are linked together) or by the
- * order of shared libraries in LD_PRELOAD.
+ * chain. Constructor load order still follows linking order or the preload
+ * string, but callback execution order is determined by the subscription slot.
  *
  * The PS_SUBSCRIBE macro also registers the chain and type names in the pubsub.
  * This is helpful for debugging. The handler body is variadic so subscribers
