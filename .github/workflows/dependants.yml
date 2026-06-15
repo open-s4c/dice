@@ -42,7 +42,7 @@ jobs:
           echo "CHECK_NAME=Test ${{ matrix.dependant }} against commit ${{ env.COMMIT }}" >> $GITHUB_ENV
       - name: Generate a token
         id: generate-token
-        uses: actions/create-github-app-token@v2
+        uses: actions/create-github-app-token@v3
         with:
           repositories: |
             dice
@@ -51,13 +51,13 @@ jobs:
           private-key: ${{ secrets.APP_PRIVATE_KEY }}
       - name: Create empty check
         id: create-check
-        uses: LouisBrunner/checks-action@v2.0.0
+        uses: LouisBrunner/checks-action@v3.1.0
         with:
           token: ${{ steps.generate-token.outputs.token }}
           name: '${{ env.CHECK_NAME }}'
           status: queued
       - name: Trigger ${{ matrix.dependant }} workflow
-        uses: peter-evans/repository-dispatch@v3
+        uses: peter-evans/repository-dispatch@v4
         with:
           token: ${{ steps.generate-token.outputs.token }}
           repository: ${{ env.OWNER }}/${{ matrix.dependant }}
@@ -68,7 +68,7 @@ jobs:
               "check_id": "${{ steps.create-check.outputs.check_id }}"
             }
       - name: Wait for ${{ matrix.dependant }} result
-        uses: lewagon/wait-on-check-action@v1.4.1
+        uses: lewagon/wait-on-check-action@v1.8.0
         with:
           ref: ${{ env.COMMIT }}
           check-name: '${{ env.CHECK_NAME }}'
