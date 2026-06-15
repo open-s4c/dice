@@ -19,7 +19,7 @@ jobs:
     steps:
       - name: Setup OpenHarmony SDK
         id: setup_sdk
-        uses: openharmony-rs/setup-ohos-sdk@v0.2.4
+        uses: openharmony-rs/setup-ohos-sdk@v1.0.0
         with:
           version: "6.0"
           fixup-path: true
