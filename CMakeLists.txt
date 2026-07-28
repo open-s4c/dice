@@ -55,6 +55,7 @@ endif()
 # Ensure we have libvsync installed or we install vendored one
 find_package(libvsync 4.2 CONFIG)
 if(NOT libvsync_FOUND)
+  unset(libvsync_DIR CACHE)
   list(APPEND CMAKE_PREFIX_PATH ${CMAKE_CURRENT_SOURCE_DIR}/deps/libvsync)
   find_package(libvsync 4.2 CONFIG REQUIRED)
 endif()
