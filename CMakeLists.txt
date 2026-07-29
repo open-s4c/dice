@@ -54,9 +54,9 @@ endif()
 
 # Ensure we have libvsync installed or we install vendored one
 find_package(libvsync 4.2 CONFIG)
-if(NOT libvsync_DIR)
-  set(CMAKE_FIND_ROOT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/deps/libvsync)
-  find_package(libvsync 4.2 CONFIG REQUIRED)
+if(NOT libvsync_FOUND)
+  list(APPEND CMAKE_PREFIX_PATH ${CMAKE_CURRENT_SOURCE_DIR}/deps/libvsync)
+  find_package(libvsync 4.2 CONFIG REQUIRED NO_CMAKE_FIND_ROOT_PATH)
 endif()
 message(STATUS "Using libvsync_DIR: ${libvsync_DIR}")
 link_libraries(libvsync::vsync)
@@ -119,7 +119,8 @@ if(NOT "${DICE_MAIN_HOOKS}")
   add_compile_definitions(DICE_MAIN_START_DISABLE)
 endif()
 
-option(DICE_PUBSUB_CTOR_INIT "Ensure pubsub is eventually initd via constructor" on)
+option(DICE_PUBSUB_CTOR_INIT
+       "Ensure pubsub is eventually initd via constructor" on)
 if(NOT "${DICE_PUBSUB_CTOR_INIT}")
   add_compile_definitions(DICE_DISABLE_PUBSUB_CTOR_INIT)
 endif()
