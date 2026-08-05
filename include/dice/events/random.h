@@ -7,7 +7,7 @@
 
 #include <sys/random.h>
 
-#define EVENT_GETRANDOM   104
+#define EVENT_GETRANDOM   262
 
 struct getrandom_event {
     const void *pc;

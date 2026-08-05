@@ -82,7 +82,7 @@ set(DISPATCH_SRCS ${DISPATCH_SRCS} ${DISPATCH_GENERATED})
 # ------------------------------------------------------------------------------
 # dice libraries
 # ------------------------------------------------------------------------------
-set(SRCS mempool.c pubsub.c registry.c ${DISPATCH_C})
+set(SRCS mempool.c mempool_user.c pubsub.c registry.c ${DISPATCH_C})
 if(${DICE_MEMSET})
   set(SRCS memset.c ${SRCS})
 endif()

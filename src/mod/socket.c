@@ -7,6 +7,7 @@
 #include <dice/interpose.h>
 #include <dice/module.h>
 #include <dice/pubsub.h>
+#include <errno.h>
 
 INTERPOSE(int, accept, int sockfd, struct sockaddr *addr, socklen_t *addrlen)
 {
@@ -21,8 +22,11 @@ INTERPOSE(int, accept, int sockfd, struct sockaddr *addr, socklen_t *addrlen)
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_ACCEPT, &ev, &md);
+    errno = 0;
     ev.ret = ev.func(ev.sockfd, ev.addr, ev.addrlen);
+    ev.errno_ = errno;
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_ACCEPT, &ev, &md);
+    errno = ev.errno_;
     return ev.ret;
 }
 
@@ -41,8 +45,11 @@ INTERPOSE(int, accept4, int sockfd, struct sockaddr *addr, socklen_t *addrlen, i
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_ACCEPT4, &ev, &md);
+    errno = 0;
     ev.ret = ev.func(ev.sockfd, ev.addr, ev.addrlen, ev.flags);
+    ev.errno_ = errno;
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_ACCEPT4, &ev, &md);
+    errno = ev.errno_;
     return ev.ret;
 }
 #endif
@@ -60,8 +67,11 @@ INTERPOSE(int, bind, int sockfd, const struct sockaddr *addr, socklen_t addrlen)
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_BIND, &ev, &md);
+    errno = 0;
     ev.ret = ev.func(ev.sockfd, ev.addr, ev.addrlen);
+    ev.errno_ = errno;
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_BIND, &ev, &md);
+    errno = ev.errno_;
 
     return ev.ret;
 }
@@ -79,8 +89,11 @@ INTERPOSE(int, connect, int sockfd, const struct sockaddr *addr, socklen_t addrl
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_CONNECT, &ev, &md);
+    errno = 0;
     ev.ret = ev.func(ev.sockfd, ev.addr, ev.addrlen);
+    ev.errno_ = errno;
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_CONNECT, &ev, &md);
+    errno = ev.errno_;
 
     return ev.ret;
 }
@@ -98,8 +111,11 @@ INTERPOSE(int, getpeername, int sockfd, struct sockaddr *addr, socklen_t *addrle
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_GETPEERNAME, &ev, &md);
+    errno = 0;
     ev.ret = ev.func(ev.sockfd, ev.addr, ev.addrlen);
+    ev.errno_ = errno;
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_GETPEERNAME, &ev, &md);
+    errno = ev.errno_;
 
     return ev.ret;
 }
@@ -117,8 +133,11 @@ INTERPOSE(int, getsockname, int sockfd, struct sockaddr *addr, socklen_t *addrle
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_GETSOCKNAME, &ev, &md);
+    errno = 0;
     ev.ret = ev.func(ev.sockfd, ev.addr, ev.addrlen);
+    ev.errno_ = errno;
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_GETSOCKNAME, &ev, &md);
+    errno = ev.errno_;
 
     return ev.ret;
 }
@@ -139,8 +158,11 @@ INTERPOSE(int, getsockopt, int sockfd, int level, int optname, void *optval, soc
     metadata_t md = {0};
 
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_GETSOCKOPT, &ev, &md);
+    errno = 0;
     ev.ret = ev.func(ev.sockfd, ev.level, ev.optname, ev.optval, ev.optlen);
+    ev.errno_ = errno;
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_GETSOCKOPT, &ev, &md);
+    errno = ev.errno_;
 
     return ev.ret;
 }
@@ -160,8 +182,11 @@ INTERPOSE(int, setsockopt, int sockfd, int level, int optname, const void *optva
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_SETSOCKOPT, &ev, &md);
+    errno = 0;
     ev.ret = ev.func(ev.sockfd, ev.level, ev.optname, ev.optval, ev.optlen);
+    ev.errno_ = errno;
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_SETSOCKOPT, &ev, &md);
+    errno = ev.errno_;
 
     return ev.ret;
 }
@@ -178,8 +203,11 @@ INTERPOSE(int, listen, int sockfd, int backlog)
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_LISTEN, &ev, &md);
+    errno = 0;
     ev.ret = ev.func(ev.sockfd, ev.backlog);
+    ev.errno_ = errno;
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_LISTEN, &ev, &md);
+    errno = ev.errno_;
 
     return ev.ret;
 }
@@ -198,8 +226,11 @@ INTERPOSE(ssize_t, recv, int sockfd, void *buf, size_t len, int flags)
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_RECV, &ev, &md);
+    errno = 0;
     ev.ret = ev.func(ev.sockfd, ev.buf, ev.len, ev.flags);
+    ev.errno_ = errno;
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_RECV, &ev, &md);
+    errno = ev.errno_;
 
     return ev.ret;
 }
@@ -221,8 +252,11 @@ INTERPOSE(ssize_t, recvfrom, int sockfd, void *buf, size_t len, int flags,
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_RECVFROM, &ev, &md);
+    errno = 0;
     ev.ret = ev.func(ev.sockfd, ev.buf, ev.len, ev.flags, ev.src_addr, ev.addrlen);
+    ev.errno_ = errno;
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_RECVFROM, &ev, &md);
+    errno = ev.errno_;
 
     return ev.ret;
 }
@@ -240,8 +274,11 @@ INTERPOSE(ssize_t, recvmsg, int sockfd, struct msghdr *msg, int flags)
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_RECVMSG, &ev, &md);
+    errno = 0;
     ev.ret = ev.func(ev.sockfd, ev.msg, ev.flags);
+    ev.errno_ = errno;
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_RECVMSG, &ev, &md);
+    errno = ev.errno_;
 
     return ev.ret;
 }
@@ -260,8 +297,11 @@ INTERPOSE(ssize_t, send, int sockfd, const void *buf, size_t len, int flags)
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_SEND, &ev, &md);
+    errno = 0;
     ev.ret = ev.func(ev.sockfd, ev.buf, ev.len, ev.flags);
+    ev.errno_ = errno;
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_SEND, &ev, &md);
+    errno = ev.errno_;
 
     return ev.ret;
 }
@@ -283,8 +323,11 @@ INTERPOSE(ssize_t, sendto, int sockfd, const void *buf, size_t len, int flags,
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_SENDTO, &ev, &md);
+    errno = 0;
     ev.ret = ev.func(ev.sockfd, ev.buf, ev.len, ev.flags, ev.dest_addr, ev.addrlen);
+    ev.errno_ = errno;
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_SENDTO, &ev, &md);
+    errno = ev.errno_;
 
     return ev.ret;
 }
@@ -302,8 +345,11 @@ INTERPOSE(ssize_t, sendmsg, int sockfd, const struct msghdr *msg, int flags)
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_SENDMSG, &ev, &md);
+    errno = 0;
     ev.ret = ev.func(ev.sockfd, ev.msg, ev.flags);
+    ev.errno_ = errno;
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_SENDMSG, &ev, &md);
+    errno = ev.errno_;
 
     return ev.ret;
 }
@@ -320,8 +366,11 @@ INTERPOSE(int, shutdown, int sockfd, int how)
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_SHUTDOWN, &ev, &md);
+    errno = 0;
     ev.ret = ev.func(ev.sockfd, ev.how);
+    ev.errno_ = errno;
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_SHUTDOWN, &ev, &md);
+    errno = ev.errno_;
 
     return ev.ret;
 }
@@ -339,8 +388,11 @@ INTERPOSE(int, socket, int domain, int type, int protocol)
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_SOCKET, &ev, &md);
+    errno = 0;
     ev.ret = ev.func(ev.domain, ev.type, ev.protocol);
+    ev.errno_ = errno;
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_SOCKET, &ev, &md);
+    errno = ev.errno_;
 
     return ev.ret;
 }
@@ -362,8 +414,11 @@ INTERPOSE(int, socketpair, int domain, int type, int protocol, int sv[2])
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_SOCKETPAIR, &ev, &md);
+    errno = 0;
     ev.ret = ev.func(ev.domain, ev.type, ev.protocol, ev.sv);
+    ev.errno_ = errno;
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_SOCKETPAIR, &ev, &md);
+    errno = ev.errno_;
 
     return ev.ret;
 }

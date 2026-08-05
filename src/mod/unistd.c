@@ -7,6 +7,8 @@
 #include <dice/interpose.h>
 #include <dice/module.h>
 #include <dice/pubsub.h>
+#include <errno.h>
+#include <stdarg.h>
 
 INTERPOSE(int, access, const char *path, int mode)
 {
@@ -20,8 +22,11 @@ INTERPOSE(int, access, const char *path, int mode)
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_ACCESS, &ev, &md);
+    errno = 0;
     ev.ret = ev.func(ev.path, ev.mode);
+    ev.errno_ = errno;
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_ACCESS, &ev, &md);
+    errno = ev.errno_;
     return ev.ret;
 }
 
@@ -53,8 +58,11 @@ INTERPOSE(int, brk, void *addr)
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_BRK, &ev, &md);
+    errno = 0;
     ev.ret = ev.func(ev.addr);
+    ev.errno_ = errno;
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_BRK, &ev, &md);
+    errno = ev.errno_;
     return ev.ret;
 }
 #endif
@@ -70,8 +78,11 @@ INTERPOSE(int, chdir, const char *path)
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_CHDIR, &ev, &md);
+    errno = 0;
     ev.ret = ev.func(ev.path);
+    ev.errno_ = errno;
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_CHDIR, &ev, &md);
+    errno = ev.errno_;
     return ev.ret;
 }
 
@@ -86,8 +97,11 @@ INTERPOSE(int, chroot, const char *path)
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_CHROOT, &ev, &md);
+    errno = 0;
     ev.ret = ev.func(ev.path);
+    ev.errno_ = errno;
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_CHROOT, &ev, &md);
+    errno = ev.errno_;
     return ev.ret;
 }
 
@@ -104,8 +118,11 @@ INTERPOSE(int, chown, const char *path, uid_t owner, gid_t group)
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_CHOWN, &ev, &md);
+    errno = 0;
     ev.ret = ev.func(ev.path, ev.owner, ev.group);
+    ev.errno_ = errno;
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_CHOWN, &ev, &md);
+    errno = ev.errno_;
     return ev.ret;
 }
 
@@ -120,8 +137,11 @@ INTERPOSE(int, close, int fd)
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_CLOSE, &ev, &md);
+    errno = 0;
     ev.ret = ev.func(ev.fd);
+    ev.errno_ = errno;
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_CLOSE, &ev, &md);
+    errno = ev.errno_;
     return ev.ret;
 }
 
@@ -138,8 +158,11 @@ INTERPOSE(size_t, confstr, int name, char *buf, size_t size)
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_CONFSTR, &ev, &md);
+    errno = 0;
     ev.ret = ev.func(ev.name, ev.buf, ev.size);
+    ev.errno_ = errno;
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_CONFSTR, &ev, &md);
+    errno = ev.errno_;
     return ev.ret;
 }
 
@@ -155,8 +178,11 @@ INTERPOSE(char *, crypt, const char *key, const char *salt)
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_CRYPT, &ev, &md);
+    errno = 0;
     ev.ret = ev.func(ev.key, ev.salt);
+    ev.errno_ = errno;
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_CRYPT, &ev, &md);
+    errno = ev.errno_;
     return ev.ret;
 }
 
@@ -205,8 +231,11 @@ INTERPOSE(int, dup, int oldfd)
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_DUP, &ev, &md);
+    errno = 0;
     ev.ret = ev.func(ev.oldfd);
+    ev.errno_ = errno;
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_DUP, &ev, &md);
+    errno = ev.errno_;
     return ev.ret;
 }
 
@@ -222,8 +251,11 @@ INTERPOSE(int, dup2, int oldfd, int newfd)
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_DUP2, &ev, &md);
+    errno = 0;
     ev.ret = ev.func(ev.oldfd, ev.newfd);
+    ev.errno_ = errno;
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_DUP2, &ev, &md);
+    errno = ev.errno_;
     return ev.ret;
 }
 
@@ -241,8 +273,11 @@ INTERPOSE(int, dup3, int oldfd, int newfd, int flags)
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_DUP3, &ev, &md);
+    errno = 0;
     ev.ret = ev.func(ev.oldfd, ev.newfd, ev.flags);
+    ev.errno_ = errno;
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_DUP3, &ev, &md);
+    errno = ev.errno_;
     return ev.ret;
 }
 #endif
@@ -275,8 +310,11 @@ INTERPOSE(int, faccessat, int dirfd, const char *path, int mode, int flags)
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_FACCESSAT, &ev, &md);
+    errno = 0;
     ev.ret = ev.func(ev.dirfd, ev.path, ev.mode, ev.flags);
+    ev.errno_ = errno;
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_FACCESSAT, &ev, &md);
+    errno = ev.errno_;
     return ev.ret;
 }
 
@@ -291,8 +329,11 @@ INTERPOSE(int, fchdir, int fd)
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_FCHDIR, &ev, &md);
+    errno = 0;
     ev.ret = ev.func(ev.fd);
+    ev.errno_ = errno;
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_FCHDIR, &ev, &md);
+    errno = ev.errno_;
     return ev.ret;
 }
 
@@ -309,8 +350,11 @@ INTERPOSE(int, fchown, int fildes, uid_t owner, gid_t group)
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_FCHOWN, &ev, &md);
+    errno = 0;
     ev.ret = ev.func(ev.fildes, ev.owner, ev.group);
+    ev.errno_ = errno;
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_FCHOWN, &ev, &md);
+    errno = ev.errno_;
     return ev.ret;
 }
 
@@ -329,8 +373,11 @@ INTERPOSE(int, fchownat, int fd, const char *path, uid_t owner, gid_t group, int
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_FCHOWNAT, &ev, &md);
+    errno = 0;
     ev.ret = ev.func(ev.fd, ev.path, ev.owner, ev.group, ev.flag);
+    ev.errno_ = errno;
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_FCHOWNAT, &ev, &md);
+    errno = ev.errno_;
     return ev.ret;
 }
 
@@ -361,8 +408,11 @@ INTERPOSE(int, fdatasync, int fd)
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_FDATASYNC, &ev, &md);
+    errno = 0;
     ev.ret = ev.func(ev.fd);
+    ev.errno_ = errno;
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_FDATASYNC, &ev, &md);
+    errno = ev.errno_;
     return ev.ret;
 }
 #endif
@@ -377,8 +427,11 @@ INTERPOSE(pid_t, fork, void)
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_FORK, &ev, &md);
+    errno = 0;
     ev.ret = ev.func();
+    ev.errno_ = errno;
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_FORK, &ev, &md);
+    errno = ev.errno_;
     return ev.ret;
 }
 
@@ -394,8 +447,11 @@ INTERPOSE(long, fpathconf, int fd, int name)
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_FPATHCONF, &ev, &md);
+    errno = 0;
     ev.ret = ev.func(ev.fd, ev.name);
+    ev.errno_ = errno;
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_FPATHCONF, &ev, &md);
+    errno = ev.errno_;
     return ev.ret;
 }
 
@@ -410,8 +466,11 @@ INTERPOSE(int, fsync, int fd)
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_FSYNC, &ev, &md);
+    errno = 0;
     ev.ret = ev.func(ev.fd);
+    ev.errno_ = errno;
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_FSYNC, &ev, &md);
+    errno = ev.errno_;
     return ev.ret;
 }
 
@@ -427,8 +486,11 @@ INTERPOSE(int, ftruncate, int fildes, off_t length)
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_FTRUNCATE, &ev, &md);
+    errno = 0;
     ev.ret = ev.func(ev.fildes, ev.length);
+    ev.errno_ = errno;
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_FTRUNCATE, &ev, &md);
+    errno = ev.errno_;
     return ev.ret;
 }
 
@@ -444,8 +506,11 @@ INTERPOSE(char *, getcwd, char *buf, size_t size)
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_GETCWD, &ev, &md);
+    errno = 0;
     ev.ret = ev.func(ev.buf, ev.size);
+    ev.errno_ = errno;
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_GETCWD, &ev, &md);
+    errno = ev.errno_;
     return ev.ret;
 }
 
@@ -459,8 +524,11 @@ INTERPOSE(int, getdtablesize, void)
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_GETDTABLESIZE, &ev, &md);
+    errno = 0;
     ev.ret = ev.func();
+    ev.errno_ = errno;
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_GETDTABLESIZE, &ev, &md);
+    errno = ev.errno_;
     return ev.ret;
 }
 
@@ -521,8 +589,11 @@ INTERPOSE(int, getgroups, int size, gid_t list[])
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_GETGROUPS, &ev, &md);
+    errno = 0;
     ev.ret = ev.func(ev.size, ev.list);
+    ev.errno_ = errno;
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_GETGROUPS, &ev, &md);
+    errno = ev.errno_;
     return ev.ret;
 }
 
@@ -551,8 +622,11 @@ INTERPOSE(char *, getlogin, void)
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_GETLOGIN, &ev, &md);
+    errno = 0;
     ev.ret = ev.func();
+    ev.errno_ = errno;
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_GETLOGIN, &ev, &md);
+    errno = ev.errno_;
     return ev.ret;
 }
 
@@ -617,8 +691,11 @@ INTERPOSE(char *, getpass, const char *prompt)
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_GETPASS, &ev, &md);
+    errno = 0;
     ev.ret = ev.func(ev.prompt);
+    ev.errno_ = errno;
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_GETPASS, &ev, &md);
+    errno = ev.errno_;
     return ev.ret;
 }
 
@@ -633,8 +710,11 @@ INTERPOSE(pid_t, getpgid, pid_t pid)
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_GETPGID, &ev, &md);
+    errno = 0;
     ev.ret = ev.func(ev.pid);
+    ev.errno_ = errno;
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_GETPGID, &ev, &md);
+    errno = ev.errno_;
     return ev.ret;
 }
 
@@ -694,8 +774,11 @@ INTERPOSE(pid_t, getsid, pid_t pid)
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_GETSID, &ev, &md);
+    errno = 0;
     ev.ret = ev.func(ev.pid);
+    ev.errno_ = errno;
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_GETSID, &ev, &md);
+    errno = ev.errno_;
     return ev.ret;
 }
 
@@ -710,8 +793,11 @@ INTERPOSE(char *, getwd, char *buf)
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_GETWD, &ev, &md);
+    errno = 0;
     ev.ret = ev.func(ev.buf);
+    ev.errno_ = errno;
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_GETWD, &ev, &md);
+    errno = ev.errno_;
     return ev.ret;
 }
 
@@ -726,8 +812,11 @@ INTERPOSE(char *, get_current_dir_name, void)
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_GET_CURRENT_DIR_NAME, &ev, &md);
+    errno = 0;
     ev.ret = ev.func();
+    ev.errno_ = errno;
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_GET_CURRENT_DIR_NAME, &ev, &md);
+    errno = ev.errno_;
     return ev.ret;
 }
 #endif
@@ -743,8 +832,11 @@ INTERPOSE(int, isatty, int fd)
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_ISATTY, &ev, &md);
+    errno = 0;
     ev.ret = ev.func(ev.fd);
+    ev.errno_ = errno;
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_ISATTY, &ev, &md);
+    errno = ev.errno_;
     return ev.ret;
 }
 
@@ -761,8 +853,11 @@ INTERPOSE(int, lchown, const char *path, uid_t owner, gid_t group)
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_LCHOWN, &ev, &md);
+    errno = 0;
     ev.ret = ev.func(ev.path, ev.owner, ev.group);
+    ev.errno_ = errno;
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_LCHOWN, &ev, &md);
+    errno = ev.errno_;
     return ev.ret;
 }
 
@@ -778,8 +873,11 @@ INTERPOSE(int, link, const char *oldpath, const char *newpath)
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_LINK, &ev, &md);
+    errno = 0;
     ev.ret = ev.func(ev.oldpath, ev.newpath);
+    ev.errno_ = errno;
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_LINK, &ev, &md);
+    errno = ev.errno_;
     return ev.ret;
 }
 
@@ -799,8 +897,11 @@ INTERPOSE(int, linkat, int olddirfd, const char *oldpath,
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_LINKAT, &ev, &md);
+    errno = 0;
     ev.ret = ev.func(ev.olddirfd, ev.oldpath, ev.newdirfd, ev.newpath, ev.flags);
+    ev.errno_ = errno;
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_LINKAT, &ev, &md);
+    errno = ev.errno_;
     return ev.ret;
 }
 
@@ -817,8 +918,11 @@ INTERPOSE(int, lockf, int fd, int op, off_t size)
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_LOCKF, &ev, &md);
+    errno = 0;
     ev.ret = ev.func(ev.fd, ev.op, ev.size);
+    ev.errno_ = errno;
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_LOCKF, &ev, &md);
+    errno = ev.errno_;
     return ev.ret;
 }
 
@@ -835,8 +939,11 @@ INTERPOSE(off_t, lseek, int fd, off_t offset, int whence)
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_LSEEK, &ev, &md);
+    errno = 0;
     ev.ret = ev.func(ev.fd, ev.offset, ev.whence);
+    ev.errno_ = errno;
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_LSEEK, &ev, &md);
+    errno = ev.errno_;
     return ev.ret;
 }
 
@@ -851,8 +958,11 @@ INTERPOSE(int, nice, int inc)
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_NICE, &ev, &md);
+    errno = 0;
     ev.ret = ev.func(ev.inc);
+    ev.errno_ = errno;
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_NICE, &ev, &md);
+    errno = ev.errno_;
     return ev.ret;
 }
 
@@ -868,8 +978,11 @@ INTERPOSE(long, pathconf, const char *path, int name)
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_PATHCONF, &ev, &md);
+    errno = 0;
     ev.ret = ev.func(ev.path, ev.name);
+    ev.errno_ = errno;
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_PATHCONF, &ev, &md);
+    errno = ev.errno_;
     return ev.ret;
 }
 
@@ -883,8 +996,11 @@ INTERPOSE(int, pause, void)
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_PAUSE, &ev, &md);
+    errno = 0;
     ev.ret = ev.func();
+    ev.errno_ = errno;
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_PAUSE, &ev, &md);
+    errno = ev.errno_;
     return ev.ret;
 }
 
@@ -903,8 +1019,11 @@ INTERPOSE(int, pipe, int pipefd[2])
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_PIPE, &ev, &md);
+    errno = 0;
     ev.ret = ev.func(pipefd);
+    ev.errno_ = errno;
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_PIPE, &ev, &md);
+    errno = ev.errno_;
     return ev.ret;
 }
 
@@ -921,8 +1040,11 @@ INTERPOSE(int, pipe2, int pipefd[2], int flags)
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_PIPE2, &ev, &md);
+    errno = 0;
     ev.ret = ev.func(pipefd, flags);
+    ev.errno_ = errno;
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_PIPE2, &ev, &md);
+    errno = ev.errno_;
     return ev.ret;
 }
 #endif
@@ -941,8 +1063,11 @@ INTERPOSE(ssize_t, pread, int fd, void *buf, size_t count, off_t offset)
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_PREAD, &ev, &md);
+    errno = 0;
     ev.ret = ev.func(ev.fd, ev.buf, ev.count, ev.offset);
+    ev.errno_ = errno;
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_PREAD, &ev, &md);
+    errno = ev.errno_;
     return ev.ret;
 }
 
@@ -960,8 +1085,11 @@ INTERPOSE(ssize_t, pwrite, int fd, const void *buf, size_t count, off_t offset)
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_PWRITE, &ev, &md);
+    errno = 0;
     ev.ret = ev.func(ev.fd, ev.buf, ev.count, ev.offset);
+    ev.errno_ = errno;
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_PWRITE, &ev, &md);
+    errno = ev.errno_;
     return ev.ret;
 }
 
@@ -978,8 +1106,11 @@ INTERPOSE(ssize_t, read, int fd, void *buf, size_t count)
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_READ, &ev, &md);
+    errno = 0;
     ev.ret = ev.func(ev.fd, ev.buf, ev.count);
+    ev.errno_ = errno;
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_READ, &ev, &md);
+    errno = ev.errno_;
     return ev.ret;
 }
 
@@ -996,8 +1127,11 @@ INTERPOSE(ssize_t, readlink, const char *path, char *buf, size_t bufsiz)
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_READLINK, &ev, &md);
+    errno = 0;
     ev.ret = ev.func(ev.path, ev.buf, ev.bufsiz);
+    ev.errno_ = errno;
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_READLINK, &ev, &md);
+    errno = ev.errno_;
     return ev.ret;
 }
 
@@ -1015,8 +1149,11 @@ INTERPOSE(ssize_t, readlinkat, int dirfd, const char *path, char *buf, size_t bu
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_READLINKAT, &ev, &md);
+    errno = 0;
     ev.ret = ev.func(ev.dirfd, ev.path, ev.buf, ev.bufsiz);
+    ev.errno_ = errno;
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_READLINKAT, &ev, &md);
+    errno = ev.errno_;
     return ev.ret;
 }
 
@@ -1031,8 +1168,11 @@ INTERPOSE(int, rmdir, const char *path)
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_RMDIR, &ev, &md);
+    errno = 0;
     ev.ret = ev.func(ev.path);
+    ev.errno_ = errno;
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_RMDIR, &ev, &md);
+    errno = ev.errno_;
     return ev.ret;
 }
 
@@ -1048,8 +1188,11 @@ INTERPOSE(void *, sbrk, intptr_t increment)
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_SBRK, &ev, &md);
+    errno = 0;
     ev.ret = ev.func(ev.increment);
+    ev.errno_ = errno;
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_SBRK, &ev, &md);
+    errno = ev.errno_;
     return ev.ret;
 }
 #endif
@@ -1065,8 +1208,11 @@ INTERPOSE(int, setgid, gid_t gid)
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_SETGID, &ev, &md);
+    errno = 0;
     ev.ret = ev.func(ev.gid);
+    ev.errno_ = errno;
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_SETGID, &ev, &md);
+    errno = ev.errno_;
     return ev.ret;
 }
 
@@ -1082,8 +1228,11 @@ INTERPOSE(int, sethostid, long hostid)
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_SETHOSTID, &ev, &md);
+    errno = 0;
     ev.ret = ev.func(ev.hostid);
+    ev.errno_ = errno;
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_SETHOSTID, &ev, &md);
+    errno = ev.errno_;
     return ev.ret;
 }
 #endif
@@ -1100,8 +1249,11 @@ INTERPOSE(int, setpgid, pid_t pid, pid_t pgid)
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_SETPGID, &ev, &md);
+    errno = 0;
     ev.ret = ev.func(ev.pid, ev.pgid);
+    ev.errno_ = errno;
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_SETPGID, &ev, &md);
+    errno = ev.errno_;
     return ev.ret;
 }
 
@@ -1116,8 +1268,11 @@ INTERPOSE(pid_t, setpgrp, void)
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_SETPGRP, &ev, &md);
+    errno = 0;
     ev.ret = ev.func();
+    ev.errno_ = errno;
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_SETPGRP, &ev, &md);
+    errno = ev.errno_;
     return ev.ret;
 }
 #endif
@@ -1134,8 +1289,11 @@ INTERPOSE(int, setregid, gid_t rgid, gid_t egid)
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_SETREGID, &ev, &md);
+    errno = 0;
     ev.ret = ev.func(ev.rgid, ev.egid);
+    ev.errno_ = errno;
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_SETREGID, &ev, &md);
+    errno = ev.errno_;
     return ev.ret;
 }
 
@@ -1151,8 +1309,11 @@ INTERPOSE(int, setreuid, uid_t ruid, uid_t euid)
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_SETREUID, &ev, &md);
+    errno = 0;
     ev.ret = ev.func(ev.ruid, ev.euid);
+    ev.errno_ = errno;
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_SETREUID, &ev, &md);
+    errno = ev.errno_;
     return ev.ret;
 }
 
@@ -1166,8 +1327,11 @@ INTERPOSE(pid_t, setsid, void)
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_SETSID, &ev, &md);
+    errno = 0;
     ev.ret = ev.func();
+    ev.errno_ = errno;
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_SETSID, &ev, &md);
+    errno = ev.errno_;
     return ev.ret;
 }
 
@@ -1182,8 +1346,11 @@ INTERPOSE(int, setuid, uid_t uid)
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_SETUID, &ev, &md);
+    errno = 0;
     ev.ret = ev.func(ev.uid);
+    ev.errno_ = errno;
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_SETUID, &ev, &md);
+    errno = ev.errno_;
     return ev.ret;
 }
 
@@ -1231,8 +1398,11 @@ INTERPOSE(int, symlink, const char *target, const char *linkpath)
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_SYMLINK, &ev, &md);
+    errno = 0;
     ev.ret = ev.func(ev.target, ev.linkpath);
+    ev.errno_ = errno;
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_SYMLINK, &ev, &md);
+    errno = ev.errno_;
     return ev.ret;
 }
 
@@ -1249,8 +1419,11 @@ INTERPOSE(int, symlinkat, const char *target, int newdirfd, const char *linkpath
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_SYMLINKAT, &ev, &md);
+    errno = 0;
     ev.ret = ev.func(ev.target, ev.newdirfd, ev.linkpath);
+    ev.errno_ = errno;
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_SYMLINKAT, &ev, &md);
+    errno = ev.errno_;
     return ev.ret;
 }
 
@@ -1279,8 +1452,11 @@ INTERPOSE(int, syncfs, int fd)
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_SYNCFS, &ev, &md);
+    errno = 0;
     ev.ret = ev.func(ev.fd);
+    ev.errno_ = errno;
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_SYNCFS, &ev, &md);
+    errno = ev.errno_;
     return ev.ret;
 }
 #endif
@@ -1296,8 +1472,11 @@ INTERPOSE(long, sysconf, int name)
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_SYSCONF, &ev, &md);
+    errno = 0;
     ev.ret = ev.func(ev.name);
+    ev.errno_ = errno;
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_SYSCONF, &ev, &md);
+    errno = ev.errno_;
     return ev.ret;
 }
 
@@ -1312,8 +1491,11 @@ INTERPOSE(pid_t, tcgetpgrp, int fd)
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_TCGETPGRP, &ev, &md);
+    errno = 0;
     ev.ret = ev.func(ev.fd);
+    ev.errno_ = errno;
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_TCGETPGRP, &ev, &md);
+    errno = ev.errno_;
     return ev.ret;
 }
 
@@ -1329,8 +1511,11 @@ INTERPOSE(int, tcsetpgrp, int fd, pid_t pgrp)
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_TCSETPGRP, &ev, &md);
+    errno = 0;
     ev.ret = ev.func(ev.fd, ev.pgrp);
+    ev.errno_ = errno;
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_TCSETPGRP, &ev, &md);
+    errno = ev.errno_;
     return ev.ret;
 }
 
@@ -1346,8 +1531,11 @@ INTERPOSE(int, truncate, const char *path, off_t length)
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_TRUNCATE, &ev, &md);
+    errno = 0;
     ev.ret = ev.func(ev.path, ev.length);
+    ev.errno_ = errno;
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_TRUNCATE, &ev, &md);
+    errno = ev.errno_;
     return ev.ret;
 }
 
@@ -1362,8 +1550,11 @@ INTERPOSE(char *, ttyname, int fd)
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_TTYNAME, &ev, &md);
+    errno = 0;
     ev.ret = ev.func(ev.fd);
+    ev.errno_ = errno;
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_TTYNAME, &ev, &md);
+    errno = ev.errno_;
     return ev.ret;
 }
 
@@ -1397,8 +1588,11 @@ INTERPOSE(useconds_t, ualarm, useconds_t usecs, useconds_t interval)
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_UALARM, &ev, &md);
+    errno = 0;
     ev.ret = ev.func(ev.usecs, ev.interval);
+    ev.errno_ = errno;
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_UALARM, &ev, &md);
+    errno = ev.errno_;
     return ev.ret;
 }
 
@@ -1413,8 +1607,11 @@ INTERPOSE(int, unlink, const char *path)
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_UNLINK, &ev, &md);
+    errno = 0;
     ev.ret = ev.func(ev.path);
+    ev.errno_ = errno;
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_UNLINK, &ev, &md);
+    errno = ev.errno_;
     return ev.ret;
 }
 
@@ -1431,8 +1628,11 @@ INTERPOSE(int, unlinkat, int dirfd, const char *path, int flags)
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_UNLINKAT, &ev, &md);
+    errno = 0;
     ev.ret = ev.func(ev.dirfd, ev.path, ev.flags);
+    ev.errno_ = errno;
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_UNLINKAT, &ev, &md);
+    errno = ev.errno_;
     return ev.ret;
 }
 
@@ -1447,8 +1647,11 @@ INTERPOSE(int, usleep, useconds_t usec)
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_USLEEP, &ev, &md);
+    errno = 0;
     ev.ret = ev.func(ev.usec);
+    ev.errno_ = errno;
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_USLEEP, &ev, &md);
+    errno = ev.errno_;
     return ev.ret;
 }
 
@@ -1463,8 +1666,11 @@ INTERPOSE(pid_t, vfork, void)
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_VFORK, &ev, &md);
+    errno = 0;
     ev.ret = ev.func();
+    ev.errno_ = errno;
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_VFORK, &ev, &md);
+    errno = ev.errno_;
     return ev.ret;
 }
 #endif
@@ -1482,8 +1688,11 @@ INTERPOSE(ssize_t, write, int fd, const void *buf, size_t count)
 
     metadata_t md = {0};
     PS_PUBLISH(INTERCEPT_BEFORE, EVENT_WRITE, &ev, &md);
+    errno = 0;
     ev.ret = ev.func(ev.fd, ev.buf, ev.count);
+    ev.errno_ = errno;
     PS_PUBLISH(INTERCEPT_AFTER, EVENT_WRITE, &ev, &md);
+    errno = ev.errno_;
     return ev.ret;
 }
 

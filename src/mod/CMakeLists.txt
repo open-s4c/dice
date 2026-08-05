@@ -25,6 +25,7 @@ set(TSAN_MODULES tsan stacktrace)
 # Compile options to modules can be set like this: set(OPTIONS_memcpy -O2)
 set(OPTIONS_memcpy -fno-builtin-memcpy -fno-builtin-memset
                    -fno-builtin-memmmove)
+set(OPTIONS_syscall -fPIC)
 
 set(TSAN_SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/tsan.c)
 
@@ -47,6 +48,9 @@ foreach(SRC ${SRCS})
   set(BUILD_SRC ${SRC})
   if("${MODULE}" STREQUAL "tsan")
     set(BUILD_SRC ${TSAN_C})
+  endif()
+  if("${MODULE}" STREQUAL "syscall")
+    list(APPEND BUILD_SRC ${CMAKE_CURRENT_SOURCE_DIR}/syscall.S)
   endif()
   if(NOT ${DICE_MEMSET} AND ${TARGET} MATCHES "wrap_memset")
     continue()
