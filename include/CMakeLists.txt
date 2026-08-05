@@ -19,7 +19,7 @@ install(DIRECTORY dice DESTINATION include)
 
 # Maximum event types
 set(DICE_MAX_TYPES
-    260
+    270
     CACHE STRING "Maximum number of supported events")
 target_compile_definitions(dice.h PUBLIC MAX_TYPES=${DICE_MAX_TYPES})
 

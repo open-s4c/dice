@@ -32,6 +32,7 @@ struct accept_event {
     struct sockaddr* addr;
     socklen_t* addrlen;
     int ret;
+    int errno_;
     int(*func)(int, struct sockaddr*, socklen_t*);
 };
 
@@ -42,6 +43,7 @@ struct accept4_event {
     socklen_t* addrlen;
     int flags;
     int ret;
+    int errno_;
     int(*func)(int, struct sockaddr*, socklen_t*, int);
 };
 
@@ -51,6 +53,7 @@ struct bind_event {
     const struct sockaddr *addr;
     socklen_t addrlen;
     int ret;
+    int errno_;
     int(*func)(int, const struct sockaddr*, socklen_t);
 };
 
@@ -60,6 +63,7 @@ struct connect_event {
     struct sockaddr *addr;
     socklen_t addrlen;
     int ret;
+    int errno_;
     int(*func)(int, const struct sockaddr*, socklen_t);
 };
 
@@ -69,6 +73,7 @@ struct getpeername_event {
     struct sockaddr *addr;
     socklen_t *addrlen;
     int ret;
+    int errno_;
     int(*func)(int, struct sockaddr*, socklen_t*);
 };
 
@@ -78,6 +83,7 @@ struct getsockname_event {
     struct sockaddr *addr;
     socklen_t *addrlen;
     int ret;
+    int errno_;
     int(*func)(int, struct sockaddr*, socklen_t*);
 };
 
@@ -89,6 +95,7 @@ struct getsockopt_event {
     void *optval;
     socklen_t *optlen;
     int ret;
+    int errno_;
     int (*func)(int, int, int, void *, socklen_t *);
 };
 
@@ -100,6 +107,7 @@ struct setsockopt_event {
     const void *optval;
     socklen_t optlen;
     int ret;
+    int errno_;
     int(*func)(int, int, int, const void*, socklen_t);
 };
 
@@ -108,6 +116,7 @@ struct listen_event {
     int sockfd;
     int backlog;
     int ret;
+    int errno_;
     int(*func)(int, int);
 };
 
@@ -118,6 +127,7 @@ struct recv_event {
     size_t len;
     int flags;
     ssize_t ret;
+    int errno_;
     ssize_t(*func)(int, void*, size_t, int);
 };
 
@@ -130,6 +140,7 @@ struct recvfrom_event {
     struct sockaddr *src_addr;
     socklen_t *addrlen;
     ssize_t ret;
+    int errno_;
     ssize_t(*func)(int, void*, size_t, int, struct sockaddr*, socklen_t*);
 };
 
@@ -139,6 +150,7 @@ struct recvmsg_event {
     struct msghdr *msg;
     int flags;
     ssize_t ret;
+    int errno_;
     ssize_t(*func)(int, struct msghdr*, int);
 };
 
@@ -149,6 +161,7 @@ struct send_event {
     size_t len;
     int flags;
     ssize_t ret;
+    int errno_;
     ssize_t(*func)(int, const void*, size_t, int);
 };
 
@@ -161,6 +174,7 @@ struct sendto_event {
     const struct sockaddr *dest_addr;
     socklen_t addrlen;
     ssize_t ret;
+    int errno_;
     ssize_t(*func)(int, const void*, size_t, int, const struct sockaddr*, socklen_t);
 };
 
@@ -170,6 +184,7 @@ struct sendmsg_event {
     const struct msghdr *msg;
     int flags;
     ssize_t ret;
+    int errno_;
     ssize_t(*func)(int, const struct msghdr*, int);
 };
 
@@ -178,6 +193,7 @@ struct shutdown_event {
     int sockfd;
     int how;
     int ret;
+    int errno_;
     int(*func)(int, int);
 };
 
@@ -187,6 +203,7 @@ struct socket_event {
     int type;
     int protocol;
     int ret;
+    int errno_;
     int(*func)(int, int, int);
 };
 
@@ -197,6 +214,7 @@ struct socketpair_event {
     int protocol;
     int *sv;
     int ret;
+    int errno_;
     int(*func)(int, int, int, int*);
 };
 

@@ -16,6 +16,7 @@ struct readv_event {
     const struct iovec *iov;
     int iovcnt;
     ssize_t ret;
+    int errno_;
     ssize_t(*func)(int, const struct iovec *, int);
 };
 
@@ -25,6 +26,7 @@ struct writev_event {
     const struct iovec *iov;
     int iovcnt;
     ssize_t ret;
+    int errno_;
     ssize_t(*func)(int, const struct iovec *, int);
 };
 
