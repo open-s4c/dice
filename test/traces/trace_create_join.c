@@ -6,34 +6,34 @@
 
 #include <dice/chains/capture.h>
 #include <dice/events/memaccess.h>
+#include <dice/events/pthread.h>
 #include <dice/events/self.h>
 #include <dice/events/stacktrace.h>
-#include <dice/events/thread.h>
 #include <dice/log.h>
 
 struct expected_event expected_1[] = {
 #ifndef __APPLE__
     EXPECTED_EVENT(CAPTURE_EVENT, EVENT_SELF_INIT),
     // initialization until THREAD_START is published
-    EXPECTED_SUFFIX(CAPTURE_EVENT, EVENT_THREAD_START),
+    EXPECTED_SUFFIX(CAPTURE_EVENT, EVENT_PTHREAD_START),
 #endif
     // there is a short time window until the main function is finally called,
     // some mutex might be accessed during this period
     EXPECTED_SUFFIX(CAPTURE_EVENT, EVENT_STACKTRACE_ENTER),
     // we should now be in the main function, register_expected_trace calls are
     // not instrumented. We should be able to match every event.
-    EXPECTED_EVENT(CAPTURE_BEFORE, EVENT_THREAD_CREATE),
-    EXPECTED_EVENT(CAPTURE_AFTER, EVENT_THREAD_CREATE),
+    EXPECTED_EVENT(CAPTURE_BEFORE, EVENT_PTHREAD_CREATE),
+    EXPECTED_EVENT(CAPTURE_AFTER, EVENT_PTHREAD_CREATE),
     // read the content of variable t
     EXPECTED_EVENT(CAPTURE_EVENT, EVENT_MA_READ),
     // and pass that to join
-    EXPECTED_EVENT(CAPTURE_BEFORE, EVENT_THREAD_JOIN),
-    EXPECTED_EVENT(CAPTURE_AFTER, EVENT_THREAD_JOIN),
+    EXPECTED_EVENT(CAPTURE_BEFORE, EVENT_PTHREAD_JOIN),
+    EXPECTED_EVENT(CAPTURE_AFTER, EVENT_PTHREAD_JOIN),
     // now exit main function
     EXPECTED_EVENT(CAPTURE_EVENT, EVENT_STACKTRACE_EXIT),
     // between the exit of the main function and the THREAD_EXIT of the main
     // thread, there might be calls done by atexit-callbacks.
-    EXPECTED_SUFFIX(CAPTURE_EVENT, EVENT_THREAD_EXIT),
+    EXPECTED_SUFFIX(CAPTURE_EVENT, EVENT_PTHREAD_EXIT),
     // And between that and the destructor of Dice, there might be other calls
     EXPECTED_SUFFIX(CAPTURE_EVENT, EVENT_SELF_FINI),
     // Since we cannot capture the real end of the program, we must allow
@@ -43,10 +43,10 @@ struct expected_event expected_1[] = {
 
 struct expected_event expected_2[] = {
     EXPECTED_EVENT(CAPTURE_EVENT, EVENT_SELF_INIT),
-    EXPECTED_EVENT(CAPTURE_EVENT, EVENT_THREAD_START),
+    EXPECTED_EVENT(CAPTURE_EVENT, EVENT_PTHREAD_START),
     // The empty run() function does not get instrumented by TSAN, so we don't
     // need any STACKTRACE_ENTER/EXIT events
-    EXPECTED_EVENT(CAPTURE_EVENT, EVENT_THREAD_EXIT),
+    EXPECTED_EVENT(CAPTURE_EVENT, EVENT_PTHREAD_EXIT),
     // Between thread exit and self_fini, there might be further events in this
     // thread, so we have to only ensure the suffix
     EXPECTED_SUFFIX(CAPTURE_EVENT, EVENT_SELF_FINI),

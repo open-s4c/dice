@@ -19,9 +19,9 @@ INTERPOSE(int, pthread_mutex_lock, pthread_mutex_t *mutex)
     };
 
     struct metadata md = {0};
-    PS_PUBLISH(INTERCEPT_BEFORE, EVENT_MUTEX_LOCK, &ev, &md);
+    PS_PUBLISH(INTERCEPT_BEFORE, EVENT_PTHREAD_MUTEX_LOCK, &ev, &md);
     ev.ret = ev.func(ev.mutex);
-    PS_PUBLISH(INTERCEPT_AFTER, EVENT_MUTEX_LOCK, &ev, &md);
+    PS_PUBLISH(INTERCEPT_AFTER, EVENT_PTHREAD_MUTEX_LOCK, &ev, &md);
     return ev.ret;
 }
 
@@ -38,9 +38,9 @@ INTERPOSE(int, pthread_mutex_timedlock, pthread_mutex_t *mutex,
     };
 
     struct metadata md = {0};
-    PS_PUBLISH(INTERCEPT_BEFORE, EVENT_MUTEX_TIMEDLOCK, &ev, &md);
+    PS_PUBLISH(INTERCEPT_BEFORE, EVENT_PTHREAD_MUTEX_TIMEDLOCK, &ev, &md);
     ev.ret = ev.func(ev.mutex, ev.timeout);
-    PS_PUBLISH(INTERCEPT_AFTER, EVENT_MUTEX_TIMEDLOCK, &ev, &md);
+    PS_PUBLISH(INTERCEPT_AFTER, EVENT_PTHREAD_MUTEX_TIMEDLOCK, &ev, &md);
     return ev.ret;
 }
 #endif
@@ -55,9 +55,9 @@ INTERPOSE(int, pthread_mutex_trylock, pthread_mutex_t *mutex)
     };
 
     struct metadata md = {0};
-    PS_PUBLISH(INTERCEPT_BEFORE, EVENT_MUTEX_TRYLOCK, &ev, &md);
+    PS_PUBLISH(INTERCEPT_BEFORE, EVENT_PTHREAD_MUTEX_TRYLOCK, &ev, &md);
     ev.ret = ev.func(ev.mutex);
-    PS_PUBLISH(INTERCEPT_AFTER, EVENT_MUTEX_TRYLOCK, &ev, &md);
+    PS_PUBLISH(INTERCEPT_AFTER, EVENT_PTHREAD_MUTEX_TRYLOCK, &ev, &md);
     return ev.ret;
 }
 
@@ -71,9 +71,9 @@ INTERPOSE(int, pthread_mutex_unlock, pthread_mutex_t *mutex)
     };
 
     struct metadata md = {0};
-    PS_PUBLISH(INTERCEPT_BEFORE, EVENT_MUTEX_UNLOCK, &ev, &md);
+    PS_PUBLISH(INTERCEPT_BEFORE, EVENT_PTHREAD_MUTEX_UNLOCK, &ev, &md);
     ev.ret = ev.func(ev.mutex);
-    PS_PUBLISH(INTERCEPT_AFTER, EVENT_MUTEX_UNLOCK, &ev, &md);
+    PS_PUBLISH(INTERCEPT_AFTER, EVENT_PTHREAD_MUTEX_UNLOCK, &ev, &md);
     return ev.ret;
 }
 
@@ -91,9 +91,9 @@ INTERPOSE(int, pthread_mutex_clocklock, pthread_mutex_t *restrict mutex,
     };
 
     struct metadata md = {0};
-    PS_PUBLISH(INTERCEPT_BEFORE, EVENT_MUTEX_CLOCKLOCK, &ev, &md);
+    PS_PUBLISH(INTERCEPT_BEFORE, EVENT_PTHREAD_MUTEX_CLOCKLOCK, &ev, &md);
     ev.ret = ev.func(ev.mutex, ev.clock_id, ev.abstime);
-    PS_PUBLISH(INTERCEPT_AFTER, EVENT_MUTEX_CLOCKLOCK, &ev, &md);
+    PS_PUBLISH(INTERCEPT_AFTER, EVENT_PTHREAD_MUTEX_CLOCKLOCK, &ev, &md);
     return ev.ret;
 }
 #endif

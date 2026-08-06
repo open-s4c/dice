@@ -7,7 +7,6 @@
 #include <dice/chains/intercept.h>
 #include <dice/ensure.h>
 #include <dice/events/pthread.h>
-#include <dice/events/thread.h>
 #include <dice/module.h>
 #include <dice/pubsub.h>
 
@@ -15,8 +14,8 @@ int start_called;
 int exit_called;
 int run_called;
 
-PS_SUBSCRIBE(INTERCEPT_EVENT, EVENT_THREAD_START, { start_called++; })
-PS_SUBSCRIBE(INTERCEPT_EVENT, EVENT_THREAD_EXIT, { exit_called++; })
+PS_SUBSCRIBE(INTERCEPT_EVENT, EVENT_PTHREAD_START, { start_called++; })
+PS_SUBSCRIBE(INTERCEPT_EVENT, EVENT_PTHREAD_EXIT, { exit_called++; })
 
 void *
 run()

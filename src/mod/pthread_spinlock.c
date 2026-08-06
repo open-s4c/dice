@@ -19,9 +19,9 @@ INTERPOSE(int, pthread_spin_lock, pthread_spinlock_t *lock)
     };
 
     struct metadata md = {0};
-    PS_PUBLISH(INTERCEPT_BEFORE, EVENT_SPIN_LOCK, &ev, &md);
+    PS_PUBLISH(INTERCEPT_BEFORE, EVENT_PTHREAD_SPIN_LOCK, &ev, &md);
     ev.ret = ev.func(ev.lock);
-    PS_PUBLISH(INTERCEPT_AFTER, EVENT_SPIN_LOCK, &ev, &md);
+    PS_PUBLISH(INTERCEPT_AFTER, EVENT_PTHREAD_SPIN_LOCK, &ev, &md);
     return ev.ret;
 }
 
@@ -35,9 +35,9 @@ INTERPOSE(int, pthread_spin_trylock, pthread_spinlock_t *lock)
     };
 
     struct metadata md = {0};
-    PS_PUBLISH(INTERCEPT_BEFORE, EVENT_SPIN_TRYLOCK, &ev, &md);
+    PS_PUBLISH(INTERCEPT_BEFORE, EVENT_PTHREAD_SPIN_TRYLOCK, &ev, &md);
     ev.ret = ev.func(ev.lock);
-    PS_PUBLISH(INTERCEPT_AFTER, EVENT_SPIN_TRYLOCK, &ev, &md);
+    PS_PUBLISH(INTERCEPT_AFTER, EVENT_PTHREAD_SPIN_TRYLOCK, &ev, &md);
     return ev.ret;
 }
 
@@ -51,9 +51,9 @@ INTERPOSE(int, pthread_spin_unlock, pthread_spinlock_t *lock)
     };
 
     struct metadata md = {0};
-    PS_PUBLISH(INTERCEPT_BEFORE, EVENT_SPIN_UNLOCK, &ev, &md);
+    PS_PUBLISH(INTERCEPT_BEFORE, EVENT_PTHREAD_SPIN_UNLOCK, &ev, &md);
     ev.ret = ev.func(ev.lock);
-    PS_PUBLISH(INTERCEPT_AFTER, EVENT_SPIN_UNLOCK, &ev, &md);
+    PS_PUBLISH(INTERCEPT_AFTER, EVENT_PTHREAD_SPIN_UNLOCK, &ev, &md);
     return ev.ret;
 }
 

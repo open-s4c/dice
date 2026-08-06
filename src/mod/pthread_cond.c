@@ -20,9 +20,9 @@ INTERPOSE(int, pthread_cond_wait, pthread_cond_t *cond, pthread_mutex_t *mutex)
     };
 
     struct metadata md = {0};
-    PS_PUBLISH(INTERCEPT_BEFORE, EVENT_COND_WAIT, &ev, &md);
+    PS_PUBLISH(INTERCEPT_BEFORE, EVENT_PTHREAD_COND_WAIT, &ev, &md);
     ev.ret = ev.func(ev.cond, ev.mutex);
-    PS_PUBLISH(INTERCEPT_AFTER, EVENT_COND_WAIT, &ev, &md);
+    PS_PUBLISH(INTERCEPT_AFTER, EVENT_PTHREAD_COND_WAIT, &ev, &md);
     return ev.ret;
 }
 
@@ -39,9 +39,9 @@ INTERPOSE(int, pthread_cond_timedwait, pthread_cond_t *cond,
     };
 
     struct metadata md = {0};
-    PS_PUBLISH(INTERCEPT_BEFORE, EVENT_COND_TIMEDWAIT, &ev, &md);
+    PS_PUBLISH(INTERCEPT_BEFORE, EVENT_PTHREAD_COND_TIMEDWAIT, &ev, &md);
     ev.ret = ev.func(ev.cond, ev.mutex, ev.abstime);
-    PS_PUBLISH(INTERCEPT_AFTER, EVENT_COND_TIMEDWAIT, &ev, &md);
+    PS_PUBLISH(INTERCEPT_AFTER, EVENT_PTHREAD_COND_TIMEDWAIT, &ev, &md);
     return ev.ret;
 }
 
@@ -55,9 +55,9 @@ INTERPOSE(int, pthread_cond_signal, pthread_cond_t *cond)
     };
 
     struct metadata md = {0};
-    PS_PUBLISH(INTERCEPT_BEFORE, EVENT_COND_SIGNAL, &ev, &md);
+    PS_PUBLISH(INTERCEPT_BEFORE, EVENT_PTHREAD_COND_SIGNAL, &ev, &md);
     ev.ret = ev.func(ev.cond);
-    PS_PUBLISH(INTERCEPT_AFTER, EVENT_COND_SIGNAL, &ev, &md);
+    PS_PUBLISH(INTERCEPT_AFTER, EVENT_PTHREAD_COND_SIGNAL, &ev, &md);
     return ev.ret;
 }
 
@@ -71,9 +71,9 @@ INTERPOSE(int, pthread_cond_broadcast, pthread_cond_t *cond)
     };
 
     struct metadata md = {0};
-    PS_PUBLISH(INTERCEPT_BEFORE, EVENT_COND_BROADCAST, &ev, &md);
+    PS_PUBLISH(INTERCEPT_BEFORE, EVENT_PTHREAD_COND_BROADCAST, &ev, &md);
     ev.ret = ev.func(ev.cond);
-    PS_PUBLISH(INTERCEPT_AFTER, EVENT_COND_BROADCAST, &ev, &md);
+    PS_PUBLISH(INTERCEPT_AFTER, EVENT_PTHREAD_COND_BROADCAST, &ev, &md);
     return ev.ret;
 }
 
@@ -93,9 +93,9 @@ INTERPOSE(int, pthread_cond_clockwait, pthread_cond_t *restrict cond,
     };
 
     struct metadata md = {0};
-    PS_PUBLISH(INTERCEPT_BEFORE, EVENT_COND_CLOCKWAIT, &ev, &md);
+    PS_PUBLISH(INTERCEPT_BEFORE, EVENT_PTHREAD_COND_CLOCKWAIT, &ev, &md);
     ev.ret = ev.func(ev.cond, ev.mutex, ev.clock_id, ev.abstime);
-    PS_PUBLISH(INTERCEPT_AFTER, EVENT_COND_CLOCKWAIT, &ev, &md);
+    PS_PUBLISH(INTERCEPT_AFTER, EVENT_PTHREAD_COND_CLOCKWAIT, &ev, &md);
     return ev.ret;
 }
 #endif

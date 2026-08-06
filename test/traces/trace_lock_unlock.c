@@ -8,14 +8,13 @@
 #include <dice/events/memaccess.h>
 #include <dice/events/pthread.h>
 #include <dice/events/self.h>
-#include <dice/events/thread.h>
 #include <dice/log.h>
 
 
 struct expected_event expected[] = {
 #ifndef __APPLE__
     EXPECTED_EVENT(CAPTURE_EVENT, EVENT_SELF_INIT),
-    EXPECTED_SUFFIX(CAPTURE_EVENT, EVENT_THREAD_START),
+    EXPECTED_SUFFIX(CAPTURE_EVENT, EVENT_PTHREAD_START),
 #endif
     EXPECTED_SUFFIX(CAPTURE_BEFORE, EVENT_PTHREAD_MUTEX_LOCK),
     EXPECTED_EVENT(CAPTURE_AFTER, EVENT_PTHREAD_MUTEX_LOCK),

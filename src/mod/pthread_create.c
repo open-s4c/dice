@@ -7,7 +7,6 @@
 
 #include <dice/chains/intercept.h>
 #include <dice/events/pthread.h>
-#include <dice/events/thread.h>
 #include <dice/interpose.h>
 #include <dice/mempool.h>
 #include <dice/module.h>
@@ -26,7 +25,7 @@ INTERPOSE(void, pthread_exit, void *ptr)
         .ptr  = ptr,
         .func = REAL_FUNC(pthread_exit),
     };
-    PS_PUBLISH(INTERCEPT_EVENT, EVENT_THREAD_EXIT, &ev, 0);
+    PS_PUBLISH(INTERCEPT_EVENT, EVENT_PTHREAD_EXIT, &ev, 0);
     ev.func(ev.ptr);
     exit(1); // unreachable
 }
@@ -39,9 +38,9 @@ trampoline_(void *targ)
     void *(*run)(void *) = t->run;
     mempool_free(t);
 
-    PS_PUBLISH(INTERCEPT_EVENT, EVENT_THREAD_START, 0, 0);
+    PS_PUBLISH(INTERCEPT_EVENT, EVENT_PTHREAD_START, 0, 0);
     void *ret = run(arg);
-    PS_PUBLISH(INTERCEPT_EVENT, EVENT_THREAD_EXIT, 0, 0);
+    PS_PUBLISH(INTERCEPT_EVENT, EVENT_PTHREAD_EXIT, 0, 0);
     return ret;
 }
 
@@ -63,9 +62,9 @@ INTERPOSE(int, pthread_create, pthread_t *thread, const pthread_attr_t *attr,
     };
 
     struct metadata md = {0};
-    PS_PUBLISH(INTERCEPT_BEFORE, EVENT_THREAD_CREATE, &ev, &md);
+    PS_PUBLISH(INTERCEPT_BEFORE, EVENT_PTHREAD_CREATE, &ev, &md);
     ev.ret = ev.func(ev.thread, ev.attr, trampoline_, t);
-    PS_PUBLISH(INTERCEPT_AFTER, EVENT_THREAD_CREATE, &ev, &md);
+    PS_PUBLISH(INTERCEPT_AFTER, EVENT_PTHREAD_CREATE, &ev, &md);
     return ev.ret;
 }
 
@@ -79,18 +78,18 @@ INTERPOSE(int, pthread_join, pthread_t thread, void **ptr)
     };
 
     struct metadata md = {0};
-    PS_PUBLISH(INTERCEPT_BEFORE, EVENT_THREAD_JOIN, &ev, &md);
+    PS_PUBLISH(INTERCEPT_BEFORE, EVENT_PTHREAD_JOIN, &ev, &md);
     ev.ret = ev.func(ev.thread, ev.ptr);
-    PS_PUBLISH(INTERCEPT_AFTER, EVENT_THREAD_JOIN, &ev, &md);
+    PS_PUBLISH(INTERCEPT_AFTER, EVENT_PTHREAD_JOIN, &ev, &md);
 
     return ev.ret;
 }
 
 /* Advertise event type names for debugging messages */
-PS_ADVERTISE_TYPE(EVENT_THREAD_START)
-PS_ADVERTISE_TYPE(EVENT_THREAD_EXIT)
-PS_ADVERTISE_TYPE(EVENT_THREAD_CREATE)
-PS_ADVERTISE_TYPE(EVENT_THREAD_JOIN)
+PS_ADVERTISE_TYPE(EVENT_PTHREAD_START)
+PS_ADVERTISE_TYPE(EVENT_PTHREAD_EXIT)
+PS_ADVERTISE_TYPE(EVENT_PTHREAD_CREATE)
+PS_ADVERTISE_TYPE(EVENT_PTHREAD_JOIN)
 
 /* Mark module initialization (optional) */
 DICE_MODULE_INIT()
