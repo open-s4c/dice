@@ -26,6 +26,7 @@
 #define EVENT_RWLOCK_TIMEDWRLOCK 26
 #define EVENT_RWLOCK_TRYWRLOCK   27
 #define EVENT_RWLOCK_UNLOCK      28
+#define EVENT_PTHREAD_ONCE       264
 
 #define EVENT_SPIN_LOCK    9
 #define EVENT_SPIN_TRYLOCK 10
@@ -242,5 +243,13 @@ struct pthread_spin_unlock_event {
     int (*func)(pthread_spinlock_t *);
 };
 #endif
+
+struct pthread_once_event {
+    const void *pc;
+    pthread_once_t *once_control;
+    void (*init_routine)(void);
+    int ret;
+    int(*func)(pthread_once_t *, void (*)(void));
+};
 
 #endif /* DICE_PTHREAD_H */
