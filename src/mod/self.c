@@ -666,15 +666,6 @@ PS_SUBSCRIBE(INTERCEPT_EVENT, EVENT_THREAD_EXIT, {
     return err;
 })
 
-PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_THREAD_JOIN, {
-    struct self *self             = get_or_create_self_(true);
-    self->md                      = md ? *md : (struct metadata){};
-    struct pthread_join_event *ev = EVENT_PAYLOAD(ev);
-    enum ps_err err = self_handle_after_(chain, type, event, self);
-    *md             = self->md;
-    return err;
-})
-
 DICE_MODULE_INIT({ init_threads_(); })
 DICE_MODULE_FINI({
     struct self *self = get_self_();
