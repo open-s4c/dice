@@ -27,7 +27,8 @@ void ps_init_();
 #ifndef DICE_DISABLE_PUBSUB_CTOR_INIT
 /* Force pubsub init in a constructor without priority, ensuring this
  * constructor is last */
-static void __attribute__((constructor)) init_()
+static void __attribute__((constructor))
+init_()
 {
     ps_init_();
 }
@@ -98,11 +99,6 @@ PS_SUBSCRIBE(CHAIN_CONTROL, EVENT_DICE_INIT, {
         //
         // Exclusion policy (PRELOAD fallback only):
         // - DICE_EXCLUDE_DSO identifies one library to skip while loading.
-        // - If DICE_EXCLUDE_DSO is empty/unset, default it to the first PRELOAD
-        //   entry (typically the main Dice runtime dso) so we avoid
-        //   re-dlopening it.
-        if (pluginvar == NULL && (dso == NULL || dso[0] == '\0'))
-            dso = path;
 
         while (path != NULL) {
             if (pluginvar != NULL || dso == NULL || strcmp(path, dso) != 0)
