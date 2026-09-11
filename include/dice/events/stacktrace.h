@@ -14,6 +14,18 @@ struct stacktrace_event {
     const char *fname;
 };
 
+struct stacktrace_enter_event {
+    const void *pc;
+    const void *caller;
+    const char *fname;
+};
+
+struct stacktrace_exit_event {
+    const void *pc;
+    const void *caller;
+    const char *fname;
+};
+
 typedef struct stacktrace_event stacktrace_event_t;
 
 #endif /* DICE_STACKTRACE_H */
