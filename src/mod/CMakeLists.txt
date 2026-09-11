@@ -25,6 +25,7 @@ set(TSAN_MODULES tsan stacktrace)
 # Compile options to modules can be set like this: set(OPTIONS_memcpy -O2)
 set(OPTIONS_memcpy -fno-builtin-memcpy -fno-builtin-memset
                    -fno-builtin-memmmove)
+set(OPTIONS_syscall -fPIC)
 
 set(TSAN_SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/tsan.c)
 
@@ -32,7 +33,13 @@ file(GLOB SRCS *.c)
 list(APPEND SRCS ${TSAN_SOURCE})
 
 if(APPLE)
-  list(REMOVE_ITEM SRCS ${CMAKE_CURRENT_SOURCE_DIR}/pthread_spinlock.c)
+  list(REMOVE_ITEM SRCS ${CMAKE_CURRENT_SOURCE_DIR}/pthread_spinlock.c
+       ${CMAKE_CURRENT_SOURCE_DIR}/eventfd.c
+       ${CMAKE_CURRENT_SOURCE_DIR}/random.c)
+endif()
+
+if(APPLE OR BSD)
+  list(REMOVE_ITEM SRCS ${CMAKE_CURRENT_SOURCE_DIR}/epoll.c)
 endif()
 
 foreach(SRC ${SRCS})
@@ -41,6 +48,9 @@ foreach(SRC ${SRCS})
   set(BUILD_SRC ${SRC})
   if("${MODULE}" STREQUAL "tsan")
     set(BUILD_SRC ${TSAN_C})
+  endif()
+  if("${MODULE}" STREQUAL "syscall")
+    list(APPEND BUILD_SRC ${CMAKE_CURRENT_SOURCE_DIR}/syscall.S)
   endif()
   if(NOT ${DICE_MEMSET} AND ${TARGET} MATCHES "wrap_memset")
     continue()

@@ -9,8 +9,10 @@
 
 #include <sys/mman.h>
 
-#define EVENT_MMAP   80
-#define EVENT_MUNMAP 81
+#define EVENT_MMAP     80
+#define EVENT_MUNMAP   81
+#define EVENT_MREMAP   259
+#define EVENT_MPROTECT 260
 
 struct mmap_event {
     const void *pc;
@@ -30,6 +32,26 @@ struct munmap_event {
     size_t length;
     int ret;
     int (*func)(void *, size_t);
+};
+
+struct mremap_event {
+    const void *pc;
+    void *old_address;
+    size_t old_size;
+    size_t new_size;
+    int flags;
+    void *new_address;
+    void * ret;
+    void *(*func)(void *, size_t, size_t, int, ...);
+};
+
+struct mprotect_event {
+    const void *pc;
+    void *addr;
+    size_t length;
+    int prot;
+    int ret;
+    int (*func)(void *, size_t, int);
 };
 
 #endif /* DICE_MMAN_H */
