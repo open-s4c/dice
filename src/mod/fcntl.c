@@ -197,6 +197,45 @@ INTERPOSE(int, posix_fallocate, int fd, off_t offset, off_t size)
 }
 #endif
 
+INTERPOSE(int, open64, const char *path, int flags, ...)
+{
+    va_list ap;
+    mode_t mode = 0;
+
+#if defined(__NetBSD__) || defined(__APPLE__)
+    if (flags & O_CREAT) {
+#else
+    if ((flags & O_CREAT) || (flags & O_TMPFILE)) {
+#endif
+        va_start(ap, flags);
+#ifdef __APPLE__
+        mode = (mode_t)va_arg(ap, int);
+#else
+        mode = va_arg(ap, mode_t);
+#endif
+        va_end(ap);
+    }
+
+    struct open64_event ev = {
+        .pc    = INTERPOSE_PC,
+        .path  = path,
+        .flags = flags,
+        .mode  = mode,
+        .ret   = 0,
+        .func  = REAL_FUNC(open64),
+    };
+
+    metadata_t md = {0};
+
+    PS_PUBLISH(INTERCEPT_BEFORE, EVENT_OPEN64, &ev, &md);
+
+    ev.ret = ev.func(ev.path, ev.flags, ev.mode);
+
+    PS_PUBLISH(INTERCEPT_AFTER, EVENT_OPEN64, &ev, &md);
+
+    return ev.ret;
+}
+
 /* Advertise event types */
 PS_ADVERTISE_TYPE(EVENT_CREAT)
 PS_ADVERTISE_TYPE(EVENT_FCNTL)
@@ -204,6 +243,7 @@ PS_ADVERTISE_TYPE(EVENT_OPEN)
 PS_ADVERTISE_TYPE(EVENT_OPENAT)
 PS_ADVERTISE_TYPE(EVENT_POSIX_FADVISE)
 PS_ADVERTISE_TYPE(EVENT_POSIX_FALLOCATE)
+PS_ADVERTISE_TYPE(EVENT_OPEN64)
 
 /* Module init (optional) */
 DICE_MODULE_INIT()
