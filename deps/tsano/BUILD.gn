@@ -1,0 +1,18 @@
+config("tsano_common") {
+  cflags = [
+    "-Wall",
+    "-Werror",
+    "-Wextra",
+  ]
+}
+
+shared_library("tsano") {
+  output_name = "libtsano"
+  configs = [ ":tsano_common" ]
+  sources = [
+    "tsano.c",
+    "syscall.c",
+    "annotate.c",
+    "fiber.c",
+  ]
+}

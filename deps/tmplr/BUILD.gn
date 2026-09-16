@@ -1,0 +1,3 @@
+executable("tmplr") {
+  sources = [ "tmplr.c" ]
+}
