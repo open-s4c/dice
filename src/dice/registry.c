@@ -6,6 +6,13 @@
 #include <dice/types.h>
 #include <vsync/spinlock/caslock.h>
 
+#define DICE_LESS_FATAL
+#ifdef DICE_LESS_FATAL
+    #define warn_or_die log_warn
+#else
+    #define warn_or_dir log_fatal
+#endif
+
 static caslock_t registry_lock_;
 
 struct name {
@@ -109,16 +116,20 @@ ps_registry_add_(bool chain, uint16_t id, const char *name)
     struct name *names = chain ? chain_names_ : type_names_;
 
     caslock_acquire(&registry_lock_);
-    if (id >= max)
-        log_fatal("cannot add %s %u (max = %u)", what, id, (max - 1));
+    if (id >= max) {
+        warn_or_die("cannot add %s %u (max = %u)", what, id, (max - 1));
+        goto end;
+    }
     if (names[id].assigned == NULL) {
         names[id].assigned = name;
     } else if (strcmp(names[id].assigned, name) == 0) {
-        log_debug("adding %s %u again", what, id);
+        // log_debug("adding %s %u again: %s", what, id, name);
     } else {
-        log_fatal("cannot add %s %u again: %s != %s", what, id,
-                  names[id].assigned, name);
+        warn_or_die("cannot add %s %u again: %s != %s", what, id,
+                    names[id].assigned, name);
+        goto end;
     }
+end:
     caslock_release(&registry_lock_);
 }
 
@@ -129,12 +140,15 @@ ps_registry_get_(bool chain, uint16_t id)
     uint16_t max       = chain ? MAX_CHAINS : MAX_TYPES;
     const char *what   = chain ? "chain" : "event type";
     struct name *names = chain ? chain_names_ : type_names_;
+    const char *name   = NULL;
 
     caslock_acquire(&registry_lock_);
-    if (id >= max)
-        log_fatal("cannot find %s %u (max = %u)", what, id, (max - 1));
-    const char *name =
-        names[id].assigned ? names[id].assigned : names[id].fallback;
+    if (id >= max) {
+        warn_or_die("cannot find %s %u (max = %u)", what, id, (max - 1));
+        goto end;
+    }
+    name = names[id].assigned ? names[id].assigned : names[id].fallback;
+end:
     caslock_release(&registry_lock_);
     return name;
 }
