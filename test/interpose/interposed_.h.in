@@ -137,3 +137,6 @@ $_map(MM_AnnotateRWLockCreate_ARGS,file,line,lock);
 $_map(MM_AnnotateRWLockAcquired_RETURN,void);
 $_map(MM_AnnotateRWLockAcquired_PARAMS, const char *file, int line, const volatile void *lock , long is_w);
 $_map(MM_AnnotateRWLockAcquired_ARGS, file, line, lock, is_w);
+$_map(MM_mmap64_RETURN, void *);
+$_map(MM_mmap64_PARAMS, void *addr, size_t length, int prot, int flags, int fd, off_t offset);
+$_map(MM_mmap64_ARGS, addr, length, prot, flags, fd, offset);
