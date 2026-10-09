@@ -559,11 +559,11 @@ self_handle_event_(const chain_id chain, const type_id type, void *event,
     return PS_STOP_CHAIN;
 }
 
-static inline struct self *
-get_or_create_self_(bool publish)
+static __attribute__((noinline)) struct self *
+get_or_create_self_slow_(bool publish)
 {
-    struct self *self = get_self_();
-    if (likely(self)) {
+    struct self *self = quack_search_(pthread_self());
+    if (self) {
         return self;
     }
 
@@ -574,6 +574,16 @@ get_or_create_self_(bool publish)
     if (publish)
         self_handle_event_(CAPTURE_EVENT, EVENT_SELF_INIT, 0, self);
     return self;
+}
+
+static inline struct self *
+get_or_create_self_(bool publish)
+{
+    struct self *self = thread_cache_get_();
+    if (likely(self)) {
+        return self;
+    }
+    return get_or_create_self_slow_(publish);
 }
 
 PS_SUBSCRIBE(INTERCEPT_EVENT, ANY_EVENT, {
