@@ -1,0 +1,3 @@
+$_begin(ROLL_HANDLER=handler)
+        err = ROLL_HANDLER(chain, type, event, md);
+$_end

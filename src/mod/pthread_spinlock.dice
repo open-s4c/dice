@@ -1,0 +1,6 @@
+(module pthread-spinlock
+  (subscribes (CHAIN_CONTROL EVENT_DICE_INIT))
+  (publishes (INTERCEPT_BEFORE EVENT_SPIN_LOCK EVENT_SPIN_TRYLOCK
+                EVENT_SPIN_UNLOCK)
+            (INTERCEPT_AFTER EVENT_SPIN_LOCK EVENT_SPIN_TRYLOCK
+                EVENT_SPIN_UNLOCK)))

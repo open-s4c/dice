@@ -1,0 +1,2 @@
+; Interceptor routes used by the runtime integration tests.
+(import (dice self) (dice pthread_create) (dice malloc))
