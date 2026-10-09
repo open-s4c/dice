@@ -98,7 +98,8 @@ add_compile_definitions(DICE_MULTIFILE_MODULE DICE_MODULE_SLOT=0)
 add_library(dice SHARED ${SRCS})
 add_dependencies(dice expand-dispatch)
 target_link_libraries(dice PUBLIC dice.h pthread)
-install(TARGETS dice DESTINATION lib)
+install(TARGETS dice EXPORT ${PROJECT_TARGETS}
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
 
 # dice.o - OBJECT library providing interface for plugin modules and builtin
 # modules. Only contains the core components mempool, pubsub, and dispatch, but

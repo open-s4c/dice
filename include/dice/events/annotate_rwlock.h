@@ -7,6 +7,7 @@
 
 #include <pthread.h>
 
+#include <dice/compiler.h>
 #include <dice/events/thread.h>
 
 
@@ -19,15 +20,17 @@ void AnnotateRWLockAcquired(const char *file, int line,
 void AnnotateRWLockReleased(const char *file, int line,
                             const volatile void *lock, long is_w);
 
-#define EVENT_ANNOTATE_RWLOCK_CREATE  43
-#define EVENT_ANNOTATE_RWLOCK_DESTROY 44
-#define EVENT_ANNOTATE_RWLOCK_ACQ     45
-#define EVENT_ANNOTATE_RWLOCK_REL     46
+#ifndef DICE_ROLLED
+    #define EVENT_ANNOTATE_RWLOCK_CREATE  43
+    #define EVENT_ANNOTATE_RWLOCK_DESTROY 44
+    #define EVENT_ANNOTATE_RWLOCK_ACQ     45
+    #define EVENT_ANNOTATE_RWLOCK_REL     46
 
-#define EVENT_ANNOTATERWLOCKCREATE   EVENT_ANNOTATE_RWLOCK_CREATE
-#define EVENT_ANNOTATERWLOCKDESTROY  EVENT_ANNOTATE_RWLOCK_DESTROY
-#define EVENT_ANNOTATERWLOCKACQUIRED EVENT_ANNOTATE_RWLOCK_ACQ
-#define EVENT_ANNOTATERWLOCKRELEASED EVENT_ANNOTATE_RWLOCK_REL
+    #define EVENT_ANNOTATERWLOCKCREATE   EVENT_ANNOTATE_RWLOCK_CREATE
+    #define EVENT_ANNOTATERWLOCKDESTROY  EVENT_ANNOTATE_RWLOCK_DESTROY
+    #define EVENT_ANNOTATERWLOCKACQUIRED EVENT_ANNOTATE_RWLOCK_ACQ
+    #define EVENT_ANNOTATERWLOCKRELEASED EVENT_ANNOTATE_RWLOCK_REL
+#endif
 
 struct AnnotateRWLockCreate_event {
     const char *file;
