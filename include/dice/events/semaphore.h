@@ -7,10 +7,12 @@
 
 #include <semaphore.h>
 
-#define EVENT_SEM_POST      70
-#define EVENT_SEM_WAIT      71
-#define EVENT_SEM_TRYWAIT   72
-#define EVENT_SEM_TIMEDWAIT 73
+#ifndef DICE_ROLLED
+    #define EVENT_SEM_POST      70
+    #define EVENT_SEM_WAIT      71
+    #define EVENT_SEM_TRYWAIT   72
+    #define EVENT_SEM_TIMEDWAIT 73
+#endif
 
 struct sem_post_event {
     const void *pc;

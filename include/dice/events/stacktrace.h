@@ -5,8 +5,10 @@
 #ifndef DICE_STACKTRACE_H
 #define DICE_STACKTRACE_H
 
-#define EVENT_STACKTRACE_ENTER 41
-#define EVENT_STACKTRACE_EXIT  42
+#ifndef DICE_ROLLED
+    #define EVENT_STACKTRACE_ENTER 41
+    #define EVENT_STACKTRACE_EXIT  42
+#endif
 
 struct stacktrace_event {
     const void *pc;

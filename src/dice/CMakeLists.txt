@@ -51,7 +51,7 @@ add_custom_command(
 add_custom_target(expand-dispatch DEPENDS tmplr ${DISPATCH_C})
 set_source_files_properties(${DISPATCH_C} PROPERTIES GENERATED TRUE)
 
-# CHAIN_CONTROL has only events 98..99
+# CHAIN_DICE_CONTROL has only events 98..99
 set(EEE_0 98 99)
 
 set(DISPATCH_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/loader.c)
@@ -94,11 +94,12 @@ add_compile_definitions(DICE_MULTIFILE_MODULE DICE_MODULE_SLOT=0)
 # dice (libdice.so) - SHARED library providing interface for plugin modules.
 # Only contains the core components mempool and pubsub. This library gets
 # installed in the system. Dispatch won't be used for this library except for
-# the internal initialization with chain 0 (CHAIN_CONTROL).
+# the internal initialization with chain 0 (CHAIN_DICE_CONTROL).
 add_library(dice SHARED ${SRCS})
 add_dependencies(dice expand-dispatch)
 target_link_libraries(dice PUBLIC dice.h pthread)
-install(TARGETS dice DESTINATION lib)
+install(TARGETS dice EXPORT ${PROJECT_TARGETS}
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
 
 # dice.o - OBJECT library providing interface for plugin modules and builtin
 # modules. Only contains the core components mempool, pubsub, and dispatch, but

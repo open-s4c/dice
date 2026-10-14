@@ -19,7 +19,7 @@ struct name {
         .fallback = #ID, .assigned = ASSIGN,                                   \
     }
 
-#define CHAIN0 "CHAIN_CONTROL"
+#define CHAIN0 "CHAIN_DICE_CONTROL"
 static struct name chain_names_[] = {
     NAME(0, CHAIN0), NAME(1, NULL),  NAME(2, NULL),  NAME(3, NULL),
     NAME(4, NULL),   NAME(5, NULL),  NAME(6, NULL),  NAME(7, NULL),

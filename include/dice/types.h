@@ -21,7 +21,9 @@ typedef uint16_t type_id;
 STATIC_ASSERT(MAX_TYPES > 0, "invalid number of event types");
 
 /* ANY_EVENT indicates any event type. */
-#define ANY_EVENT 0
+#ifndef DICE_ROLLED
+    #define ANY_EVENT 0
+#endif
 
 /* chain_id identifies a subscriber group ordered by the subscription time.
  * See include/dice/chains/ for the predefined chain identifiers. */
@@ -33,9 +35,13 @@ typedef uint16_t chain_id;
 #endif
 STATIC_ASSERT(MAX_CHAINS > 0, "invalid number of chains");
 
-/* CHAIN_CONTROL is a chain_id reserved for internal events of the pubsub
+/* CHAIN_DICE_CONTROL is a chain_id reserved for internal events of the pubsub
  * system, for example, initialization of modules. */
-#define CHAIN_CONTROL 0
+#ifndef DICE_ROLLED
+    #define CHAIN_DICE_CONTROL 0
+    /* Compatibility name for existing, non-generated consumers. */
+    #define CHAIN_CONTROL CHAIN_DICE_CONTROL
+#endif
 
 /* Metadata passed to handlers. The base definition tracks drop semantics; chain
  * implementations embed additional fields by casting to chain-specific

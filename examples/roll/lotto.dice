@@ -1,0 +1,66 @@
+; Topology excerpt from Lotto's mutex/cxa subscribers and runtime ingress.
+; This describes the boundary into ingress, not a complete Lotto runtime.
+; Port the corresponding C handlers to dice.h and SLOT_* before linking.
+(dice
+  (schema 1)
+  (runtime (plugins true))
+  (slot dice-self
+    (consumes (CHAIN_DICE_CONTROL EVENT_DICE_INIT)
+              (INTERCEPT_EVENT ANY_EVENT EVENT_THREAD_EXIT)
+              (INTERCEPT_BEFORE ANY_EVENT)
+              (INTERCEPT_AFTER ANY_EVENT))
+    (produces (CAPTURE_EVENT ANY_EVENT)
+              (CAPTURE_BEFORE ANY_EVENT)
+              (CAPTURE_AFTER ANY_EVENT)))
+  (slot dice-pthread-create
+    (consumes (CHAIN_DICE_CONTROL EVENT_DICE_INIT))
+    (produces (INTERCEPT_EVENT EVENT_THREAD_START EVENT_THREAD_EXIT)
+              (INTERCEPT_BEFORE EVENT_THREAD_CREATE EVENT_THREAD_JOIN)
+              (INTERCEPT_AFTER EVENT_THREAD_CREATE EVENT_THREAD_JOIN)))
+  (slot dice-pthread-mutex
+    (consumes (CHAIN_DICE_CONTROL EVENT_DICE_INIT))
+    (produces
+      (INTERCEPT_BEFORE EVENT_MUTEX_LOCK EVENT_MUTEX_TIMEDLOCK
+                        EVENT_MUTEX_TRYLOCK EVENT_MUTEX_UNLOCK EVENT_MUTEX_CLOCKLOCK)
+      (INTERCEPT_AFTER EVENT_MUTEX_LOCK EVENT_MUTEX_TIMEDLOCK
+                       EVENT_MUTEX_TRYLOCK EVENT_MUTEX_UNLOCK EVENT_MUTEX_CLOCKLOCK)))
+  (slot dice-cxa
+    (consumes (CHAIN_DICE_CONTROL EVENT_DICE_INIT))
+    (produces
+      (INTERCEPT_BEFORE EVENT_CXA_GUARD_ACQUIRE EVENT_CXA_GUARD_RELEASE
+                        EVENT_CXA_GUARD_ABORT)
+      (INTERCEPT_AFTER EVENT_CXA_GUARD_ACQUIRE EVENT_CXA_GUARD_RELEASE
+                       EVENT_CXA_GUARD_ABORT)))
+
+  ; Optional pins can preserve Lotto's existing ABI during migration:
+  ; (events (EVENT_MUTEX_ACQUIRE 142)
+  ;         (EVENT_MUTEX_TRYACQUIRE 143) (EVENT_MUTEX_RELEASE 144))
+  ; (chains (CHAIN_INGRESS_EVENT 9) (CHAIN_INGRESS_BEFORE 10)
+  ;         (CHAIN_INGRESS_AFTER 11) (CHAIN_LOTTO_TRAP 14))
+
+  (slot lotto-mutex
+    (after dice-self)
+    (before lotto-ingress)
+    (consumes
+      (CAPTURE_BEFORE EVENT_MUTEX_LOCK EVENT_MUTEX_TRYLOCK
+                      EVENT_MUTEX_UNLOCK)
+      (CHAIN_LOTTO_TRAP EVENT_MUTEX_TRYACQUIRE))
+    (produces
+      (CHAIN_INGRESS_EVENT EVENT_MUTEX_ACQUIRE EVENT_MUTEX_TRYACQUIRE
+                           EVENT_MUTEX_RELEASE)))
+
+  (slot lotto-cxa
+    (after dice-self)
+    (before lotto-ingress)
+    (consumes
+      (CAPTURE_BEFORE EVENT_CXA_GUARD_ACQUIRE)
+      (CAPTURE_AFTER EVENT_CXA_GUARD_ACQUIRE))
+    (produces
+      (CHAIN_INGRESS_BEFORE EVENT_CXA_GUARD_ACQUIRE)
+      (CHAIN_INGRESS_AFTER EVENT_CXA_GUARD_ACQUIRE)))
+
+  (slot lotto-ingress
+    (consumes
+      (CHAIN_INGRESS_EVENT ANY_EVENT)
+      (CHAIN_INGRESS_BEFORE ANY_EVENT)
+      (CHAIN_INGRESS_AFTER ANY_EVENT))))

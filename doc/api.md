@@ -6,7 +6,7 @@ right building blocks when writing interceptors or subscribers.
 ## Core Concepts
 
 - `types.h`: defines `chain_id`, `type_id`, `struct metadata`, and constants
-  such as `MAX_TYPES`, `MAX_CHAINS`, and `CHAIN_CONTROL`; defines the
+  such as `MAX_TYPES`, `MAX_CHAINS`, and `CHAIN_DICE_CONTROL`; defines the
   `thread_id` type and sentinel values (`NO_THREAD`, `ANY_THREAD`,
   `MAIN_THREAD`).
 - `chains/`: standard chain identifiers. `intercept.h` introduces

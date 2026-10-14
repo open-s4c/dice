@@ -8,8 +8,10 @@
 /* The Self module subscribes for all events from INTERCEPT_* chains and
  * republishes them the in following chains with additional "self" metadata such
  * as ID and TLS pointers. */
-#define CAPTURE_EVENT  4
-#define CAPTURE_BEFORE 5
-#define CAPTURE_AFTER  6
+#ifndef DICE_ROLLED
+    #define CAPTURE_EVENT  4
+    #define CAPTURE_BEFORE 5
+    #define CAPTURE_AFTER  6
+#endif
 
 #endif /* DICE_CAPTURE_H */

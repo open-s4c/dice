@@ -7,12 +7,14 @@
 
 #include <stddef.h>
 
-#define EVENT_MALLOC         50
-#define EVENT_CALLOC         51
-#define EVENT_REALLOC        52
-#define EVENT_FREE           53
-#define EVENT_POSIX_MEMALIGN 54
-#define EVENT_ALIGNED_ALLOC  55
+#ifndef DICE_ROLLED
+    #define EVENT_MALLOC         50
+    #define EVENT_CALLOC         51
+    #define EVENT_REALLOC        52
+    #define EVENT_FREE           53
+    #define EVENT_POSIX_MEMALIGN 54
+    #define EVENT_ALIGNED_ALLOC  55
+#endif
 
 struct malloc_event {
     const void *pc;

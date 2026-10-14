@@ -7,9 +7,11 @@
 
 #include <stddef.h>
 
-#define EVENT_MEMCPY  100
-#define EVENT_MEMMOVE 101
-#define EVENT_MEMSET  102
+#ifndef DICE_ROLLED
+    #define EVENT_MEMCPY  100
+    #define EVENT_MEMMOVE 101
+    #define EVENT_MEMSET  102
+#endif
 
 struct memcpy_event {
     const void *pc;

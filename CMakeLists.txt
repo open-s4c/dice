@@ -15,7 +15,6 @@ project(
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 include(GNUInstallDirs)
 include(CheckSymbolExists)
-include(cmake/export.cmake)
 add_compile_options(-Wall -Wextra -Werror)
 
 # POSIX extensions
@@ -76,9 +75,21 @@ if(${DICE_LTO})
   endif()
 endif()
 
+# Generator tools do not need the runtime's LTO configuration or LLVM archiver.
+function(dice_configure_tool TARGET)
+  set_target_properties(${TARGET} PROPERTIES INTERPROCEDURAL_OPTIMIZATION OFF)
+  if(DICE_LTO AND CMAKE_SYSTEM_NAME MATCHES "NetBSD" AND
+     CMAKE_C_COMPILER_ID MATCHES "Clang")
+    # NetBSD uses explicit flags above instead of CMake's IPO property.
+    target_compile_options(${TARGET} PRIVATE -fno-lto -fno-fat-lto-objects)
+  endif()
+endfunction()
+
 # memory
 option(DICE_MEMSET "Build Dice with memset wrapper" off)
 option(DICE_MEMPOOL_USE_MMAP "Use mmap for mempool" off)
+
+include(cmake/export.cmake)
 
 # Tests and benchmarks
 if(PROJECT_IS_TOP_LEVEL)
@@ -132,6 +143,7 @@ add_subdirectory(scripts)
 add_subdirectory(deps)
 add_subdirectory(include)
 add_subdirectory(src)
+include(cmake/roll.cmake)
 
 set(DICE_SCRIPT
     env DICE_BUILD=${PROJECT_BINARY_DIR} DICE_SOURCE=${PROJECT_SOURCE_DIR}
@@ -147,8 +159,3 @@ if(${DICE_BENCHMARKS})
   add_subdirectory(bench/micro)
   add_subdirectory(bench/lib)
 endif()
-
-# ------------------------------------------------------------------------------
-# Installation
-# ------------------------------------------------------------------------------
-install(TARGETS dice dice.h EXPORT ${PROJECT_TARGETS})

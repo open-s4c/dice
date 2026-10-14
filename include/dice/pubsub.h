@@ -67,15 +67,18 @@ enum ps_err ps_publish(const chain_id chain, const type_id type, void *event,
 
 
 /* PS_PUBLISH simplifies the publication and drop mechanism of metadata. */
-#define PS_PUBLISH(chain, type, event, md)                                     \
+#define PS_PUBLISH_WITH_(PUBLISH, chain, type, event, md)                      \
     do {                                                                       \
         struct metadata __md = {};                                             \
         struct metadata *_md = (md) != NULL ? (struct metadata *)(md) : &__md; \
-        enum ps_err err      = ps_publish(chain, type, event, _md);            \
+        enum ps_err err      = PUBLISH(chain, type, event, _md);               \
         if (err < 0)                                                           \
             log_fatal("could not publish %s/%s: %d", ps_chain_str(chain),      \
                       ps_type_str(type), err);                                 \
     } while (0)
+
+#define PS_PUBLISH(chain, type, event, md)                                     \
+    PS_PUBLISH_WITH_(ps_publish, chain, type, event, md)
 
 /* ps_subscribe subscribes a callback in a chain for an event.
  *

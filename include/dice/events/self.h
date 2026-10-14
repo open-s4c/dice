@@ -7,9 +7,11 @@
 
 #include <stdbool.h>
 
-#define EVENT_SELF_INIT 5
-#define EVENT_SELF_FINI 6
-#define EVENT_SELF_WAIT 7
+#ifndef DICE_ROLLED
+    #define EVENT_SELF_INIT 5
+    #define EVENT_SELF_FINI 6
+    #define EVENT_SELF_WAIT 7
+#endif
 
 struct self_wait_event {
     bool wait;

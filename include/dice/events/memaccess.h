@@ -11,18 +11,20 @@
 
 #include <dice/types.h>
 
-#define EVENT_MA_READ         30
-#define EVENT_MA_WRITE        31
-#define EVENT_MA_AREAD        32
-#define EVENT_MA_AWRITE       33
-#define EVENT_MA_RMW          34
-#define EVENT_MA_XCHG         35
-#define EVENT_MA_CMPXCHG      36
-#define EVENT_MA_CMPXCHG_WEAK 37
-#define EVENT_MA_FENCE        38
-#define EVENT_MA_READ_RANGE   39
-#define EVENT_MA_WRITE_RANGE  40
-#define LAST_MA_EVENT         EVENT_MA_WRITE_RANGE
+#ifndef DICE_ROLLED
+    #define EVENT_MA_READ         30
+    #define EVENT_MA_WRITE        31
+    #define EVENT_MA_AREAD        32
+    #define EVENT_MA_AWRITE       33
+    #define EVENT_MA_RMW          34
+    #define EVENT_MA_XCHG         35
+    #define EVENT_MA_CMPXCHG      36
+    #define EVENT_MA_CMPXCHG_WEAK 37
+    #define EVENT_MA_FENCE        38
+    #define EVENT_MA_READ_RANGE   39
+    #define EVENT_MA_WRITE_RANGE  40
+#endif
+#define LAST_MA_EVENT EVENT_MA_WRITE_RANGE
 
 enum rmw_op {
     RMW_OP_ADD,

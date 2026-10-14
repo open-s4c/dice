@@ -1,0 +1,13 @@
+(dice
+  (schema 1)
+  (include "interceptors.dice")
+  (runtime (plugins true))
+
+  ; Events and chains are inferred from consumes/produces.
+  (slot observer
+    (after dice-self)
+    (consumes (CAPTURE_BEFORE EVENT_MALLOC)
+              (CAPTURE_EVENT EVENT_THREAD_START EVENT_THREAD_EXIT)))
+
+  (slot preload-observer
+    (consumes (CAPTURE_BEFORE EVENT_MALLOC))))

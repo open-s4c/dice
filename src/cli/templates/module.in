@@ -1,0 +1,111 @@
+/* Configured slots provide strong handlers or register callback fallbacks.
+ * Unknown slots register in the trailing callback phase. */
+#ifndef DICE_MODULE_H
+#define DICE_MODULE_H
+void dice_require_abi(const char *configuration);
+int dice_subscribe_abi(const char *configuration, chain_id chain, type_id type,
+                      ps_callback_f callback, int slot);
+#define ps_subscribe(CHAIN, TYPE, CB, SLOT) \
+    dice_subscribe_abi(DICE_CONFIG_ID, CHAIN, TYPE, CB, SLOT)
+
+#if defined(DICE_ROLL_RUNTIME) && !defined(DICE_MODULE_SLOT)
+#define DICE_MODULE_SLOT 0
+#endif
+#ifndef DICE_MODULE_SLOT
+#define DICE_MODULE_SLOT DICE_DEFAULT_PLUGIN_SLOT
+#define DICE_IMPLICIT_SLOT
+#define DICE_PLUGIN_MODULE
+#endif
+
+#define PS_ADVERTISE_TYPE(TYPE)
+#define PS_ADVERTISE_CHAIN(CHAIN)
+#define PS_DISPATCH_SLOT_ON(SLOT)
+#define DICE_ROLL_JOIN_(A, B) A##B
+#define DICE_ROLL_JOIN(A, B) DICE_ROLL_JOIN_(A, B)
+#define DICE_ROLL_LOCAL(NAME) DICE_ROLL_JOIN(NAME, DICE_MODULE_SLOT)
+#define DICE_SLOT_HANDLER(C, E, S) V_JOIN(V_JOIN(V_JOIN(dice_slot, C), E), S)
+#define DICE_CONSUMES(C, E, S) V_JOIN(V_JOIN(V_JOIN(dice_consumes, C), E), S)
+
+#if DICE_CHECK_ROUTES
+/* A handler's explicit SLOT shadows this translation unit's default. */
+#define DICE_ROUTE_SLOT dice_route_slot_
+#ifdef DICE_IMPLICIT_SLOT
+enum { DICE_ROUTE_SLOT = -1 };
+#else
+enum { DICE_ROUTE_SLOT = DICE_MODULE_SLOT };
+#endif
+#define DICE_ROUTE_CONTEXT(SLOT) enum { DICE_ROUTE_SLOT = (SLOT) };
+enum ps_err dice_publish_checked(int slot, chain_id chain, type_id type,
+                                void *event, struct metadata *md);
+#define ps_publish(CHAIN, TYPE, EVENT, MD) \
+    dice_publish_checked(DICE_ROUTE_SLOT, CHAIN, TYPE, EVENT, MD)
+#define DICE_CHECK_CONSUMES(CHAIN, TYPE, SLOT) \
+    STATIC_ASSERT((DICE_PLUGINS && (SLOT) > DICE_LAST_KNOWN_SLOT) || \
+                  DICE_ROUTE_CONSUMES(SLOT, CHAIN, TYPE), \
+                  "undeclared slot consumption");
+#else
+#define DICE_ROUTE_CONTEXT(SLOT)
+#define DICE_CHECK_CONSUMES(CHAIN, TYPE, SLOT)
+#if defined(DICE_DISPATCH_MODULE) && !defined(DICE_PLUGIN_MODULE) && !defined(DICE_ROLL_RUNTIME) && DICE_ROLL_JOIN(DICE_STATIC_SLOT_, DICE_MODULE_SLOT)
+/* Linked release modules publish through the core's internal entry point.
+ * Direct ps_publish calls and function pointers retain public validation. */
+DICE_HIDE enum ps_err dice_publish_internal_(chain_id, type_id, void *,
+                                             struct metadata *);
+#undef PS_PUBLISH
+#define PS_PUBLISH(CHAIN, TYPE, EVENT, MD) \
+    PS_PUBLISH_WITH_(dice_publish_internal_, CHAIN, TYPE, EVENT, MD)
+#endif
+#endif
+
+#ifndef DICE_ROLL_RUNTIME
+static void DICE_CTOR dice_validate_header_(void)
+{
+    dice_require_abi(DICE_CONFIG_ID);
+}
+#endif
+
+#if !defined(DICE_PLUGIN_MODULE) && (defined(DICE_DISPATCH_MODULE) || DICE_ROLL_JOIN(DICE_STATIC_SLOT_, DICE_MODULE_SLOT))
+#define PS_SUBSCRIBE_SLOT(CHAIN, TYPE, SLOT, ...) \
+    STATIC_ASSERT(DICE_CONSUMES(CHAIN, TYPE, SLOT), "undeclared slot consumption"); \
+    PS_HANDLER_DEF(CHAIN, TYPE, SLOT, DICE_ROUTE_CONTEXT(SLOT) __VA_ARGS__) \
+    DICE_HIDE enum ps_err DICE_SLOT_HANDLER(CHAIN, TYPE, SLOT)( \
+        chain_id chain, type_id type, void *event, struct metadata *md) \
+    { return PS_HANDLER(CHAIN, TYPE, SLOT)(chain, type, event, md); }
+#define DICE_ROLL_CONSTRUCTOR()
+#else
+#define PS_SUBSCRIBE_SLOT(CHAIN, TYPE, SLOT, ...) \
+    DICE_CHECK_CONSUMES(CHAIN, TYPE, SLOT) \
+    PS_HANDLER_DEF(CHAIN, TYPE, SLOT, DICE_ROUTE_CONTEXT(SLOT) __VA_ARGS__) \
+    static void DICE_CTOR V_JOIN(PS_HANDLER(CHAIN, TYPE, SLOT), register_)(void) \
+    { \
+        int err = ps_subscribe(CHAIN, TYPE, PS_HANDLER(CHAIN, TYPE, SLOT), SLOT); \
+        if (err != PS_OK) \
+            log_fatal("could not subscribe plugin: %d", err); \
+    }
+#define DICE_ROLL_CONSTRUCTOR() \
+    static void DICE_CTOR DICE_ROLL_LOCAL(module_ctor_)(void) \
+    { \
+        dice_require_abi(DICE_CONFIG_ID); \
+        DICE_ROLL_LOCAL(module_init_)(); \
+    }
+#endif
+
+#define PS_SUBSCRIBE(CHAIN, TYPE, ...) \
+    PS_SUBSCRIBE_SLOT(CHAIN, TYPE, DICE_MODULE_SLOT, __VA_ARGS__)
+#define DICE_MODULE_INIT(...) \
+    static void DICE_ROLL_LOCAL(module_init_)(void) \
+    { \
+        static bool done; \
+        if (!done) { \
+            done = true; \
+            do { __VA_ARGS__; } while (0); \
+        } \
+    } \
+    PS_SUBSCRIBE(CHAIN_DICE_CONTROL, EVENT_DICE_INIT, { \
+        DICE_ROLL_LOCAL(module_init_)(); \
+    }) \
+    DICE_ROLL_CONSTRUCTOR()
+#define DICE_MODULE_FINI(...) \
+    static void DICE_DTOR DICE_ROLL_LOCAL(module_fini_)(void) \
+    { do { __VA_ARGS__; } while (0); }
+#endif /* DICE_MODULE_H */

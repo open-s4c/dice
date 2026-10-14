@@ -1,0 +1,4 @@
+(dice
+  (schema 1)
+  (runtime (plugins true))
+  (include "modules.dice"))

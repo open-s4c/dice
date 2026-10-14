@@ -26,7 +26,18 @@ add_custom_command(
   WORKING_DIRECTORY ${TMPLR_SRCDIR}
   VERBATIM)
 
+add_custom_target(tmplr-version DEPENDS ${TMPLR_VERSION_H})
+add_library(tmplr-lib STATIC ${TMPLR_SRCDIR}/tmplr.c)
+dice_configure_tool(tmplr-lib)
+add_dependencies(tmplr-lib tmplr-version)
+target_compile_definitions(tmplr-lib PRIVATE TMPLR_NO_MAIN)
+target_include_directories(tmplr-lib PUBLIC ${TMPLR_SRCDIR}/include
+                           PRIVATE ${TMPLR_BINDIR})
+set_target_properties(tmplr-lib PROPERTIES OUTPUT_NAME tmplr)
+
 function(dice_configure_tmplr_target)
+  dice_configure_tool(tmplr)
+  add_dependencies(tmplr tmplr-version)
   target_include_directories(tmplr PRIVATE ${TMPLR_SRCDIR}/include
                                             ${TMPLR_BINDIR})
   set_target_properties(

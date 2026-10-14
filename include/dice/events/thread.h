@@ -5,9 +5,11 @@
 #ifndef DICE_THREAD_H
 #define DICE_THREAD_H
 
-#define EVENT_THREAD_START  1
-#define EVENT_THREAD_EXIT   2
-#define EVENT_THREAD_CREATE 3
-#define EVENT_THREAD_JOIN   4
+#ifndef DICE_ROLLED
+    #define EVENT_THREAD_START  1
+    #define EVENT_THREAD_EXIT   2
+    #define EVENT_THREAD_CREATE 3
+    #define EVENT_THREAD_JOIN   4
+#endif
 
 #endif /* DICE_THREAD_H */

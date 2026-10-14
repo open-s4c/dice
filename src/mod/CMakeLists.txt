@@ -25,6 +25,11 @@ set(TSAN_MODULES tsan stacktrace)
 # Compile options to modules can be set like this: set(OPTIONS_memcpy -O2)
 set(OPTIONS_memcpy -fno-builtin-memcpy -fno-builtin-memset
                    -fno-builtin-memmmove)
+# Runtime callbacks must stay uninstrumented even when a rolled library
+# inherits sanitizer options from another linked target.
+foreach(MODULE IN LISTS TSAN_MODULES)
+  set(OPTIONS_${MODULE} -fno-sanitize=all)
+endforeach()
 
 set(TSAN_SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/tsan.c)
 
@@ -47,15 +52,24 @@ foreach(SRC ${SRCS})
   endif()
 
   add_library(${TARGET} SHARED ${BUILD_SRC})
+  if("${MODULE}" STREQUAL "tsan")
+    add_dependencies(${TARGET} expand-tsan.c)
+  endif()
   target_link_libraries(${TARGET} PRIVATE dice dice.h)
   target_compile_options(${TARGET} PRIVATE ${OPTIONS_${MODULE}})
   set_target_properties(${TARGET} PROPERTIES PREFIX "")
+  # Installed modules live one directory below their libdice dependency.
+  if(APPLE)
+    set_target_properties(${TARGET} PROPERTIES INSTALL_RPATH "@loader_path/..")
+  else()
+    set_target_properties(${TARGET} PROPERTIES INSTALL_RPATH "$ORIGIN/..")
+  endif()
+  install(TARGETS ${TARGET} LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/dice)
   if(APPLE)
     # Allow unresolved symbols that will be provided by the sanitizer/runtime at
     # preload time (Annotate*, pthread_*, etc).
     target_link_options(${TARGET} PRIVATE -undefined dynamic_lookup)
   endif()
-  install(TARGETS ${TARGET} DESTINATION lib/dice)
 
   if(NOT ${TARGET} MATCHES "wrap_memset")
     if(${LINK_OVERRIDE})
@@ -63,6 +77,11 @@ foreach(SRC ${SRCS})
     endif()
 
     add_library(${TARGET}.o OBJECT ${BUILD_SRC})
+    set_target_properties(${TARGET}.o PROPERTIES
+                          DICE_MODULE_OPTIONS "${OPTIONS_${MODULE}}")
+    if("${MODULE}" STREQUAL "tsan")
+      add_dependencies(${TARGET}.o expand-tsan.c)
+    endif()
     target_link_libraries(${TARGET}.o PRIVATE dice.h)
     target_compile_options(${TARGET}.o PRIVATE)
     target_compile_options(${TARGET}.o PRIVATE ${OPTIONS_${MODULE}})
@@ -72,9 +91,6 @@ foreach(SRC ${SRCS})
   endif()
 
   foreach(ENDING ${ENDINGS})
-    if("${MODULE}" STREQUAL "tsan")
-      add_dependencies(${TARGET}${ENDING} expand-tsan.c)
-    endif()
     if(NOT "${MODULE}" IN_LIST TSAN_MODULES)
       if(NOT "${DICE_SANITIZER}" STREQUAL "")
         target_compile_options(${TARGET}${ENDING}

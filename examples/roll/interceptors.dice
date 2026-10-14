@@ -1,0 +1,22 @@
+; Compile the corresponding src/mod/*.c files separately against dice.h.
+(dice
+  (schema 1)
+  (slot dice-self
+    (consumes (CHAIN_DICE_CONTROL EVENT_DICE_INIT)
+              (INTERCEPT_EVENT ANY_EVENT EVENT_THREAD_EXIT)
+              (INTERCEPT_BEFORE ANY_EVENT)
+              (INTERCEPT_AFTER ANY_EVENT))
+    (produces (CAPTURE_EVENT ANY_EVENT)
+              (CAPTURE_BEFORE ANY_EVENT)
+              (CAPTURE_AFTER ANY_EVENT)))
+  (slot dice-pthread-create
+    (consumes (CHAIN_DICE_CONTROL EVENT_DICE_INIT))
+    (produces (INTERCEPT_EVENT EVENT_THREAD_START EVENT_THREAD_EXIT)
+              (INTERCEPT_BEFORE EVENT_THREAD_CREATE EVENT_THREAD_JOIN)
+              (INTERCEPT_AFTER EVENT_THREAD_CREATE EVENT_THREAD_JOIN)))
+  (slot dice-malloc
+    (consumes (CHAIN_DICE_CONTROL EVENT_DICE_INIT))
+    (produces (INTERCEPT_BEFORE EVENT_MALLOC EVENT_CALLOC EVENT_REALLOC
+                              EVENT_FREE EVENT_POSIX_MEMALIGN EVENT_ALIGNED_ALLOC)
+              (INTERCEPT_AFTER EVENT_MALLOC EVENT_CALLOC EVENT_REALLOC
+                             EVENT_FREE EVENT_POSIX_MEMALIGN EVENT_ALIGNED_ALLOC))))

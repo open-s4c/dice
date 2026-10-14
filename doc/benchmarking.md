@@ -51,10 +51,14 @@ Each suite reuses the same scenario names so results are comparable:
   reports).
 - `self`: Extends `intercept` by also loading `dice-self` to account for TLS
   management overhead when subscribers depend on Self metadata.
-- `bundle`: Uses the monolithic `libdice-bundle` produced in `bench/lib`, which
-  links Dice core and the same intercept modules into a single shared library
-  so dispatch happens through generated switch tables.
+- `bundle`: Uses `libdice-bundle` built with `add_dice_core()` and `add_dice_mods()` in `bench/lib`.
+  `bundle.dice` enables plugins and includes `modules.dice`, which declares the
+  self, pthread, TSAN, and stacktrace routes. The generated dispatchers, ordinary core sources, and separately
+  compiled modules link into one shared library.
 - `box`: Uses `libdice-bundle-box` (also under `bench/lib`) to measure the
   fast-path where only dispatch-based modules remain and plugins are absent.
+  `box.dice` shares the module routes and sets `(plugins false)`. The existing
+  mempool/self visibility overrides remain linked for the sealed benchmark.
 - `cbonly`: Loads `libdice-bundle-cbonly` to isolate the callback-only path and
-  compare it with the bundled dispatch implementations.
+  compare it with the bundled dispatch implementations. This control retains
+  the legacy build because generated known slots always dispatch.

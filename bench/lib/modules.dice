@@ -1,0 +1,59 @@
+(dice
+  (schema 1)
+  (slot dice-self
+    (consumes (CHAIN_DICE_CONTROL EVENT_DICE_INIT)
+              (INTERCEPT_EVENT ANY_EVENT EVENT_THREAD_EXIT)
+              (INTERCEPT_BEFORE ANY_EVENT)
+              (INTERCEPT_AFTER ANY_EVENT))
+    (produces (CAPTURE_EVENT ANY_EVENT)
+              (CAPTURE_BEFORE ANY_EVENT)
+              (CAPTURE_AFTER ANY_EVENT)))
+
+  (slot dice-pthread-create
+    (consumes (CHAIN_DICE_CONTROL EVENT_DICE_INIT))
+    (produces (INTERCEPT_EVENT EVENT_THREAD_START EVENT_THREAD_EXIT)
+              (INTERCEPT_BEFORE EVENT_THREAD_CREATE EVENT_THREAD_JOIN)
+              (INTERCEPT_AFTER EVENT_THREAD_CREATE EVENT_THREAD_JOIN)))
+
+  (slot dice-pthread-mutex
+    (consumes (CHAIN_DICE_CONTROL EVENT_DICE_INIT))
+    (produces (INTERCEPT_BEFORE EVENT_MUTEX_LOCK EVENT_MUTEX_TIMEDLOCK
+                               EVENT_MUTEX_TRYLOCK EVENT_MUTEX_UNLOCK
+                               EVENT_MUTEX_CLOCKLOCK)
+              (INTERCEPT_AFTER EVENT_MUTEX_LOCK EVENT_MUTEX_TIMEDLOCK
+                              EVENT_MUTEX_TRYLOCK EVENT_MUTEX_UNLOCK
+                              EVENT_MUTEX_CLOCKLOCK)))
+
+  (slot dice-pthread-cond
+    (consumes (CHAIN_DICE_CONTROL EVENT_DICE_INIT))
+    (produces (INTERCEPT_BEFORE EVENT_COND_WAIT EVENT_COND_TIMEDWAIT
+                               EVENT_COND_SIGNAL EVENT_COND_BROADCAST
+                               EVENT_COND_CLOCKWAIT)
+              (INTERCEPT_AFTER EVENT_COND_WAIT EVENT_COND_TIMEDWAIT
+                              EVENT_COND_SIGNAL EVENT_COND_BROADCAST
+                              EVENT_COND_CLOCKWAIT)))
+
+  (slot dice-pthread-rwlock
+    (consumes (CHAIN_DICE_CONTROL EVENT_DICE_INIT))
+    (produces (INTERCEPT_BEFORE EVENT_RWLOCK_RDLOCK EVENT_RWLOCK_TIMEDRDLOCK
+                               EVENT_RWLOCK_TRYRDLOCK EVENT_RWLOCK_WRLOCK
+                               EVENT_RWLOCK_TIMEDWRLOCK EVENT_RWLOCK_TRYWRLOCK
+                               EVENT_RWLOCK_UNLOCK)
+              (INTERCEPT_AFTER EVENT_RWLOCK_RDLOCK EVENT_RWLOCK_TIMEDRDLOCK
+                              EVENT_RWLOCK_TRYRDLOCK EVENT_RWLOCK_WRLOCK
+                              EVENT_RWLOCK_TIMEDWRLOCK EVENT_RWLOCK_TRYWRLOCK
+                              EVENT_RWLOCK_UNLOCK)))
+
+  (slot dice-tsan
+    (consumes (CHAIN_DICE_CONTROL EVENT_DICE_INIT))
+    (produces (INTERCEPT_EVENT EVENT_MA_READ EVENT_MA_WRITE
+                              EVENT_MA_READ_RANGE EVENT_MA_WRITE_RANGE)
+              (INTERCEPT_BEFORE EVENT_MA_AREAD EVENT_MA_AWRITE EVENT_MA_XCHG
+                               EVENT_MA_RMW EVENT_MA_CMPXCHG EVENT_MA_FENCE)
+              (INTERCEPT_AFTER EVENT_MA_AREAD EVENT_MA_AWRITE EVENT_MA_XCHG
+                              EVENT_MA_RMW EVENT_MA_CMPXCHG EVENT_MA_FENCE)))
+
+  (slot dice-stacktrace
+    (consumes (CHAIN_DICE_CONTROL EVENT_DICE_INIT))
+    (produces (INTERCEPT_EVENT EVENT_STACKTRACE_ENTER EVENT_STACKTRACE_EXIT
+                              EVENT_THREAD_START EVENT_THREAD_EXIT))))
