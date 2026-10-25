@@ -106,7 +106,6 @@ mempool_init(size_t cap)
     mp_.pool.memory = REAL_FUNCV(malloc, 0)(cap);
     if (mp_.pool.memory == NULL)
         log_fatal("could not create mempool");
-    memset(mp_.pool.memory, 0, cap);
 #endif
     // caslock already initialized with 0
 }

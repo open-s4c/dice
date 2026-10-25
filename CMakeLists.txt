@@ -16,6 +16,8 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 include(GNUInstallDirs)
 include(CheckSymbolExists)
 include(cmake/export.cmake)
+include(cmake/DiceModules.cmake)
+include(cmake/DiceInterposeTests.cmake)
 add_compile_options(-Wall -Wextra -Werror)
 
 # POSIX extensions
@@ -125,6 +127,12 @@ if(NOT "${DICE_PUBSUB_CTOR_INIT}")
   add_compile_definitions(DICE_DISABLE_PUBSUB_CTOR_INIT)
 endif()
 
+set(
+  DICE_EXTENSION_DIRS
+  ""
+  CACHE STRING
+  "Semicolon-separated directories containing Dice extensions")
+
 # ------------------------------------------------------------------------------
 # Include directories
 # ------------------------------------------------------------------------------
@@ -142,6 +150,36 @@ if(${DICE_TESTS})
   enable_testing()
   add_subdirectory(test)
 endif()
+
+foreach(EXTENSION_DIR IN LISTS DICE_EXTENSION_DIRS)
+  get_filename_component(
+    EXTENSION_DIR
+    "${EXTENSION_DIR}"
+    ABSOLUTE
+    BASE_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
+
+  if(NOT EXISTS "${EXTENSION_DIR}/CMakeLists.txt")
+    message(
+      FATAL_ERROR
+      "Dice extension has no CMakeLists.txt: ${EXTENSION_DIR}")
+  endif()
+
+  get_filename_component(
+    EXTENSION_NAME
+    "${EXTENSION_DIR}"
+    NAME)
+
+  # The hash prevents two different directories having the same basename
+  # from colliding in the build tree.
+  string(
+    MD5
+    EXTENSION_ID
+    "${EXTENSION_DIR}")
+
+  add_subdirectory(
+    "${EXTENSION_DIR}"
+    "${CMAKE_CURRENT_BINARY_DIR}/extensions/${EXTENSION_NAME}-${EXTENSION_ID}")
+endforeach()
 
 if(${DICE_BENCHMARKS})
   add_subdirectory(bench/micro)

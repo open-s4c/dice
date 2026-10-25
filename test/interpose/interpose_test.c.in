@@ -11,8 +11,8 @@
 #define $__begin(...)
 #define $__end(...)
 #define $_include(...)
-#define MM_RETURN_FOO int
-#define MM_PARAMS_FOO
+#define MM_FOO_RETURN int
+#define MM_FOO_PARAMS
 #define MAKE_UPCASE 1
 #define PARAM       int x
 int FOO(int);
@@ -82,10 +82,10 @@ $_begin(FOO = [[foo]]);
 /* Expects struct to match this:
  *
  * struct FOO_event {
- *     $__begin(PPP = MM_PARAMS_FOO);
+ *     $__begin(PPP = MM_FOO_PARAMS);
  *     PPP;
  *     $__end();
- *     $_returns MM_RETURN_FOO $.!? ret;
+ *     $_returns MM_FOO_RETURN $.!? ret;
  * };
  */
 struct FOO_event E_FOO;
@@ -93,17 +93,17 @@ $_end();
 
 /* mock implementation of functions */
 $_begin(FOO = [[foo]]);
-MM_RETURN_FOO
-fake_FOO(MM_PARAMS_FOO)
+MM_FOO_RETURN
+fake_FOO(MM_FOO_PARAMS)
 {
     /* check that every argument is as expected (unless should be skipped). */
-    $__begin(AA = MM_ARGS_FOO);
+    $__begin(AA = MM_FOO_ARGS);
     $__UNLESS_FOO_AA;
     ensure(AA == E_FOO.AA);
     $__end();
 
     /* skipped arguments should be void-cast to silent compiler warnings. */
-    $__begin(AA = MM_ARGS_FOO);
+    $__begin(AA = MM_FOO_ARGS);
     $__WHEN_FOO_AA;
     (void)AA;
     $__end();
@@ -114,7 +114,7 @@ fake_FOO(MM_PARAMS_FOO)
     called = true;
 
     /* return expected value */
-    $_returns MM_RETURN_FOO $.? return E_FOO.ret;
+    $_returns MM_FOO_RETURN $.? return E_FOO.ret;
 }
 $_end();
 
@@ -128,7 +128,7 @@ PS_SUBSCRIBE(INTERCEPT_BEFORE, MAKE_UPCASE, {
 
     /* check fields match expectations */
     struct FOO_event *ev = EVENT_PAYLOAD(ev);
-    $__begin(AA = MM_ARGS_FOO);
+    $__begin(AA = MM_FOO_ARGS);
     $__UNLESS_FOO_AA; // should skip check?
     ASSERT_FIELD_EQ(&E_FOO, AA);
     $__end();
@@ -147,12 +147,12 @@ PS_SUBSCRIBE(INTERCEPT_BEFORE, MAKE_UPCASE, {
     $__end();
 
     /* ensure fields are the same if they should */
-    $__begin(AA = MM_ARGS_FOO);
+    $__begin(AA = MM_FOO_ARGS);
     E_FOO.AA = E_FOO.__FOO_AA_SAME_AS;
     $__end();
 
     /* manual memcpy to avoid recursion */
-    $__begin(AA = MM_ARGS_FOO);
+    $__begin(AA = MM_FOO_ARGS);
     ev->AA = E_FOO.AA;
     $__end();
 
@@ -164,11 +164,11 @@ PS_SUBSCRIBE(INTERCEPT_AFTER, MAKE_UPCASE, {
     if (!enabled())
         return PS_STOP_CHAIN;
     struct FOO_event *ev = EVENT_PAYLOAD(ev);
-    $__begin(AA = MM_ARGS_FOO);
+    $__begin(AA = MM_FOO_ARGS);
     $__UNLESS_FOO_AA; // should skip check?
     ASSERT_FIELD_EQ(&E_FOO, AA);
     $__end();
-    $_returns MM_RETURN_FOO $.? ASSERT_FIELD_EQ(&E_FOO, ret);
+    $_returns MM_FOO_RETURN $.? ASSERT_FIELD_EQ(&E_FOO, ret);
 })
 $_end();
 
@@ -182,7 +182,7 @@ test_FOO(void)
     event_init(&E_FOO, sizeof(struct FOO_event));
 
     /* ensure that fields that must be equal are actually equal */
-    $__begin(AA = MM_ARGS_FOO);
+    $__begin(AA = MM_FOO_ARGS);
     E_FOO.AA = E_FOO.__FOO_AA_SAME_AS;
     $__end();
     $__begin(AA = FOO);
@@ -191,14 +191,14 @@ test_FOO(void)
 
     /* call FOO with arguments */
     enable(fake_FOO);
-    $_returns MM_RETURN_FOO $.!? ret =                                   //
+    $_returns MM_FOO_RETURN $.!? ret =                                   //
                                  FOO(                                    //
-                                     $__begin(AA = MM_ARGS_FOO $__kill), //
+                                     $__begin(AA = MM_FOO_ARGS $__kill), //
                                      E_FOO.AA,                           //
                                      $__end(),                           //
                                  );
     ensure(called);
-    $_returns MM_RETURN_FOO $.? ensure(ret == E_FOO.ret);
+    $_returns MM_FOO_RETURN $.? ensure(ret == E_FOO.ret);
     disable();
 }
 $_end();

@@ -67,9 +67,9 @@ foreach(CHAIN ${CHAINS})
     OUTPUT ${DISPATCH_CHAIN_C}
     COMMAND
       cat ${CMAKE_CURRENT_SOURCE_DIR}/dispatch_chain.c.in #
-      | $<TARGET_FILE:tmplr> -P_tmpl -l 1024 #
+      | $<TARGET_FILE:tmplr> -P_tmpl -l 2048 #
       "-DCCC=${CHAIN}" "-DEEE='${eee}'" "-DSSS='${SSS}'" -i #
-      | $<TARGET_FILE:tmplr> -P_tmpl2 -l 1024 #
+      | $<TARGET_FILE:tmplr> -P_tmpl2 -l 2048 #
       "-DEEE='${eee}'" "-DSSS='${SSS}'" -i > dispatch_${CHAIN}.c
     DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/dispatch_chain.c.in
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
