@@ -1,5 +1,10 @@
 (schema 1)
   (callbacks true)
+  ; Exercise preferred exact handlers, wildcard events in the fallback, and
+  ; publications to an unprioritized chain with the same event.
+  (prioritize (chains CHAIN_FLOW) (events EVENT_TEST))
+  ; Numeric order deliberately differs from name order, with unused IDs between.
+  (chains (CHAIN_FLOW 15) (CHAIN_OTHER 7))
   (module early (number 2)
     (subscribes (CHAIN_FLOW EVENT_TEST ANY_EVENT)
               (CHAIN_OTHER EVENT_OTHER)))

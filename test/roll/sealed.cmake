@@ -1,20 +1,5 @@
 cmake_minimum_required(VERSION 3.20)
-
-function(run)
-  execute_process(COMMAND ${ARGV} RESULT_VARIABLE result OUTPUT_VARIABLE stdout
-                  ERROR_VARIABLE stderr TIMEOUT 30)
-  if(NOT result STREQUAL "0")
-    message(FATAL_ERROR "${ARGV}: ${result}\n${stdout}${stderr}")
-  endif()
-  set(output "${stdout}${stderr}" PARENT_SCOPE)
-endfunction()
-function(fails expected)
-  execute_process(COMMAND ${ARGN} RESULT_VARIABLE result OUTPUT_VARIABLE stdout
-                  ERROR_VARIABLE stderr TIMEOUT 30)
-  if(result STREQUAL "0" OR NOT "${stdout}${stderr}" MATCHES "${expected}")
-    message(FATAL_ERROR "Expected '${expected}': ${ARGN}\n${result}\n${stdout}${stderr}")
-  endif()
-endfunction()
+include("${CMAKE_CURRENT_LIST_DIR}/common.cmake")
 
 set(out "${WORK}/sealed")
 file(MAKE_DIRECTORY "${out}")
@@ -23,18 +8,7 @@ set(common "(mempool-size 1Mi)
   (module app (after (dice self))
     (publishes (INTERCEPT_EVENT EVENT_TEST))
     (subscribes (CAPTURE_EVENT EVENT_TEST)))")
-set(flags -std=gnu11 -D_GNU_SOURCE -DDICE_DISPATCH_MODULE
-          -DDICE_DISABLE_PUBSUB_CTOR_INIT -Wall -Wextra -Werror -fPIC
-          "-I${out}" "-I${SOURCE}/include" "-I${SOURCE}/src/dice"
-          "-I${SOURCE}/deps/libvsync/include")
-set(link -pthread ${DL_LIBS})
-if(APPLE)
-  set(shared -dynamiclib)
-  set(suffix .dylib)
-else()
-  set(shared -shared)
-  set(suffix .so)
-endif()
+roll_compile_flags(flags "${out}" DISPATCH NO_CTOR)
 set(open_hash "")
 foreach(policy open all pool self pubsub)
   set(config "${common}")
@@ -78,7 +52,7 @@ foreach(policy open all pool self pubsub)
   endforeach()
   run("${DICE}" --query "${out}/system.dice")
   if(policy STREQUAL "all" OR policy STREQUAL "self")
-    if(NOT output MATCHES "slot dice/self [0-9]+ callbacks false sealed true")
+    if(NOT output MATCHES "slot dice/self [0-9]+ callbacks false option inline sealed true")
       message(FATAL_ERROR "Missing sealed slot policy: ${output}")
     endif()
   endif()
@@ -131,7 +105,7 @@ foreach(policy open all pool self pubsub)
         endif()
         file(WRITE "${out}/override.c" "${body}\n")
         run("${CC}" ${build_flags} -c "${out}/override.c" -o "${out}/override.o")
-        fails("${name}" "${CC}" ${build_flags} ${shared} ${objects}
+        expect_failure("${name}" "${CC}" ${build_flags} ${shared} ${objects}
               "${out}/override.o" ${link} -o "${lib}")
       endforeach()
       # Box sources compiled with the same configuration are harmless.
@@ -221,7 +195,7 @@ foreach(config "(module a (module b)) (module a-b (module c)) (seal (a))"
                "(module a (module b)) (module A (module c)) (seal (a))"
                "(module dice-self (module extra)) (seal (dice self))")
   file(WRITE "${out}/collision.dice" "${config}")
-  fails("sealing names collide" "${DICE}" --check "${out}/collision.dice")
+  expect_failure("sealing names collide" "${DICE}" --check "${out}/collision.dice")
 endforeach()
 file(WRITE "${out}/unsealed.dice"
      "(module a (module b)) (module a-b (module c))")
@@ -236,8 +210,8 @@ foreach(config
     "(module slot (module app (module fast))) (module app (slot fast-sealed)) (seal (slot app fast))"
     "(events EVENT_TEST_SEALED) (module event (module test)) (seal (event))")
   file(WRITE "${out}/collision.dice" "${config}")
-  fails("sealing flag .* collides" "${DICE}" --check "${out}/collision.dice")
-  fails("sealing flag .* collides" "${DICE}" "${out}/collision.dice"
+  expect_failure("sealing flag .* collides" "${DICE}" --check "${out}/collision.dice")
+  expect_failure("sealing flag .* collides" "${DICE}" "${out}/collision.dice"
         -o "${out}/collision")
   string(REGEX REPLACE "\\(seal \\([^)]*\\)\\)" "" unsealed "${config}")
   file(WRITE "${out}/unsealed.dice" "${unsealed}")
@@ -251,7 +225,7 @@ foreach(config "(seal)" "(seal ())" "(seal self)" "(seal _ _)"
                "(options sealed)" "(module a (options sealed))"
                "(module a (options sealed))")
   file(WRITE "${out}/invalid.dice" "${config}")
-  fails("expects|duplicate|unknown|empty|top level" "${DICE}" --check "${out}/invalid.dice")
+  expect_failure("expects|duplicate|unknown|empty|top level" "${DICE}" --check "${out}/invalid.dice")
 endforeach()
 foreach(config "(seal _) (callbacks true)"
                "(callbacks true) (seal _)"
@@ -261,7 +235,7 @@ foreach(config "(seal _) (callbacks true)"
                "(module a (slot b (callbacks true))) (seal (a b))"
                "(callbacks true) (seal (dice pubsub))")
   file(WRITE "${out}/invalid.dice" "${config}")
-  fails("callbacks true.*sealed" "${DICE}" --check "${out}/invalid.dice")
+  expect_failure("callbacks true.*sealed" "${DICE}" --check "${out}/invalid.dice")
 endforeach()
 # Matching must respect namespace boundaries; unrelated callbacks remain valid.
 file(WRITE "${out}/scopes.dice" "(seal (a)) (module a (slot x))

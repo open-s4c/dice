@@ -1,4 +1,6 @@
 #define DICE_MODULE_SLOT SLOT_DIRECT
+#include <assert.h>
+
 #include "trace.h"
 
 #if !DICE_CALLBACKS
@@ -9,12 +11,16 @@ PS_SUBSCRIBE_SLOT(CHAIN_FLOW, EVENT_TEST, SLOT_EARLY, {
 })
 PS_SUBSCRIBE_SLOT(CHAIN_FLOW, ANY_EVENT, SLOT_EARLY,
                   { return record(event, 'a'); })
-PS_SUBSCRIBE_SLOT(CHAIN_OTHER, EVENT_OTHER, SLOT_EARLY, {})
     #ifndef OMIT_MIDDLE
 PS_SUBSCRIBE_SLOT(CHAIN_FLOW, ANY_EVENT, SLOT_MIDDLE,
                   { return record(event, 'B'); })
     #endif
 #endif
+
+PS_SUBSCRIBE_SLOT(CHAIN_OTHER, EVENT_OTHER, SLOT_EARLY, {
+    assert(chain == CHAIN_OTHER && type == EVENT_OTHER);
+    return record(event, 'O');
+})
 
 PS_SUBSCRIBE(CHAIN_FLOW, EVENT_TEST, { return record(event, 'D'); })
 PS_SUBSCRIBE_SLOT(CHAIN_FLOW, EVENT_TEST, SLOT_LAST, {
