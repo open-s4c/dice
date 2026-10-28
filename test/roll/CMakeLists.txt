@@ -71,6 +71,14 @@ if(NOT CMAKE_CROSSCOMPILING)
            "-DDL_LIBS=${roll_dl_libs}" -DSOURCE=${PROJECT_SOURCE_DIR}
            -P ${CMAKE_CURRENT_SOURCE_DIR}/callbacks.cmake)
   set_tests_properties(roll-callback-scopes PROPERTIES TIMEOUT 180)
+  add_test(NAME roll-inline COMMAND ${CMAKE_COMMAND}
+           -DDICE=$<TARGET_FILE:dice-cli> -DCC=${CMAKE_C_COMPILER}
+           -DCC_ID=${CMAKE_C_COMPILER_ID}
+           -DWORK=${CMAKE_CURRENT_BINARY_DIR}
+           -DFIXTURES=${CMAKE_CURRENT_SOURCE_DIR} -DAPPLE=${APPLE}
+           "-DDL_LIBS=${roll_dl_libs}" -DSOURCE=${PROJECT_SOURCE_DIR}
+           -P ${CMAKE_CURRENT_SOURCE_DIR}/inline.cmake)
+  set_tests_properties(roll-inline PROPERTIES TIMEOUT 180)
   add_test(NAME roll-sealed COMMAND ${CMAKE_COMMAND}
            -DDICE=$<TARGET_FILE:dice-cli> -DCC=${CMAKE_C_COMPILER}
            -DWORK=${CMAKE_CURRENT_BINARY_DIR}

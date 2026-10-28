@@ -495,7 +495,14 @@ retire_self_(struct self *self)
 //  pubsub handler
 // -----------------------------------------------------------------------------
 
-static void
+/* Keep the capture chain constant when dispatch is emitted at the call site. */
+#if defined(DICE_ROLLED) && !DICE_CALLBACKS && !DICE_CHECK_ROUTES
+    #define SELF_PUBLISH_INLINE_ inline __attribute__((always_inline))
+#else
+    #define SELF_PUBLISH_INLINE_
+#endif
+
+static SELF_PUBLISH_INLINE_ void
 self_publish_(const chain_id chain, const type_id type, void *event,
               struct self *self)
 {
@@ -510,7 +517,7 @@ self_publish_(const chain_id chain, const type_id type, void *event,
     self->guard -= 2;
 }
 
-static enum ps_err
+static SELF_PUBLISH_INLINE_ enum ps_err
 self_handle_before_(const chain_id chain, const type_id type, void *event,
                     struct self *self)
 {
@@ -528,7 +535,7 @@ self_handle_before_(const chain_id chain, const type_id type, void *event,
     return PS_STOP_CHAIN;
 }
 
-static enum ps_err
+static SELF_PUBLISH_INLINE_ enum ps_err
 self_handle_after_(const chain_id chain, const type_id type, void *event,
                    struct self *self)
 {
@@ -547,7 +554,7 @@ self_handle_after_(const chain_id chain, const type_id type, void *event,
     return PS_STOP_CHAIN;
 }
 
-static enum ps_err
+static SELF_PUBLISH_INLINE_ enum ps_err
 self_handle_event_(const chain_id chain, const type_id type, void *event,
                    struct self *self)
 {
@@ -565,13 +572,14 @@ self_handle_event_(const chain_id chain, const type_id type, void *event,
     return PS_STOP_CHAIN;
 }
 
+/* Thread recovery, allocation and initialization must not inflate the cached
+ * lookup that runs on every intercepted event. */
 static __attribute__((noinline)) struct self *
 get_or_create_self_slow_(bool publish)
 {
     struct self *self = quack_search_(pthread_self());
-    if (self) {
+    if (self)
         return self;
-    }
 
     self = create_self_();
 
@@ -586,9 +594,8 @@ static inline struct self *
 get_or_create_self_(bool publish)
 {
     struct self *self = thread_cache_get_();
-    if (likely(self)) {
+    if (likely(self))
         return self;
-    }
     return get_or_create_self_slow_(publish);
 }
 

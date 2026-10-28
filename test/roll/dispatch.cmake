@@ -16,7 +16,8 @@ endfunction()
 set(out "${WORK}/dispatch")
 file(MAKE_DIRECTORY "${out}")
 file(READ "${FIXTURES}/dispatch/system.dice" config)
-set(flags -std=gnu11 -D_GNU_SOURCE -DDICE_ROLLED=1 -Wall -Wextra -Werror -fPIC "-I${out}"
+set(flags -std=gnu11 -D_GNU_SOURCE -DDICE_ROLLED=1 -DDICE_DISPATCH_MODULE
+          -DDICE_DISABLE_PUBSUB_CTOR_INIT -Wall -Wextra -Werror -fPIC "-I${out}"
           "-I${SOURCE}/include" "-I${SOURCE}/src/dice"
           "-I${SOURCE}/deps/libvsync/include")
 include("${FIXTURES}/core.cmake")
@@ -36,84 +37,96 @@ set(mod "${out}/plugin${suffix}")
 set(duplicate_mod "${out}/duplicate${suffix}")
 set(duplicate_second "${out}/duplicate-second${suffix}")
 set(app "${out}/app")
-foreach(callbacks true false)
-  string(REPLACE "(callbacks true)" "(callbacks ${callbacks})" input "${config}")
-  file(WRITE "${out}/system.dice" "${input}")
-  run("${DICE}" "${out}/system.dice" -o "${out}")
-  if(NOT callbacks)
-    file(READ "${out}/dice.c" source)
-    if(source MATCHES "dice_callbacks_|DICE_WEAK DICE_HIDE enum ps_err dice_slot_")
-      message(FATAL_ERROR "Sealed runtime contains callback fallbacks")
-    endif()
+foreach(priority_order chains events)
+  set(ordered_config "${config}")
+  if(priority_order STREQUAL "events")
+    # EVENT_OTHER matches only wildcards on the preferred chain, and an exact
+    # handler on the other chain. Exercise both sides of the event-first split.
+    string(REPLACE "(prioritize (chains CHAIN_FLOW) (events EVENT_TEST))"
+                   "(prioritize (events EVENT_TEST EVENT_OTHER) (chains CHAIN_FLOW))"
+                   ordered_config "${config}")
   endif()
-  foreach(checked 0 1)
-    foreach(lto 0 1)
-      set(build_flags ${flags} -DDICE_CHECK_ROUTES=${checked})
-      if(lto)
-        list(APPEND build_flags -O3 -flto)
+  foreach(callbacks true false)
+    string(REPLACE "(callbacks true)" "(callbacks ${callbacks})" input "${ordered_config}")
+    file(WRITE "${out}/system.dice" "${input}")
+    run("${DICE}" "${out}/system.dice" -o "${out}")
+    if(NOT callbacks)
+      file(READ "${out}/dice.c" source)
+      if(source MATCHES "dice_callbacks_|DICE_WEAK DICE_HIDE enum ps_err dice_slot_")
+        message(FATAL_ERROR "Sealed runtime contains callback fallbacks")
       endif()
-      run("${CC}" ${build_flags} -c "${out}/dice.c" -o "${out}/dice.o")
-      build_core(core_objects "${out}/dice.c" ${build_flags})
-      run("${CC}" ${build_flags} -c "${FIXTURES}/dispatch/handlers.c" -o "${out}/handlers.o")
-      if(NOT callbacks)
-        # A single missing consumer must fail the link, even with all others supplied.
-        run("${CC}" ${build_flags} -DOMIT_MIDDLE -c
-            "${FIXTURES}/dispatch/handlers.c" -o "${out}/partial.o")
-        expect_failure("dice_slot_" "${CC}" ${build_flags}
-            "${FIXTURES}/dispatch/main.c" "${out}/dice.o" ${core_objects} "${out}/partial.o"
-            ${link} -o "${app}")
-      endif()
-      run("${CC}" ${build_flags} ${shared} ${plugin_flags}
-          "${FIXTURES}/dispatch/plugin.c" -o "${mod}")
-      if(callbacks)
-        run("${CC}" ${build_flags} ${shared} ${plugin_flags}
-            "${FIXTURES}/dispatch/duplicate.c" -o "${duplicate_mod}")
-        run("${CC}" ${build_flags} ${shared} ${plugin_flags}
-            "${FIXTURES}/dispatch/duplicate.c" -o "${duplicate_second}")
-      endif()
-      foreach(strong 0 1)
-        if(NOT callbacks AND NOT strong)
-          continue()
+    endif()
+    foreach(checked 0 1)
+      foreach(lto 0 1)
+        set(build_flags ${flags} -DDICE_CHECK_ROUTES=${checked})
+        if(lto)
+          list(APPEND build_flags -O3 -flto)
         endif()
-        set(objects "${out}/dice.o" ${core_objects})
-        set(env_args)
-        if(strong)
-          list(APPEND objects "${out}/handlers.o")
-          list(APPEND env_args WITH_STRONG=1)
+        run("${CC}" ${build_flags} -c "${out}/dice.c" -o "${out}/dice.o")
+        build_core(core_objects "${out}/dice.c" ${build_flags})
+        run("${CC}" ${build_flags} -c "${FIXTURES}/dispatch/handlers.c" -o "${out}/handlers.o")
+        run("${CC}" ${build_flags} -c "${FIXTURES}/dispatch/publisher.c" -o "${out}/publisher.o")
+        if(NOT callbacks)
+          # A single missing consumer must fail the link, even with all others supplied.
+          run("${CC}" ${build_flags} -DOMIT_MIDDLE -c
+              "${FIXTURES}/dispatch/handlers.c" -o "${out}/partial.o")
+          expect_failure("dice_slot_" "${CC}" ${build_flags}
+              "${FIXTURES}/dispatch/main.c" "${out}/dice.o" ${core_objects}
+              "${out}/publisher.o" "${out}/partial.o"
+              ${link} -o "${app}")
         endif()
-        run("${CC}" ${build_flags} ${shared} ${objects} ${link} -o "${lib}")
-        run("${CC}" ${build_flags} "${FIXTURES}/dispatch/main.c" "${lib}" ${link} -o "${app}")
-        run("${CMAKE_COMMAND}" -E env ${env_args} "${app}")
+        run("${CC}" ${build_flags} ${shared} ${plugin_flags}
+            "${FIXTURES}/dispatch/plugin.c" -o "${mod}")
         if(callbacks)
-          run("${CMAKE_COMMAND}" -E env ${env_args} "${app}" wildcard)
-          run("${CMAKE_COMMAND}" -E env ${env_args} "${app}" duplicates)
-          run("${CMAKE_COMMAND}" -E env ${env_args} "${app}" extensions)
-          run("${CMAKE_COMMAND}" -E env ${env_args} WITH_PLUGIN=1
-              "${preload}=${lib}:${mod}" "${app}")
-          # Both constructor orders must reject a second callback. Linked
-          # handlers must reject callbacks before any publication as well.
-          if(strong)
-            expect_failure("could not subscribe plugin" "${CMAKE_COMMAND}" -E env
-                ${env_args} "${preload}=${lib}:${duplicate_mod}" "${app}")
-          else()
-            expect_failure("could not subscribe plugin" "${CMAKE_COMMAND}" -E env
-                ${env_args} "${preload}=${lib}:${duplicate_mod}:${duplicate_second}" "${app}")
-            expect_failure("could not subscribe plugin" "${CMAKE_COMMAND}" -E env
-                ${env_args} "${preload}=${lib}:${duplicate_second}:${duplicate_mod}" "${app}")
-          endif()
-        else()
-          expect_failure("subscribe" "${CMAKE_COMMAND}" -E env ${env_args}
-              WITH_PLUGIN=1 "${preload}=${lib}:${mod}" "${app}")
+          run("${CC}" ${build_flags} ${shared} ${plugin_flags}
+              "${FIXTURES}/dispatch/duplicate.c" -o "${duplicate_mod}")
+          run("${CC}" ${build_flags} ${shared} ${plugin_flags}
+              "${FIXTURES}/dispatch/duplicate.c" -o "${duplicate_second}")
         endif()
-        foreach(mode zero gap boundary)
-          if(checked)
-            expect_failure("undeclared subscribes" "${app}" "${mode}")
-          else()
-            run("${app}" "${mode}")
+        foreach(strong 0 1)
+          if(NOT callbacks AND NOT strong)
+            continue()
           endif()
+          set(objects "${out}/dice.o" ${core_objects} "${out}/publisher.o")
+          set(env_args)
+          if(strong)
+            list(APPEND objects "${out}/handlers.o")
+            list(APPEND env_args WITH_STRONG=1)
+          endif()
+          run("${CC}" ${build_flags} ${shared} ${objects} ${link} -o "${lib}")
+          run("${CC}" ${build_flags} "${FIXTURES}/dispatch/main.c" "${lib}" ${link} -o "${app}")
+          run("${CMAKE_COMMAND}" -E env ${env_args} "${app}")
+          if(callbacks)
+            run("${CMAKE_COMMAND}" -E env ${env_args} "${app}" wildcard)
+            run("${CMAKE_COMMAND}" -E env ${env_args} "${app}" duplicates)
+            run("${CMAKE_COMMAND}" -E env ${env_args} "${app}" extensions)
+            run("${CMAKE_COMMAND}" -E env ${env_args} WITH_PLUGIN=1
+                "${preload}=${lib}:${mod}" "${app}")
+            # Both constructor orders must reject a second callback. Linked
+            # handlers must reject callbacks before any publication as well.
+            if(strong)
+              expect_failure("could not subscribe plugin" "${CMAKE_COMMAND}" -E env
+                  ${env_args} "${preload}=${lib}:${duplicate_mod}" "${app}")
+            else()
+              expect_failure("could not subscribe plugin" "${CMAKE_COMMAND}" -E env
+                  ${env_args} "${preload}=${lib}:${duplicate_mod}:${duplicate_second}" "${app}")
+              expect_failure("could not subscribe plugin" "${CMAKE_COMMAND}" -E env
+                  ${env_args} "${preload}=${lib}:${duplicate_second}:${duplicate_mod}" "${app}")
+            endif()
+          else()
+            expect_failure("subscribe" "${CMAKE_COMMAND}" -E env ${env_args}
+                WITH_PLUGIN=1 "${preload}=${lib}:${mod}" "${app}")
+          endif()
+          foreach(mode zero gap boundary)
+            if(checked)
+              expect_failure("undeclared subscribes" "${app}" "${mode}")
+            else()
+              run("${app}" "${mode}")
+            endif()
+          endforeach()
         endforeach()
       endforeach()
     endforeach()
   endforeach()
 endforeach()
-message(STATUS "declared-slot uniqueness, callback fallbacks, both pubsub phases and LTO passed")
+message(STATUS "both priority orders, declared-slot uniqueness, callback fallbacks, both pubsub phases and LTO passed")

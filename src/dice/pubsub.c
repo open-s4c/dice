@@ -91,7 +91,7 @@ ps_initd_(void)
         BLOCK,
     } state_ = NONE;
 
-#if !defined(__clang__)
+#if !defined(__clang__) && !defined(DICE_ROLL_RUNTIME)
     static bool ready_ = false;
 #endif
 

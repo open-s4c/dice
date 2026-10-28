@@ -1,5 +1,6 @@
 #define DICE_PLUGIN_MODULE
 #include <assert.h>
+#include <string.h>
 
 #include "trace.h"
 
@@ -37,7 +38,9 @@ register_fallbacks(void)
 /* Register out of order: the trailing phase must still run in slot order. */
 PS_SUBSCRIBE_SLOT(CHAIN_FLOW, EVENT_TEST, 14, { return record(event, 'U'); })
 PS_SUBSCRIBE_SLOT(CHAIN_FLOW, EVENT_TEST, 11, {
-    PS_PUBLISH(CHAIN_OTHER, EVENT_OTHER, event, md);
+    struct trace other = {0};
+    PS_PUBLISH(CHAIN_OTHER, EVENT_OTHER, &other, md);
+    assert(!strcmp(other.text, getenv("WITH_STRONG") ? "O" : ""));
     return record(event, 'T');
 })
 PS_SUBSCRIBE(CHAIN_FLOW, EVENT_TEST, { return record(event, 'V'); })
