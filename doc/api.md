@@ -6,12 +6,12 @@ right building blocks when writing interceptors or subscribers.
 ## Core Concepts
 
 - `types.h`: defines `chain_id`, `type_id`, `struct metadata`, and constants
-  such as `MAX_TYPES`, `MAX_CHAINS`, and `CHAIN_CONTROL`; defines the
+  such as `MAX_TYPES`, `MAX_CHAINS`, and `CHAIN_DICE_CONTROL`; defines the
   `thread_id` type and sentinel values (`NO_THREAD`, `ANY_THREAD`,
   `MAIN_THREAD`).
 - `chains/`: standard chain identifiers. `intercept.h` introduces
-  `INTERCEPT_EVENT`, `INTERCEPT_BEFORE`, `INTERCEPT_AFTER`; `capture.h`
-  provides the corresponding republished chains (`CAPTURE_*`).
+  `CHAIN_INTERCEPT_EVENT`, `CHAIN_INTERCEPT_BEFORE`, `CHAIN_INTERCEPT_AFTER`; `capture.h`
+  provides the corresponding republished chains (`CHAIN_CAPTURE_*`).
 - `events/`: payload definitions and event identifiers. Each header groups a
   family of events (`events/thread.h`, `events/malloc.h`, `events/memaccess.h`,
   etc.). Include the relevant header to interpret `EVENT_*` payloads inside
@@ -71,7 +71,7 @@ Example:
 #include <dice/events/mutex.h>
 #include <dice/module.h>
 
-PS_SUBSCRIBE(CAPTURE_BEFORE, EVENT_MUTEX_LOCK, {
+PS_SUBSCRIBE(CHAIN_CAPTURE_BEFORE, EVENT_MUTEX_LOCK, {
     struct mutex_event *ev = EVENT_PAYLOAD(ev);
     /* inspect ev->mutex, ev->owner, etc. */
     return PS_OK;

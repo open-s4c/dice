@@ -32,7 +32,7 @@ __tsan_func_entry(void *caller)
     struct stacktrace_event ev = {.caller = caller, .pc = INTERPOSE_PC};
 
     struct metadata md = {0};
-    PS_PUBLISH(INTERCEPT_EVENT, EVENT_STACKTRACE_ENTER, &ev, &md);
+    PS_PUBLISH(CHAIN_INTERCEPT_EVENT, EVENT_STACKTRACE_ENTER, &ev, &md);
 }
 void
 __tsan_func_exit(void)
@@ -40,7 +40,7 @@ __tsan_func_exit(void)
     struct stacktrace_event ev = {.pc = INTERPOSE_PC};
 
     struct metadata md = {0};
-    PS_PUBLISH(INTERCEPT_EVENT, EVENT_STACKTRACE_EXIT, &ev, &md);
+    PS_PUBLISH(CHAIN_INTERCEPT_EVENT, EVENT_STACKTRACE_EXIT, &ev, &md);
 }
 
 /* -----------------------------------------------------------------------------
@@ -50,14 +50,14 @@ __tsan_func_exit(void)
 static void
 main_exit_()
 {
-    PS_PUBLISH(INTERCEPT_EVENT, EVENT_THREAD_EXIT, 0, 0);
+    PS_PUBLISH(CHAIN_INTERCEPT_EVENT, EVENT_THREAD_EXIT, 0, 0);
     log_debug("main thread exits");
 }
 static void
 main_start_()
 {
     log_debug("main thread starts");
-    PS_PUBLISH(INTERCEPT_EVENT, EVENT_THREAD_START, 0, 0);
+    PS_PUBLISH(CHAIN_INTERCEPT_EVENT, EVENT_THREAD_START, 0, 0);
     atexit(main_exit_);
 }
 #endif

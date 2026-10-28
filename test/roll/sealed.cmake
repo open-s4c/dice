@@ -21,8 +21,8 @@ file(MAKE_DIRECTORY "${out}")
 set(common "(mempool-size 1Mi)
   (import (dice self))
   (module app (after (dice self))
-    (publishes (INTERCEPT_EVENT EVENT_TEST))
-    (subscribes (CAPTURE_EVENT EVENT_TEST)))")
+    (publishes (CHAIN_INTERCEPT_EVENT EVENT_TEST))
+    (subscribes (CHAIN_CAPTURE_EVENT EVENT_TEST)))")
 set(flags -std=gnu11 -D_GNU_SOURCE -DDICE_DISPATCH_MODULE
           -DDICE_DISABLE_PUBSUB_CTOR_INIT -Wall -Wextra -Werror -fPIC
           "-I${out}" "-I${SOURCE}/include" "-I${SOURCE}/src/dice"

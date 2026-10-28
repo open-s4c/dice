@@ -268,7 +268,7 @@ bad_config("(schema 1) (module a (number 2)) (module b (number 2))" "both force 
 bad_config("(schema 1) (events (EVENT_A 128) (EVENT_B 128))" "ID collision")
 bad_config("(schema 1) (events (EVENT_A 1))" "ID collision")
 bad_config("(schema 1) (events (ANY_EVENT 128))" "duplicate or reserved identifier")
-bad_config("(schema 1) (chains (CHAIN_CONTROL 7))" "duplicate or reserved identifier")
+bad_config("(schema 1) (chains (CHAIN_DICE_CONTROL 7))" "duplicate or reserved identifier")
 bad_config("(schema 1) (events (EVENT_A 0))" "expected integer")
 bad_config("(schema 1) (chains (CHAIN_A 0))" "expected integer")
 bad_config("(runtime (callbacks true))" "unknown form runtime")
@@ -282,7 +282,7 @@ bad_config("(schema 1) (prioritize (slots first))" "unknown prioritize field slo
 bad_config("(schema 1) (prioritize (chains CHAIN_UNKNOWN))" "unknown prioritized chain")
 bad_config("(schema 1) (prioritize (events EVENT_UNKNOWN))" "unknown prioritized event")
 bad_config("(schema 1) (prioritize (events ANY_EVENT))" "wildcard")
-bad_config("(schema 1) (prioritize (chains CAPTURE_EVENT CAPTURE-EVENT))" "duplicate prioritized chain")
+bad_config("(schema 1) (prioritize (chains CHAIN_CAPTURE_EVENT CAPTURE-EVENT))" "duplicate prioritized chain")
 bad_config("(schema 1) (prioritize (events EVENT_MALLOC EVENT-MALLOC))" "duplicate prioritized event")
 bad_config("(schema 1) (prioritize (chains) (chains))" "duplicate prioritize field")
 bad_config("(schema 1) (prioritize (events) (events))" "duplicate prioritize field")
@@ -365,7 +365,7 @@ set(priority_flags ${flags})
 list(REMOVE_ITEM priority_flags "-I${out}")
 list(APPEND priority_flags "-I${priority_out}")
 file(WRITE "${root}/prioritized.dice" [=[(schema 1)
-  (prioritize (chains CHAIN_TEST INTERCEPT_EVENT CAPTURE_EVENT)
+  (prioritize (chains CHAIN_TEST CHAIN_INTERCEPT_EVENT CHAIN_CAPTURE_EVENT)
               (events EVENT_TEST EVENT_MALLOC))
   (include "system.dice")
 ]=])
@@ -405,7 +405,7 @@ run("${CC}" ${priority_flags} -c "${priority_out}/dice.c"
 # malloc event has no exact handler on CHAIN_TEST; its wildcard must still match.
 file(WRITE "${root}/prioritized.dice" [=[(schema 1)
   (prioritize (events EVENT_TEST EVENT_MALLOC)
-              (chains CHAIN_TEST INTERCEPT_EVENT CAPTURE_EVENT))
+              (chains CHAIN_TEST CHAIN_INTERCEPT_EVENT CHAIN_CAPTURE_EVENT))
   (include "system.dice")
 ]=])
 run("${DICE}" "${root}/prioritized.dice" -o "${priority_out}")
@@ -452,14 +452,14 @@ run("${CC}" ${priority_flags} -c "${priority_out}/dice.c"
 file(WRITE "${root}/priority-layer.dice"
      "(prioritize (chains CHAIN_TEST) (events EVENT_TEST))\n")
 file(WRITE "${root}/prioritized.dice" [=[(schema 1)
-  (prioritize (chains INTERCEPT_EVENT) (events EVENT_MALLOC))
+  (prioritize (chains CHAIN_INTERCEPT_EVENT) (events EVENT_MALLOC))
   (include "priority-layer.dice")
   (include "system.dice")
 ]=])
 run("${DICE}" --query "${root}/prioritized.dice")
 assert_contains("${result_text}" "prioritize chains 7\nprioritize events 128\n")
-foreach(priority "(chains INTERCEPT_EVENT)" "(events EVENT_MALLOC)" "(chains) (events)"
-                 "(events EVENT_MALLOC) (chains INTERCEPT_EVENT)")
+foreach(priority "(chains CHAIN_INTERCEPT_EVENT)" "(events EVENT_MALLOC)" "(chains) (events)"
+                 "(events EVENT_MALLOC) (chains CHAIN_INTERCEPT_EVENT)")
   file(WRITE "${root}/prioritized.dice"
        "(schema 1) (include \"system.dice\") (include \"priority-layer.dice\") (prioritize ${priority})\n")
   run("${DICE}" "${root}/prioritized.dice" -o "${priority_out}")
@@ -532,11 +532,11 @@ assert_contains("${result_text}" "slot b 2147483647")
 file(WRITE "${root}/empty.dice" "(schema 1)")
 run("${DICE}" --query "${root}/empty.dice")
 assert_contains("${result_text}" "event ANY_EVENT 0\n")
-assert_contains("${result_text}" "chain CHAIN_CONTROL 0\n")
+assert_contains("${result_text}" "chain CHAIN_DICE_CONTROL 0\n")
 run("${DICE}" "${root}/empty.dice" -o "${out}")
 file(READ "${out}/dice.h" empty_header)
 assert_contains("${empty_header}" "#define ANY_EVENT 0\n")
-assert_contains("${empty_header}" "#define CHAIN_CONTROL 0\n")
+assert_contains("${empty_header}" "#define CHAIN_DICE_CONTROL 0\n")
 run("${CC}" ${flags} -c "${out}/dice.c" -o "${out}/empty.o")
 run("${CC}" ${flags} -DDICE_CHECK_ROUTES=1 -c "${out}/dice.c" -o "${out}/empty-checked.o")
 
@@ -587,7 +587,7 @@ foreach(high_id 129 65534)
       (events (EVENT_LOW 128) (EVENT_HIGH ${high_id}))
       (chains (CHAIN_LOW 7) (CHAIN_HIGH ${high_id}))
       (module initializer
-        (subscribes (CHAIN_CONTROL EVENT_DICE_INIT EVENT_DICE_READY)
+        (subscribes (CHAIN_DICE_CONTROL EVENT_DICE_INIT EVENT_DICE_READY)
                   (CHAIN_LOW EVENT_LOW))
         (publishes (CHAIN_LOW EVENT_LOW)))")
     run("${DICE}" "${root}/pubsub.dice" -o "${out}")
@@ -602,7 +602,7 @@ endforeach()
 # Force-inclusion selects the generated API before any legacy header is read.
 file(WRITE "${root}/compat.dice" "(schema 1)
   (module receiver (subscribes (CHAIN_COMPAT EVENT_COMPAT)
-                           (CHAIN_CONTROL EVENT_DICE_INIT)))")
+                           (CHAIN_DICE_CONTROL EVENT_DICE_INIT)))")
 run("${DICE}" "${root}/compat.dice" -o "${out}")
 set(compat_flags ${flags} "-I${SOURCE}/include"
     -include "${out}/dice.h" -DDICE_MODULE_SLOT=SLOT_RECEIVER)
@@ -645,8 +645,8 @@ static enum ps_err cb(chain_id c, type_id t, void *e, struct metadata *m) {
 }
 int main(void) {
   _Static_assert(DICE_LAST_KNOWN_SLOT == 2147483647, \"maximum slot\");
-  assert(ps_subscribe(CHAIN_CONTROL, EVENT_DICE_NOP, cb, 2147483647) == PS_INVALID);
-  assert(ps_subscribe(CHAIN_CONTROL, EVENT_DICE_NOP, cb, DICE_DEFAULT_PLUGIN_SLOT) == PS_INVALID);
+  assert(ps_subscribe(CHAIN_DICE_CONTROL, EVENT_DICE_NOP, cb, 2147483647) == PS_INVALID);
+  assert(ps_subscribe(CHAIN_DICE_CONTROL, EVENT_DICE_NOP, cb, DICE_DEFAULT_PLUGIN_SLOT) == PS_INVALID);
 }\n")
 build_core(objects "${out}/dice.c")
 run("${CC}" ${flags} "${out}/dice.c" "${out}/maximum.c"

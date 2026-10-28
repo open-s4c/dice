@@ -8,7 +8,7 @@
 static unsigned observed, callbacks_;
 static unsigned key, tls_key;
 
-PS_SUBSCRIBE(CAPTURE_EVENT, EVENT_TEST, {
+PS_SUBSCRIBE(CHAIN_CAPTURE_EVENT, EVENT_TEST, {
     assert(self_id(md) != NO_THREAD);
     assert(self_md() == md);
     assert(self_guard_get(md) == SELF_GUARD_SERVING);
@@ -46,11 +46,11 @@ sealed_probe(void)
     ptr = mempool_aligned_alloc(64, 32);
     assert(ptr && (uintptr_t)ptr % 64 == 0);
     mempool_free(ptr);
-    int err = ps_subscribe(CAPTURE_EVENT, EVENT_TEST, callback,
+    int err = ps_subscribe(CHAIN_CAPTURE_EVENT, EVENT_TEST, callback,
                            DICE_LAST_KNOWN_SLOT + 1);
     assert(err == (DICE_EXTENSION_CALLBACKS ? PS_OK : PS_INVALID));
     unsigned value = 42;
-    PS_PUBLISH(INTERCEPT_EVENT, EVENT_TEST, &value, NULL);
+    PS_PUBLISH(CHAIN_INTERCEPT_EVENT, EVENT_TEST, &value, NULL);
     assert(observed == value);
     assert(callbacks_ == DICE_EXTENSION_CALLBACKS);
     return 0;

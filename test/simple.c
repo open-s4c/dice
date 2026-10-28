@@ -18,7 +18,7 @@ void *
 run0(void *_)
 {
     (void)_;
-    PS_PUBLISH(INTERCEPT_EVENT, EVENT_MA_AWRITE, 0, 0);
+    PS_PUBLISH(CHAIN_INTERCEPT_EVENT, EVENT_MA_AWRITE, 0, 0);
     vatomic32_write(&ready, 1);
     data = 1;
     return 0;
@@ -29,7 +29,7 @@ run1(void *_)
     (void)_;
     printf("here\n");
 
-    PS_PUBLISH(INTERCEPT_EVENT, EVENT_MA_AREAD, 0, 0);
+    PS_PUBLISH(CHAIN_INTERCEPT_EVENT, EVENT_MA_AREAD, 0, 0);
     if (vatomic32_read(&ready) == 1)
         ensure(data == 1);
     printf("there\n");

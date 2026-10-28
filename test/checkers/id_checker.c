@@ -55,12 +55,12 @@ check_ids_(chain_id chain, type_id type, struct metadata *md)
     }
 }
 
-PS_SUBSCRIBE(CAPTURE_EVENT, ANY_EVENT, {
+PS_SUBSCRIBE(CHAIN_CAPTURE_EVENT, ANY_EVENT, {
     // we can check for every event except SELF_FINI, where the current osid
     // will not match because another thread reclaims the self object when the
     // thread is already dead.
     if (type != EVENT_SELF_FINI)
         check_ids_(chain, type, md);
 })
-PS_SUBSCRIBE(CAPTURE_BEFORE, ANY_EVENT, { check_ids_(chain, type, md); })
-PS_SUBSCRIBE(CAPTURE_AFTER, ANY_EVENT, { check_ids_(chain, type, md); })
+PS_SUBSCRIBE(CHAIN_CAPTURE_BEFORE, ANY_EVENT, { check_ids_(chain, type, md); })
+PS_SUBSCRIBE(CHAIN_CAPTURE_AFTER, ANY_EVENT, { check_ids_(chain, type, md); })

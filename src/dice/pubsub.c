@@ -10,6 +10,7 @@
 #ifndef DICE_ROLL_RUNTIME
     #define DICE_MODULE_SLOT 0
 #endif
+#include "chain-names.h"
 #include "pubsub-internal.h"
 #include "tweaks.h"
 #include <dice/mempool.h>
@@ -107,9 +108,9 @@ ps_initd_(void)
 #ifndef DICE_ROLL_RUNTIME
             assert(ps_dispatch_max() >= 0);
 #endif
-            PS_PUBLISH(CHAIN_CONTROL, EVENT_DICE_INIT, 0, 0);
+            PS_PUBLISH(CHAIN_DICE_CONTROL, EVENT_DICE_INIT, 0, 0);
             ready_ = true;
-            PS_PUBLISH(CHAIN_CONTROL, EVENT_DICE_READY, 0, 0);
+            PS_PUBLISH(CHAIN_DICE_CONTROL, EVENT_DICE_READY, 0, 0);
             return true;
         case START:
             state_ = BLOCK;
@@ -336,7 +337,7 @@ ps_subscribe(chain_id chain, type_id type, ps_callback_f cb, int slot)
     (void)type;
     (void)cb;
     if ((ps_dispatch_chain_on_(chain) && slot <= ps_dispatch_max()) ||
-        chain == CHAIN_CONTROL)
+        chain == CHAIN_DICE_CONTROL)
         return PS_OK;
     log_fatal("cannot subscribe callback: pubsub is sealed");
     return PS_ERROR;
@@ -473,7 +474,7 @@ dice_publish_checked(int slot, chain_id chain, type_id type, void *event,
 PUBSUB_API_ const char *
 ps_chain_str(chain_id chain)
 {
-    return dice_chain_name_(chain);
+    return ps_chain_name_normalize_(dice_chain_name_(chain));
 }
 PUBSUB_API_ const char *
 ps_type_str(type_id type)

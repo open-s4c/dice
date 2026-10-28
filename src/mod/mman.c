@@ -23,9 +23,9 @@ INTERPOSE(void *, mmap, void *addr, size_t length, int prot, int flags, int fd,
     };
 
     struct metadata md = {0};
-    PS_PUBLISH(INTERCEPT_BEFORE, EVENT_MMAP, &ev, &md);
+    PS_PUBLISH(CHAIN_INTERCEPT_BEFORE, EVENT_MMAP, &ev, &md);
     ev.ret = ev.func(ev.addr, ev.length, ev.prot, ev.flags, ev.fd, ev.offset);
-    PS_PUBLISH(INTERCEPT_AFTER, EVENT_MMAP, &ev, &md);
+    PS_PUBLISH(CHAIN_INTERCEPT_AFTER, EVENT_MMAP, &ev, &md);
     return ev.ret;
 }
 
@@ -46,9 +46,9 @@ INTERPOSE(void *, mmap64, void *addr, size_t length, int prot, int flags,
     };
 
     struct metadata md = {0};
-    PS_PUBLISH(INTERCEPT_BEFORE, EVENT_MMAP, &ev, &md);
+    PS_PUBLISH(CHAIN_INTERCEPT_BEFORE, EVENT_MMAP, &ev, &md);
     ev.ret = ev.func(ev.addr, ev.length, ev.prot, ev.flags, ev.fd, ev.offset);
-    PS_PUBLISH(INTERCEPT_AFTER, EVENT_MMAP, &ev, &md);
+    PS_PUBLISH(CHAIN_INTERCEPT_AFTER, EVENT_MMAP, &ev, &md);
     return ev.ret;
 }
 #endif
@@ -64,9 +64,9 @@ INTERPOSE(int, munmap, void *addr, size_t length)
     };
 
     struct metadata md = {0};
-    PS_PUBLISH(INTERCEPT_BEFORE, EVENT_MUNMAP, &ev, &md);
+    PS_PUBLISH(CHAIN_INTERCEPT_BEFORE, EVENT_MUNMAP, &ev, &md);
     ev.ret = ev.func(ev.addr, ev.length);
-    PS_PUBLISH(INTERCEPT_AFTER, EVENT_MUNMAP, &ev, &md);
+    PS_PUBLISH(CHAIN_INTERCEPT_AFTER, EVENT_MUNMAP, &ev, &md);
     return ev.ret;
 }
 

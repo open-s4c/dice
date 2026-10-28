@@ -17,9 +17,9 @@ INTERPOSE(void *, malloc, size_t size)
     };
 
     struct metadata md = {0};
-    PS_PUBLISH(INTERCEPT_BEFORE, EVENT_MALLOC, &ev, &md);
+    PS_PUBLISH(CHAIN_INTERCEPT_BEFORE, EVENT_MALLOC, &ev, &md);
     ev.ret = ev.func(ev.size);
-    PS_PUBLISH(INTERCEPT_AFTER, EVENT_MALLOC, &ev, &md);
+    PS_PUBLISH(CHAIN_INTERCEPT_AFTER, EVENT_MALLOC, &ev, &md);
     return ev.ret;
 }
 
@@ -34,9 +34,9 @@ INTERPOSE(void *, calloc, size_t number, size_t size)
     };
 
     struct metadata md = {0};
-    PS_PUBLISH(INTERCEPT_BEFORE, EVENT_CALLOC, &ev, &md);
+    PS_PUBLISH(CHAIN_INTERCEPT_BEFORE, EVENT_CALLOC, &ev, &md);
     ev.ret = ev.func(ev.number, ev.size);
-    PS_PUBLISH(INTERCEPT_AFTER, EVENT_CALLOC, &ev, &md);
+    PS_PUBLISH(CHAIN_INTERCEPT_AFTER, EVENT_CALLOC, &ev, &md);
     return ev.ret;
 }
 
@@ -51,9 +51,9 @@ INTERPOSE(void *, realloc, void *ptr, size_t size)
     };
 
     struct metadata md = {0};
-    PS_PUBLISH(INTERCEPT_BEFORE, EVENT_REALLOC, &ev, &md);
+    PS_PUBLISH(CHAIN_INTERCEPT_BEFORE, EVENT_REALLOC, &ev, &md);
     ev.ret = ev.func(ev.ptr, ev.size);
-    PS_PUBLISH(INTERCEPT_AFTER, EVENT_REALLOC, &ev, &md);
+    PS_PUBLISH(CHAIN_INTERCEPT_AFTER, EVENT_REALLOC, &ev, &md);
     return ev.ret;
 }
 
@@ -73,9 +73,9 @@ INTERPOSE(void, free, void *ptr)
     }
 #endif
     struct metadata md = {0};
-    PS_PUBLISH(INTERCEPT_BEFORE, EVENT_FREE, &ev, &md);
+    PS_PUBLISH(CHAIN_INTERCEPT_BEFORE, EVENT_FREE, &ev, &md);
     ev.func(ev.ptr);
-    PS_PUBLISH(INTERCEPT_AFTER, EVENT_FREE, &ev, &md);
+    PS_PUBLISH(CHAIN_INTERCEPT_AFTER, EVENT_FREE, &ev, &md);
 }
 
 INTERPOSE(int, posix_memalign, void **ptr, size_t alignment, size_t size)
@@ -90,9 +90,9 @@ INTERPOSE(int, posix_memalign, void **ptr, size_t alignment, size_t size)
     };
 
     struct metadata md = {0};
-    PS_PUBLISH(INTERCEPT_BEFORE, EVENT_POSIX_MEMALIGN, &ev, &md);
+    PS_PUBLISH(CHAIN_INTERCEPT_BEFORE, EVENT_POSIX_MEMALIGN, &ev, &md);
     ev.ret = ev.func(ev.ptr, ev.alignment, ev.size);
-    PS_PUBLISH(INTERCEPT_AFTER, EVENT_POSIX_MEMALIGN, &ev, &md);
+    PS_PUBLISH(CHAIN_INTERCEPT_AFTER, EVENT_POSIX_MEMALIGN, &ev, &md);
     return ev.ret;
 }
 
@@ -107,9 +107,9 @@ INTERPOSE(void *, aligned_alloc, size_t alignment, size_t size)
     };
 
     struct metadata md = {0};
-    PS_PUBLISH(INTERCEPT_BEFORE, EVENT_ALIGNED_ALLOC, &ev, &md);
+    PS_PUBLISH(CHAIN_INTERCEPT_BEFORE, EVENT_ALIGNED_ALLOC, &ev, &md);
     ev.ret = ev.func(ev.alignment, ev.size);
-    PS_PUBLISH(INTERCEPT_AFTER, EVENT_ALIGNED_ALLOC, &ev, &md);
+    PS_PUBLISH(CHAIN_INTERCEPT_AFTER, EVENT_ALIGNED_ALLOC, &ev, &md);
     return ev.ret;
 }
 

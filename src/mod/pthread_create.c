@@ -26,7 +26,7 @@ INTERPOSE(void, pthread_exit, void *ptr)
         .ptr  = ptr,
         .func = REAL_FUNC(pthread_exit),
     };
-    PS_PUBLISH(INTERCEPT_EVENT, EVENT_THREAD_EXIT, &ev, 0);
+    PS_PUBLISH(CHAIN_INTERCEPT_EVENT, EVENT_THREAD_EXIT, &ev, 0);
     ev.func(ev.ptr);
     exit(1); // unreachable
 }
@@ -39,9 +39,9 @@ trampoline_(void *targ)
     void *(*run)(void *) = t->run;
     mempool_free(t);
 
-    PS_PUBLISH(INTERCEPT_EVENT, EVENT_THREAD_START, 0, 0);
+    PS_PUBLISH(CHAIN_INTERCEPT_EVENT, EVENT_THREAD_START, 0, 0);
     void *ret = run(arg);
-    PS_PUBLISH(INTERCEPT_EVENT, EVENT_THREAD_EXIT, 0, 0);
+    PS_PUBLISH(CHAIN_INTERCEPT_EVENT, EVENT_THREAD_EXIT, 0, 0);
     return ret;
 }
 
@@ -63,9 +63,9 @@ INTERPOSE(int, pthread_create, pthread_t *thread, const pthread_attr_t *attr,
     };
 
     struct metadata md = {0};
-    PS_PUBLISH(INTERCEPT_BEFORE, EVENT_THREAD_CREATE, &ev, &md);
+    PS_PUBLISH(CHAIN_INTERCEPT_BEFORE, EVENT_THREAD_CREATE, &ev, &md);
     ev.ret = ev.func(ev.thread, ev.attr, trampoline_, t);
-    PS_PUBLISH(INTERCEPT_AFTER, EVENT_THREAD_CREATE, &ev, &md);
+    PS_PUBLISH(CHAIN_INTERCEPT_AFTER, EVENT_THREAD_CREATE, &ev, &md);
     return ev.ret;
 }
 
@@ -79,9 +79,9 @@ INTERPOSE(int, pthread_join, pthread_t thread, void **ptr)
     };
 
     struct metadata md = {0};
-    PS_PUBLISH(INTERCEPT_BEFORE, EVENT_THREAD_JOIN, &ev, &md);
+    PS_PUBLISH(CHAIN_INTERCEPT_BEFORE, EVENT_THREAD_JOIN, &ev, &md);
     ev.ret = ev.func(ev.thread, ev.ptr);
-    PS_PUBLISH(INTERCEPT_AFTER, EVENT_THREAD_JOIN, &ev, &md);
+    PS_PUBLISH(CHAIN_INTERCEPT_AFTER, EVENT_THREAD_JOIN, &ev, &md);
 
     return ev.ret;
 }

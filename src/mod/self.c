@@ -8,14 +8,14 @@
  * guards further modules from receiving events before threads are
  * initialized or after they are finished.
  *
- * The Self module subscribes to INTERCEPT_{BEFORE,AFTER,EVENT} chains and
+ * The Self module subscribes to CHAIN_INTERCEPT_{BEFORE,AFTER,EVENT} chains and
  * interrupts them, ie, any module subscribing after Self module does not
  * receive events in the INTERCEPT chains. The Self module republishes all
  * events in equivalent CAPTURE chains, but these contain TLS metadata object
  * can can be used by the user.
  *
  * When a self object is created, an EVENT_SELF_INIT is published in
- * CAPTURE_EVENT. When a self object is deleted, an EVENT_SELF_FINI is
+ * CHAIN_CAPTURE_EVENT. When a self object is deleted, an EVENT_SELF_FINI is
  * published.
  *
  * Self eventually garbage collect the self object of finished threads.
@@ -525,7 +525,7 @@ self_handle_before_(const chain_id chain, const type_id type, void *event,
     assert(self);
 
     if (likely(self->guard++ == 0))
-        self_publish_(CAPTURE_BEFORE, type, event, self);
+        self_publish_(CHAIN_CAPTURE_BEFORE, type, event, self);
     else
         log_debug(">>> [%" PRIu64 ":0x%" PRIx64 ":%" PRIu64 "] %s/%s: %d",
                   self_id(&self->md), (uint64_t)self->ptid, self->osid,
@@ -543,7 +543,7 @@ self_handle_after_(const chain_id chain, const type_id type, void *event,
     assert(self);
 
     if (likely(self->guard == 1))
-        self_publish_(CAPTURE_AFTER, type, event, self);
+        self_publish_(CHAIN_CAPTURE_AFTER, type, event, self);
     else
         log_debug("<<< [%" PRIu64 ":0x%" PRIx64 ":%" PRIu64 "] %s/%s: %d",
                   self_id(&self->md), (uint64_t)self->ptid, self->osid,
@@ -562,7 +562,7 @@ self_handle_event_(const chain_id chain, const type_id type, void *event,
     assert(self);
 
     if (likely(self->guard == 0))
-        self_publish_(CAPTURE_EVENT, type, event, self);
+        self_publish_(CHAIN_CAPTURE_EVENT, type, event, self);
     else
         log_debug("!!! [%" PRIu64 ":0x%" PRIx64 ":%" PRIu64 "] %s/%s: %d",
                   self_id(&self->md), (uint64_t)self->ptid, self->osid,
@@ -586,7 +586,7 @@ get_or_create_self_slow_(bool publish)
     thread_cache_set_(self);
 
     if (publish)
-        self_handle_event_(CAPTURE_EVENT, EVENT_SELF_INIT, 0, self);
+        self_handle_event_(CHAIN_CAPTURE_EVENT, EVENT_SELF_INIT, 0, self);
     return self;
 }
 
@@ -599,14 +599,14 @@ get_or_create_self_(bool publish)
     return get_or_create_self_slow_(publish);
 }
 
-PS_SUBSCRIBE(INTERCEPT_EVENT, ANY_EVENT, {
+PS_SUBSCRIBE(CHAIN_INTERCEPT_EVENT, ANY_EVENT, {
     struct self *self = get_or_create_self_(true);
     self->md          = md ? *md : (struct metadata){};
     enum ps_err err   = self_handle_event_(chain, type, event, self);
     *md               = self->md;
     return err;
 })
-PS_SUBSCRIBE(INTERCEPT_BEFORE, ANY_EVENT, {
+PS_SUBSCRIBE(CHAIN_INTERCEPT_BEFORE, ANY_EVENT, {
     struct self *self = get_or_create_self_(true);
     self->md          = md ? *md : (struct metadata){};
 
@@ -616,7 +616,7 @@ PS_SUBSCRIBE(INTERCEPT_BEFORE, ANY_EVENT, {
     *md             = self->md;
     return err;
 })
-PS_SUBSCRIBE(INTERCEPT_AFTER, ANY_EVENT, {
+PS_SUBSCRIBE(CHAIN_INTERCEPT_AFTER, ANY_EVENT, {
     struct self *self = get_or_create_self_(true);
     self->md          = md ? *md : (struct metadata){};
 
@@ -641,7 +641,7 @@ self_fini_(struct self *self)
         return;
 
     // announce thread self is really over
-    self_handle_event_(CAPTURE_EVENT, EVENT_SELF_FINI, 0, self);
+    self_handle_event_(CHAIN_CAPTURE_EVENT, EVENT_SELF_FINI, 0, self);
 
     // free self resources
     destroy_self_(self);
@@ -680,7 +680,7 @@ cleanup_threads_(struct self *own, pthread_t ptid)
         own->guard -= 2;
 }
 
-PS_SUBSCRIBE(INTERCEPT_EVENT, EVENT_THREAD_EXIT, {
+PS_SUBSCRIBE(CHAIN_INTERCEPT_EVENT, EVENT_THREAD_EXIT, {
     struct self *self = get_or_create_self_(true);
     self->md          = md ? *md : (struct metadata){};
     enum ps_err err   = self_handle_event_(chain, type, event, self);
@@ -711,7 +711,7 @@ DICE_MODULE_FINI({
             log_debug("waiting for %" PRIu64 " threads to die", (born - dead));
 
             struct self_wait_event ev = {.wait = false};
-            PS_PUBLISH(CAPTURE_EVENT, EVENT_SELF_WAIT, &ev,
+            PS_PUBLISH(CHAIN_CAPTURE_EVENT, EVENT_SELF_WAIT, &ev,
                        self ? &self->md : NULL);
             if (!ev.wait)
                 break;
@@ -723,9 +723,9 @@ DICE_MODULE_FINI({
 
 PS_ADVERTISE_TYPE(EVENT_SELF_INIT)
 PS_ADVERTISE_TYPE(EVENT_SELF_FINI)
-PS_ADVERTISE_CHAIN(INTERCEPT_EVENT)
-PS_ADVERTISE_CHAIN(INTERCEPT_BEFORE)
-PS_ADVERTISE_CHAIN(INTERCEPT_AFTER)
-PS_ADVERTISE_CHAIN(CAPTURE_EVENT)
-PS_ADVERTISE_CHAIN(CAPTURE_BEFORE)
-PS_ADVERTISE_CHAIN(CAPTURE_AFTER)
+PS_ADVERTISE_CHAIN(CHAIN_INTERCEPT_EVENT)
+PS_ADVERTISE_CHAIN(CHAIN_INTERCEPT_BEFORE)
+PS_ADVERTISE_CHAIN(CHAIN_INTERCEPT_AFTER)
+PS_ADVERTISE_CHAIN(CHAIN_CAPTURE_EVENT)
+PS_ADVERTISE_CHAIN(CHAIN_CAPTURE_BEFORE)
+PS_ADVERTISE_CHAIN(CHAIN_CAPTURE_AFTER)
