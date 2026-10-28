@@ -1,4 +1,5 @@
 (module self
+  (option inline)
   (subscribes (CHAIN_CONTROL EVENT_DICE_INIT)
             (INTERCEPT_EVENT ANY_EVENT EVENT_THREAD_EXIT)
             (INTERCEPT_BEFORE ANY_EVENT)

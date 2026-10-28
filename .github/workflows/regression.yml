@@ -6,6 +6,33 @@ env:
   REGISTRY: ghcr.io
 
 jobs:
+  configured-runtime:
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        cfg:
+          - {cc: gcc, cxx: g++, lto: full}
+          - {cc: clang, cxx: clang++, lto: full}
+          - {cc: clang, cxx: clang++, lto: thin}
+    steps:
+      - uses: actions/checkout@v6
+      - name: Configure generated-runtime benchmarks
+        run: cmake -Bbuild
+             -DCMAKE_C_COMPILER=${{ matrix.cfg.cc }}
+             -DCMAKE_CXX_COMPILER=${{ matrix.cfg.cxx }}
+             -DCMAKE_BUILD_TYPE=Release
+             -DDICE_TESTS=OFF -DDICE_BENCHMARKS=ON -DDICE_LTO=OFF
+             -DDICE_ROLL_BENCH_LTO=${{ matrix.cfg.lto }}
+      - name: Build generated-runtime benchmarks
+        run: cmake --build build --target roll-benchmarks -j 2
+      - name: Measure generated dispatch and inspect call paths
+        run: cmake -DBUILD=build -P scripts/benchmark-roll.cmake
+      - uses: actions/upload-artifact@v4
+        with:
+          name: configured-${{ matrix.cfg.cc }}-${{ matrix.cfg.lto }}
+          path: build/bench/roll/results
+
   test-linux-x86:
     if: true
     strategy:

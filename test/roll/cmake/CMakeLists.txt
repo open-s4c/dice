@@ -1,7 +1,24 @@
 cmake_minimum_required(VERSION 3.20)
 project(roll_consumer LANGUAGES C)
+set(OPTIONS_tsan -fno-stack-protector)
+set(OPTIONS_stacktrace -fno-omit-frame-pointer)
 add_subdirectory("${DICE_SOURCE}" dice EXCLUDE_FROM_ALL)
 find_package(Threads REQUIRED)
+
+foreach(module tsan stacktrace)
+  get_target_property(options dice-${module}.o DICE_MODULE_OPTIONS)
+  if(NOT "${OPTIONS_${module}}" IN_LIST options OR NOT "-fno-sanitize=all"
+                                                IN_LIST options)
+    message(FATAL_ERROR
+            "Dice discarded the embedder's ${module} options: ${options}")
+  endif()
+  get_target_property(options dice-${module} COMPILE_OPTIONS)
+  if(NOT "${OPTIONS_${module}}" IN_LIST options OR "-fno-sanitize=all"
+                                               IN_LIST options)
+    message(FATAL_ERROR
+            "Shared ${module} changed ordinary compile options: ${options}")
+  endif()
+endforeach()
 
 foreach(runtime foo bar)
   add_library(${runtime} SHARED)

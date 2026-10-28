@@ -58,3 +58,52 @@ Each suite reuses the same scenario names so results are comparable:
   fast-path where only dispatch-based modules remain and plugins are absent.
 - `cbonly`: Loads `libdice-bundle-cbonly` to isolate the callback-only path and
   compare it with the bundled dispatch implementations.
+
+## Configured dispatch matrix
+
+The `micro3` and `micro4` regression gates above use legacy runtime targets.
+Use `roll-benchmarks` to measure generated runtimes separately:
+
+```sh
+cmake -S . -B build-roll -DCMAKE_BUILD_TYPE=Release \
+  -DDICE_TESTS=OFF -DDICE_BENCHMARKS=ON -DDICE_LTO=OFF \
+  -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ \
+  -DDICE_ROLL_BENCH_LTO=full
+cmake --build build-roll --target roll-benchmarks -j
+cmake -DBUILD=build-roll -DSAMPLES=5 -DITERATIONS=1000000 \
+  -P scripts/benchmark-roll.cmake
+```
+
+Repeat with GCC/G++ and `full`, or Clang/Clang++ and `thin`. `none` is also
+available. Explicit LTO flags apply to each runtime shared library; the calling
+executable stays separate, so results include a consistent exported-call
+boundary. These targets are excluded from the default build.
+
+The matrix has 18 variants: default/chain-first/event-first priorities;
+open callbacks, callback-free public APIs (`closed`), or fully sealed APIs;
+and ordinary/inline observer slots. Every publication travels through Self to
+a capture subscriber. Constant-chain and volatile dynamic-chain publications
+are measured separately: dynamic publication exercises the shared prioritized
+dispatcher, while constant publication can use generated header dispatch.
+The inline observer also exercises Self's conservative nested-chain fallback.
+
+Each process warms up before timing, then checks that exactly one capture
+occurred per measured publication. The observer has a compiler barrier so LTO
+cannot remove the payload work. Timing uses `CLOCK_MONOTONIC` inside the
+application, excluding startup and initialization.
+
+`build-roll/bench/roll/results/` contains raw latency samples in `samples.csv`,
+library file sizes, text/data sizes in `sizes.txt`, compiler/build settings,
+symbol tables, disassembly, and extracted publication bodies (`.callpaths`).
+Inspect `roll_publish` and `roll_publish_dynamic` to see the surviving calls,
+rather than assuming an inline request removed every wrapper. Code size and
+actual latency can trade off; compare the samples before choosing a policy.
+
+Performance CI runs GCC full LTO and Clang full/ThinLTO and uploads these
+artifacts. This new matrix measures the current revision; it does not yet
+apply a cross-revision slowdown threshold. The existing legacy regression
+gates remain in place.
+
+The [initial local measurements](roll-optimizations-benchmark-20261106.txt)
+include all three compiler/LTO combinations, section sizes, and a representative
+call-path inspection. Inline slots are not faster in every configuration.

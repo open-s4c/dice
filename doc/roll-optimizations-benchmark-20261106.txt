@@ -1,0 +1,116 @@
+Configured Dice dispatch benchmark, 2026-11-06
+
+Review-fix sources based on 741e7bc. Native macOS arm64 (Apple M1).
+AppleClang 21.0.0 with full/ThinLTO; GCC 12.5 with full LTO.
+Release/O3 runtime DSOs, separate non-LTO callers. No sanitizer.
+Two million publications/sample, five samples per case; medians below.
+Each process warms up before CLOCK_MONOTONIC timing and validates capture counts.
+Runtime initialization and process startup are outside the measured interval.
+Constant and volatile dynamic chains both publish through Self to a capture slot.
+No builds or tests ran during the measurement matrix.
+
+open = callbacks enabled, public APIs; closed = callbacks disabled, public APIs.
+sealed = callbacks disabled and all component APIs sealed.
+ordinary/inline select the capture observer slot policy; Self is inline in both.
+Default, chain-first, and event-first policies preserve the same handler order.
+All 540 measured runs completed with exactly the expected number of events.
+
+clang-full
+policy    API      handler     constant ns  dynamic ns  text bytes  DSO bytes
+default   open     ordinary         6.877       9.389        8772      53528
+default   open     inline           6.899       9.396        8772      53528
+default   closed   ordinary         3.443       4.689        7004      53264
+default   closed   inline           3.441       6.258        7200      53256
+default   sealed   ordinary         2.658       3.754        3900      51680
+default   sealed   inline           2.655       5.337        4192      51736
+chains    open     ordinary         7.141       9.403        8964      53560
+chains    open     inline           7.381       9.405        8964      53560
+chains    closed   ordinary         3.434       4.652        7356      53312
+chains    closed   inline           3.453       5.963        7488      53304
+chains    sealed   ordinary         2.663       3.753        4220      51728
+chains    sealed   inline           2.660       5.005        4448      51784
+events    open     ordinary         6.892       9.078        8868      53560
+events    open     inline           6.886       9.078        8868      53560
+events    closed   ordinary         3.462       4.539        7356      53312
+events    closed   inline           3.443       5.966        7456      53304
+events    sealed   ordinary         2.707       3.820        4220      51728
+events    sealed   inline           2.746       5.152        4448      51784
+
+Inspected chain-first/closed/inline roll_publish: no direct dice_slot_* or
+ps_handler_* wrapper calls remain. TLS, initialization and cold-path calls remain.
+
+clang-thin
+policy    API      handler     constant ns  dynamic ns  text bytes  DSO bytes
+default   open     ordinary        10.543      10.367        9468      73016
+default   open     inline           9.368      10.497        9468      73016
+default   closed   ordinary         6.725       4.821        7664      56048
+default   closed   inline           5.640       4.770        7676      56040
+default   sealed   ordinary         5.250       3.988        5624      51712
+default   sealed   inline           4.460       4.024        5348      51704
+chains    open     ordinary         8.439      10.092        9532      73064
+chains    open     inline           9.136       9.879        9532      73064
+chains    closed   ordinary         5.411       4.755        7984      56080
+chains    closed   inline           5.845       4.677        7964      56072
+chains    sealed   ordinary         5.728       3.805        5944      51760
+chains    sealed   inline           5.307       3.804        5668      51752
+events    open     ordinary         9.322       9.712        9500      73064
+events    open     inline           8.495       9.712        9500      73064
+events    closed   ordinary         6.386       4.686        7952      56080
+events    closed   inline           6.431       4.678        7932      56072
+events    sealed   ordinary         5.889       3.769        5912      51760
+events    sealed   inline           5.459       3.788        5668      51752
+
+Inspected chain-first/closed/inline roll_publish: no direct dice_slot_* or
+ps_handler_* wrapper calls remain. TLS, initialization and cold-path calls remain.
+
+gcc-full
+policy    API      handler     constant ns  dynamic ns  text bytes  DSO bytes
+default   open     ordinary         7.705       5.632       11976      69608
+default   open     inline           7.181       5.628       11976      69608
+default   closed   ordinary         5.216       4.852        9832      69424
+default   closed   inline           7.173       6.422        9864      69416
+default   sealed   ordinary         4.324       3.866        4616      51584
+default   sealed   inline           6.644       5.336        4920      51576
+chains    open     ordinary         7.770       5.325       12264      69592
+chains    open     inline           7.785       5.327       12264      69592
+chains    closed   ordinary         6.147       3.592       10344      69472
+chains    closed   inline           6.856       4.698       10408      69464
+chains    sealed   ordinary         5.119       2.836        4840      51632
+chains    sealed   inline           4.665       4.077        5160      51624
+events    open     ordinary         7.159       5.630       12296      69592
+events    open     inline           7.699       5.633       12296      69592
+events    closed   ordinary         6.571       3.599       10344      69472
+events    closed   inline           6.363       4.717       10408      69464
+events    sealed   ordinary         5.505       2.841        4856      51632
+events    sealed   inline           4.987       4.135        5208      51624
+
+Inspected chain-first/closed/inline roll_publish: no direct dice_slot_* or
+ps_handler_* wrapper calls remain. TLS, initialization and cold-path calls remain.
+
+Interpretation
+Callback-free dispatch and sealed APIs reduce costs in this small workload.
+Forcing an observer inline is not universally faster: its chain-wide nested
+fallback can increase dynamic-publication latency or code size. Priority and
+inlining effects differ between compilers/LTO modes; these are controls, not
+unconditional speedup guarantees. This microbenchmark is not an application
+overhead estimate and does not predict Linux/OHOS performance.
+
+Validation
+GCC: all 69 CTests passed, including C++ delivery, missing/duplicate handlers,
+exact-only priorities, and publication initialization/result parity.
+AppleClang: all 69 cases passed across verification runs. The install test
+passed with a fresh build directory after the existing tsan.c.tmp build race.
+C++ linkage tests include unoptimized, optimized, full LTO, debug/full LTO,
+and Clang ThinLTO, with callbacks and route checks both on and off.
+
+Reproduce
+Configure Release with DICE_TESTS=OFF, DICE_BENCHMARKS=ON, DICE_LTO=OFF.
+Select C/C++ compilers and DICE_ROLL_BENCH_LTO=full or thin.
+Build target roll-benchmarks, then run:
+  cmake -DBUILD=<build> -DSAMPLES=5 -DITERATIONS=2000000 \
+    -P scripts/benchmark-roll.cmake
+
+Raw samples, sizes, symbols and disassembly:
+  build/review-benchmarks-20261106/{clang-full,clang-thin,gcc-full}/
+CI uploads equivalent artifacts from the configured-runtime matrix.
+No configured-runtime cross-revision threshold is applied yet.

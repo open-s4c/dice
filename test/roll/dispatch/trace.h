@@ -8,6 +8,8 @@ struct trace {
     char stop;
 };
 
+void publish_test(type_id type, struct trace *trace, bool dynamic_chain);
+
 static inline enum ps_err
 record(void *event, char name)
 {
