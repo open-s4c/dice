@@ -29,10 +29,10 @@ observed_exits(void)
     return exits;
 }
 
-PS_SUBSCRIBE(CAPTURE_BEFORE, EVENT_MALLOC, {
+PS_SUBSCRIBE(CHAIN_CAPTURE_BEFORE, EVENT_MALLOC, {
     struct malloc_event *allocation = event;
     if (allocation->size == 1234)
         allocations++;
 })
-PS_SUBSCRIBE(CAPTURE_EVENT, EVENT_THREAD_START, { starts++; })
-PS_SUBSCRIBE(CAPTURE_EVENT, EVENT_THREAD_EXIT, { exits++; })
+PS_SUBSCRIBE(CHAIN_CAPTURE_EVENT, EVENT_THREAD_START, { starts++; })
+PS_SUBSCRIBE(CHAIN_CAPTURE_EVENT, EVENT_THREAD_EXIT, { exits++; })

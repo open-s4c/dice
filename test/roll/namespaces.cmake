@@ -35,13 +35,13 @@ set(root "${WORK}/namespaces")
 file(REMOVE_RECURSE "${root}")
 file(MAKE_DIRECTORY "${root}/src/dice" "${root}/src/mod")
 file(WRITE "${root}/src/dice/foo.dice"
-     "(module s1 (subscribes (CAPTURE_EVENT EVENT_MA_READ)))\n")
+     "(module s1 (subscribes (CHAIN_CAPTURE_EVENT EVENT_MA_READ)))\n")
 file(
   WRITE "${root}/src/mod/bar.dice"
   [=[
 (module bar
   (slot s1 (after (dice s1))
-    (subscribes (CAPTURE_EVENT EVENT_MA_WRITE))))
+    (subscribes (CHAIN_CAPTURE_EVENT EVENT_MA_WRITE))))
 ]=])
 set(paths "-I${root}/src" "-Idice=${root}/src/mod")
 file(
@@ -66,9 +66,9 @@ contains("#define SLOT_DICE_BAR_S1 [0-9]+")
 # Use a separate namespace to avoid also importing Dice's bundled definitions.
 file(MAKE_DIRECTORY "${root}/src/app" "${root}/extras/nested")
 file(WRITE "${root}/src/app/z.dice"
-     "(module z)\n(prioritize (chains CAPTURE_EVENT))\n")
+     "(module z)\n(prioritize (chains CHAIN_CAPTURE_EVENT))\n")
 file(WRITE "${root}/extras/a.dice"
-     "(module a)\n(prioritize (chains INTERCEPT_EVENT))\n")
+     "(module a)\n(prioritize (chains CHAIN_INTERCEPT_EVENT))\n")
 file(WRITE "${root}/extras/z.dice" "(module should-be-shadowed)\n")
 file(WRITE "${root}/extras/nested/child.dice" "(module child)\n")
 file(WRITE "${root}/extras/ignored.dice.in" "(invalid)\n")

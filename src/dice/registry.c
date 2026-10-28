@@ -1,6 +1,7 @@
 #include <stddef.h>
 #include <string.h>
 
+#include "chain-names.h"
 #include <dice/compiler.h>
 #include <dice/log.h>
 #include <dice/types.h>
@@ -110,6 +111,8 @@ STATIC_ASSERT(sizeof(type_names_) / sizeof(struct name) >= MAX_TYPES,
 DICE_HIDE void
 ps_registry_add_(bool chain, uint16_t id, const char *name)
 {
+    if (chain)
+        name = ps_chain_name_normalize_(name);
     uint16_t max       = chain ? MAX_CHAINS : MAX_TYPES;
     const char *what   = chain ? "chain" : "event type";
     struct name *names = chain ? chain_names_ : type_names_;
@@ -151,6 +154,11 @@ ps_registry_lookup_(bool chain, const char *name)
     uint16_t max       = chain ? MAX_CHAINS : MAX_TYPES;
     struct name *names = chain ? chain_names_ : type_names_;
     uint16_t id        = 0;
+
+    if (chain)
+        name = ps_chain_name_normalize_(name);
+    if (!name)
+        return max;
 
     caslock_acquire(&registry_lock_);
     for (; id < max; id++) {

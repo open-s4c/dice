@@ -136,6 +136,7 @@ _check_trace(chain_id chain, type_id type, struct metadata *md)
     _check_next(exp, chain, type, id);
 }
 
-PS_SUBSCRIBE(CAPTURE_EVENT, ANY_EVENT, { _check_trace(chain, type, md); })
-PS_SUBSCRIBE(CAPTURE_BEFORE, ANY_EVENT, { _check_trace(chain, type, md); })
-PS_SUBSCRIBE(CAPTURE_AFTER, ANY_EVENT, { _check_trace(chain, type, md); })
+PS_SUBSCRIBE(CHAIN_CAPTURE_EVENT, ANY_EVENT, { _check_trace(chain, type, md); })
+PS_SUBSCRIBE(CHAIN_CAPTURE_BEFORE, ANY_EVENT,
+             { _check_trace(chain, type, md); })
+PS_SUBSCRIBE(CHAIN_CAPTURE_AFTER, ANY_EVENT, { _check_trace(chain, type, md); })

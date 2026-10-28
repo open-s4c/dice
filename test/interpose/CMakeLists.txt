@@ -55,8 +55,8 @@ if(NOT APPLE)
   set(FUNS_sem ${FUNS_sem} sem_timedwait)
 endif()
 
-# TODO: create special tests for INTERCEPT_EVENT chain. Currently, we can only
-# test INTERCEPT_BEFORE and INTERCEPT_AFTER.
+# TODO: create special tests for CHAIN_INTERCEPT_EVENT chain. Currently, we can only
+# test CHAIN_INTERCEPT_BEFORE and CHAIN_INTERCEPT_AFTER.
 set(INCL_annotate_rwlock '<dice/events/annotate_rwlock.h>')
 set(FUNS_annotate_rwlock AnnotateRWLockCreate AnnotateRWLockDestroy
                          AnnotateRWLockAcquired AnnotateRWLockReleased)
@@ -66,7 +66,7 @@ set(INCL_cxa '<dice/events/cxa.h>')
 
 set(MODS
     mman
-    # annotate_rwlock: disabled until INTERCEPT_EVENT can be tested
+    # annotate_rwlock: disabled until CHAIN_INTERCEPT_EVENT can be tested
     pthread_create
     pthread_mutex
     pthread_cond

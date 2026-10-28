@@ -49,8 +49,8 @@ set(routes
 (schema 1)
   (include "types-ids.dice")
   (module observer (number 32) (after (dice self))
-    (subscribes (CAPTURE_BEFORE EVENT_MALLOC)
-              (CAPTURE_EVENT EVENT_THREAD_START EVENT_THREAD_EXIT)))
+    (subscribes (CHAIN_CAPTURE_BEFORE EVENT_MALLOC)
+              (CHAIN_CAPTURE_EVENT EVENT_THREAD_START EVENT_THREAD_EXIT)))
 ]=])
 file(WRITE "${root}/${import_directory}/app/observer-routes.dice" "${routes}")
 file(WRITE "${root}/${import_directory}/app/types-ids.dice"
@@ -62,8 +62,8 @@ file(
   (include "interceptors.dice")
   (events (EVENT_USER 400))
   (module app (slot observer (number 64) (after (dice self))
-    (subscribes (CAPTURE_BEFORE EVENT_MALLOC)
-              (CAPTURE_EVENT EVENT_THREAD_START EVENT_THREAD_EXIT))))
+    (subscribes (CHAIN_CAPTURE_BEFORE EVENT_MALLOC)
+              (CHAIN_CAPTURE_EVENT EVENT_THREAD_START EVENT_THREAD_EXIT))))
 ]=])
 file(
   WRITE "${root}/direct.dice"

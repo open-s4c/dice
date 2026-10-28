@@ -13,7 +13,7 @@
 #define NTHREADS 3
 vatomic32_t exists[NTHREADS];
 
-PS_SUBSCRIBE(CAPTURE_EVENT, EVENT_SELF_INIT, {
+PS_SUBSCRIBE(CHAIN_CAPTURE_EVENT, EVENT_SELF_INIT, {
     thread_id id = self_id(md);
     ensure(id > 0);
     // ids start with 1
@@ -26,7 +26,7 @@ run(void *arg)
 {
     (void)arg;
     // send some event to trigger SELF_INIT
-    PS_PUBLISH(INTERCEPT_EVENT, 100, 0, 0);
+    PS_PUBLISH(CHAIN_INTERCEPT_EVENT, 100, 0, 0);
     return NULL;
 }
 
@@ -38,7 +38,7 @@ main(void)
     pthread_t t[NTHREADS - 1];
 
     // send some event to trigger SELF_INIT of main thread
-    PS_PUBLISH(INTERCEPT_EVENT, 100, 0, 0);
+    PS_PUBLISH(CHAIN_INTERCEPT_EVENT, 100, 0, 0);
 
     for (int i = 0; i < NTHREADS - 1; i++)
         pthread_create(&t[i], 0, run, 0);

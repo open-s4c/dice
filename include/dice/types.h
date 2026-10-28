@@ -35,10 +35,14 @@ typedef uint16_t chain_id;
 #endif
 STATIC_ASSERT(MAX_CHAINS > 0, "invalid number of chains");
 
-/* CHAIN_CONTROL is a chain_id reserved for internal events of the pubsub
+/* CHAIN_DICE_CONTROL is a chain_id reserved for internal events of the pubsub
  * system, for example, initialization of modules. */
 #ifndef DICE_ROLLED
-    #define CHAIN_CONTROL 0
+    #define CHAIN_DICE_CONTROL 0
+#endif
+/* Existing sources retain the control-chain name in either build mode. */
+#ifndef CHAIN_CONTROL
+    #define CHAIN_CONTROL CHAIN_DICE_CONTROL
 #endif
 
 /* Metadata passed to handlers. The base definition tracks drop semantics; chain

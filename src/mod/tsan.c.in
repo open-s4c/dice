@@ -73,7 +73,7 @@ __tsan_FUNC_range(void *addr, unsigned long size)
         .size = size,
     };
 
-    PS_PUBLISH(INTERCEPT_EVENT, EV_TYPE(FUNC_range), &ev, 0);
+    PS_PUBLISH(CHAIN_INTERCEPT_EVENT, EV_TYPE(FUNC_range), &ev, 0);
 }
 _tmpl_end()
 
@@ -169,7 +169,7 @@ __tsan_PFXFUNCSZ(void *a)
         .size = SZ,
     };
 
-    PS_PUBLISH(INTERCEPT_EVENT, EV_TYPE(FUNC), &ev, 0);
+    PS_PUBLISH(CHAIN_INTERCEPT_EVENT, EV_TYPE(FUNC), &ev, 0);
 }
 _tmpl_end();
 
@@ -182,7 +182,7 @@ __tsan_FUNCSZ_pc(void *a, void *b)
 {
     (void)a;
     (void)b;
-    PS_PUBLISH(INTERCEPT_EVENT, EV_TYPE(FUNC), 0, 0);
+    PS_PUBLISH(CHAIN_INTERCEPT_EVENT, EV_TYPE(FUNC), 0, 0);
 }
 _tmpl_end();
 
@@ -203,9 +203,9 @@ __tsan_atomicBITS_load(const volatile uintBITS_t *a, int mo)
     };
 
     struct metadata md = {0};
-    PS_PUBLISH(INTERCEPT_BEFORE, EV_TYPE(AREAD), &ev, &md);
+    PS_PUBLISH(CHAIN_INTERCEPT_BEFORE, EV_TYPE(AREAD), &ev, &md);
     ev.val.uBITS = __atomic_load_n(a, __ATOMIC_SEQ_CST);
-    PS_PUBLISH(INTERCEPT_AFTER, EV_TYPE(AREAD), &ev, &md);
+    PS_PUBLISH(CHAIN_INTERCEPT_AFTER, EV_TYPE(AREAD), &ev, &md);
     return ev.val.uBITS;
 }
 _tmpl_end();
@@ -227,9 +227,9 @@ __tsan_atomicBITS_store(volatile uintBITS_t *a, uintBITS_t v, int mo)
     };
 
     struct metadata md = {0};
-    PS_PUBLISH(INTERCEPT_BEFORE, EV_TYPE(AWRITE), &ev, &md);
+    PS_PUBLISH(CHAIN_INTERCEPT_BEFORE, EV_TYPE(AWRITE), &ev, &md);
     __atomic_store_n(a, v, __ATOMIC_SEQ_CST);
-    PS_PUBLISH(INTERCEPT_AFTER, EV_TYPE(AWRITE), &ev, &md);
+    PS_PUBLISH(CHAIN_INTERCEPT_AFTER, EV_TYPE(AWRITE), &ev, &md);
 }
 _tmpl_end();
 
@@ -251,9 +251,9 @@ __tsan_atomicBITS_exchange(volatile uintBITS_t *a, uintBITS_t v, int mo)
     };
 
     struct metadata md = {0};
-    PS_PUBLISH(INTERCEPT_BEFORE, EV_TYPE(XCHG), &ev, &md);
+    PS_PUBLISH(CHAIN_INTERCEPT_BEFORE, EV_TYPE(XCHG), &ev, &md);
     ev.old.uBITS = __atomic_exchange_n(a, v, __ATOMIC_SEQ_CST);
-    PS_PUBLISH(INTERCEPT_AFTER, EV_TYPE(XCHG), &ev, &md);
+    PS_PUBLISH(CHAIN_INTERCEPT_AFTER, EV_TYPE(XCHG), &ev, &md);
     return ev.old.uBITS;
 }
 _tmpl_end();
@@ -277,9 +277,9 @@ __tsan_atomicBITS_fetch_Op(volatile uintBITS_t *a, uintBITS_t v, int mo)
     };
 
     struct metadata md = {0};
-    PS_PUBLISH(INTERCEPT_BEFORE, EV_TYPE(RMW), &ev, &md);
+    PS_PUBLISH(CHAIN_INTERCEPT_BEFORE, EV_TYPE(RMW), &ev, &md);
     ev.old.uBITS = __atomic_fetch_Op(a, v, __ATOMIC_SEQ_CST);
-    PS_PUBLISH(INTERCEPT_AFTER, EV_TYPE(RMW), &ev, &md);
+    PS_PUBLISH(CHAIN_INTERCEPT_AFTER, EV_TYPE(RMW), &ev, &md);
     return ev.old.uBITS;
 }
 _tmpl_end();
@@ -305,11 +305,11 @@ __tsan_atomicBITS_compare_exchange_SUF(volatile uintBITS_t *a, uintBITS_t *c,
     };
 
     struct metadata md = {0};
-    PS_PUBLISH(INTERCEPT_BEFORE, EV_TYPE(CMPXCHG), &ev, &md);
+    PS_PUBLISH(CHAIN_INTERCEPT_BEFORE, EV_TYPE(CMPXCHG), &ev, &md);
     ev.ok = __atomic_compare_exchange_n(a, c, v, PARAM_SUF, __ATOMIC_SEQ_CST,
                                         __ATOMIC_SEQ_CST);
     ev.old.uBITS = *c;
-    PS_PUBLISH(INTERCEPT_AFTER, EV_TYPE(CMPXCHG), &ev, &md);
+    PS_PUBLISH(CHAIN_INTERCEPT_AFTER, EV_TYPE(CMPXCHG), &ev, &md);
     return ev.ok;
 }
 _tmpl_end();
@@ -334,11 +334,11 @@ __tsan_atomicBITS_compare_exchange_val(volatile uintBITS_t *a, uintBITS_t c,
         .ok        = 0,
     };
     struct metadata md = {0};
-    PS_PUBLISH(INTERCEPT_BEFORE, EV_TYPE(CMPXCHG), &ev, &md);
+    PS_PUBLISH(CHAIN_INTERCEPT_BEFORE, EV_TYPE(CMPXCHG), &ev, &md);
     ev.ok        = __atomic_compare_exchange_n(a, &c, v, 0, __ATOMIC_SEQ_CST,
                                                __ATOMIC_SEQ_CST);
     ev.old.uBITS = c;
-    PS_PUBLISH(INTERCEPT_AFTER, EV_TYPE(CMPXCHG), &ev, &md);
+    PS_PUBLISH(CHAIN_INTERCEPT_AFTER, EV_TYPE(CMPXCHG), &ev, &md);
     return ev.old.uBITS;
 }
 _tmpl_end();
@@ -356,9 +356,9 @@ __tsan_atomic_thread_fence(int mo)
     };
 
     struct metadata md = {0};
-    PS_PUBLISH(INTERCEPT_BEFORE, EVENT_MA_FENCE, &ev, &md);
+    PS_PUBLISH(CHAIN_INTERCEPT_BEFORE, EVENT_MA_FENCE, &ev, &md);
     __atomic_thread_fence(__ATOMIC_SEQ_CST);
-    PS_PUBLISH(INTERCEPT_AFTER, EVENT_MA_FENCE, &ev, &md);
+    PS_PUBLISH(CHAIN_INTERCEPT_AFTER, EVENT_MA_FENCE, &ev, &md);
 }
 
 void
@@ -371,7 +371,7 @@ __tsan_atomic_signal_fence(int mo)
     };
 
     struct metadata md = {0};
-    PS_PUBLISH(INTERCEPT_BEFORE, EVENT_MA_FENCE, &ev, &md);
+    PS_PUBLISH(CHAIN_INTERCEPT_BEFORE, EVENT_MA_FENCE, &ev, &md);
     __atomic_signal_fence(__ATOMIC_SEQ_CST);
-    PS_PUBLISH(INTERCEPT_AFTER, EVENT_MA_FENCE, &ev, &md);
+    PS_PUBLISH(CHAIN_INTERCEPT_AFTER, EVENT_MA_FENCE, &ev, &md);
 }

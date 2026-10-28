@@ -28,7 +28,8 @@ enum self_guard {
 thread_id self_id(struct metadata *self);
 
 /* Returns whether Dice is currently idle, serving a handler, or between a
- * matching INTERCEPT_BEFORE/INTERCEPT_AFTER pair for the current thread. */
+ * matching CHAIN_INTERCEPT_BEFORE/CHAIN_INTERCEPT_AFTER pair for the current
+ * thread. */
 enum self_guard self_guard_get(struct metadata *self);
 
 /* True when the backing TLS object has been retired (for example, after a

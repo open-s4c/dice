@@ -42,7 +42,7 @@ ps_subscribe(chain_id chain, type_id type, ps_callback_f cb, int slot)
         return PS_OK;
     }
 
-    if (chain == CHAIN_CONTROL) {
+    if (chain == CHAIN_DICE_CONTROL) {
         // Ignore any subscription of callback handlers for control chain. This
         // is only valid for builtin modules.
         return PS_OK;
