@@ -91,7 +91,7 @@ ps_initd_(void)
         BLOCK,
     } state_ = NONE;
 
-#if !defined(__clang__)
+#if !defined(__clang__) && !defined(DICE_ROLL_RUNTIME)
     static bool ready_ = false;
 #endif
 
@@ -382,6 +382,8 @@ end:
     return err;
 }
 #else
+/* Keep initialization and result normalization in sync with the generated
+ * header paths; roll-publication-parity exercises all four entry points. */
     #ifdef DICE_ROLL_RUNTIME
 DICE_HIDE enum ps_err
     #else

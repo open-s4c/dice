@@ -66,9 +66,9 @@ contains("#define SLOT_DICE_BAR_S1 [0-9]+")
 # Use a separate namespace to avoid also importing Dice's bundled definitions.
 file(MAKE_DIRECTORY "${root}/src/app" "${root}/extras/nested")
 file(WRITE "${root}/src/app/z.dice"
-     "(module z)\n\n")
+     "(module z)\n(prioritize (chains CAPTURE_EVENT))\n")
 file(WRITE "${root}/extras/a.dice"
-     "(module a)\n\n")
+     "(module a)\n(prioritize (chains INTERCEPT_EVENT))\n")
 file(WRITE "${root}/extras/z.dice" "(module should-be-shadowed)\n")
 file(WRITE "${root}/extras/nested/child.dice" "(module child)\n")
 file(WRITE "${root}/extras/ignored.dice.in" "(invalid)\n")
@@ -77,17 +77,19 @@ file(
   WRITE "${root}/all.dice"
   [=[
 (import (app a) (app))
-
+(prioritize (events EVENT_MA_READ))
 (import (app z) (app))
 ]=])
 run("${DICE}" ${paths} --query "${root}/all.dice")
 contains("slot app/a ")
 contains("slot app/z ")
+contains("prioritize events 30")
 if(output MATCHES "should_be_shadowed|slot app/nested/child")
   message(FATAL_ERROR "Bulk import ignored precedence or recursed: ${output}")
 endif()
 file(WRITE "${root}/sorted.dice" "(import (app))\n")
 run("${DICE}" ${paths} --query "${root}/sorted.dice")
+contains("prioritize chains 4")
 run("${DICE}"
     ${paths}
     "${root}/all.dice"
