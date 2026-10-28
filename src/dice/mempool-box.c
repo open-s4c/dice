@@ -1,6 +1,7 @@
 #include <dice/compiler.h>
 #include <dice/mempool.h>
 
+#ifndef DICE_MEMPOOL_SEALED
 void *mempool_alloc_(size_t size);
 void *mempool_realloc_(void *ptr, size_t size);
 void mempool_free_(void *ptr);
@@ -29,3 +30,4 @@ mempool_aligned_alloc(size_t alignment, size_t size)
 {
     return mempool_aligned_alloc_(alignment, size);
 }
+#endif

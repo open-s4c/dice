@@ -63,6 +63,12 @@ static struct callback_policy {
     bool enabled;
 } callback_policies[LIMIT];
 static size_t ncallback_policies;
+static struct sealing_policy {
+    char scope[NAME_SIZE];
+    unsigned line;
+} sealing_policies[LIMIT];
+static size_t nsealing_policies;
+static bool pubsub_sealed, self_sealed, mempool_sealed;
 static bool callbacks, extension_callbacks;
 static bool mempool_seen;
 static uint64_t mempool_size = 200 * 1024 * 1024;
@@ -416,6 +422,48 @@ read_routes(const struct sxp *args, const char *slot, bool publishes)
 }
 
 static void
+read_seal(const struct sxp *key, const char *scope)
+{
+    if (*scope)
+        fail("line %u: seal is only allowed at the top level", key->line);
+    if (!key->next)
+        fail("line %u: seal expects at least one target", key->line);
+    for (const struct sxp *ref = key->next; ref; ref = ref->next) {
+        char name[NAME_SIZE] = "";
+        if (!symbol(ref, "_")) {
+            if (ref->kind != SXP_LIST)
+                fail("line %u: seal expects _ or an absolute reference",
+                     ref->line);
+            read_reference(name, ref);
+        }
+        for (size_t i = 0; i < nsealing_policies; i++)
+            if (!strcmp(sealing_policies[i].scope, name))
+                fail("line %u: duplicate seal target %s", ref->line,
+                     *name ? name : "_");
+        if (nsealing_policies == LIMIT)
+            fail("too many seal targets");
+        struct sealing_policy *policy = &sealing_policies[nsealing_policies++];
+        strcpy(policy->scope, name);
+        policy->line = ref->line;
+    }
+}
+
+/* Sealing is inherited and cannot be undone by a more specific callback policy.
+ */
+static bool
+scope_sealed(const char *scope)
+{
+    for (size_t i = 0; i < nsealing_policies; i++) {
+        const char *parent = sealing_policies[i].scope;
+        size_t length      = strlen(parent);
+        if (!length || (!strncmp(scope, parent, length) &&
+                        (!scope[length] || scope[length] == '/')))
+            return true;
+    }
+    return false;
+}
+
+static void
 read_callbacks(const struct sxp *key, const char *scope)
 {
     for (size_t i = 0; i < ncallback_policies; i++)
@@ -436,6 +484,8 @@ read_callbacks(const struct sxp *key, const char *scope)
 static bool
 callbacks_allowed(const char *scope)
 {
+    if (pubsub_sealed || scope_sealed(scope))
+        return false;
     char current[NAME_SIZE];
     strcpy(current, scope);
     for (;;) {
@@ -807,6 +857,8 @@ read_forms(const struct sxp *forms, const char *path, const char *ancestors[],
             read_ids(key->next, symbol(key, "chains"));
         } else if (symbol(key, "callbacks")) {
             read_callbacks(key, scope);
+        } else if (symbol(key, "seal")) {
+            read_seal(key, scope);
         } else if (symbol(key, "mempool_size")) {
             read_mempool(key);
         } else if (symbol(key, "slot")) {
@@ -1141,6 +1193,26 @@ resolve(void)
                     ids[j].id == ids[i].id)
                     fail("ID collision: %s and %s", ids[i].name, ids[j].name);
     }
+    /* Core component scopes exist even without module imports. Other targets
+     * must resolve to a declared slot or namespace after all files are loaded.
+     */
+    for (size_t i = 0; i < nsealing_policies; i++) {
+        const struct sealing_policy *policy = &sealing_policies[i];
+        const char *name                    = policy->scope;
+        if (*name && strcmp(name, "dice") && strcmp(name, "dice/pubsub") &&
+            strcmp(name, "dice/self") && strcmp(name, "dice/mempool") &&
+            find_slot(name) < 0 && find_namespace(name) < 0)
+            fail("line %u: unknown seal target %s", policy->line, name);
+    }
+    pubsub_sealed  = scope_sealed("dice/pubsub");
+    self_sealed    = scope_sealed("dice/self");
+    mempool_sealed = scope_sealed("dice/mempool");
+    for (size_t i = 0; i < ncallback_policies; i++) {
+        const struct callback_policy *policy = &callback_policies[i];
+        if (policy->enabled && (pubsub_sealed || scope_sealed(policy->scope)))
+            fail("callbacks true is not allowed in sealed %s",
+                 *policy->scope ? policy->scope : "top level");
+    }
     prepare_slots();
     resolve_routes(subs, nsubs, false);
     resolve_routes(prods, nprods, true);
@@ -1163,9 +1235,9 @@ resolve(void)
         hash = hash_string(hash, entry);
     }
     for (size_t i = 0; i < nslots; i++) {
-        snprintf(entry, sizeof(entry), "slot:%.*s:%d:%d", NAME_SIZE - 1,
+        snprintf(entry, sizeof(entry), "slot:%.*s:%d:%d:%d", NAME_SIZE - 1,
                  slots[i].name, slots[i].number,
-                 callbacks_allowed(slots[i].name));
+                 callbacks_allowed(slots[i].name), scope_sealed(slots[i].name));
         hash = hash_string(hash, entry);
     }
     for (size_t i = 0; i < nprods; i++) {
@@ -1175,6 +1247,9 @@ resolve(void)
     }
     snprintf(entry, sizeof(entry), "%d:%" PRIu64, extension_callbacks,
              mempool_size);
+    hash = hash_string(hash, entry);
+    snprintf(entry, sizeof(entry), "sealed:%d:%d:%d", pubsub_sealed,
+             self_sealed, mempool_sealed);
     hash = hash_string(hash, entry);
     snprintf(config_id, sizeof(config_id), "roll-1-%016" PRIx64, hash);
 }
@@ -1395,6 +1470,25 @@ emit_header(FILE *out)
             last_known_slot == INT_MAX ? 0 :
             last_known_slot < 10000    ? 10000 :
                                          last_known_slot + 1);
+    if (pubsub_sealed)
+        fputs(
+            "#ifndef DICE_PUBSUB_SEALED\n#define DICE_PUBSUB_SEALED 1\n"
+            "#endif\n",
+            out);
+    if (self_sealed)
+        fputs(
+            "#ifndef DICE_SELF_SEALED\n#define DICE_SELF_SEALED 1\n"
+            "#endif\n",
+            out);
+    if (mempool_sealed)
+        fputs(
+            "#ifndef DICE_MEMPOOL_SEALED\n#define DICE_MEMPOOL_SEALED 1\n"
+            "#endif\n",
+            out);
+    fputs(
+        "#if defined(DICE_PUBSUB_SEALED) && DICE_CALLBACKS\n"
+        "#error Sealed pubsub does not allow callbacks\n#endif\n",
+        out);
     for (size_t i = 0; i < nslots; i++) {
         char name[NAME_SIZE];
         macro_name(name, slots[i].name);
@@ -1906,13 +2000,17 @@ main(int argc, char **argv)
     else if (mode == QUERY) {
         printf("configuration %s\ncallbacks %s\n", config_id,
                extension_callbacks ? "true" : "false");
+        printf("sealed pubsub %s\nsealed self %s\nsealed mempool %s\n",
+               pubsub_sealed ? "true" : "false", self_sealed ? "true" : "false",
+               mempool_sealed ? "true" : "false");
         for (size_t i = 0; i < nids; i++)
             printf("%s %s %d\n", ids[i].chain ? "chain" : "event", ids[i].name,
                    ids[i].id);
         for (size_t i = 0; i < nslots; i++)
-            printf("slot %s %d%s callbacks %s\n", slots[i].name,
+            printf("slot %s %d%s callbacks %s%s\n", slots[i].name,
                    slots[i].number, slots[i].forced >= 0 ? " forced" : "",
-                   callbacks_allowed(slots[i].name) ? "true" : "false");
+                   callbacks_allowed(slots[i].name) ? "true" : "false",
+                   scope_sealed(slots[i].name) ? " sealed true" : "");
         for (size_t i = 0; i < nsubs; i++)
             printf("subscribes %s %d/%d\n", subs[i].slot_name, subs[i].chain,
                    subs[i].event);

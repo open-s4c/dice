@@ -6,6 +6,12 @@
 #include <dice/types.h>
 #include <vsync/spinlock/caslock.h>
 
+#ifdef DICE_PUBSUB_SEALED
+    #define REGISTRY_API_ DICE_HIDE
+#else
+    #define REGISTRY_API_ DICE_WEAK
+#endif
+
 static caslock_t registry_lock_;
 
 struct name {
@@ -161,34 +167,34 @@ ps_registry_lookup_(bool chain, const char *name)
 // external interfaces
 // -----------------------------------------------------------------------------
 
-DICE_WEAK void
+REGISTRY_API_ void
 ps_register_chain(chain_id id, const char *name)
 {
     ps_registry_add_(true, id, name);
 }
 
-DICE_WEAK void
+REGISTRY_API_ void
 ps_register_type(type_id id, const char *name)
 {
     return ps_registry_add_(false, id, name);
 }
 
-DICE_WEAK const char *
+REGISTRY_API_ const char *
 ps_chain_str(chain_id id)
 {
     return ps_registry_get_(true, id);
 }
-DICE_WEAK const char *
+REGISTRY_API_ const char *
 ps_type_str(type_id id)
 {
     return ps_registry_get_(false, id);
 }
-DICE_WEAK chain_id
+REGISTRY_API_ chain_id
 ps_chain_lookup(const char *name)
 {
     return ps_registry_lookup_(true, name);
 }
-DICE_WEAK type_id
+REGISTRY_API_ type_id
 ps_type_lookup(const char *name)
 {
     return ps_registry_lookup_(false, name);
