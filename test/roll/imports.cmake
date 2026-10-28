@@ -97,7 +97,6 @@ foreach(invalid
     "(plugins false)"
     "(prioritize (chains CAPTURE_EVENT))"
     "(module a (option inline))"
-    "(seal _)"
 )
   file(WRITE "${root}/unsupported.dice" "${invalid}")
   fails("unknown form|unknown slot field" "${DICE}" --check "${root}/unsupported.dice")

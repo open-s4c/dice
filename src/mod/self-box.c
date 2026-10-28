@@ -6,6 +6,7 @@
 #include <dice/self.h>
 #include <dice/types.h>
 
+#ifndef DICE_SELF_SEALED
 thread_id self_id_(struct metadata *md);
 DICE_HIDE thread_id
 self_id(struct metadata *md)
@@ -49,3 +50,4 @@ self_tls(struct metadata *md, const void *global, size_t size)
 {
     return self_tls_(md, global, size);
 }
+#endif

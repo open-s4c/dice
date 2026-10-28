@@ -45,6 +45,12 @@
 #include <vsync/spinlock/caslock.h>
 #include <vsync/stack/quack.h>
 
+#ifdef DICE_SELF_SEALED
+    #define SELF_API_ DICE_HIDE
+#else
+    #define SELF_API_ DICE_WEAK
+#endif
+
 #ifndef container_of
     #define container_of(A, T, M) ((T *)((((size_t)(A)) - offsetof(T, M))))
 #endif
@@ -247,44 +253,44 @@ self_tls_(struct metadata *md, const void *global, size_t size)
     return ptr;
 }
 
-DICE_WEAK thread_id
+SELF_API_ thread_id
 self_id(struct metadata *md)
 {
     return self_id_(md);
 }
 
-DICE_WEAK enum self_guard
+SELF_API_ enum self_guard
 self_guard_get(struct metadata *md)
 {
     return self_guard_get_(md);
 }
 
-DICE_WEAK bool
+SELF_API_ bool
 self_retired(struct metadata *md)
 {
     return self_retired_(md);
 }
 
-DICE_WEAK void *
+SELF_API_ void *
 self_tls_get(struct metadata *md, uintptr_t item_key)
 {
     return self_tls_get_(md, item_key);
 }
 
-DICE_WEAK void
+SELF_API_ void
 self_tls_set(struct metadata *md, uintptr_t item_key, void *ptr,
              struct tls_dtor dtor)
 {
     self_tls_set_(md, item_key, ptr, dtor);
 }
 
-DICE_WEAK void *
+SELF_API_ void *
 self_tls(struct metadata *md, const void *global, size_t size)
 {
     return self_tls_(md, global, size);
 }
 
-DICE_WEAK struct metadata *
+SELF_API_ struct metadata *
 self_md(void)
 {
     return (struct metadata *)get_self_();
