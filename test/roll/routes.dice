@@ -13,8 +13,8 @@
     (publishes (CHAIN_OUTPUT EVENT_TEST)))
   (module observer
     (subscribes (CHAIN_OUTPUT EVENT_TEST)
-              (CAPTURE_BEFORE EVENT_MALLOC)
-              (CAPTURE_EVENT EVENT_THREAD_START)))
+              (CHAIN_CAPTURE_BEFORE EVENT_MALLOC)
+              (CHAIN_CAPTURE_EVENT EVENT_THREAD_START)))
   (module wildcard
     (subscribes (CHAIN_WILD ANY_EVENT))
     (publishes (CHAIN_OUTPUT ANY_EVENT)))

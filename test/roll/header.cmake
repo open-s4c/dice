@@ -32,7 +32,7 @@ foreach(header dice.h dice/roll.h)
   file(WRITE "${root}/configured.c"
     "#include <${header}>\n#include <dice/module.h>\n"
     "#include <dice/chains/capture.h>\n"
-    "STATIC_ASSERT(CAPTURE_EVENT == 4, \"configured IDs\");\n")
+    "STATIC_ASSERT(CHAIN_CAPTURE_EVENT == 4, \"configured IDs\");\n")
   run("${CC}" ${flags} -DDICE_ROLLED=1 -c "${root}/configured.c"
       -o "${root}/configured.o")
   # Including the configuration itself opts into generated mode too.
@@ -48,5 +48,5 @@ run("${CC}" ${flags} -DDICE_ROLLED=1 -include dice/roll.h -c
 file(WRITE "${root}/ordinary.c"
   "#include <dice/module.h>\n#include <dice/chains/capture.h>\n"
   "#ifdef DICE_ROLLED\n#error ordinary source opted into generated mode\n#endif\n"
-  "STATIC_ASSERT(CAPTURE_EVENT == 4, \"ordinary IDs\");\n")
+  "STATIC_ASSERT(CHAIN_CAPTURE_EVENT == 4, \"ordinary IDs\");\n")
 run("${CC}" ${flags} -c "${root}/ordinary.c" -o "${root}/ordinary.o")

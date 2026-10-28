@@ -14,7 +14,7 @@ void *
 run(void *arg)
 {
     (void)arg;
-    PS_PUBLISH(INTERCEPT_EVENT, 100, 0, 0);
+    PS_PUBLISH(CHAIN_INTERCEPT_EVENT, 100, 0, 0);
     while (true)
         sched_yield();
     return NULL;
@@ -24,7 +24,7 @@ run(void *arg)
 int
 main(void)
 {
-    PS_PUBLISH(INTERCEPT_EVENT, 100, 0, 0);
+    PS_PUBLISH(CHAIN_INTERCEPT_EVENT, 100, 0, 0);
     for (int i = 0; i < NTHREADS; ++i) {
         pthread_create(&t[i], NULL, run, NULL);
     }
