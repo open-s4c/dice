@@ -1,3 +1,5 @@
+cmake_minimum_required(VERSION 3.20)
+
 function(run)
   execute_process(COMMAND ${ARGV} RESULT_VARIABLE result OUTPUT_VARIABLE stdout
                   ERROR_VARIABLE stderr TIMEOUT 30)
@@ -149,6 +151,97 @@ foreach(policy open all pool self pubsub)
       run("${out}/app" "${mask}")
     endif()
   endforeach()
+endforeach()
+
+# Custom namespaces and slots use their full path, without a Dice prefix.
+file(MAKE_DIRECTORY "${out}/imports")
+file(WRITE "${out}/imports/cache.dice" "(module cache)\n")
+set(scope_modules "(import (third-party cache))
+  (module app
+    (module cache (slot hot-path) (slot cold))
+    (module cache2))
+  (module vendor (module cache))")
+function(check_scopes name policy)
+  file(WRITE "${out}/scopes.dice" "${scope_modules}\n${policy}\n")
+  run("${DICE}" "-Ithird-party=${out}/imports"
+      "${out}/scopes.dice" -o "${out}/scopes-${name}")
+  file(READ "${out}/scopes-${name}/dice.h" header)
+  string(REGEX MATCHALL "#define [A-Z_][A-Z0-9_]*_SEALED 1\n" actual "${header}")
+  set(expected)
+  set(probe "#include \"dice.h\"\n")
+  foreach(flag IN LISTS ARGN)
+    list(APPEND expected "#define ${flag}_SEALED 1\n")
+    string(APPEND probe
+      "_Static_assert(${flag}_SEALED == 1, \"${flag} is sealed\");\n")
+  endforeach()
+  list(SORT actual)
+  list(SORT expected)
+  if(NOT "${actual}" STREQUAL "${expected}")
+    message(FATAL_ERROR "Incorrect flags for ${name}:\n${actual}\nExpected:\n${expected}")
+  endif()
+  file(WRITE "${out}/scopes-${name}/probe.c" "${probe}")
+  run("${CC}" -std=gnu11 -Wall -Wextra -Werror -fPIC
+      "-I${SOURCE}/include" "-I${SOURCE}/deps/libvsync/include"
+      -c "${out}/scopes-${name}/probe.c" -o "${out}/scopes-${name}/probe.o")
+endfunction()
+check_scopes(open "")
+check_scopes(module "(seal (app cache))"
+             APP_CACHE APP_CACHE_HOT_PATH APP_CACHE_COLD)
+check_scopes(children "(seal (app cache hot-path) (app cache cold))"
+             APP_CACHE_HOT_PATH APP_CACHE_COLD)
+# The slots have identical policies, but the parent flag changes the ABI too.
+foreach(name module children)
+  file(READ "${out}/scopes-${name}/dice.h" header)
+  string(REGEX MATCH "DICE_CONFIG_HASH 0x[0-9a-f]+ULL" hash_${name} "${header}")
+endforeach()
+if(hash_module STREQUAL hash_children)
+  message(FATAL_ERROR "Module sealing flag is missing from the ABI fingerprint")
+endif()
+check_scopes(namespace "(seal (app))"
+             APP APP_CACHE APP_CACHE_HOT_PATH APP_CACHE_COLD APP_CACHE2)
+check_scopes(slot "(seal (app cache hot-path))" APP_CACHE_HOT_PATH)
+check_scopes(import "(seal (third-party cache))" THIRD_PARTY_CACHE)
+check_scopes(peers "(seal (app cache) (vendor cache))"
+             APP_CACHE APP_CACHE_HOT_PATH APP_CACHE_COLD VENDOR_CACHE)
+check_scopes(dice "(seal (dice))"
+             DICE DICE_MEMPOOL DICE_PUBSUB DICE_SELF)
+check_scopes(all "(seal _)"
+             APP APP_CACHE APP_CACHE_HOT_PATH APP_CACHE_COLD APP_CACHE2
+             VENDOR VENDOR_CACHE THIRD_PARTY THIRD_PARTY_CACHE
+             DICE DICE_MEMPOOL DICE_PUBSUB DICE_SELF)
+run("${DICE}" "-Ithird-party=${out}/imports" --query "${out}/scopes.dice")
+if(NOT output MATCHES "sealed third_party/cache true" OR
+   NOT output MATCHES "sealed app/cache true")
+  message(FATAL_ERROR "Missing qualified sealing policies: ${output}")
+endif()
+
+# Namespace flags must not accidentally seal a different module with an
+# equivalent C spelling, including a built-in API scope.
+foreach(config "(module a (module b)) (module a-b (module c)) (seal (a))"
+               "(module a (module b)) (module A (module c)) (seal (a))"
+               "(module dice-self (module extra)) (seal (dice self))")
+  file(WRITE "${out}/collision.dice" "${config}")
+  fails("sealing names collide" "${DICE}" --check "${out}/collision.dice")
+endforeach()
+file(WRITE "${out}/unsealed.dice"
+     "(module a (module b)) (module a-b (module c))")
+run("${DICE}" --check "${out}/unsealed.dice")
+
+# Compare the final sealing flag spelling with event, chain and slot macros.
+foreach(config
+    "(events EVENT_TEST_SEALED) (module event (module test)) (seal (event test))"
+    "(seal (chain test)) (module chain (module test)) (chains CHAIN_TEST_SEALED)"
+    "(module event (module test)) (module app (publishes (CHAIN_TEST EVENT_TEST_SEALED))) (seal (event test))"
+    "(module slot (module cache)) (module cache-sealed (number 5)) (seal (slot cache))"
+    "(module slot (module app (module fast))) (module app (slot fast-sealed)) (seal (slot app fast))"
+    "(events EVENT_TEST_SEALED) (module event (module test)) (seal (event))")
+  file(WRITE "${out}/collision.dice" "${config}")
+  fails("sealing flag .* collides" "${DICE}" --check "${out}/collision.dice")
+  fails("sealing flag .* collides" "${DICE}" "${out}/collision.dice"
+        -o "${out}/collision")
+  string(REGEX REPLACE "\\(seal \\([^)]*\\)\\)" "" unsealed "${config}")
+  file(WRITE "${out}/unsealed.dice" "${unsealed}")
+  run("${DICE}" --check "${out}/unsealed.dice")
 endforeach()
 
 foreach(config "(seal)" "(seal ())" "(seal self)" "(seal _ _)"
