@@ -68,7 +68,12 @@ static struct sealing_policy {
     unsigned line;
 } sealing_policies[LIMIT];
 static size_t nsealing_policies;
-static bool pubsub_sealed, self_sealed, mempool_sealed;
+static struct sealing_scope {
+    char name[NAME_SIZE], macro[NAME_SIZE];
+    bool sealed;
+} sealing_scopes[LIMIT + SLOT_LIMIT + COUNT(standard_modules) + 1];
+static size_t nsealing_scopes;
+static bool pubsub_sealed;
 static bool callbacks, extension_callbacks;
 static bool mempool_seen;
 static uint64_t mempool_size = 200 * 1024 * 1024;
@@ -461,6 +466,92 @@ scope_sealed(const char *scope)
             return true;
     }
     return false;
+}
+
+static void
+add_sealing_scope(const char *name)
+{
+    for (size_t i = 0; i < nsealing_scopes; i++)
+        if (!strcmp(sealing_scopes[i].name, name))
+            return;
+    char parent[NAME_SIZE];
+    strcpy(parent, name);
+    char *last = strrchr(parent, '/');
+    if (last) {
+        *last = 0;
+        add_sealing_scope(parent);
+    }
+    if (nsealing_scopes == COUNT(sealing_scopes))
+        fail("too many sealing scopes");
+    struct sealing_scope *scope = &sealing_scopes[nsealing_scopes];
+    strcpy(scope->name, name);
+    macro_name(scope->macro, name);
+    scope->sealed = scope_sealed(name);
+    for (size_t i = 0; i < nsealing_scopes; i++) {
+        const struct sealing_scope *other = &sealing_scopes[i];
+        if ((scope->sealed || other->sealed) &&
+            !strcmp(scope->macro, other->macro))
+            fail("sealing names collide in generated macros: %s and %s",
+                 scope->name, other->name);
+    }
+    if (scope->sealed) {
+        char flag[NAME_SIZE + sizeof("_SEALED")];
+        snprintf(flag, sizeof(flag), "%s_SEALED", scope->macro);
+        for (size_t i = 0; i < nids; i++)
+            if (!strcmp(flag, ids[i].name))
+                fail("sealing flag %s for %s collides with identifier %s", flag,
+                     scope->name, ids[i].name);
+        for (size_t i = 0; i < nslots; i++) {
+            char name_macro[NAME_SIZE];
+            char slot_macro[NAME_SIZE + sizeof("SLOT_")];
+            macro_name(name_macro, slots[i].name);
+            snprintf(slot_macro, sizeof(slot_macro), "SLOT_%s", name_macro);
+            if (!strcmp(flag, slot_macro))
+                fail("sealing flag %s for %s collides with slot %s", flag,
+                     scope->name, slots[i].name);
+        }
+    }
+    nsealing_scopes++;
+}
+
+static int
+sealing_scope_compare(const void *a, const void *b)
+{
+    return strcmp(((const struct sealing_scope *)a)->name,
+                  ((const struct sealing_scope *)b)->name);
+}
+
+static void
+resolve_sealing(void)
+{
+    for (size_t i = 0; i < COUNT(standard_modules); i++)
+        add_sealing_scope(standard_modules[i]);
+    for (size_t i = 0; i < nnamespaces; i++)
+        add_sealing_scope(namespaces[i].name);
+    for (size_t i = 0; i < nslots; i++)
+        add_sealing_scope(slots[i].name);
+    qsort(sealing_scopes, nsealing_scopes, sizeof(*sealing_scopes),
+          sealing_scope_compare);
+    for (size_t i = 0; i < nsealing_policies; i++) {
+        const struct sealing_policy *policy = &sealing_policies[i];
+        if (!*policy->scope)
+            continue;
+        bool found = false;
+        for (size_t j = 0; j < nsealing_scopes; j++)
+            if (!strcmp(policy->scope, sealing_scopes[j].name))
+                found = true;
+        if (!found)
+            fail("line %u: unknown seal target %s", policy->line,
+                 policy->scope);
+    }
+    /* Sealing pubsub disables callbacks in every scope. */
+    pubsub_sealed = scope_sealed("dice/pubsub");
+    for (size_t i = 0; i < ncallback_policies; i++) {
+        const struct callback_policy *policy = &callback_policies[i];
+        if (policy->enabled && (pubsub_sealed || scope_sealed(policy->scope)))
+            fail("callbacks true is not allowed in sealed %s",
+                 *policy->scope ? policy->scope : "top level");
+    }
 }
 
 static void
@@ -1193,27 +1284,8 @@ resolve(void)
                     ids[j].id == ids[i].id)
                     fail("ID collision: %s and %s", ids[i].name, ids[j].name);
     }
-    /* Core component scopes exist even without module imports. Other targets
-     * must resolve to a declared slot or namespace after all files are loaded.
-     */
-    for (size_t i = 0; i < nsealing_policies; i++) {
-        const struct sealing_policy *policy = &sealing_policies[i];
-        const char *name                    = policy->scope;
-        if (*name && strcmp(name, "dice") && strcmp(name, "dice/pubsub") &&
-            strcmp(name, "dice/self") && strcmp(name, "dice/mempool") &&
-            find_slot(name) < 0 && find_namespace(name) < 0)
-            fail("line %u: unknown seal target %s", policy->line, name);
-    }
-    pubsub_sealed  = scope_sealed("dice/pubsub");
-    self_sealed    = scope_sealed("dice/self");
-    mempool_sealed = scope_sealed("dice/mempool");
-    for (size_t i = 0; i < ncallback_policies; i++) {
-        const struct callback_policy *policy = &callback_policies[i];
-        if (policy->enabled && (pubsub_sealed || scope_sealed(policy->scope)))
-            fail("callbacks true is not allowed in sealed %s",
-                 *policy->scope ? policy->scope : "top level");
-    }
     prepare_slots();
+    resolve_sealing();
     resolve_routes(subs, nsubs, false);
     resolve_routes(prods, nprods, true);
     extension_callbacks = callbacks_allowed("");
@@ -1248,9 +1320,14 @@ resolve(void)
     snprintf(entry, sizeof(entry), "%d:%" PRIu64, extension_callbacks,
              mempool_size);
     hash = hash_string(hash, entry);
-    snprintf(entry, sizeof(entry), "sealed:%d:%d:%d", pubsub_sealed,
-             self_sealed, mempool_sealed);
-    hash = hash_string(hash, entry);
+    for (size_t i = 0; i < nsealing_scopes; i++) {
+        const struct sealing_scope *scope = &sealing_scopes[i];
+        if (scope->sealed) {
+            snprintf(entry, sizeof(entry), "sealed:%.*s", NAME_SIZE - 1,
+                     scope->name);
+            hash = hash_string(hash, entry);
+        }
+    }
     snprintf(config_id, sizeof(config_id), "roll-1-%016" PRIx64, hash);
 }
 
@@ -1470,21 +1547,12 @@ emit_header(FILE *out)
             last_known_slot == INT_MAX ? 0 :
             last_known_slot < 10000    ? 10000 :
                                          last_known_slot + 1);
-    if (pubsub_sealed)
-        fputs(
-            "#ifndef DICE_PUBSUB_SEALED\n#define DICE_PUBSUB_SEALED 1\n"
-            "#endif\n",
-            out);
-    if (self_sealed)
-        fputs(
-            "#ifndef DICE_SELF_SEALED\n#define DICE_SELF_SEALED 1\n"
-            "#endif\n",
-            out);
-    if (mempool_sealed)
-        fputs(
-            "#ifndef DICE_MEMPOOL_SEALED\n#define DICE_MEMPOOL_SEALED 1\n"
-            "#endif\n",
-            out);
+    for (size_t i = 0; i < nsealing_scopes; i++) {
+        const struct sealing_scope *scope = &sealing_scopes[i];
+        if (scope->sealed)
+            fprintf(out, "#ifndef %s_SEALED\n#define %s_SEALED 1\n#endif\n",
+                    scope->macro, scope->macro);
+    }
     fputs(
         "#if defined(DICE_PUBSUB_SEALED) && DICE_CALLBACKS\n"
         "#error Sealed pubsub does not allow callbacks\n#endif\n",
@@ -2000,9 +2068,9 @@ main(int argc, char **argv)
     else if (mode == QUERY) {
         printf("configuration %s\ncallbacks %s\n", config_id,
                extension_callbacks ? "true" : "false");
-        printf("sealed pubsub %s\nsealed self %s\nsealed mempool %s\n",
-               pubsub_sealed ? "true" : "false", self_sealed ? "true" : "false",
-               mempool_sealed ? "true" : "false");
+        for (size_t i = 0; i < nsealing_scopes; i++)
+            printf("sealed %s %s\n", sealing_scopes[i].name,
+                   sealing_scopes[i].sealed ? "true" : "false");
         for (size_t i = 0; i < nids; i++)
             printf("%s %s %d\n", ids[i].chain ? "chain" : "event", ids[i].name,
                    ids[i].id);

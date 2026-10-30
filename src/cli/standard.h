@@ -3,6 +3,13 @@
 
 #include "templates/public.in"
 
+/* These API scopes exist even without importing a module configuration. */
+static const char *const standard_modules[] = {
+    "dice/mempool",
+    "dice/pubsub",
+    "dice/self",
+};
+
 /* Keep the existing built-in names and take their values from Dice headers. */
 static const struct standard_id {
     const char *name;
