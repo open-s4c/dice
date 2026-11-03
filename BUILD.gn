@@ -1,0 +1,277 @@
+config("dice_common") {
+  include_dirs = [
+    "//deps/dice/include",
+    "//deps/dice/deps/libvsync/include",
+  ]
+  defines = [
+    "LOG_PREFIX=\"coldtrace: \"",
+    "DEFAULT_SMR_EBR",
+    "DICE_MAIN_START_DISABLE",
+    "MAX_TYPES=${dice_max_types}",
+    "MAX_CHAINS=${dice_max_chains}",
+    "MAX_BUILTIN_SLOTS=${dice_max_builtin_slots}",
+    "MEMPOOL_SIZE=${dice_mempool_size}",
+  ]
+  if (target_os == "netbsd") {
+    defines += [ "_XOPEN_SOURCE=700" ]
+  } else {
+    defines += [ "_GNU_SOURCE" ]
+  }
+  if (dice_log_level != "") {
+    defines += [ "LOG_LEVEL=${dice_log_level}" ]
+  }
+  cflags = [
+    "-fPIC",
+    "-g3",
+    "-Wall",
+    "-Wextra",
+    "-Werror",
+  ]
+  use_lto = enable_lto && dice_sanitizer == ""
+  if (use_lto) {
+    cflags += [ "-flto" ]
+    ldflags = [ "-flto" ]
+  }
+  if (dice_sanitizer != "") {
+    cflags += [ "-fsanitize=${dice_sanitizer}" ]
+    ldflags = [ "-fsanitize=${dice_sanitizer}" ]
+    if (dice_use_clang) {
+      ldflags += [ "-shared-libsan" ]
+    }
+  }
+  if (dice_coverage) {
+    cflags += [ "--coverage" ]
+    ldflags = [ "--coverage" ]
+  }
+}
+
+config("dice_pthread") {
+  libs = [ "pthread" ]
+}
+
+config("dice_stdcpp") {
+  libs = [ "stdc++" ]
+}
+
+action("gen_dice_sources") {
+  script = "//gn/scripts/gen_dice_sources.py"
+  sources = [
+    "//deps/dice/src/dice/dispatch.c.in",
+    "//deps/dice/src/dice/dispatch_chain.c.in",
+    "//deps/dice/src/mod/tsan.c.in",
+  ]
+
+  outputs = [
+    "$target_gen_dir/dispatch.c",
+    "$target_gen_dir/tsan.c",
+  ]
+
+  dice_chains = string_split(dice_dispatch_chains, ",")
+  foreach(chain, dice_chains) {
+    outputs += [ "$target_gen_dir/dispatch_${chain}.c" ]
+  }
+
+  args = [
+    "--tmplr",
+    "./tmplr",
+    "--out-dir",
+    rebase_path("$target_gen_dir", root_build_dir),
+    "--dispatch-in",
+    rebase_path("//deps/dice/src/dice/dispatch.c.in", root_build_dir),
+    "--dispatch-chain-in",
+    rebase_path("//deps/dice/src/dice/dispatch_chain.c.in", root_build_dir),
+    "--tsan-in",
+    rebase_path("//deps/dice/src/mod/tsan.c.in", root_build_dir),
+    "--chains",
+    dice_dispatch_chains,
+    "--max-types",
+    "${dice_max_types}",
+    "--max-builtin-slots",
+    "${dice_max_builtin_slots}",
+  ]
+
+  deps = [ "//deps/dice/deps/tmplr:tmplr" ]
+}
+
+shared_library("dice") {
+  output_name = "libdice"
+  configs = [ ":dice_common" ]
+  sources = [
+    "src/dice/mempool.c",
+    "src/dice/pubsub.c",
+    "src/dice/registry.c",
+    "src/dice/memset.c",
+    "$target_gen_dir/dispatch.c",
+  ]
+  deps = [ ":gen_dice_sources" ]
+  public_configs = [ ":dice_pthread" ]
+}
+
+source_set("dice_obj") {
+  configs = [ ":dice_common" ]
+  sources = [
+    "src/dice/mempool.c",
+    "src/dice/pubsub.c",
+    "src/dice/registry.c",
+    "src/dice/memset.c",
+    "src/dice/loader.c",
+    "$target_gen_dir/dispatch.c",
+  ]
+  dice_chains = string_split(dice_dispatch_chains, ",")
+  foreach(chain, dice_chains) {
+    sources += [ "$target_gen_dir/dispatch_${chain}.c" ]
+  }
+  deps = [ ":gen_dice_sources" ]
+}
+
+source_set("dice_box") {
+  configs = [ ":dice_common" ]
+  defines = [ "DICE_HIDE_ALL" ]
+  sources = [
+    "src/dice/pubsub-box.c",
+    "src/dice/mempool-box.c",
+  ]
+}
+
+source_set("dice_mempool_box") {
+  configs = [ ":dice_common" ]
+  sources = [ "src/dice/mempool-box.c" ]
+}
+
+source_set("dice_pubsub_box") {
+  configs = [ ":dice_common" ]
+  defines = [ "DICE_HIDE_ALL" ]
+  sources = [ "src/dice/pubsub-box.c" ]
+}
+
+source_set("dice_cbonly") {
+  configs = [ ":dice_common" ]
+  sources = [
+    "src/dice/mempool.c",
+    "src/dice/pubsub.c",
+    "src/dice/registry.c",
+    "src/dice/memset.c",
+    "$target_gen_dir/dispatch.c",
+  ]
+  deps = [ ":gen_dice_sources" ]
+}
+
+source_set("dice_override") {
+  configs = [ ":dice_common" ]
+  sources = [ "src/dice/memset.c" ]
+}
+
+module_sources = [
+  [ "annotate_rwlock", "annotate_rwlock" ],
+  [ "cxa", "cxa" ],
+  [ "malloc", "malloc" ],
+  [ "memcpy", "memcpy" ],
+  [ "mman", "mman" ],
+  [ "pthread_cond", "pthread_cond" ],
+  [ "pthread_create", "pthread_create" ],
+  [ "pthread_mutex", "pthread_mutex" ],
+  [ "pthread_rwlock", "pthread_rwlock" ],
+  [ "pthread_spinlock", "pthread_spinlock" ],
+  [ "sem", "sem" ],
+  [ "self", "self" ],
+  [ "self-box", "self_box" ],
+  [ "stacktrace", "stacktrace" ],
+  [ "wrap_memset", "wrap_memset" ],
+  [ "tsan", "tsan" ],
+]
+
+if (is_apple) {
+  module_sources -= [ [ "pthread_spinlock", "pthread_spinlock" ] ]
+}
+
+foreach(entry, module_sources) {
+  module = entry[0]
+  module_target = "dice_${entry[1]}"
+  module_src = "src/mod/${module}.c"
+  if (module == "tsan") {
+    module_src = "$target_gen_dir/tsan.c"
+  }
+
+  shared_library(module_target) {
+    output_name = "dice-${module}"
+    configs = [ ":dice_common" ]
+    deps = [ ":dice" ]
+    sources = [ module_src ]
+    if (module == "tsan") {
+      deps += [ ":gen_dice_sources" ]
+    }
+    if (module == "memcpy") {
+      cflags = [
+        "-fno-builtin-memcpy",
+        "-fno-builtin-memset",
+        "-fno-builtin-memmmove",
+      ]
+    }
+    if (module == "self") {
+      public_configs = [ ":dice_pthread" ]
+    }
+    if (module == "cxa" && is_apple) {
+      public_configs = [ ":dice_stdcpp" ]
+    }
+    if (is_apple) {
+      ldflags = [ "-undefined", "dynamic_lookup" ]
+    }
+    if (module == "wrap_memset") {
+      deps += [ ":dice_memcpy" ]
+    }
+    if (module != "wrap_memset" && dice_link_override) {
+      deps += [ ":dice_override" ]
+    }
+  }
+
+  if (module != "wrap_memset") {
+    source_set("${module_target}_obj") {
+      configs = [ ":dice_common" ]
+      sources = [ module_src ]
+      if (module == "tsan") {
+        deps = [ ":gen_dice_sources" ]
+      }
+      if (module == "memcpy") {
+        cflags = [
+          "-fno-builtin-memcpy",
+          "-fno-builtin-memset",
+          "-fno-builtin-memmmove",
+        ]
+      }
+      if (module == "self") {
+        defines = [
+          "COLDTRACE_BASE_SLOT=${coldtrace_base_slot}",
+          "DICE_MODULE_SLOT=${coldtrace_base_slot}",
+        ]
+        public_configs = [ ":dice_pthread" ]
+      }
+      if (module == "cxa" && is_apple) {
+        public_configs = [ ":dice_stdcpp" ]
+      }
+      if (is_apple) {
+        ldflags = [ "-undefined", "dynamic_lookup" ]
+      }
+    }
+  }
+}
+
+group("all") {
+  deps = [
+    ":dice",
+    ":dice_obj",
+    ":dice_box",
+    ":dice_mempool_box",
+    ":dice_pubsub_box",
+    ":dice_cbonly",
+    ":dice_override",
+    "//deps/dice/deps/tsano:tsano",
+  ]
+  foreach(entry, module_sources) {
+    module = entry[0]
+    target_name = entry[1]
+    deps += [ ":dice_${target_name}" ]
+    if (module != "wrap_memset") {
+      deps += [ ":dice_${target_name}_obj" ]
+    }
+  }
+}
