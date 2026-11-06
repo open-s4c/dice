@@ -8,14 +8,14 @@
  * guards further modules from receiving events before threads are
  * initialized or after they are finished.
  *
- * The Self module subscribes to INTERCEPT_{BEFORE,AFTER,EVENT} chains and
+ * The Self module subscribes to CHAIN_INTERCEPT_{BEFORE,AFTER,EVENT} chains and
  * interrupts them, ie, any module subscribing after Self module does not
  * receive events in the INTERCEPT chains. The Self module republishes all
  * events in equivalent CAPTURE chains, but these contain TLS metadata object
  * can can be used by the user.
  *
  * When a self object is created, an EVENT_SELF_INIT is published in
- * CAPTURE_EVENT. When a self object is deleted, an EVENT_SELF_FINI is
+ * CHAIN_CAPTURE_EVENT. When a self object is deleted, an EVENT_SELF_FINI is
  * published.
  *
  * Self eventually garbage collect the self object of finished threads.
@@ -44,6 +44,12 @@
 #include <vsync/atomic.h>
 #include <vsync/spinlock/caslock.h>
 #include <vsync/stack/quack.h>
+
+#ifdef DICE_SELF_SEALED
+    #define SELF_API_ DICE_HIDE
+#else
+    #define SELF_API_ DICE_WEAK
+#endif
 
 #ifndef container_of
     #define container_of(A, T, M) ((T *)((((size_t)(A)) - offsetof(T, M))))
@@ -247,44 +253,44 @@ self_tls_(struct metadata *md, const void *global, size_t size)
     return ptr;
 }
 
-DICE_WEAK thread_id
+SELF_API_ thread_id
 self_id(struct metadata *md)
 {
     return self_id_(md);
 }
 
-DICE_WEAK enum self_guard
+SELF_API_ enum self_guard
 self_guard_get(struct metadata *md)
 {
     return self_guard_get_(md);
 }
 
-DICE_WEAK bool
+SELF_API_ bool
 self_retired(struct metadata *md)
 {
     return self_retired_(md);
 }
 
-DICE_WEAK void *
+SELF_API_ void *
 self_tls_get(struct metadata *md, uintptr_t item_key)
 {
     return self_tls_get_(md, item_key);
 }
 
-DICE_WEAK void
+SELF_API_ void
 self_tls_set(struct metadata *md, uintptr_t item_key, void *ptr,
              struct tls_dtor dtor)
 {
     self_tls_set_(md, item_key, ptr, dtor);
 }
 
-DICE_WEAK void *
+SELF_API_ void *
 self_tls(struct metadata *md, const void *global, size_t size)
 {
     return self_tls_(md, global, size);
 }
 
-DICE_WEAK struct metadata *
+SELF_API_ struct metadata *
 self_md(void)
 {
     return (struct metadata *)get_self_();
@@ -489,7 +495,14 @@ retire_self_(struct self *self)
 //  pubsub handler
 // -----------------------------------------------------------------------------
 
-static void
+/* Keep the capture chain constant when dispatch is emitted at the call site. */
+#if defined(DICE_ROLLED) && !DICE_CALLBACKS && !DICE_CHECK_ROUTES
+    #define SELF_PUBLISH_INLINE_ inline __attribute__((always_inline))
+#else
+    #define SELF_PUBLISH_INLINE_
+#endif
+
+static SELF_PUBLISH_INLINE_ void
 self_publish_(const chain_id chain, const type_id type, void *event,
               struct self *self)
 {
@@ -504,7 +517,7 @@ self_publish_(const chain_id chain, const type_id type, void *event,
     self->guard -= 2;
 }
 
-static enum ps_err
+static SELF_PUBLISH_INLINE_ enum ps_err
 self_handle_before_(const chain_id chain, const type_id type, void *event,
                     struct self *self)
 {
@@ -512,7 +525,7 @@ self_handle_before_(const chain_id chain, const type_id type, void *event,
     assert(self);
 
     if (likely(self->guard++ == 0))
-        self_publish_(CAPTURE_BEFORE, type, event, self);
+        self_publish_(CHAIN_CAPTURE_BEFORE, type, event, self);
     else
         log_debug(">>> [%" PRIu64 ":0x%" PRIx64 ":%" PRIu64 "] %s/%s: %d",
                   self_id(&self->md), (uint64_t)self->ptid, self->osid,
@@ -522,7 +535,7 @@ self_handle_before_(const chain_id chain, const type_id type, void *event,
     return PS_STOP_CHAIN;
 }
 
-static enum ps_err
+static SELF_PUBLISH_INLINE_ enum ps_err
 self_handle_after_(const chain_id chain, const type_id type, void *event,
                    struct self *self)
 {
@@ -530,7 +543,7 @@ self_handle_after_(const chain_id chain, const type_id type, void *event,
     assert(self);
 
     if (likely(self->guard == 1))
-        self_publish_(CAPTURE_AFTER, type, event, self);
+        self_publish_(CHAIN_CAPTURE_AFTER, type, event, self);
     else
         log_debug("<<< [%" PRIu64 ":0x%" PRIx64 ":%" PRIu64 "] %s/%s: %d",
                   self_id(&self->md), (uint64_t)self->ptid, self->osid,
@@ -541,7 +554,7 @@ self_handle_after_(const chain_id chain, const type_id type, void *event,
     return PS_STOP_CHAIN;
 }
 
-static enum ps_err
+static SELF_PUBLISH_INLINE_ enum ps_err
 self_handle_event_(const chain_id chain, const type_id type, void *event,
                    struct self *self)
 {
@@ -549,7 +562,7 @@ self_handle_event_(const chain_id chain, const type_id type, void *event,
     assert(self);
 
     if (likely(self->guard == 0))
-        self_publish_(CAPTURE_EVENT, type, event, self);
+        self_publish_(CHAIN_CAPTURE_EVENT, type, event, self);
     else
         log_debug("!!! [%" PRIu64 ":0x%" PRIx64 ":%" PRIu64 "] %s/%s: %d",
                   self_id(&self->md), (uint64_t)self->ptid, self->osid,
@@ -559,20 +572,21 @@ self_handle_event_(const chain_id chain, const type_id type, void *event,
     return PS_STOP_CHAIN;
 }
 
+/* Thread recovery, allocation and initialization must not inflate the cached
+ * lookup that runs on every intercepted event. */
 static __attribute__((noinline)) struct self *
 get_or_create_self_slow_(bool publish)
 {
     struct self *self = quack_search_(pthread_self());
-    if (self) {
+    if (self)
         return self;
-    }
 
     self = create_self_();
 
     thread_cache_set_(self);
 
     if (publish)
-        self_handle_event_(CAPTURE_EVENT, EVENT_SELF_INIT, 0, self);
+        self_handle_event_(CHAIN_CAPTURE_EVENT, EVENT_SELF_INIT, 0, self);
     return self;
 }
 
@@ -580,20 +594,19 @@ static inline struct self *
 get_or_create_self_(bool publish)
 {
     struct self *self = thread_cache_get_();
-    if (likely(self)) {
+    if (likely(self))
         return self;
-    }
     return get_or_create_self_slow_(publish);
 }
 
-PS_SUBSCRIBE(INTERCEPT_EVENT, ANY_EVENT, {
+PS_SUBSCRIBE(CHAIN_INTERCEPT_EVENT, ANY_EVENT, {
     struct self *self = get_or_create_self_(true);
     self->md          = md ? *md : (struct metadata){};
     enum ps_err err   = self_handle_event_(chain, type, event, self);
     *md               = self->md;
     return err;
 })
-PS_SUBSCRIBE(INTERCEPT_BEFORE, ANY_EVENT, {
+PS_SUBSCRIBE(CHAIN_INTERCEPT_BEFORE, ANY_EVENT, {
     struct self *self = get_or_create_self_(true);
     self->md          = md ? *md : (struct metadata){};
 
@@ -603,7 +616,7 @@ PS_SUBSCRIBE(INTERCEPT_BEFORE, ANY_EVENT, {
     *md             = self->md;
     return err;
 })
-PS_SUBSCRIBE(INTERCEPT_AFTER, ANY_EVENT, {
+PS_SUBSCRIBE(CHAIN_INTERCEPT_AFTER, ANY_EVENT, {
     struct self *self = get_or_create_self_(true);
     self->md          = md ? *md : (struct metadata){};
 
@@ -628,7 +641,7 @@ self_fini_(struct self *self)
         return;
 
     // announce thread self is really over
-    self_handle_event_(CAPTURE_EVENT, EVENT_SELF_FINI, 0, self);
+    self_handle_event_(CHAIN_CAPTURE_EVENT, EVENT_SELF_FINI, 0, self);
 
     // free self resources
     destroy_self_(self);
@@ -667,7 +680,7 @@ cleanup_threads_(struct self *own, pthread_t ptid)
         own->guard -= 2;
 }
 
-PS_SUBSCRIBE(INTERCEPT_EVENT, EVENT_THREAD_EXIT, {
+PS_SUBSCRIBE(CHAIN_INTERCEPT_EVENT, EVENT_THREAD_EXIT, {
     struct self *self = get_or_create_self_(true);
     self->md          = md ? *md : (struct metadata){};
     enum ps_err err   = self_handle_event_(chain, type, event, self);
@@ -698,7 +711,7 @@ DICE_MODULE_FINI({
             log_debug("waiting for %" PRIu64 " threads to die", (born - dead));
 
             struct self_wait_event ev = {.wait = false};
-            PS_PUBLISH(CAPTURE_EVENT, EVENT_SELF_WAIT, &ev,
+            PS_PUBLISH(CHAIN_CAPTURE_EVENT, EVENT_SELF_WAIT, &ev,
                        self ? &self->md : NULL);
             if (!ev.wait)
                 break;
@@ -710,9 +723,9 @@ DICE_MODULE_FINI({
 
 PS_ADVERTISE_TYPE(EVENT_SELF_INIT)
 PS_ADVERTISE_TYPE(EVENT_SELF_FINI)
-PS_ADVERTISE_CHAIN(INTERCEPT_EVENT)
-PS_ADVERTISE_CHAIN(INTERCEPT_BEFORE)
-PS_ADVERTISE_CHAIN(INTERCEPT_AFTER)
-PS_ADVERTISE_CHAIN(CAPTURE_EVENT)
-PS_ADVERTISE_CHAIN(CAPTURE_BEFORE)
-PS_ADVERTISE_CHAIN(CAPTURE_AFTER)
+PS_ADVERTISE_CHAIN(CHAIN_INTERCEPT_EVENT)
+PS_ADVERTISE_CHAIN(CHAIN_INTERCEPT_BEFORE)
+PS_ADVERTISE_CHAIN(CHAIN_INTERCEPT_AFTER)
+PS_ADVERTISE_CHAIN(CHAIN_CAPTURE_EVENT)
+PS_ADVERTISE_CHAIN(CHAIN_CAPTURE_BEFORE)
+PS_ADVERTISE_CHAIN(CHAIN_CAPTURE_AFTER)

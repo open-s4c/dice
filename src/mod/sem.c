@@ -19,9 +19,9 @@ INTERPOSE(int, sem_post, sem_t *sem)
     };
 
     struct metadata md = {0};
-    PS_PUBLISH(INTERCEPT_BEFORE, EVENT_SEM_POST, &ev, &md);
+    PS_PUBLISH(CHAIN_INTERCEPT_BEFORE, EVENT_SEM_POST, &ev, &md);
     ev.ret = ev.func(ev.sem);
-    PS_PUBLISH(INTERCEPT_AFTER, EVENT_SEM_POST, &ev, &md);
+    PS_PUBLISH(CHAIN_INTERCEPT_AFTER, EVENT_SEM_POST, &ev, &md);
     return ev.ret;
 }
 
@@ -35,9 +35,9 @@ INTERPOSE(int, sem_wait, sem_t *sem)
     };
 
     struct metadata md = {0};
-    PS_PUBLISH(INTERCEPT_BEFORE, EVENT_SEM_WAIT, &ev, &md);
+    PS_PUBLISH(CHAIN_INTERCEPT_BEFORE, EVENT_SEM_WAIT, &ev, &md);
     ev.ret = ev.func(ev.sem);
-    PS_PUBLISH(INTERCEPT_AFTER, EVENT_SEM_WAIT, &ev, &md);
+    PS_PUBLISH(CHAIN_INTERCEPT_AFTER, EVENT_SEM_WAIT, &ev, &md);
     return ev.ret;
 }
 
@@ -51,9 +51,9 @@ INTERPOSE(int, sem_trywait, sem_t *sem)
     };
 
     struct metadata md = {0};
-    PS_PUBLISH(INTERCEPT_BEFORE, EVENT_SEM_TRYWAIT, &ev, &md);
+    PS_PUBLISH(CHAIN_INTERCEPT_BEFORE, EVENT_SEM_TRYWAIT, &ev, &md);
     ev.ret = ev.func(ev.sem);
-    PS_PUBLISH(INTERCEPT_AFTER, EVENT_SEM_TRYWAIT, &ev, &md);
+    PS_PUBLISH(CHAIN_INTERCEPT_AFTER, EVENT_SEM_TRYWAIT, &ev, &md);
     return ev.ret;
 }
 
@@ -69,9 +69,9 @@ INTERPOSE(int, sem_timedwait, sem_t *sem, const struct timespec *abstime)
     };
 
     struct metadata md = {0};
-    PS_PUBLISH(INTERCEPT_BEFORE, EVENT_SEM_TIMEDWAIT, &ev, &md);
+    PS_PUBLISH(CHAIN_INTERCEPT_BEFORE, EVENT_SEM_TIMEDWAIT, &ev, &md);
     ev.ret = ev.func(ev.sem, ev.abstime);
-    PS_PUBLISH(INTERCEPT_AFTER, EVENT_SEM_TIMEDWAIT, &ev, &md);
+    PS_PUBLISH(CHAIN_INTERCEPT_AFTER, EVENT_SEM_TIMEDWAIT, &ev, &md);
     return ev.ret;
 }
 #endif

@@ -10,11 +10,33 @@
 #ifndef DICE_ROLL_RUNTIME
     #define DICE_MODULE_SLOT 0
 #endif
+#include "chain-names.h"
 #include "pubsub-internal.h"
 #include "tweaks.h"
 #include <dice/mempool.h>
 #include <dice/module.h>
 #include <dice/pubsub.h>
+
+#ifdef DICE_PUBSUB_SEALED
+    #define PUBSUB_API_ DICE_HIDE
+#elif defined(DICE_ROLL_RUNTIME)
+    #define PUBSUB_API_
+#else
+    #define PUBSUB_API_ DICE_WEAK
+#endif
+
+#if !defined(DICE_PUBSUB_SEALED) &&                                            \
+    (!defined(DICE_ROLL_RUNTIME) || DICE_CALLBACKS)
+    #define PUBSUB_CALLBACKS_ 1
+#else
+    #define PUBSUB_CALLBACKS_ 0
+#endif
+#if !defined(DICE_PUBSUB_SEALED) &&                                            \
+    (!defined(DICE_ROLL_RUNTIME) || DICE_EXTENSION_CALLBACKS)
+    #define PUBSUB_EXTENSION_CALLBACKS_ 1
+#else
+    #define PUBSUB_EXTENSION_CALLBACKS_ 0
+#endif
 
 #ifdef DICE_ROLL_RUNTIME
     #undef ps_publish
@@ -25,7 +47,7 @@
 int ps_dispatch_max(void);
 bool ps_dispatch_chain_on_(chain_id);
 
-#if !defined(DICE_ROLL_RUNTIME) || DICE_CALLBACKS
+#if PUBSUB_CALLBACKS_
     /* Rolled configurations may map sparse public IDs to compact array indexes.
      */
     #ifndef PS_CHAIN_COUNT
@@ -37,7 +59,7 @@ bool ps_dispatch_chain_on_(chain_id);
         #define PS_TYPE_INDEX(ID) (ID)
     #endif
 
-    #if !defined(DICE_ROLL_RUNTIME) || DICE_EXTENSION_CALLBACKS
+    #if PUBSUB_EXTENSION_CALLBACKS_
 struct chain {
     struct type types[PS_TYPE_COUNT];
 };
@@ -70,7 +92,7 @@ ps_initd_(void)
         BLOCK,
     } state_ = NONE;
 
-#if !defined(__clang__)
+#if !defined(__clang__) && !defined(DICE_ROLL_RUNTIME)
     static bool ready_ = false;
 #endif
 
@@ -86,9 +108,9 @@ ps_initd_(void)
 #ifndef DICE_ROLL_RUNTIME
             assert(ps_dispatch_max() >= 0);
 #endif
-            PS_PUBLISH(CHAIN_CONTROL, EVENT_DICE_INIT, 0, 0);
+            PS_PUBLISH(CHAIN_DICE_CONTROL, EVENT_DICE_INIT, 0, 0);
             ready_ = true;
-            PS_PUBLISH(CHAIN_CONTROL, EVENT_DICE_READY, 0, 0);
+            PS_PUBLISH(CHAIN_DICE_CONTROL, EVENT_DICE_READY, 0, 0);
             return true;
         case START:
             state_ = BLOCK;
@@ -118,7 +140,7 @@ PS_DISPATCH_SLOT_ON(DICE_MODULE_SLOT)
 // subscribe interface
 // -----------------------------------------------------------------------------
 
-#if !defined(DICE_ROLL_RUNTIME) || DICE_CALLBACKS
+#if PUBSUB_CALLBACKS_
     #ifdef DICE_ROLL_RUNTIME
 static int
     #else
@@ -181,7 +203,7 @@ ps_subscribe_list_(struct type *ev, chain_id chain, type_id type,
 }
     #endif
 
-    #if !defined(DICE_ROLL_RUNTIME) || DICE_EXTENSION_CALLBACKS
+    #if PUBSUB_EXTENSION_CALLBACKS_
 static int
 ps_subscribe_type_(chain_id chain, type_id type, ps_callback_f cb, int slot,
                    bool any_type)
@@ -238,7 +260,7 @@ ps_subscribe_(chain_id chain, type_id type, ps_callback_f cb, int slot)
 }
 
         #ifndef DICE_ROLL_RUNTIME
-DICE_WEAK int
+PUBSUB_API_ int
 ps_subscribe(chain_id chain, type_id type, ps_callback_f cb, int slot)
 {
     return ps_subscribe_(chain, type, cb, slot);
@@ -267,7 +289,7 @@ ps_callback_invoke_(struct sub *cur, const chain_id chain, const type_id type,
 }
     #endif
 
-    #if !defined(DICE_ROLL_RUNTIME) || DICE_EXTENSION_CALLBACKS
+    #if PUBSUB_EXTENSION_CALLBACKS_
 static enum ps_err
 ps_callback_(const chain_id chain, const type_id type, void *event,
              struct metadata *md)
@@ -297,6 +319,32 @@ ps_callback_(const chain_id chain, const type_id type, void *event,
     #endif
 #endif /* callbacks */
 
+#if !PUBSUB_EXTENSION_CALLBACKS_
+    #ifdef DICE_ROLL_RUNTIME
+DICE_HIDE int
+ps_subscribe_(chain_id chain, type_id type, ps_callback_f cb, int slot)
+{
+    (void)chain;
+    (void)type;
+    (void)cb;
+    (void)slot;
+    return PS_INVALID;
+}
+    #else
+PUBSUB_API_ int
+ps_subscribe(chain_id chain, type_id type, ps_callback_f cb, int slot)
+{
+    (void)type;
+    (void)cb;
+    if ((ps_dispatch_chain_on_(chain) && slot <= ps_dispatch_max()) ||
+        chain == CHAIN_DICE_CONTROL)
+        return PS_OK;
+    log_fatal("cannot subscribe callback: pubsub is sealed");
+    return PS_ERROR;
+}
+    #endif
+#endif
+
 #ifndef DICE_ROLL_RUNTIME
 DICE_WEAK DICE_HIDE enum ps_err
 ps_dispatch_(const chain_id chain, const type_id type, void *event,
@@ -310,11 +358,11 @@ ps_dispatch_(const chain_id chain, const type_id type, void *event,
 }
 #endif
 
-#if !defined(DICE_ROLL_RUNTIME) || DICE_EXTENSION_CALLBACKS
+#if PUBSUB_EXTENSION_CALLBACKS_
     #ifdef DICE_ROLL_RUNTIME
 DICE_HIDE enum ps_err
     #else
-DICE_WEAK enum ps_err
+PUBSUB_API_ enum ps_err
     #endif
 ps_publish(const chain_id chain, const type_id type, void *event,
            struct metadata *md)
@@ -334,6 +382,21 @@ end:
     log_debug("<= published %s/%s", ps_chain_str(chain), ps_type_str(type));
     return err;
 }
+#else
+    #ifdef DICE_ROLL_RUNTIME
+DICE_HIDE enum ps_err
+    #else
+PUBSUB_API_ enum ps_err
+    #endif
+ps_publish(const chain_id chain, const type_id type, void *event,
+           struct metadata *md)
+{
+    if (PS_NOT_INITD_())
+        return PS_STOP_CHAIN;
+    log_debug("Dispatch %s/%s", ps_chain_str(chain), ps_type_str(type));
+    enum ps_err err = ps_dispatch_(chain, type, event, md);
+    return err == PS_STOP_CHAIN ? err : PS_OK;
+}
 #endif
 
 #ifdef DICE_ROLL_RUNTIME
@@ -349,15 +412,15 @@ dice_route_error_(const char *direction, int slot, chain_id chain, type_id type)
 }
     #endif
 
-void
+PUBSUB_API_ void
 dice_require_abi(const char *configuration)
 {
     if (!configuration || strcmp(configuration, DICE_CONFIG_ID))
         log_fatal("plugin was built with a different generated dice.h");
 }
 
-int(ps_subscribe)(chain_id chain, type_id type, ps_callback_f callback,
-                  int slot)
+PUBSUB_API_ int(ps_subscribe)(chain_id chain, type_id type,
+                              ps_callback_f callback, int slot)
 {
     #if DICE_CHECK_ROUTES
     if (!(DICE_EXTENSION_CALLBACKS && slot > DICE_LAST_KNOWN_SLOT) &&
@@ -375,7 +438,7 @@ int(ps_subscribe)(chain_id chain, type_id type, ps_callback_f callback,
     return ps_subscribe_(chain, type, callback, slot);
 }
 
-int
+PUBSUB_API_ int
 dice_subscribe_abi(const char *configuration, chain_id chain, type_id type,
                    ps_callback_f callback, int slot)
 {
@@ -383,8 +446,8 @@ dice_subscribe_abi(const char *configuration, chain_id chain, type_id type,
     return (ps_subscribe)(chain, type, callback, slot);
 }
 
-enum ps_err(ps_publish)(chain_id chain, type_id type, void *event,
-                        struct metadata *md)
+PUBSUB_API_ enum ps_err(ps_publish)(chain_id chain, type_id type, void *event,
+                                    struct metadata *md)
 {
     #if DICE_CHECK_ROUTES
     /* Function pointers cannot carry the caller's slot. */
@@ -396,7 +459,7 @@ enum ps_err(ps_publish)(chain_id chain, type_id type, void *event,
 }
 
     #if DICE_CHECK_ROUTES
-enum ps_err
+PUBSUB_API_ enum ps_err
 dice_publish_checked(int slot, chain_id chain, type_id type, void *event,
                      struct metadata *md)
 {
@@ -408,37 +471,37 @@ dice_publish_checked(int slot, chain_id chain, type_id type, void *event,
 }
     #endif
 
-const char *
+PUBSUB_API_ const char *
 ps_chain_str(chain_id chain)
 {
-    return dice_chain_name_(chain);
+    return ps_chain_name_normalize_(dice_chain_name_(chain));
 }
-const char *
+PUBSUB_API_ const char *
 ps_type_str(type_id type)
 {
     return dice_event_name_(type);
 }
 
-chain_id
+PUBSUB_API_ chain_id
 ps_chain_lookup(const char *name)
 {
     return dice_chain_lookup_(name);
 }
 
-type_id
+PUBSUB_API_ type_id
 ps_type_lookup(const char *name)
 {
     return dice_event_lookup_(name);
 }
 
-void
+PUBSUB_API_ void
 ps_register_chain(chain_id id, const char *name)
 {
     if (!dice_chain_valid_(id) || dice_chain_lookup_(name) != id)
         log_fatal("chain is not declared by the generated configuration");
 }
 
-void
+PUBSUB_API_ void
 ps_register_type(type_id id, const char *name)
 {
     if ((!dice_event_valid_(id) && id != ANY_EVENT) ||

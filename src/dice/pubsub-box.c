@@ -3,13 +3,7 @@
 #include "tweaks.h"
 #include <dice/pubsub.h>
 
-#if !defined(DICE_ROLL_RUNTIME) || !DICE_EXTENSION_CALLBACKS
-
-    #ifdef DICE_ROLL_RUNTIME
-        #undef ps_publish
-        #undef ps_subscribe
-        #define ps_publish dice_publish_internal_
-    #endif
+#if !defined(DICE_ROLL_RUNTIME) && !defined(DICE_PUBSUB_SEALED)
 
 // -----------------------------------------------------------------------------
 // pubsub interface
@@ -37,18 +31,6 @@ ps_publish(const chain_id chain, const type_id type, void *event,
     return PS_OK;
 }
 
-    #ifdef DICE_ROLL_RUNTIME
-/* No registrations outside the declared callback slots. */
-DICE_HIDE int
-ps_subscribe_(chain_id chain, type_id type, ps_callback_f cb, int slot)
-{
-    (void)chain;
-    (void)type;
-    (void)cb;
-    (void)slot;
-    return PS_INVALID;
-}
-    #else
 DICE_HIDE int
 ps_subscribe(chain_id chain, type_id type, ps_callback_f cb, int slot)
 {
@@ -60,7 +42,7 @@ ps_subscribe(chain_id chain, type_id type, ps_callback_f cb, int slot)
         return PS_OK;
     }
 
-    if (chain == CHAIN_CONTROL) {
+    if (chain == CHAIN_DICE_CONTROL) {
         // Ignore any subscription of callback handlers for control chain. This
         // is only valid for builtin modules.
         return PS_OK;
@@ -110,5 +92,4 @@ ps_type_lookup(const char *name)
 {
     return ps_registry_lookup_(false, name);
 }
-    #endif /* legacy registration and registry overrides */
-#endif     /* legacy override or runtime without extension callbacks */
+#endif /* legacy box override */

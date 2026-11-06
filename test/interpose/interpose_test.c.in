@@ -122,7 +122,7 @@ $_end();
     ensure(memcmp(&ev->field, &(E)->field, sizeof(__typeof((E)->field))) == 0);
 
 $_begin(FOO = [[foo]]);
-PS_SUBSCRIBE(INTERCEPT_BEFORE, MAKE_UPCASE, {
+PS_SUBSCRIBE(CHAIN_INTERCEPT_BEFORE, MAKE_UPCASE, {
     if (!enabled())
         return PS_STOP_CHAIN;
 
@@ -160,7 +160,7 @@ PS_SUBSCRIBE(INTERCEPT_BEFORE, MAKE_UPCASE, {
     ev->func = fake_FOO;
 })
 
-PS_SUBSCRIBE(INTERCEPT_AFTER, MAKE_UPCASE, {
+PS_SUBSCRIBE(CHAIN_INTERCEPT_AFTER, MAKE_UPCASE, {
     if (!enabled())
         return PS_STOP_CHAIN;
     struct FOO_event *ev = EVENT_PAYLOAD(ev);

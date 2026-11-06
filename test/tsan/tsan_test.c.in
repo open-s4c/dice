@@ -71,7 +71,7 @@ register_PFXreadSZ(void)
 }
 _tmpl_end();
 
-PS_SUBSCRIBE(INTERCEPT_EVENT, EVENT_MA_READ, {
+PS_SUBSCRIBE(CHAIN_INTERCEPT_EVENT, EVENT_MA_READ, {
     struct ma_read_event *ev = EVENT_PAYLOAD(ev);
     _tmpl_begin(PFX = [[nix; unaligned_]], SZ = [[1; 2; 4; 8; 16]]);
     if (strcmp(ev->func, "PFXreadSZ") == 0) {
@@ -103,7 +103,7 @@ register_PFXwriteSZ(void)
 }
 _tmpl_end();
 
-PS_SUBSCRIBE(INTERCEPT_EVENT, EVENT_MA_WRITE, {
+PS_SUBSCRIBE(CHAIN_INTERCEPT_EVENT, EVENT_MA_WRITE, {
     struct ma_read_event *ev = EVENT_PAYLOAD(ev);
     _tmpl_begin(PFX = [[nix; unaligned_]], SZ = [[1; 2; 4; 8; 16]]);
     if (strcmp(ev->func, "PFXwriteSZ") == 0) {
@@ -126,7 +126,7 @@ __tsan_FUNCSZ_pc(void *a, void *b)
 {
     (void)a;
     (void)b;
-    PS_PUBLISH(INTERCEPT_EVENT, EV_TYPE(FUNC), 0, 0);
+    PS_PUBLISH(CHAIN_INTERCEPT_EVENT, EV_TYPE(FUNC), 0, 0);
 }
 _tmpl_end();
 #endif
@@ -159,7 +159,7 @@ register_atomicBITS_load(void)
 }
 _tmpl_end();
 
-PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_MA_AREAD, {
+PS_SUBSCRIBE(CHAIN_INTERCEPT_BEFORE, EVENT_MA_AREAD, {
     struct ma_aread_event *ev = EVENT_PAYLOAD(ev);
     _tmpl_begin(BITS = [[8; 16; 32; 64]]);
     if (strcmp(ev->func, "atomicBITS_load") == 0) {
@@ -171,7 +171,7 @@ PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_MA_AREAD, {
     ensure(false && "unexpected");
 });
 
-PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_MA_AREAD, {
+PS_SUBSCRIBE(CHAIN_INTERCEPT_AFTER, EVENT_MA_AREAD, {
     struct ma_aread_event *ev = EVENT_PAYLOAD(ev);
     _tmpl_begin(BITS = [[8; 16; 32; 64]]);
     if (strcmp(ev->func, "atomicBITS_load") == 0) {
@@ -209,7 +209,7 @@ register_atomicBITS_store(void)
 }
 _tmpl_end();
 
-PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_MA_AWRITE, {
+PS_SUBSCRIBE(CHAIN_INTERCEPT_BEFORE, EVENT_MA_AWRITE, {
     struct ma_awrite_event *ev = EVENT_PAYLOAD(ev);
     _tmpl_begin(BITS = [[8; 16; 32; 64]]);
     if (strcmp(ev->func, "atomicBITS_store") == 0) {
@@ -222,7 +222,7 @@ PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_MA_AWRITE, {
     ensure(false && "unexpected");
 });
 
-PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_MA_AWRITE, {
+PS_SUBSCRIBE(CHAIN_INTERCEPT_AFTER, EVENT_MA_AWRITE, {
     struct ma_awrite_event *ev = EVENT_PAYLOAD(ev);
     _tmpl_begin(BITS = [[8; 16; 32; 64]]);
     if (strcmp(ev->func, "atomicBITS_store") == 0) {
@@ -263,7 +263,7 @@ register_atomicBITS_xchg(void)
 }
 _tmpl_end();
 
-PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_MA_XCHG, {
+PS_SUBSCRIBE(CHAIN_INTERCEPT_BEFORE, EVENT_MA_XCHG, {
     struct ma_xchg_event *ev = EVENT_PAYLOAD(ev);
     _tmpl_begin(BITS = [[8; 16; 32; 64]]);
     if (strcmp(ev->func, "atomicBITS_exchange") == 0) {
@@ -277,7 +277,7 @@ PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_MA_XCHG, {
     ensure(false && "unexpected");
 });
 
-PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_MA_XCHG, {
+PS_SUBSCRIBE(CHAIN_INTERCEPT_AFTER, EVENT_MA_XCHG, {
     struct ma_xchg_event *ev = EVENT_PAYLOAD(ev);
     _tmpl_begin(BITS = [[8; 16; 32; 64]]);
     if (strcmp(ev->func, "atomicBITS_exchange") == 0) {
@@ -332,7 +332,7 @@ register_atomicBITS_fetch_Op(void)
 }
 _tmpl_end();
 
-PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_MA_RMW, {
+PS_SUBSCRIBE(CHAIN_INTERCEPT_BEFORE, EVENT_MA_RMW, {
     struct ma_rmw_event *ev = EVENT_PAYLOAD(ev);
     _tmpl_begin(Op   = [[add; sub; and; or ; xor; nand]],
                 BITS = [[8; 16; 32; 64]]);
@@ -340,14 +340,14 @@ PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_MA_RMW, {
         ensure(ev->addr == _exp_rmw.addr);
         ensure(ev->size == (BITS >> 3));
         ensure(ev->mo == _exp_rmw.mo);
-        ensure(ev->val.uBITS == _exp_rmw.val.uBITS && "INTERCEPT_BEFORE");
+        ensure(ev->val.uBITS == _exp_rmw.val.uBITS && "CHAIN_INTERCEPT_BEFORE");
         ensure(ev->old.uBITS == 0);
     } else
         _tmpl_end();
     ensure(false && "unexpected");
 });
 
-PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_MA_RMW, {
+PS_SUBSCRIBE(CHAIN_INTERCEPT_AFTER, EVENT_MA_RMW, {
     struct ma_rmw_event *ev = EVENT_PAYLOAD(ev);
     _tmpl_begin(Op   = [[add; sub; and; or ; xor; nand]],
                 BITS = [[8; 16; 32; 64]]);
@@ -355,8 +355,8 @@ PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_MA_RMW, {
         ensure(ev->addr == _exp_rmw.addr);
         ensure(ev->size == (BITS >> 3));
         ensure(ev->mo == _exp_rmw.mo);
-        ensure(ev->val.uBITS == _exp_rmw.val.uBITS && "INTERCEPT_AFTER");
-        ensure(ev->old.uBITS == _exp_rmw.old.uBITS && "INTERCEPT_AFTER");
+        ensure(ev->val.uBITS == _exp_rmw.val.uBITS && "CHAIN_INTERCEPT_AFTER");
+        ensure(ev->old.uBITS == _exp_rmw.old.uBITS && "CHAIN_INTERCEPT_AFTER");
     } else
         _tmpl_end();
     ensure(false && "unexpected");
@@ -459,14 +459,14 @@ register_atomicBITS_compare_exchange_val(void)
     tests[test_count++] = test_atomicBITS_compare_exchange_val;
 }
 _tmpl_end();
-PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_MA_CMPXCHG, {
+PS_SUBSCRIBE(CHAIN_INTERCEPT_BEFORE, EVENT_MA_CMPXCHG, {
     struct ma_cmpxchg_event *ev = EVENT_PAYLOAD(ev);
     _tmpl_begin(SUF = [[strong; weak; val]], BITS = [[8; 16; 32; 64]]);
     if (strcmp(ev->func, "atomicBITS_compare_exchange_SUF") == 0) {
         ensure(ev->addr == _exp_cmpxchg.addr);
         ensure(ev->size == (BITS >> 3));
         ensure(ev->mo == _exp_cmpxchg.mo);
-        ensure(ev->val.uBITS == _exp_cmpxchg.val.uBITS && "INTERCEPT_BEFORE");
+        ensure(ev->val.uBITS == _exp_cmpxchg.val.uBITS && "CHAIN_INTERCEPT_BEFORE");
         ensure(ev->old.uBITS == 0);
         ensure(ev->ok == 0);
     } else
@@ -474,15 +474,15 @@ PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_MA_CMPXCHG, {
     ensure(false && "unexpected");
 });
 
-PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_MA_CMPXCHG, {
+PS_SUBSCRIBE(CHAIN_INTERCEPT_AFTER, EVENT_MA_CMPXCHG, {
     struct ma_cmpxchg_event *ev = EVENT_PAYLOAD(ev);
     _tmpl_begin(SUF = [[strong; weak; val]], BITS = [[8; 16; 32; 64]]);
     if (strcmp(ev->func, "atomicBITS_compare_exchange_SUF") == 0) {
         ensure(ev->addr == _exp_cmpxchg.addr);
         ensure(ev->size == (BITS >> 3));
         ensure(ev->mo == _exp_cmpxchg.mo);
-        ensure(ev->val.uBITS == _exp_cmpxchg.val.uBITS && "INTERCEPT_AFTER");
-        ensure(ev->old.uBITS == _exp_cmpxchg.old.uBITS && "INTERCEPT_AFTER");
+        ensure(ev->val.uBITS == _exp_cmpxchg.val.uBITS && "CHAIN_INTERCEPT_AFTER");
+        ensure(ev->old.uBITS == _exp_cmpxchg.old.uBITS && "CHAIN_INTERCEPT_AFTER");
         ensure(ev->ok == _exp_cmpxchg.ok);
     } else
         _tmpl_end();
@@ -510,7 +510,7 @@ register_atomic_FENCE_fence(void)
 }
 _tmpl_end();
 
-PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_MA_FENCE, {
+PS_SUBSCRIBE(CHAIN_INTERCEPT_BEFORE, EVENT_MA_FENCE, {
     struct ma_fence_event *ev = EVENT_PAYLOAD(ev);
     _tmpl_begin(FENCE = [[thread; signal]]);
     if (strcmp(ev->func, "atomic_FENCE_fence") == 0) {
@@ -520,7 +520,7 @@ PS_SUBSCRIBE(INTERCEPT_BEFORE, EVENT_MA_FENCE, {
     ensure(false && "unexpected");
 });
 
-PS_SUBSCRIBE(INTERCEPT_AFTER, EVENT_MA_FENCE, {
+PS_SUBSCRIBE(CHAIN_INTERCEPT_AFTER, EVENT_MA_FENCE, {
     struct ma_fence_event *ev = EVENT_PAYLOAD(ev);
     _tmpl_begin(FENCE = [[thread; signal]]);
     if (strcmp(ev->func, "atomic_FENCE_fence") == 0) {

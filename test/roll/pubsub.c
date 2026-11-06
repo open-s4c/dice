@@ -5,11 +5,11 @@
 
 static int init_count, ready_count, nested_count;
 
-PS_SUBSCRIBE(CHAIN_CONTROL, EVENT_DICE_INIT, {
+PS_SUBSCRIBE(CHAIN_DICE_CONTROL, EVENT_DICE_INIT, {
     ++init_count;
     assert(ps_publish(CHAIN_LOW, EVENT_LOW, NULL, NULL) == PS_STOP_CHAIN);
 })
-PS_SUBSCRIBE(CHAIN_CONTROL, EVENT_DICE_READY, {
+PS_SUBSCRIBE(CHAIN_DICE_CONTROL, EVENT_DICE_READY, {
     ++ready_count;
     assert(ps_publish(CHAIN_LOW, EVENT_LOW, NULL, NULL) == PS_OK);
 })

@@ -3,6 +3,13 @@
 
 #include "templates/public.in"
 
+/* These API scopes exist even without importing a module configuration. */
+static const char *const standard_modules[] = {
+    "dice/mempool",
+    "dice/pubsub",
+    "dice/self",
+};
+
 /* Keep the existing built-in names and take their values from Dice headers. */
 static const struct standard_id {
     const char *name;
@@ -10,6 +17,7 @@ static const struct standard_id {
     bool chain;
 } standard_ids[] = {
     {"ANY_EVENT", ANY_EVENT, false},
+    {"CHAIN_DICE_CONTROL", CHAIN_DICE_CONTROL, true},
     {"CHAIN_CONTROL", CHAIN_CONTROL, true},
     {"EVENT_ANNOTATE_RWLOCK_CREATE", EVENT_ANNOTATE_RWLOCK_CREATE, false},
     {"EVENT_ANNOTATE_RWLOCK_DESTROY", EVENT_ANNOTATE_RWLOCK_DESTROY, false},
@@ -108,6 +116,12 @@ static const struct standard_id {
     {"EVENT_THREAD_EXIT", EVENT_THREAD_EXIT, false},
     {"EVENT_THREAD_CREATE", EVENT_THREAD_CREATE, false},
     {"EVENT_THREAD_JOIN", EVENT_THREAD_JOIN, false},
+    {"CHAIN_INTERCEPT_EVENT", CHAIN_INTERCEPT_EVENT, true},
+    {"CHAIN_INTERCEPT_BEFORE", CHAIN_INTERCEPT_BEFORE, true},
+    {"CHAIN_INTERCEPT_AFTER", CHAIN_INTERCEPT_AFTER, true},
+    {"CHAIN_CAPTURE_EVENT", CHAIN_CAPTURE_EVENT, true},
+    {"CHAIN_CAPTURE_BEFORE", CHAIN_CAPTURE_BEFORE, true},
+    {"CHAIN_CAPTURE_AFTER", CHAIN_CAPTURE_AFTER, true},
     {"INTERCEPT_EVENT", INTERCEPT_EVENT, true},
     {"INTERCEPT_BEFORE", INTERCEPT_BEFORE, true},
     {"INTERCEPT_AFTER", INTERCEPT_AFTER, true},

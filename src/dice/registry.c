@@ -1,10 +1,17 @@
 #include <stddef.h>
 #include <string.h>
 
+#include "chain-names.h"
 #include <dice/compiler.h>
 #include <dice/log.h>
 #include <dice/types.h>
 #include <vsync/spinlock/caslock.h>
+
+#ifdef DICE_PUBSUB_SEALED
+    #define REGISTRY_API_ DICE_HIDE
+#else
+    #define REGISTRY_API_ DICE_WEAK
+#endif
 
 static caslock_t registry_lock_;
 
@@ -104,6 +111,8 @@ STATIC_ASSERT(sizeof(type_names_) / sizeof(struct name) >= MAX_TYPES,
 DICE_HIDE void
 ps_registry_add_(bool chain, uint16_t id, const char *name)
 {
+    if (chain)
+        name = ps_chain_name_normalize_(name);
     uint16_t max       = chain ? MAX_CHAINS : MAX_TYPES;
     const char *what   = chain ? "chain" : "event type";
     struct name *names = chain ? chain_names_ : type_names_;
@@ -146,6 +155,11 @@ ps_registry_lookup_(bool chain, const char *name)
     struct name *names = chain ? chain_names_ : type_names_;
     uint16_t id        = 0;
 
+    if (chain)
+        name = ps_chain_name_normalize_(name);
+    if (!name)
+        return max;
+
     caslock_acquire(&registry_lock_);
     for (; id < max; id++) {
         if (names[id].assigned == NULL)
@@ -161,34 +175,34 @@ ps_registry_lookup_(bool chain, const char *name)
 // external interfaces
 // -----------------------------------------------------------------------------
 
-DICE_WEAK void
+REGISTRY_API_ void
 ps_register_chain(chain_id id, const char *name)
 {
     ps_registry_add_(true, id, name);
 }
 
-DICE_WEAK void
+REGISTRY_API_ void
 ps_register_type(type_id id, const char *name)
 {
     return ps_registry_add_(false, id, name);
 }
 
-DICE_WEAK const char *
+REGISTRY_API_ const char *
 ps_chain_str(chain_id id)
 {
     return ps_registry_get_(true, id);
 }
-DICE_WEAK const char *
+REGISTRY_API_ const char *
 ps_type_str(type_id id)
 {
     return ps_registry_get_(false, id);
 }
-DICE_WEAK chain_id
+REGISTRY_API_ chain_id
 ps_chain_lookup(const char *name)
 {
     return ps_registry_lookup_(true, name);
 }
-DICE_WEAK type_id
+REGISTRY_API_ type_id
 ps_type_lookup(const char *name)
 {
     return ps_registry_lookup_(false, name);
