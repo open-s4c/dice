@@ -1,19 +1,5 @@
-function(run)
-  execute_process(COMMAND ${ARGV} RESULT_VARIABLE result OUTPUT_VARIABLE stdout
-                  ERROR_VARIABLE stderr TIMEOUT 30)
-  if(NOT result STREQUAL "0")
-    message(FATAL_ERROR "${ARGV}: ${result}\n${stdout}${stderr}")
-  endif()
-  set(output "${stdout}${stderr}" PARENT_SCOPE)
-endfunction()
+include("${CMAKE_CURRENT_LIST_DIR}/common.cmake")
 
-function(fails expected)
-  execute_process(COMMAND ${ARGN} RESULT_VARIABLE result OUTPUT_VARIABLE stdout
-                  ERROR_VARIABLE stderr TIMEOUT 30)
-  if(result STREQUAL "0" OR NOT "${stdout}${stderr}" MATCHES "${expected}")
-    message(FATAL_ERROR "Expected '${expected}': ${ARGN}\n${result}\n${stdout}${stderr}")
-  endif()
-endfunction()
 
 set(root "${WORK}/callbacks")
 set(out "${root}/generated")
@@ -40,22 +26,8 @@ set(common [=[
 (module top (number 50) (subscribes (CHAIN_FLOW ANY_EVENT)))
 ]=])
 
-set(flags -std=gnu11 -D_GNU_SOURCE -Wall -Wextra -Werror -fPIC
-          "-I${out}" "-I${SOURCE}/include" "-I${SOURCE}/src/dice"
-          "-I${SOURCE}/deps/libvsync/include")
-set(link -pthread ${DL_LIBS})
+roll_compile_flags(flags "${out}")
 include("${FIXTURES}/core.cmake")
-if(APPLE)
-  set(shared -dynamiclib)
-  set(plugin_flags -undefined dynamic_lookup)
-  set(suffix .dylib)
-  set(preload DYLD_INSERT_LIBRARIES)
-else()
-  set(shared -shared)
-  set(plugin_flags)
-  set(suffix .so)
-  set(preload LD_PRELOAD)
-endif()
 set(lib "${out}/runtime${suffix}")
 set(mod "${out}/plugin${suffix}")
 set(app "${out}/app")
@@ -105,17 +77,17 @@ foreach(default true false)
       run("${CMAKE_COMMAND}" -E env "${preload}=${lib}:${mod}" "${app}")
       if(NOT default)
         if(checked)
-          fails("undeclared subscribes" "${CMAKE_COMMAND}" -E env
+          expect_failure("undeclared subscribes" "${CMAKE_COMMAND}" -E env
                 "${preload}=${lib}:${mod}" "${app}" extension)
         else()
           # PS_INVALID is nonzero; no callbacks may be registered in the tail.
-          fails("" "${CMAKE_COMMAND}" -E env
+          expect_failure("" "${CMAKE_COMMAND}" -E env
                 "${preload}=${lib}:${mod}" "${app}" extension)
         endif()
       endif()
       run("${CC}" ${build_flags} -DOMIT_CLOSED -c
           "${FIXTURES}/callbacks/handlers.c" -o "${out}/partial.o")
-      fails("dice_slot_" "${CC}" ${build_flags} "${out}/dice.o"
+      expect_failure("dice_slot_" "${CC}" ${build_flags} "${out}/dice.o"
             ${core_objects} "${out}/partial.o" "${FIXTURES}/callbacks/main.c"
             ${link} -o "${out}/missing")
     endforeach()
@@ -127,19 +99,19 @@ foreach(config "(callbacks true) (callbacks false)"
                "(module a (callbacks true)) (module a (callbacks false))"
                "(module a (callbacks true) (callbacks false))")
   file(WRITE "${root}/bad.dice" "${config}\n")
-  fails("duplicate" "${DICE}" --check "${root}/bad.dice")
+  expect_failure("duplicate" "${DICE}" --check "${root}/bad.dice")
 endforeach()
 foreach(config "(callbacks yes)" "(module a (callbacks yes))"
                "(module a (callbacks yes))")
   file(WRITE "${root}/bad.dice" "${config}\n")
-  fails("true or false" "${DICE}" --check "${root}/bad.dice")
+  expect_failure("true or false" "${DICE}" --check "${root}/bad.dice")
 endforeach()
 
 # Only callbacks is accepted, including within modules and slots.
 foreach(config "(plugins true)" "(module a (plugins true))"
                "(module a (plugins true))")
   file(WRITE "${root}/bad.dice" "${config}\n")
-  fails("unknown (form|slot field) plugins" "${DICE}" --check "${root}/bad.dice")
+  expect_failure("unknown (form|slot field) plugins" "${DICE}" --check "${root}/bad.dice")
 endforeach()
 
 # Resolved policy participates in ABI validation even with identical IDs/routes.

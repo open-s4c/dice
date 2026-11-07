@@ -45,6 +45,12 @@
 #include <vsync/spinlock/caslock.h>
 #include <vsync/stack/quack.h>
 
+#ifdef DICE_SELF_SEALED
+    #define SELF_API_ DICE_HIDE
+#else
+    #define SELF_API_ DICE_WEAK
+#endif
+
 #ifndef container_of
     #define container_of(A, T, M) ((T *)((((size_t)(A)) - offsetof(T, M))))
 #endif
@@ -247,44 +253,44 @@ self_tls_(struct metadata *md, const void *global, size_t size)
     return ptr;
 }
 
-DICE_WEAK thread_id
+SELF_API_ thread_id
 self_id(struct metadata *md)
 {
     return self_id_(md);
 }
 
-DICE_WEAK enum self_guard
+SELF_API_ enum self_guard
 self_guard_get(struct metadata *md)
 {
     return self_guard_get_(md);
 }
 
-DICE_WEAK bool
+SELF_API_ bool
 self_retired(struct metadata *md)
 {
     return self_retired_(md);
 }
 
-DICE_WEAK void *
+SELF_API_ void *
 self_tls_get(struct metadata *md, uintptr_t item_key)
 {
     return self_tls_get_(md, item_key);
 }
 
-DICE_WEAK void
+SELF_API_ void
 self_tls_set(struct metadata *md, uintptr_t item_key, void *ptr,
              struct tls_dtor dtor)
 {
     self_tls_set_(md, item_key, ptr, dtor);
 }
 
-DICE_WEAK void *
+SELF_API_ void *
 self_tls(struct metadata *md, const void *global, size_t size)
 {
     return self_tls_(md, global, size);
 }
 
-DICE_WEAK struct metadata *
+SELF_API_ struct metadata *
 self_md(void)
 {
     return (struct metadata *)get_self_();
@@ -489,7 +495,14 @@ retire_self_(struct self *self)
 //  pubsub handler
 // -----------------------------------------------------------------------------
 
-static void
+/* Keep the capture chain constant when dispatch is emitted at the call site. */
+#if defined(DICE_ROLLED) && !DICE_CALLBACKS && !DICE_CHECK_ROUTES
+    #define SELF_PUBLISH_INLINE_ inline __attribute__((always_inline))
+#else
+    #define SELF_PUBLISH_INLINE_
+#endif
+
+static SELF_PUBLISH_INLINE_ void
 self_publish_(const chain_id chain, const type_id type, void *event,
               struct self *self)
 {
@@ -504,7 +517,7 @@ self_publish_(const chain_id chain, const type_id type, void *event,
     self->guard -= 2;
 }
 
-static enum ps_err
+static SELF_PUBLISH_INLINE_ enum ps_err
 self_handle_before_(const chain_id chain, const type_id type, void *event,
                     struct self *self)
 {
@@ -522,7 +535,7 @@ self_handle_before_(const chain_id chain, const type_id type, void *event,
     return PS_STOP_CHAIN;
 }
 
-static enum ps_err
+static SELF_PUBLISH_INLINE_ enum ps_err
 self_handle_after_(const chain_id chain, const type_id type, void *event,
                    struct self *self)
 {
@@ -541,7 +554,7 @@ self_handle_after_(const chain_id chain, const type_id type, void *event,
     return PS_STOP_CHAIN;
 }
 
-static enum ps_err
+static SELF_PUBLISH_INLINE_ enum ps_err
 self_handle_event_(const chain_id chain, const type_id type, void *event,
                    struct self *self)
 {
@@ -559,13 +572,14 @@ self_handle_event_(const chain_id chain, const type_id type, void *event,
     return PS_STOP_CHAIN;
 }
 
+/* Thread recovery, allocation and initialization must not inflate the cached
+ * lookup that runs on every intercepted event. */
 static __attribute__((noinline)) struct self *
 get_or_create_self_slow_(bool publish)
 {
     struct self *self = quack_search_(pthread_self());
-    if (self) {
+    if (self)
         return self;
-    }
 
     self = create_self_();
 
@@ -580,9 +594,8 @@ static inline struct self *
 get_or_create_self_(bool publish)
 {
     struct self *self = thread_cache_get_();
-    if (likely(self)) {
+    if (likely(self))
         return self;
-    }
     return get_or_create_self_slow_(publish);
 }
 

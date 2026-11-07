@@ -30,7 +30,7 @@ file(MAKE_DIRECTORY "${first}/app" "${first}/dice" "${second}/app")
 set(body [=[(import (dice self) (dice malloc) (dice pthread_create))
 (module observer (after (dice self))
   (subscribes (CAPTURE_EVENT EVENT_THREAD_START)))
-
+(prioritize (events EVENT_THREAD_START) (chains CAPTURE_EVENT INTERCEPT_EVENT))
 ]=])
 file(WRITE "${root}/bare.dice" "${body}")
 file(WRITE "${root}/versioned.dice" "(schema 1)\n${body}\n")
@@ -64,6 +64,49 @@ run("${DICE}" --check "${root}/search.dice" -I "${first}")
 run("${DICE}" --graph -I "${first}" "${root}/search.dice")
 run("${DICE}" "${root}/search.dice" -I "${first}" -o "${root}/search")
 file(WRITE "${first}/dice/self.dice" "(module replacement)\n")
+file(WRITE "${root}/override.dice" "(import (dice self))\n")
+run("${DICE}" --query -I "${first}" "${root}/override.dice")
+contains("slot dice/replacement")
+if(output MATCHES "slot dice/self")
+  message(FATAL_ERROR "Built-in import path took precedence over -I")
+endif()
+
+# Diamond imports and symlink aliases are loaded once by canonical file path.
+# Includes remain relative to the importing file. Priorities are processed in
+# place, and a repeated import must not restore an already overridden policy.
+file(WRITE "${first}/app/settings.dice" [=[(events EVENT_LIBRARY)
+(prioritize (chains CAPTURE_EVENT))
+]=])
+file(WRITE "${first}/app/common.dice" "(include \"settings.dice\")\n(module common)\n")
+file(CREATE_LINK "${first}/app/common.dice" "${first}/app/alias.dice" SYMBOLIC)
+file(WRITE "${first}/app/left.dice" "(import (app common))\n")
+file(WRITE "${first}/app/right.dice" "(import (app common))\n")
+file(WRITE "${root}/diamond.dice" [=[(import (app left) (app right))
+(prioritize (events EVENT_LIBRARY))
+(import (app alias))
+]=])
+run("${DICE}" -I "${first}" --query "${root}/diamond.dice")
+contains("slot app/common 1")
+contains("prioritize events 128\nprioritize chains 1 4 2 3 5 6 0")
+run("${DICE}" -I "${first}" "${root}/diamond.dice" -o "${root}/diamond"
+    --depfile "${root}/diamond.d")
+file(READ "${root}/diamond.d" dependencies)
+string(REPLACE "\\ " " " dependencies "${dependencies}")
+foreach(dependency left right common settings)
+  string(FIND "${dependencies}" "/app/${dependency}.dice" position)
+  if(position LESS 0)
+    message(FATAL_ERROR "Missing import/include dependency: ${dependency}")
+  endif()
+endforeach()
+file(WRITE "${root}/override.dice" [=[(prioritize (events EVENT_LIBRARY))
+(import (app common))
+]=])
+run("${DICE}" -I "${first}" --query "${root}/override.dice")
+contains("prioritize chains 4")
+if(output MATCHES "prioritize events")
+  message(FATAL_ERROR "Imported priority did not replace the earlier form")
+endif()
+
 foreach(invalid "(import)" "(import ())" "(import app)" "(import (app \"types\"))"
                 "(import (../app types))" "(import (app/types))"
                 "(import (app missing))")
@@ -95,9 +138,6 @@ foreach(invalid
     "(dice (schema 1) (callbacks false))"
     "(runtime (callbacks false))"
     "(plugins false)"
-    "(prioritize (chains CAPTURE_EVENT))"
-    "(module a (option inline))"
-    "(seal _)"
 )
   file(WRITE "${root}/unsupported.dice" "${invalid}")
   fails("unknown form|unknown slot field" "${DICE}" --check "${root}/unsupported.dice")

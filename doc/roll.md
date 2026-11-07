@@ -88,6 +88,108 @@ Built-in aliases, such as `EVENT_THREAD_CREATE` and `EVENT_PTHREAD_CREATE`,
 retain the same numeric ID. Name lookups and registration accept either
 spelling; ID-to-name functions select one canonical spelling for diagnostics.
 
+## Callbacks, sealing, and inlining
+
+These controls make separate decisions:
+
+| Control | Effect |
+| --- | --- |
+| `(callbacks false)` | Requires linked handlers in its scope; does not hide component APIs. |
+| `(seal (dice mempool))` | Disables callbacks in that scope and makes the built-in allocator API hidden and strong. |
+| `(option inline)` | Requests handler inlining; does not change callback availability or API visibility. |
+
+Place `seal` directives at the top level, using absolute namespace, module, or
+slot references. `(seal _)` seals the whole configuration. Policies apply to
+descendants, including imported namespaces, and cannot be undone by a nested
+`callbacks true`. Sealing `dice/pubsub` disables callbacks throughout the
+configuration. Sealing `dice/self` or `dice/mempool` affects those components.
+
+```scheme
+(import (dice self))
+(module app
+  (module cache (slot hot) (slot cold)))
+(seal (dice mempool) (app cache))
+```
+
+Generated flags use complete paths: this example defines
+`DICE_MEMPOOL_SEALED`, `APP_CACHE_SEALED`, `APP_CACHE_HOT_SEALED`, and
+`APP_CACHE_COLD_SEALED`. User modules can inspect their own flags to implement
+visibility policies; the generator does not automatically hide arbitrary user
+APIs. Conflicting flag, event, chain, and slot macro names are rejected.
+
+Sealed built-in APIs are no longer exported from a shared runtime and cannot
+be overridden by a second definition. Separately linked consumers and plugins
+that use those APIs must instead be linked into the same runtime or avoid the
+sealed component. Sealing changes the configuration fingerprint: rebuild the
+runtime and its consumers together.
+
+An inline option on a module applies to its implicit slot. Named children opt
+in separately:
+
+```scheme
+(module observer
+  (option inline)
+  (subscribes (CAPTURE_EVENT EVENT_MA_READ))
+  (slot stats (subscribes (CAPTURE_EVENT ANY_EVENT)))
+```
+
+Here `SLOT_OBSERVER` requests inlining; `SLOT_OBSERVER_STATS` does not. Inline
+wrappers retain strong external definitions in C and C++, including without
+LTO, so duplicate handlers still fail to link. Cross-translation-unit inlining
+requires LTO. The handler remains callable in unoptimized builds.
+C++ subscribers must give the generated header and handler definitions C
+linkage (`extern "C" { ... }`) to match the generated C dispatcher.
+
+The generated `DICE_HEADER_DISPATCH` capability is enabled only when the entire
+configuration has no callback-enabled subscriptions or extensions and route
+checking is disabled. It does not require API sealing. One callback-enabled
+subscription elsewhere disables this optimization globally. Eligible linked
+modules dispatch constant-chain publications at the call site; dynamic chains
+use the shared prioritized dispatcher.
+
+Inline slots use a conservative nested-publication path to avoid mandatory
+inlining cycles. If any subscription on a chain belongs to an inline slot,
+nested publications from inline slots use the shared dispatcher for that
+whole chain, including other events and ordinary subscribers. Adding an inline
+slot can therefore change another handler's generated call path without
+changing handler order or event delivery.
+
+## Dispatch priorities
+
+Priorities select fast dispatch branches, independently of the slot ordering
+established by `before` and `after`:
+
+```scheme
+(prioritize
+  (chains INTERCEPT_EVENT CAPTURE_EVENT)
+  (events EVENT_MA_READ EVENT_MA_WRITE))
+```
+
+The first field selects chain-first or event-first dispatch; reverse the fields
+for event-first selection. Lists preserve their specified order. Unlisted
+chains and events retain normal dispatch and wildcard behavior. Without a
+chain list, the default chain preference is `1, 4, 2, 3, 5, 6, 0`; without an
+event list, there is no event preference. An explicit empty list removes that
+preference. Priorities and inline options change code shape, not the runtime
+configuration fingerprint.
+
+Each processed `prioritize` form replaces the complete preceding policy,
+including field order and omitted lists. Forms are processed in encounter
+order, including inside imports and includes:
+
+```scheme
+(include "defaults.dice")      ; may set a chain-first policy
+(import (vendor policy))        ; may replace it with an event-first policy
+(prioritize (chains CAPTURE_EVENT)) ; final policy has no event preference
+```
+
+`include` resolves quoted paths relative to the containing file and processes
+them each time. Imports search `-I` roots in order and load each resolved file
+once per scope; repeating an import does not replay its policy. Directory
+imports merge roots, select the first file of each name, and process immediate
+`.dice` files in sorted filename order. Put application priorities after
+imports/includes when they should take precedence over library defaults.
+
 ## Use the generator directly
 
 From the Dice checkout, build the native tool explicitly when tests and

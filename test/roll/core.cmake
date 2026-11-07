@@ -3,7 +3,7 @@ function(build_core result generated)
   get_filename_component(directory "${generated}" DIRECTORY)
   get_filename_component(name "${generated}" NAME_WE)
   set(objects)
-  foreach(core pubsub mempool pubsub-box)
+  foreach(core pubsub mempool)
     set(object "${directory}/${core}.o")
     run("${CC}" ${flags} ${ARGN} -DDICE_ROLLED=1 -DDICE_ROLL_RUNTIME
         -DDICE_MODULE_SLOT=0 "-I${SOURCE}/include"
