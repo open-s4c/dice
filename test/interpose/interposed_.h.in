@@ -6,6 +6,9 @@ $_dl;
 $_dl; // -----------------------------------------------------------------------
 $_dl; // malloc and co
 $_dl; // -----------------------------------------------------------------------
+$_map(MM_RETURN_malloc_usable_size, size_t);
+$_map(MM_PARAMS_malloc_usable_size, __typeof__(E_malloc_usable_size.ptr) ptr);
+$_map(MM_ARGS_malloc_usable_size, ptr);
 $_map(MM_RETURN_malloc, void *);
 $_map(MM_PARAMS_malloc, size_t size);
 $_map(MM_ARGS_malloc, size);

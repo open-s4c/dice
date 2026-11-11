@@ -3,6 +3,10 @@
 
 set(INCL_malloc '<dice/events/malloc.h>')
 set(FUNS_malloc malloc calloc realloc free posix_memalign aligned_alloc)
+if(NOT APPLE)
+  list(APPEND INCL_malloc '<malloc.h>')
+  list(APPEND FUNS_malloc malloc_usable_size)
+endif()
 
 set(INCL_memcpy '<dice/events/memcpy.h>')
 set(FUNS_memcpy memcpy memmove)
@@ -90,6 +94,7 @@ foreach(MOD ${MODS})
   set(TARGET ${MOD}_test)
   set(TARGET_SRC ${CMAKE_CURRENT_BINARY_DIR}/${TARGET}.c)
   string(REPLACE ";" "\;" FUNS_${MOD} "${FUNS_${MOD}}")
+  string(REPLACE ";" "\;" INCL_${MOD} "${INCL_${MOD}}")
   add_custom_command(
     OUTPUT ${TARGET_SRC}
     COMMAND
@@ -118,6 +123,9 @@ foreach(MOD ${MODS})
   add_executable(${TARGET} ${CMAKE_CURRENT_BINARY_DIR}/${TARGET}.c)
   add_dependencies(${TARGET} expand-test-${MOD})
   target_link_libraries(${TARGET} PRIVATE dice.h dice tsano pthread)
+  if(MOD STREQUAL "malloc" AND CMAKE_SYSTEM_NAME STREQUAL "NetBSD")
+    target_link_libraries(${TARGET} PRIVATE jemalloc)
+  endif()
   target_compile_options(
     ${TARGET} PRIVATE -fno-builtin-memcpy -fno-builtin-memset
                       -fno-builtin-memmmove)
