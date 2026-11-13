@@ -42,6 +42,7 @@ static const struct standard_id {
     {"EVENT_FREE", EVENT_FREE, false},
     {"EVENT_POSIX_MEMALIGN", EVENT_POSIX_MEMALIGN, false},
     {"EVENT_ALIGNED_ALLOC", EVENT_ALIGNED_ALLOC, false},
+    {"EVENT_MALLOC_USABLE_SIZE", EVENT_MALLOC_USABLE_SIZE, false},
     {"EVENT_MA_READ", EVENT_MA_READ, false},
     {"EVENT_MA_WRITE", EVENT_MA_WRITE, false},
     {"EVENT_MA_AREAD", EVENT_MA_AREAD, false},

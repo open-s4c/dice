@@ -56,8 +56,9 @@ event_init(void *ptr, size_t n)
         buf[i] = rand() % 256;
 }
 
-static void *symbol;
-static bool called;
+/* Subscribers can run during direct calls to libc leaf functions. */
+static void *volatile symbol;
+static volatile bool called;
 /* we need to declare this as noinline, otherwise the optimization of the
  * compiler gets rid of the symbol. */
 static __attribute__((noinline)) void
@@ -189,7 +190,7 @@ test_FOO(void)
     E_FOO.ret = E_FOO.__FOO_ret_SAME_AS;
     $__end();
 
-    /* call FOO with arguments */
+    /* Call the intercepted symbol directly, including libc leaf functions. */
     enable(fake_FOO);
     $_returns MM_RETURN_FOO $.!? ret =                                   //
                                  FOO(                                    //

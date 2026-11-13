@@ -10,12 +10,13 @@
 #include <dice/compiler.h>
 
 #ifndef DICE_ROLLED
-    #define EVENT_MALLOC         50
-    #define EVENT_CALLOC         51
-    #define EVENT_REALLOC        52
-    #define EVENT_FREE           53
-    #define EVENT_POSIX_MEMALIGN 54
-    #define EVENT_ALIGNED_ALLOC  55
+    #define EVENT_MALLOC             50
+    #define EVENT_CALLOC             51
+    #define EVENT_REALLOC            52
+    #define EVENT_FREE               53
+    #define EVENT_POSIX_MEMALIGN     54
+    #define EVENT_ALIGNED_ALLOC      55
+    #define EVENT_MALLOC_USABLE_SIZE 56
 #endif
 
 struct malloc_event {
@@ -62,6 +63,21 @@ struct aligned_alloc_event {
     size_t size;
     void *ret;
     void *(*func)(size_t, size_t);
+};
+
+struct malloc_usable_size_event {
+    const void *pc;
+#if defined(__NetBSD__)
+    const void *ptr;
+#else
+    void *ptr;
+#endif
+    size_t ret;
+#if defined(__NetBSD__)
+    size_t (*func)(const void *);
+#else
+    size_t (*func)(void *);
+#endif
 };
 
 #endif /* DICE_MALLOC_H */

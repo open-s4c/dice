@@ -53,6 +53,25 @@ right building blocks when writing interceptors or subscribers.
 - `compiler.h`: shared compiler attributes (`DICE_CTOR`, `DICE_HIDE`, `likely`,
   etc.) used across Dice headers.
 
+### Subscriber state and libc leaf attributes
+
+Some libc declarations, including glibc's `malloc_usable_size`, carry the
+[`leaf` attribute](https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-leaf-function-attribute).
+The compiler can assume that such a call does not invoke callbacks in the
+calling translation unit, even when an interceptor actually publishes events
+there. Ordinary static state shared between application code and a subscriber
+in the same translation unit can therefore be cached or reordered across a
+direct libc call. This applies to both legacy and rolled runtimes; changing the
+runtime cannot remove an attribute used when compiling the application's call.
+
+Make that shared state `volatile` so direct calls observe subscriber updates,
+for example `static volatile size_t observed_size;` for a single-threaded
+subscriber that records `malloc_usable_size` results. The same applies to state
+written by the caller and read by the subscriber. For state shared across
+threads, use atomics or locks as well: `volatile` provides compiler visibility,
+not thread synchronization. GCC documents volatile static state as a remedy
+for callbacks introduced by interposition on leaf functions.
+
 ## Chains and Events at a Glance
 
 When writing a handler:
