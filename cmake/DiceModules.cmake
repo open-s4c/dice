@@ -118,7 +118,7 @@ function(dice_add_interpose_module MODULE)
 
   install(
     TARGETS ${TARGET}
-    DESTINATION lib/dice)
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/dice)
 
   set(MODULE_TARGETS ${TARGET})
 
@@ -145,6 +145,12 @@ function(dice_add_interpose_module MODULE)
       ${OBJECT_TARGET}
       PRIVATE
         dice.h)
+    # add_dice_mods imports these sources into a generated Dice Roll runtime.
+    # Propagate any per-module build options through the catalog target.
+    set_target_properties(
+      ${OBJECT_TARGET}
+      PROPERTIES DICE_MODULE_OPTIONS "${MOD_COMPILE_OPTIONS}")
+
 
     if(MOD_INCLUDE_DIRECTORIES)
       target_include_directories(

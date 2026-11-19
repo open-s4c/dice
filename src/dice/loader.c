@@ -27,7 +27,8 @@ void ps_init_();
 #ifndef DICE_DISABLE_PUBSUB_CTOR_INIT
 /* Force pubsub init in a constructor without priority, ensuring this
  * constructor is last */
-static void __attribute__((constructor)) init_()
+static void __attribute__((constructor))
+init_()
 {
     ps_init_();
 }
@@ -58,7 +59,7 @@ strdup_(const char *str)
     return strncpy(copy, str, len);
 }
 
-PS_SUBSCRIBE(CHAIN_CONTROL, EVENT_DICE_INIT, {
+PS_SUBSCRIBE(CHAIN_DICE_CONTROL, EVENT_DICE_INIT, {
     static bool done_ = false;
     if (done_)
         return PS_OK;
