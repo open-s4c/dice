@@ -11,8 +11,8 @@
 #define $__begin(...)
 #define $__end(...)
 #define $_include(...)
-#define MM_FOO_RETURN int
-#define MM_FOO_PARAMS
+#define MM_RETURN_FOO int
+#define MM_PARAMS_FOO
 #define MAKE_UPCASE 1
 #define PARAM       int x
 int FOO(int);
@@ -56,8 +56,9 @@ event_init(void *ptr, size_t n)
         buf[i] = rand() % 256;
 }
 
-static void *symbol;
-static bool called;
+/* Subscribers can run during direct calls to libc leaf functions. */
+static void *volatile symbol;
+static volatile bool called;
 /* we need to declare this as noinline, otherwise the optimization of the
  * compiler gets rid of the symbol. */
 static __attribute__((noinline)) void
@@ -82,10 +83,10 @@ $_begin(FOO = [[foo]]);
 /* Expects struct to match this:
  *
  * struct FOO_event {
- *     $__begin(PPP = MM_FOO_PARAMS);
+ *     $__begin(PPP = MM_PARAMS_FOO);
  *     PPP;
  *     $__end();
- *     $_returns MM_FOO_RETURN $.!? ret;
+ *     $_returns MM_RETURN_FOO $.!? ret;
  * };
  */
 struct FOO_event E_FOO;
@@ -93,17 +94,17 @@ $_end();
 
 /* mock implementation of functions */
 $_begin(FOO = [[foo]]);
-MM_FOO_RETURN
-fake_FOO(MM_FOO_PARAMS)
+MM_RETURN_FOO
+fake_FOO(MM_PARAMS_FOO)
 {
     /* check that every argument is as expected (unless should be skipped). */
-    $__begin(AA = MM_FOO_ARGS);
+    $__begin(AA = MM_ARGS_FOO);
     $__UNLESS_FOO_AA;
     ensure(AA == E_FOO.AA);
     $__end();
 
     /* skipped arguments should be void-cast to silent compiler warnings. */
-    $__begin(AA = MM_FOO_ARGS);
+    $__begin(AA = MM_ARGS_FOO);
     $__WHEN_FOO_AA;
     (void)AA;
     $__end();
@@ -114,7 +115,7 @@ fake_FOO(MM_FOO_PARAMS)
     called = true;
 
     /* return expected value */
-    $_returns MM_FOO_RETURN $.? return E_FOO.ret;
+    $_returns MM_RETURN_FOO $.? return E_FOO.ret;
 }
 $_end();
 
@@ -122,13 +123,13 @@ $_end();
     ensure(memcmp(&ev->field, &(E)->field, sizeof(__typeof((E)->field))) == 0);
 
 $_begin(FOO = [[foo]]);
-PS_SUBSCRIBE(INTERCEPT_BEFORE, MAKE_UPCASE, {
+PS_SUBSCRIBE(CHAIN_INTERCEPT_BEFORE, MAKE_UPCASE, {
     if (!enabled())
         return PS_STOP_CHAIN;
 
     /* check fields match expectations */
     struct FOO_event *ev = EVENT_PAYLOAD(ev);
-    $__begin(AA = MM_FOO_ARGS);
+    $__begin(AA = MM_ARGS_FOO);
     $__UNLESS_FOO_AA; // should skip check?
     ASSERT_FIELD_EQ(&E_FOO, AA);
     $__end();
@@ -147,12 +148,12 @@ PS_SUBSCRIBE(INTERCEPT_BEFORE, MAKE_UPCASE, {
     $__end();
 
     /* ensure fields are the same if they should */
-    $__begin(AA = MM_FOO_ARGS);
+    $__begin(AA = MM_ARGS_FOO);
     E_FOO.AA = E_FOO.__FOO_AA_SAME_AS;
     $__end();
 
     /* manual memcpy to avoid recursion */
-    $__begin(AA = MM_FOO_ARGS);
+    $__begin(AA = MM_ARGS_FOO);
     ev->AA = E_FOO.AA;
     $__end();
 
@@ -160,15 +161,15 @@ PS_SUBSCRIBE(INTERCEPT_BEFORE, MAKE_UPCASE, {
     ev->func = fake_FOO;
 })
 
-PS_SUBSCRIBE(INTERCEPT_AFTER, MAKE_UPCASE, {
+PS_SUBSCRIBE(CHAIN_INTERCEPT_AFTER, MAKE_UPCASE, {
     if (!enabled())
         return PS_STOP_CHAIN;
     struct FOO_event *ev = EVENT_PAYLOAD(ev);
-    $__begin(AA = MM_FOO_ARGS);
+    $__begin(AA = MM_ARGS_FOO);
     $__UNLESS_FOO_AA; // should skip check?
     ASSERT_FIELD_EQ(&E_FOO, AA);
     $__end();
-    $_returns MM_FOO_RETURN $.? ASSERT_FIELD_EQ(&E_FOO, ret);
+    $_returns MM_RETURN_FOO $.? ASSERT_FIELD_EQ(&E_FOO, ret);
 })
 $_end();
 
@@ -182,23 +183,23 @@ test_FOO(void)
     event_init(&E_FOO, sizeof(struct FOO_event));
 
     /* ensure that fields that must be equal are actually equal */
-    $__begin(AA = MM_FOO_ARGS);
+    $__begin(AA = MM_ARGS_FOO);
     E_FOO.AA = E_FOO.__FOO_AA_SAME_AS;
     $__end();
     $__begin(AA = FOO);
     E_FOO.ret = E_FOO.__FOO_ret_SAME_AS;
     $__end();
 
-    /* call FOO with arguments */
+    /* Call the intercepted symbol directly, including libc leaf functions. */
     enable(fake_FOO);
-    $_returns MM_FOO_RETURN $.!? ret =                                   //
+    $_returns MM_RETURN_FOO $.!? ret =                                   //
                                  FOO(                                    //
-                                     $__begin(AA = MM_FOO_ARGS $__kill), //
+                                     $__begin(AA = MM_ARGS_FOO $__kill), //
                                      E_FOO.AA,                           //
                                      $__end(),                           //
                                  );
     ensure(called);
-    $_returns MM_FOO_RETURN $.? ensure(ret == E_FOO.ret);
+    $_returns MM_RETURN_FOO $.? ensure(ret == E_FOO.ret);
     disable();
 }
 $_end();

@@ -5,6 +5,10 @@
 #ifndef DICE_COMPILER_H
 #define DICE_COMPILER_H
 
+#if defined(DICE_ROLLED) && !defined(DICE_GENERATED_H)
+    #error "DICE_ROLLED requires dice/roll.h or generated dice.h first"
+#endif
+
 #include <stddef.h>
 
 #ifndef DICE_XTOR_PRIO

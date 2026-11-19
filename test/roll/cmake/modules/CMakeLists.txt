@@ -1,0 +1,5 @@
+foreach(runtime foo bar)
+  add_library(${runtime}-observer.o OBJECT ../observer.c)
+  target_link_libraries(${runtime}-observer.o PRIVATE ${runtime}-dice.h)
+  target_link_libraries(${runtime} PRIVATE ${runtime}-observer.o)
+endforeach()

@@ -12,6 +12,12 @@
 #include <dice/module.h>
 #include <vsync/spinlock/caslock.h>
 
+#ifdef DICE_MEMPOOL_SEALED
+    #define MEMPOOL_API_ DICE_HIDE
+#else
+    #define MEMPOOL_API_ DICE_WEAK
+#endif
+
 #ifdef DICE_MEMPOOL_USE_MMAP
     #include <sys/mman.h>
 #endif
@@ -106,6 +112,7 @@ mempool_init(size_t cap)
     mp_.pool.memory = REAL_FUNCV(malloc, 0)(cap);
     if (mp_.pool.memory == NULL)
         log_fatal("could not create mempool");
+    memset(mp_.pool.memory, 0, cap);
 #endif
     // caslock already initialized with 0
 }
@@ -126,7 +133,7 @@ mempool_alloc_(size_t n)
     return mempool_aligned_alloc_(1, n);
 }
 
-DICE_WEAK void *
+MEMPOOL_API_ void *
 mempool_alloc(size_t n)
 {
     return mempool_alloc_(n);
@@ -146,7 +153,7 @@ mempool_realloc_(void *ptr, size_t size)
     return p;
 }
 
-DICE_WEAK void *
+MEMPOOL_API_ void *
 mempool_realloc(void *ptr, size_t size)
 {
     return mempool_realloc_(ptr, size);
@@ -172,7 +179,7 @@ mempool_free_(void *ptr)
     caslock_release(&mp->lock);
 }
 
-DICE_WEAK void
+MEMPOOL_API_ void
 mempool_free(void *ptr)
 {
     return mempool_free_(ptr);
@@ -225,7 +232,7 @@ out:
     return NULL;
 }
 
-DICE_WEAK void *
+MEMPOOL_API_ void *
 mempool_aligned_alloc(size_t alignment, size_t n)
 {
     return mempool_aligned_alloc_(alignment, n);

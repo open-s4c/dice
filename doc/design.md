@@ -204,13 +204,13 @@ when all subscribers of a chain have learned about an event, etc.
 app thread
    │ intercepts pthread_mutex_lock
    ▼
-interceptor publishes INTERCEPT_BEFORE (EVENT_MUTEX_LOCK)
+interceptor publishes CHAIN_INTERCEPT_BEFORE (EVENT_MUTEX_LOCK)
    │
    ▼
-Self module republishes CAPTURE_BEFORE + metadata
+Self module republishes CHAIN_CAPTURE_BEFORE + metadata
    │
    ▼
-subscriber handles CAPTURE_BEFORE (EVENT_MUTEX_LOCK)
+subscriber handles CHAIN_CAPTURE_BEFORE (EVENT_MUTEX_LOCK)
    │
    └─► optional republish or STOP_CHAIN
 ```
@@ -223,22 +223,22 @@ propagate between chains.
 
 The meaning of `chain_id` and `type_id` is given by convention between publishers
 and subscribers.  The Pubsub system is oblivious to their meaning.  The header
-file `<dice/intercept.h>` defines three chains: `INTERCEPT_BEFORE`,
-`INTERCEPT_AFTER`, `INTERCEPT_EVENT`. All Dice modules that intercept syscalls
+file `<dice/intercept.h>` defines three chains: `CHAIN_INTERCEPT_BEFORE`,
+`CHAIN_INTERCEPT_AFTER`, `CHAIN_INTERCEPT_EVENT`. All Dice modules that intercept syscalls
 and other functions publish events to these three chains following this
 convention:
 
-- `INTERCEPT_BEFORE`: a function/operation is about to be
+- `CHAIN_INTERCEPT_BEFORE`: a function/operation is about to be
   invoked. The exact function or operation is typically reflected in the
-  `type_id` or inside the event payload. A publication to `INTERCEPT_BEFORE`
-  must be followed by a publication to `INTERCEPT_AFTER`.
+  `type_id` or inside the event payload. A publication to `CHAIN_INTERCEPT_BEFORE`
+  must be followed by a publication to `CHAIN_INTERCEPT_AFTER`.
 
-- `INTERCEPT_AFTER`: a function/operation has been called and has
-  returned. A publication to `INTERCEPT_AFTER` must follow a publication to
-  `INTERCEPT_BEFORE`.
+- `CHAIN_INTERCEPT_AFTER`: a function/operation has been called and has
+  returned. A publication to `CHAIN_INTERCEPT_AFTER` must follow a publication to
+  `CHAIN_INTERCEPT_BEFORE`.
 
-- `INTERCEPT_EVENT`: a function/operation is being called. Publications to
-  `INTERCEPT_EVENT` represent the function/operation itself.
+- `CHAIN_INTERCEPT_EVENT`: a function/operation is being called. Publications to
+  `CHAIN_INTERCEPT_EVENT` represent the function/operation itself.
 
 A module that publishes to one of these intercept chains is called
 *interceptor*.
@@ -249,14 +249,14 @@ of `malloc`.  The interceptor code would look similar to this:
 ```c
 void *malloc(size_t n) {
     struct malloc_event ev = {.n = n};
-    PS_PUBLISH(INTERCEPT_BEFORE, EVENT_MALLOC, &ev, NULL);
+    PS_PUBLISH(CHAIN_INTERCEPT_BEFORE, EVENT_MALLOC, &ev, NULL);
     ev.ret = REAL(malloc, n); // call the actual implementation
-    PS_PUBLISH(INTERCEPT_AFTER, EVENT_MALLOC, &ev, NULL);
+    PS_PUBLISH(CHAIN_INTERCEPT_AFTER, EVENT_MALLOC, &ev, NULL);
     return ev.ret;
 }
 ```
 
-The publications to `INTERCEPT_BEFORE` and `INTERCEPT_AFTER` happen around the
+The publications to `CHAIN_INTERCEPT_BEFORE` and `CHAIN_INTERCEPT_AFTER` happen around the
 call to the real malloc function.
 
 Consider another example: `__tsan_read8`. Calls to this function are injected
@@ -269,15 +269,15 @@ events like this:
 ```c
 void __tsan_read8(void *addr) {
     struct memaccess_event ev = {.addr = addr, .size = 8};
-    PS_PUBLISH(INTERCEPT_EVENT, EVENT_MA_READ, &ev, NULL);
+    PS_PUBLISH(CHAIN_INTERCEPT_EVENT, EVENT_MA_READ, &ev, NULL);
 }
 ```
 
 Here there is no reason to publish multiple events because there is no real
-action occuring inside `__tsan_read8`. In such, we use `INTERCEPT_EVENT`.
+action occuring inside `__tsan_read8`. In such, we use `CHAIN_INTERCEPT_EVENT`.
 
 Usually, interceptors either publish an event to the chain pair
-`INTERCEPT_BEFORE` and `INTERCEPT_AFTER` or to the `INTERCEPT_EVENT` chain. The
+`CHAIN_INTERCEPT_BEFORE` and `CHAIN_INTERCEPT_AFTER` or to the `CHAIN_INTERCEPT_EVENT` chain. The
 formers are used when an external function is called, e.g., `pthread_create`;
 the latter is used when the intercepted function is fully implemented in the
 subscribers, e.g., user annotations.
@@ -324,7 +324,7 @@ need thread-local storage (TLS), e.g., to keep track of the events they observe.
 Consider the following scenario:
 
 1. An application calls `pthread_mutex_lock`.
-2. An interceptor publishes the event `EVENT_MUTEX_LOCK` in `INTERCEPT_BEFORE`.
+2. An interceptor publishes the event `EVENT_MUTEX_LOCK` in `CHAIN_INTERCEPT_BEFORE`.
 3. A subscriber is triggered with that event and requests TLS memory to store
    a call-count information.
 4. The TLS management triggers another call to `pthread_mutex_lock`, which is
@@ -456,8 +456,8 @@ interceptors.
 ## 4.4. Capture chains
 
 The Self module subscribes to all intercept chains and republishes the
-events in equivalent **capture chains**: `CAPTURE_BEFORE`, `CAPTURE_AFTER`,
-`CAPTURE_EVENT`.  When republishing to these chains, the Self module sends a
+events in equivalent **capture chains**: `CHAIN_CAPTURE_BEFORE`, `CHAIN_CAPTURE_AFTER`,
+`CHAIN_CAPTURE_EVENT`.  When republishing to these chains, the Self module sends a
 **self-specific metadata** along with the event.  This metadata can be used
 by any subscriber to query for TLS data as well as thread ID without any extra
 cost.  The functions provided for these functionalities are in `dice/self.h`:
@@ -467,8 +467,8 @@ cost.  The functions provided for these functionalities are in `dice/self.h`:
   pointer to a thread-local memory of `size` identified by `key`.
 
 Unless the user is deploying a component reimplementing the functionality of
-the Self module, user modules should subscribe to `CAPTURE_` chains instead of
-the equivalent `INTERCEPT_` chains.
+the Self module, user modules should subscribe to `CHAIN_CAPTURE_` chains instead of
+the equivalent `CHAIN_INTERCEPT_` chains.
 
 
 ## 4.5. Example Use Case: File Descriptor Management

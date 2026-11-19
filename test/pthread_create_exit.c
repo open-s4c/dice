@@ -16,9 +16,10 @@ vatomic32_t start_called;
 vatomic32_t exit_called;
 vatomic32_t run_called;
 
-PS_SUBSCRIBE(INTERCEPT_EVENT, EVENT_THREAD_START,
+PS_SUBSCRIBE(CHAIN_INTERCEPT_EVENT, EVENT_THREAD_START,
              { vatomic_inc(&start_called); })
-PS_SUBSCRIBE(INTERCEPT_EVENT, EVENT_THREAD_EXIT, { vatomic_inc(&exit_called); })
+PS_SUBSCRIBE(CHAIN_INTERCEPT_EVENT, EVENT_THREAD_EXIT,
+             { vatomic_inc(&exit_called); })
 
 void *
 run()

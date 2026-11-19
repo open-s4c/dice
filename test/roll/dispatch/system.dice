@@ -1,0 +1,20 @@
+(schema 1)
+  (callbacks true)
+  ; Exercise preferred exact handlers, wildcard events in the fallback, and
+  ; publications to an unprioritized chain with the same event.
+  (prioritize (chains CHAIN_FLOW) (events EVENT_TEST))
+  ; Numeric order deliberately differs from name order, with unused IDs between.
+  (chains (CHAIN_FLOW 15) (CHAIN_OTHER 7))
+  (module early (number 2)
+    (subscribes (CHAIN_FLOW EVENT_TEST ANY_EVENT)
+              (CHAIN_OTHER EVENT_OTHER)))
+  (module direct (number 4)
+    (subscribes (CHAIN_FLOW EVENT_TEST)))
+  (module middle (number 6)
+    (subscribes (CHAIN_FLOW ANY_EVENT)))
+  (module last (number 8)
+    (subscribes (CHAIN_FLOW EVENT_TEST ANY_EVENT)))
+  ; A publishes-only slot still contributes to the global dispatch boundary.
+  (module source (number 10)
+    (publishes (CHAIN_FLOW EVENT_TEST EVENT_OTHER)
+              (CHAIN_OTHER EVENT_OTHER)))

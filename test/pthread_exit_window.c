@@ -64,7 +64,7 @@ main()
 }
 
 // remember when thread exit
-PS_SUBSCRIBE(CAPTURE_EVENT, EVENT_THREAD_EXIT, {
+PS_SUBSCRIBE(CHAIN_CAPTURE_EVENT, EVENT_THREAD_EXIT, {
     log_printf("2) tid = %p\tself = %p\n", (void *)pthread_self(), md);
     log_printf("Thread %" PRIu64 " exit\n", self_id(md));
     assert(self_id(md) == 2);
@@ -72,8 +72,8 @@ PS_SUBSCRIBE(CAPTURE_EVENT, EVENT_THREAD_EXIT, {
 })
 
 // if retired thread (after THREAD_EXIT) calls free(), we should see a
-// CAPTURE_BEFORE EVENT_FREE
-PS_SUBSCRIBE(CAPTURE_BEFORE, EVENT_FREE, {
+// CHAIN_CAPTURE_BEFORE EVENT_FREE
+PS_SUBSCRIBE(CHAIN_CAPTURE_BEFORE, EVENT_FREE, {
     if (exit_called == 0)
         return PS_OK;
 
