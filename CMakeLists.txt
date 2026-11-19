@@ -181,6 +181,27 @@ foreach(EXTENSION_DIR IN LISTS DICE_EXTENSION_DIRS)
     "${CMAKE_CURRENT_BINARY_DIR}/extensions/${EXTENSION_NAME}-${EXTENSION_ID}")
 endforeach()
 
+# Optional configured core for consumers that embed Dice into another
+# toolchain (for example a Rust staticlib).  The legacy Dice targets remain
+# available and are not linked into this OBJECT library.
+set(DICE_ROLL_CONFIG "" CACHE FILEPATH
+    "Dice Roll configuration for an embedded runtime (empty disables it)")
+set(DICE_ROLL_MODULES "" CACHE STRING
+    "Semicolon-separated module names for the embedded Dice Roll runtime")
+set(DICE_ROLL_IMPORT_PATHS "" CACHE STRING
+    "Semicolon-separated extra Dice Roll import search roots")
+if(DICE_ROLL_CONFIG)
+  if(NOT DICE_ROLL_MODULES)
+    message(FATAL_ERROR
+            "DICE_ROLL_CONFIG requires at least one DICE_ROLL_MODULES entry")
+  endif()
+  add_library(dice-roll-runtime OBJECT)
+  add_dice_core(
+    dice-roll-runtime "${DICE_ROLL_CONFIG}"
+    IMPORT_PATHS ${DICE_ROLL_IMPORT_PATHS})
+  add_dice_mods(dice-roll-runtime ${DICE_ROLL_MODULES})
+endif()
+
 if(${DICE_BENCHMARKS})
   add_subdirectory(bench/micro)
   add_subdirectory(bench/lib)
