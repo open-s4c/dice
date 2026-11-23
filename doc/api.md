@@ -6,12 +6,12 @@ right building blocks when writing interceptors or subscribers.
 ## Core Concepts
 
 - `types.h`: defines `chain_id`, `type_id`, `struct metadata`, and constants
-  such as `MAX_TYPES`, `MAX_CHAINS`, and `CHAIN_CONTROL`; defines the
+  such as `MAX_TYPES`, `MAX_CHAINS`, and `CHAIN_DICE_CONTROL`; defines the
   `thread_id` type and sentinel values (`NO_THREAD`, `ANY_THREAD`,
   `MAIN_THREAD`).
 - `chains/`: standard chain identifiers. `intercept.h` introduces
-  `INTERCEPT_EVENT`, `INTERCEPT_BEFORE`, `INTERCEPT_AFTER`; `capture.h`
-  provides the corresponding republished chains (`CAPTURE_*`).
+  `CHAIN_INTERCEPT_EVENT`, `CHAIN_INTERCEPT_BEFORE`, `CHAIN_INTERCEPT_AFTER`; `capture.h`
+  provides the corresponding republished chains (`CHAIN_CAPTURE_*`).
 - `events/`: payload definitions and event identifiers. Each header groups a
   family of events (`events/thread.h`, `events/malloc.h`, `events/memaccess.h`,
   etc.). Include the relevant header to interpret `EVENT_*` payloads inside
@@ -53,6 +53,25 @@ right building blocks when writing interceptors or subscribers.
 - `compiler.h`: shared compiler attributes (`DICE_CTOR`, `DICE_HIDE`, `likely`,
   etc.) used across Dice headers.
 
+### Subscriber state and libc leaf attributes
+
+Some libc declarations, including glibc's `malloc_usable_size`, carry the
+[`leaf` attribute](https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-leaf-function-attribute).
+The compiler can assume that such a call does not invoke callbacks in the
+calling translation unit, even when an interceptor actually publishes events
+there. Ordinary static state shared between application code and a subscriber
+in the same translation unit can therefore be cached or reordered across a
+direct libc call. This applies to both legacy and rolled runtimes; changing the
+runtime cannot remove an attribute used when compiling the application's call.
+
+Make that shared state `volatile` so direct calls observe subscriber updates,
+for example `static volatile size_t observed_size;` for a single-threaded
+subscriber that records `malloc_usable_size` results. The same applies to state
+written by the caller and read by the subscriber. For state shared across
+threads, use atomics or locks as well: `volatile` provides compiler visibility,
+not thread synchronization. GCC documents volatile static state as a remedy
+for callbacks introduced by interposition on leaf functions.
+
 ## Chains and Events at a Glance
 
 When writing a handler:
@@ -71,7 +90,7 @@ Example:
 #include <dice/events/mutex.h>
 #include <dice/module.h>
 
-PS_SUBSCRIBE(CAPTURE_BEFORE, EVENT_MUTEX_LOCK, {
+PS_SUBSCRIBE(CHAIN_CAPTURE_BEFORE, EVENT_MUTEX_LOCK, {
     struct mutex_event *ev = EVENT_PAYLOAD(ev);
     /* inspect ev->mutex, ev->owner, etc. */
     return PS_OK;

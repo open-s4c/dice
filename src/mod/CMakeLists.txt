@@ -50,12 +50,18 @@ foreach(SRC ${SRCS})
   target_link_libraries(${TARGET} PRIVATE dice dice.h)
   target_compile_options(${TARGET} PRIVATE ${OPTIONS_${MODULE}})
   set_target_properties(${TARGET} PROPERTIES PREFIX "")
+  # Installed modules live one directory below their libdice dependency.
+  if(APPLE)
+    set_target_properties(${TARGET} PROPERTIES INSTALL_RPATH "@loader_path/..")
+  else()
+    set_target_properties(${TARGET} PROPERTIES INSTALL_RPATH "$ORIGIN/..")
+  endif()
+  install(TARGETS ${TARGET} LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/dice)
   if(APPLE)
     # Allow unresolved symbols that will be provided by the sanitizer/runtime at
     # preload time (Annotate*, pthread_*, etc).
     target_link_options(${TARGET} PRIVATE -undefined dynamic_lookup)
   endif()
-  install(TARGETS ${TARGET} DESTINATION lib/dice)
 
   if(NOT ${TARGET} MATCHES "wrap_memset")
     if(${LINK_OVERRIDE})
@@ -63,6 +69,14 @@ foreach(SRC ${SRCS})
     endif()
 
     add_library(${TARGET}.o OBJECT ${BUILD_SRC})
+    set(ROLLED_OPTIONS ${OPTIONS_${MODULE}})
+    # Only the opt-in generated runtime needs to suppress instrumentation
+    # inherited from another linked target.
+    if("${MODULE}" IN_LIST TSAN_MODULES)
+      list(APPEND ROLLED_OPTIONS -fno-sanitize=all)
+    endif()
+    set_target_properties(${TARGET}.o PROPERTIES
+                          DICE_MODULE_OPTIONS "${ROLLED_OPTIONS}")
     target_link_libraries(${TARGET}.o PRIVATE dice.h)
     target_compile_options(${TARGET}.o PRIVATE)
     target_compile_options(${TARGET}.o PRIVATE ${OPTIONS_${MODULE}})

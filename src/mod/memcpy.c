@@ -21,9 +21,9 @@ INTERPOSE(void *, memcpy, void *dest, const void *src, size_t num)
     };
 
     struct metadata md = {0};
-    PS_PUBLISH(INTERCEPT_BEFORE, EVENT_MEMCPY, &ev, &md);
+    PS_PUBLISH(CHAIN_INTERCEPT_BEFORE, EVENT_MEMCPY, &ev, &md);
     ev.ret = ev.func(ev.dest, ev.src, ev.num);
-    PS_PUBLISH(INTERCEPT_AFTER, EVENT_MEMCPY, &ev, &md);
+    PS_PUBLISH(CHAIN_INTERCEPT_AFTER, EVENT_MEMCPY, &ev, &md);
     return ev.ret;
 }
 
@@ -39,9 +39,9 @@ INTERPOSE(void *, memmove, void *dest, const void *src, size_t count)
     };
 
     struct metadata md = {0};
-    PS_PUBLISH(INTERCEPT_BEFORE, EVENT_MEMMOVE, &ev, &md);
+    PS_PUBLISH(CHAIN_INTERCEPT_BEFORE, EVENT_MEMMOVE, &ev, &md);
     ev.ret = ev.func(ev.dest, ev.src, ev.count);
-    PS_PUBLISH(INTERCEPT_AFTER, EVENT_MEMMOVE, &ev, &md);
+    PS_PUBLISH(CHAIN_INTERCEPT_AFTER, EVENT_MEMMOVE, &ev, &md);
     return ev.ret;
 }
 
@@ -63,9 +63,9 @@ dice___memset(void *ptr, int value, size_t num)
     };
 
     struct metadata md = {0};
-    PS_PUBLISH(INTERCEPT_BEFORE, EVENT_MEMSET, &ev, &md);
+    PS_PUBLISH(CHAIN_INTERCEPT_BEFORE, EVENT_MEMSET, &ev, &md);
     ev.ret = ev.func(ev.ptr, ev.value, ev.num);
-    PS_PUBLISH(INTERCEPT_AFTER, EVENT_MEMSET, &ev, &md);
+    PS_PUBLISH(CHAIN_INTERCEPT_AFTER, EVENT_MEMSET, &ev, &md);
     return ev.ret;
 }
 FAKE_REAL_APPLE_DECL(memset_, dice___memset, dice___memset);

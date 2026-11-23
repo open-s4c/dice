@@ -64,7 +64,7 @@ STATIC_ASSERT(LAST_DISPATCH_SLOT >= 0, "slot 0 is always dispatch-capable");
         if (module_init_())                                                    \
             log_info("[%4d] INIT: %s", DICE_MODULE_SLOT, __FILE__);            \
     }                                                                          \
-    PS_SUBSCRIBE(CHAIN_CONTROL, EVENT_DICE_INIT, {                             \
+    PS_SUBSCRIBE(CHAIN_DICE_CONTROL, EVENT_DICE_INIT, {                        \
         if (module_init_())                                                    \
             log_info("[%4d] INIT! %s", DICE_MODULE_SLOT, __FILE__);            \
     })                                                                         \

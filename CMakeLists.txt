@@ -15,9 +15,6 @@ project(
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 include(GNUInstallDirs)
 include(CheckSymbolExists)
-include(cmake/export.cmake)
-include(cmake/DiceModules.cmake)
-include(cmake/DiceInterposeTests.cmake)
 add_compile_options(-Wall -Wextra -Werror)
 
 # POSIX extensions
@@ -78,9 +75,24 @@ if(${DICE_LTO})
   endif()
 endif()
 
+# Build generator tools only for explicit consumers and generator tests. They
+# do not need the runtime's LTO configuration or LLVM archiver.
+function(dice_configure_tool TARGET)
+  set_target_properties(${TARGET} PROPERTIES
+                        EXCLUDE_FROM_ALL ON
+                        INTERPROCEDURAL_OPTIMIZATION OFF)
+  if(DICE_LTO AND CMAKE_SYSTEM_NAME MATCHES "NetBSD" AND
+     CMAKE_C_COMPILER_ID MATCHES "Clang")
+    # NetBSD uses explicit flags above instead of CMake's IPO property.
+    target_compile_options(${TARGET} PRIVATE -fno-lto -fno-fat-lto-objects)
+  endif()
+endfunction()
+
 # memory
 option(DICE_MEMSET "Build Dice with memset wrapper" off)
 option(DICE_MEMPOOL_USE_MMAP "Use mmap for mempool" off)
+
+include(cmake/export.cmake)
 
 # Tests and benchmarks
 if(PROJECT_IS_TOP_LEVEL)
@@ -127,11 +139,9 @@ if(NOT "${DICE_PUBSUB_CTOR_INIT}")
   add_compile_definitions(DICE_DISABLE_PUBSUB_CTOR_INIT)
 endif()
 
-set(
-  DICE_EXTENSION_DIRS
-  ""
-  CACHE STRING
-  "Semicolon-separated directories containing Dice extensions")
+# Roll module catalogs may live in independently maintained extension repos.
+set(DICE_EXTENSION_DIRS "" CACHE STRING
+    "External Roll module catalog directories")
 
 # ------------------------------------------------------------------------------
 # Include directories
@@ -140,6 +150,7 @@ add_subdirectory(scripts)
 add_subdirectory(deps)
 add_subdirectory(include)
 add_subdirectory(src)
+include(cmake/roll.cmake)
 
 set(DICE_SCRIPT
     env DICE_BUILD=${PROJECT_BINARY_DIR} DICE_SOURCE=${PROJECT_SOURCE_DIR}
@@ -151,42 +162,45 @@ if(${DICE_TESTS})
   add_subdirectory(test)
 endif()
 
+# Register external Roll module catalogs before configuring an embedded runtime.
 foreach(EXTENSION_DIR IN LISTS DICE_EXTENSION_DIRS)
-  get_filename_component(
-    EXTENSION_DIR
-    "${EXTENSION_DIR}"
-    ABSOLUTE
-    BASE_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
-
+  get_filename_component(EXTENSION_DIR "${EXTENSION_DIR}" ABSOLUTE
+                         BASE_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
   if(NOT EXISTS "${EXTENSION_DIR}/CMakeLists.txt")
-    message(
-      FATAL_ERROR
-      "Dice extension has no CMakeLists.txt: ${EXTENSION_DIR}")
+    message(FATAL_ERROR
+            "Dice extension has no CMakeLists.txt: ${EXTENSION_DIR}")
   endif()
-
-  get_filename_component(
-    EXTENSION_NAME
-    "${EXTENSION_DIR}"
-    NAME)
-
-  # The hash prevents two different directories having the same basename
-  # from colliding in the build tree.
-  string(
-    MD5
-    EXTENSION_ID
-    "${EXTENSION_DIR}")
-
+  get_filename_component(EXTENSION_NAME "${EXTENSION_DIR}" NAME)
+  string(MD5 EXTENSION_ID "${EXTENSION_DIR}")
   add_subdirectory(
     "${EXTENSION_DIR}"
     "${CMAKE_CURRENT_BINARY_DIR}/extensions/${EXTENSION_NAME}-${EXTENSION_ID}")
 endforeach()
 
+# Configured Roll core used by embedded consumers (such as dice-rs).
+# It is built solely from rolled runtime sources and their module catalogs.
+set(DICE_ROLL_CONFIG "" CACHE FILEPATH
+    "Dice Roll configuration for an embedded runtime (empty disables it)")
+set(DICE_ROLL_MODULES "" CACHE STRING
+    "Semicolon-separated module names for the embedded Dice Roll runtime")
+set(DICE_ROLL_IMPORT_PATHS "" CACHE STRING
+    "Semicolon-separated extra Dice Roll import search roots")
+if(DICE_ROLL_CONFIG)
+  if(NOT DICE_ROLL_MODULES)
+    message(FATAL_ERROR
+            "DICE_ROLL_CONFIG requires at least one DICE_ROLL_MODULES entry")
+  endif()
+  add_library(dice-roll-runtime OBJECT)
+  set(roll_import_args)
+  if(DICE_ROLL_IMPORT_PATHS)
+    list(APPEND roll_import_args IMPORT_PATHS ${DICE_ROLL_IMPORT_PATHS})
+  endif()
+  add_dice_core(
+    dice-roll-runtime "${DICE_ROLL_CONFIG}" ${roll_import_args})
+  add_dice_mods(dice-roll-runtime ${DICE_ROLL_MODULES})
+endif()
+
 if(${DICE_BENCHMARKS})
   add_subdirectory(bench/micro)
   add_subdirectory(bench/lib)
 endif()
-
-# ------------------------------------------------------------------------------
-# Installation
-# ------------------------------------------------------------------------------
-install(TARGETS dice dice.h EXPORT ${PROJECT_TARGETS})

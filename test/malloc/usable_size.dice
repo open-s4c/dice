@@ -1,0 +1,6 @@
+(schema 1)
+(callbacks true)
+(import (dice malloc))
+(module observer
+  (subscribes (CHAIN_INTERCEPT_BEFORE EVENT_MALLOC_USABLE_SIZE)
+              (CHAIN_INTERCEPT_AFTER EVENT_MALLOC_USABLE_SIZE)))
