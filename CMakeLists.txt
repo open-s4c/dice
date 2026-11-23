@@ -191,9 +191,12 @@ if(DICE_ROLL_CONFIG)
             "DICE_ROLL_CONFIG requires at least one DICE_ROLL_MODULES entry")
   endif()
   add_library(dice-roll-runtime OBJECT)
+  set(roll_import_args)
+  if(DICE_ROLL_IMPORT_PATHS)
+    list(APPEND roll_import_args IMPORT_PATHS ${DICE_ROLL_IMPORT_PATHS})
+  endif()
   add_dice_core(
-    dice-roll-runtime "${DICE_ROLL_CONFIG}"
-    IMPORT_PATHS ${DICE_ROLL_IMPORT_PATHS})
+    dice-roll-runtime "${DICE_ROLL_CONFIG}" ${roll_import_args})
   add_dice_mods(dice-roll-runtime ${DICE_ROLL_MODULES})
 endif()
 
