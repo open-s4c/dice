@@ -27,7 +27,10 @@ assigns slots named `SLOT_DICE_<MODULE>`.
 Consume only the objects under `CMakeFiles/dice-roll-runtime.dir/`, rather
 than recursively archiving all CMake `.o` files.
 
-When replaying pre-existing traces, pin event IDs in the `.dice` description:
-`(events (EVENT_FOO 123))`. Leave callback support enabled when Rust registers
-handlers dynamically through `ps_subscribe`. Record/replay validation is
-required before enabling sealing or disabling callback support.
+Events, chains and slots are automatically numbered by Dice Roll from the
+configuration, with no explicit numeric IDs. Consumer code must use the
+generated header; Rust uses bindgen on that header. The old trace format
+need not be compatible with a newly generated numbering scheme.
+
+Leave callback support enabled for Rust subscribers registered with
+`ps_subscribe`. Validate record/replay before enabling sealing.

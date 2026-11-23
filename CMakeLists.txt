@@ -93,8 +93,6 @@ option(DICE_MEMSET "Build Dice with memset wrapper" off)
 option(DICE_MEMPOOL_USE_MMAP "Use mmap for mempool" off)
 
 include(cmake/export.cmake)
-include(cmake/DiceModules.cmake)
-include(cmake/DiceInterposeTests.cmake)
 
 # Tests and benchmarks
 if(PROJECT_IS_TOP_LEVEL)
@@ -141,10 +139,9 @@ if(NOT "${DICE_PUBSUB_CTOR_INIT}")
   add_compile_definitions(DICE_DISABLE_PUBSUB_CTOR_INIT)
 endif()
 
-# External interceptors may live in a separate repository.  Keep this list
-# available both to legacy consumers and Dice Roll embedders.
+# Roll module catalogs may live in independently maintained extension repos.
 set(DICE_EXTENSION_DIRS "" CACHE STRING
-    "Semicolon-separated directories containing Dice extension CMakeLists.txt files")
+    "External Roll module catalog directories")
 
 # ------------------------------------------------------------------------------
 # Include directories
@@ -165,8 +162,7 @@ if(${DICE_TESTS})
   add_subdirectory(test)
 endif()
 
-# Register externally maintained interceptor targets after the Dice test
-# infrastructure (needed by dice_add_interpose_test) has been initialized.
+# Register external Roll module catalogs before configuring an embedded runtime.
 foreach(EXTENSION_DIR IN LISTS DICE_EXTENSION_DIRS)
   get_filename_component(EXTENSION_DIR "${EXTENSION_DIR}" ABSOLUTE
                          BASE_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
@@ -181,9 +177,8 @@ foreach(EXTENSION_DIR IN LISTS DICE_EXTENSION_DIRS)
     "${CMAKE_CURRENT_BINARY_DIR}/extensions/${EXTENSION_NAME}-${EXTENSION_ID}")
 endforeach()
 
-# Optional configured core for consumers that embed Dice into another
-# toolchain (for example a Rust staticlib).  The legacy Dice targets remain
-# available and are not linked into this OBJECT library.
+# Configured Roll core used by embedded consumers (such as dice-rs).
+# It is built solely from rolled runtime sources and their module catalogs.
 set(DICE_ROLL_CONFIG "" CACHE FILEPATH
     "Dice Roll configuration for an embedded runtime (empty disables it)")
 set(DICE_ROLL_MODULES "" CACHE STRING
