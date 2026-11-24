@@ -65,6 +65,8 @@ INTERPOSE(int, pthread_create, pthread_t *thread, const pthread_attr_t *attr,
     struct metadata md = {0};
     PS_PUBLISH(CHAIN_INTERCEPT_BEFORE, EVENT_THREAD_CREATE, &ev, &md);
     ev.ret = ev.func(ev.thread, ev.attr, trampoline_, t);
+    if (ev.ret != 0)
+        mempool_free(t);
     PS_PUBLISH(CHAIN_INTERCEPT_AFTER, EVENT_THREAD_CREATE, &ev, &md);
     return ev.ret;
 }
