@@ -38,11 +38,18 @@ main(void)
     fill_pattern(block, original, 0x40);
     check_pattern(block, original, 0x40);
 
-    /* Grow the block and verify the original payload is preserved. */
+    /* Realloc will reuse this destination. Its tail lets us detect a copy
+     * past the requested source size, even within the same pool bucket. */
     const size_t grown = 48;
-    uint8_t *bigger    = mempool_realloc(block, grown);
-    ensure(bigger != NULL);
+    uint8_t *dest      = mempool_alloc(grown);
+    ensure(dest != NULL);
+    fill_pattern(dest, grown, 0xa0);
+    mempool_free(dest);
+
+    uint8_t *bigger = mempool_realloc(block, grown);
+    ensure(bigger == dest);
     check_pattern(bigger, original, 0x40);
+    check_pattern(bigger + original, grown - original, 0xa0 + original);
 
     mempool_free(bigger);
     return 0;
