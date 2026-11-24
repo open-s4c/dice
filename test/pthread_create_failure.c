@@ -6,6 +6,7 @@
 #include <dice/chains/intercept.h>
 #include <dice/ensure.h>
 #include <dice/events/pthread.h>
+#include <dice/mempool.h>
 #include <dice/module.h>
 
 static uintptr_t trampoline_address;
@@ -45,5 +46,12 @@ main(void)
     trampoline_address = 0;
     ensure(pthread_create(&thread, NULL, worker, NULL) == EAGAIN);
     ensure(trampoline_address == first);
+
+    /* Exhaust the pool, including the recycled trampoline block. */
+    while (mempool_alloc(1024 * 1024) != NULL) {}
+    while (mempool_alloc(2 * sizeof(void *)) != NULL) {}
+    trampoline_address = 0;
+    ensure(pthread_create(&thread, NULL, worker, NULL) == EAGAIN);
+    ensure(trampoline_address == 0);
     return 0;
 }

@@ -2,6 +2,7 @@
  * Copyright (C) 2025 Huawei Technologies Co., Ltd.
  * SPDX-License-Identifier: 0BSD
  */
+#include <errno.h>
 #include <pthread.h>
 #include <stdlib.h>
 
@@ -48,9 +49,9 @@ trampoline_(void *targ)
 INTERPOSE(int, pthread_create, pthread_t *thread, const pthread_attr_t *attr,
           void *(*run)(void *), void *arg)
 {
-    trampoline_t *t;
-
-    t  = mempool_alloc(sizeof(trampoline_t));
+    trampoline_t *t = mempool_alloc(sizeof(*t));
+    if (t == NULL)
+        return EAGAIN;
     *t = (trampoline_t){.arg = arg, .run = run};
 
     struct pthread_create_event ev = {
