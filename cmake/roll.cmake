@@ -29,11 +29,11 @@ function(_dice_source target path slot runtime)
 endfunction()
 
 function(add_dice_core target config)
-  cmake_parse_arguments(PARSE_ARGV 2 CORE "CHECK_ROUTES" "" "IMPORT_PATHS")
+  cmake_parse_arguments(PARSE_ARGV 2 CORE "CHECK_ROUTES" "IDS_HEADER" "IMPORT_PATHS")
   if(CORE_UNPARSED_ARGUMENTS OR CORE_KEYWORDS_MISSING_VALUES OR NOT config)
     message(
       FATAL_ERROR
-        "Usage: add_dice_core(target config.dice [CHECK_ROUTES] [IMPORT_PATHS directory ...])")
+        "Usage: add_dice_core(target config.dice [CHECK_ROUTES] [IDS_HEADER filename] [IMPORT_PATHS directory ...])")
   endif()
   if(NOT TARGET "${target}")
     message(FATAL_ERROR "add_dice_core: target '${target}' does not exist")
@@ -69,6 +69,19 @@ function(add_dice_core target config)
                          "${CMAKE_CURRENT_SOURCE_DIR}")
   set(generated "${CMAKE_CURRENT_BINARY_DIR}/${target}-dice")
   set(header "${generated}/dice.h")
+  set(outputs "${generated}/dice.c" "${header}")
+  set(ids_args)
+  if(DEFINED CORE_IDS_HEADER)
+    string(TOLOWER "${CORE_IDS_HEADER}" filename)
+    if(NOT filename MATCHES "^[a-z0-9_.-]+$" OR
+       filename MATCHES "^([.][.]?|dice[.][cdh])$")
+      message(FATAL_ERROR "add_dice_core: invalid IDS_HEADER filename '${CORE_IDS_HEADER}'")
+    endif()
+    set(ids_header "${generated}/${CORE_IDS_HEADER}")
+    list(APPEND outputs "${ids_header}")
+    set(ids_args --ids-header "${CORE_IDS_HEADER}")
+    set_property(TARGET ${target} PROPERTY DICE_ROLL_IDS_HEADER "${ids_header}")
+  endif()
   set(generator dice-cli)
   if(CMAKE_CROSSCOMPILING)
     _dice_add_host_cli()
@@ -89,15 +102,14 @@ function(add_dice_core target config)
     list(APPEND import_args -I "${namespace}${directory}")
   endforeach()
   add_custom_command(
-    OUTPUT "${generated}/dice.c" "${header}"
+    OUTPUT ${outputs}
     COMMAND ${CMAKE_COMMAND} -E make_directory "${generated}"
     COMMAND $<TARGET_FILE:${generator}> ${import_args} "${config}" --output
-            "${generated}" --depfile "${generated}/dice.d"
+            "${generated}" ${ids_args} --depfile "${generated}/dice.d"
     DEPENDS ${generator} "${config}"
     DEPFILE "${generated}/dice.d"
     VERBATIM)
-  add_custom_target(${target}-dice-generate DEPENDS "${generated}/dice.c"
-                                                    "${header}")
+  add_custom_target(${target}-dice-generate DEPENDS ${outputs})
 
   # Separate downstream object targets can share IDs and generation
   # dependencies.
