@@ -212,8 +212,6 @@ ps_subscribe_type_(chain_id chain, type_id type, ps_callback_f cb, int slot,
     return ps_subscribe_list_(ps_callback_list_(chain, type), chain, type, cb,
                               slot, any_type);
         #else
-    if (type > MAX_TYPES)
-        return PS_INVALID;
     struct type *ev = &chains_[chain].types[type];
     ev->count++;
     ps_subscribe_sorted_(&ev->head, chain, type, cb, slot, any_type);
@@ -224,14 +222,12 @@ ps_subscribe_type_(chain_id chain, type_id type, ps_callback_f cb, int slot,
 DICE_HIDE int
 ps_subscribe_(chain_id chain, type_id type, ps_callback_f cb, int slot)
 {
-        #ifdef DICE_ROLL_RUNTIME
-    if (chain >= MAX_CHAINS || type >= MAX_TYPES || !cb || slot < 0)
-        #else
-    if (chain > MAX_CHAINS)
-        #endif
+    if (chain >= MAX_CHAINS || type >= MAX_TYPES)
         return PS_INVALID;
-
-        #ifndef DICE_ROLL_RUNTIME
+        #ifdef DICE_ROLL_RUNTIME
+    if (!cb || slot < 0)
+        return PS_INVALID;
+        #else
     if (ps_dispatch_chain_on_(chain) && slot <= ps_dispatch_max())
         return PS_OK;
         #endif

@@ -1825,7 +1825,7 @@ emit_header(FILE *out)
           out);
     emit_route_expression(out, subs, nsubs, "S", "C", "E");
     fputs("\n#endif\n", out);
-    int max_event = 127, max_chain = 6;
+    int max_event = 0, max_chain = 6;
     for (size_t i = 0; i < nids; i++) {
         int *max = ids[i].chain ? &max_chain : &max_event;
         if (ids[i].id > *max)
