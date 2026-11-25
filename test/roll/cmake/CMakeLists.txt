@@ -43,7 +43,11 @@ add_subdirectory(modules)
 
 # Also support linking a complete runtime directly into an executable.
 add_executable(direct direct.c)
-add_dice_core(direct direct.dice CHECK_ROUTES)
+add_dice_core(direct direct.dice CHECK_ROUTES IDS_HEADER public-ids.h)
+get_target_property(ids direct DICE_ROLL_IDS_HEADER)
+if(NOT ids STREQUAL "${CMAKE_CURRENT_BINARY_DIR}/direct-dice/public-ids.h")
+  message(FATAL_ERROR "Unexpected IDs header path: ${ids}")
+endif()
 
 # Core sources can also be added directly to an object target.
 add_library(direct-objects OBJECT direct.c)

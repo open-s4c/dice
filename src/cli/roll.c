@@ -9,6 +9,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <strings.h>
 #include <sxp.h>
 #include <tmplr.h>
 #include <unistd.h>
@@ -1766,7 +1767,26 @@ chain_has_inline_slot(int chain)
 }
 
 static void
-emit_header(FILE *out)
+emit_ids(FILE *out)
+{
+    for (size_t i = 0; i < nids; i++)
+        fprintf(out, "#define %s %d\n", ids[i].name, ids[i].id);
+}
+
+static void
+emit_ids_header(FILE *out)
+{
+    emit_preamble(out);
+    fprintf(out,
+            "#ifndef DICE_GENERATED_IDS_%s_H\n"
+            "#define DICE_GENERATED_IDS_%s_H\n",
+            config_id + 7, config_id + 7);
+    emit_ids(out);
+    fputs("#endif\n", out);
+}
+
+static void
+emit_header(FILE *out, const char *ids_header)
 {
     emit_preamble(out);
     fputs(
@@ -1830,8 +1850,15 @@ emit_header(FILE *out)
         int *max = ids[i].chain ? &max_chain : &max_event;
         if (ids[i].id > *max)
             *max = ids[i].id;
-        fprintf(out, "#define %s %d\n", ids[i].name, ids[i].id);
     }
+    if (ids_header)
+        fprintf(out,
+                "#include \"%s\"\n#ifndef DICE_GENERATED_IDS_%s_H\n"
+                "#error Dice IDs header does not match this "
+                "configuration\n#endif\n",
+                ids_header, config_id + 7);
+    else
+        emit_ids(out);
     fprintf(out, "#define MAX_TYPES %d\n#define MAX_CHAINS %d\n", max_event + 1,
             max_chain + 1);
     fputs(source_text("public"), out);
@@ -2114,70 +2141,61 @@ emit_source(FILE *out, const char *name)
     emit_dispatch(out);
 }
 
-static void
-replace_output(const char *tmp_c, const char *tmp_h, const char *dest_c,
-               const char *dest_h)
-{
-    char backup_dir[PATH_MAX], backup_h[PATH_MAX];
-    bool have_backup = false, installed_header = false;
-    bool backup_created = false;
-    int error;
-    if (snprintf(backup_dir, sizeof(backup_dir), "%s.backup.XXXXXX", tmp_h) >=
-            (int)sizeof(backup_dir) ||
-        snprintf(backup_h, sizeof(backup_h), "%s/header", backup_dir) >=
-            (int)sizeof(backup_h)) {
-        errno = ENAMETOOLONG;
-        goto failure;
-    }
-    if (!mkdtemp(backup_dir))
-        goto failure;
-    backup_created = true;
-    /* mkdtemp replaced the suffix, without changing the path's length. */
-    memcpy(backup_h, backup_dir, strlen(backup_dir));
+enum output_kind { OUTPUT_SOURCE, OUTPUT_HEADER, OUTPUT_IDS };
 
+struct output_file {
+    char path[PATH_MAX], temporary[PATH_MAX], backup[PATH_MAX];
+    bool saved, installed;
+};
+
+/* Install headers first. The source rename commits the new output set. */
+static void
+replace_output(struct output_file files[], size_t count, const char *stage)
+{
     struct stat st;
-    if (lstat(dest_h, &st) == 0) {
-        if (!S_ISREG(st.st_mode) && !S_ISLNK(st.st_mode)) {
-            errno = EINVAL;
+    int error;
+    for (size_t i = OUTPUT_HEADER; i < count; i++) {
+        struct output_file *header = &files[i];
+        if (lstat(header->path, &st) == 0) {
+            if (!S_ISREG(st.st_mode) && !S_ISLNK(st.st_mode)) {
+                errno = EINVAL;
+                goto failure;
+            }
+            if (rename(header->path, header->backup))
+                goto failure;
+            header->saved = true;
+        } else if (errno != ENOENT) {
             goto failure;
         }
-        if (rename(dest_h, backup_h))
+        if (rename(header->temporary, header->path))
             goto failure;
-        have_backup = true;
-    } else if (errno != ENOENT) {
-        goto failure;
+        header->installed = true;
     }
-    if (rename(tmp_h, dest_h))
+    if (rename(files[OUTPUT_SOURCE].temporary, files[OUTPUT_SOURCE].path))
         goto failure;
-    installed_header = true;
-    /* Source replacement is the final commit step. A failed rename leaves
-     * the previous source intact, so only the header needs rolling back. */
-    if (rename(tmp_c, dest_c))
-        goto failure;
-    if (have_backup && unlink(backup_h))
-        fprintf(stderr, "dice: cannot remove backup %s: %s\n", backup_h,
-                strerror(errno));
-    else if (rmdir(backup_dir))
-        fprintf(stderr, "dice: cannot remove backup directory %s: %s\n",
-                backup_dir, strerror(errno));
+    for (size_t i = OUTPUT_HEADER; i < count; i++)
+        if (files[i].saved && unlink(files[i].backup))
+            fprintf(stderr, "dice: cannot remove backup %s: %s\n",
+                    files[i].backup, strerror(errno));
+    if (rmdir(stage))
+        fprintf(stderr, "dice: cannot remove %s: %s\n", stage, strerror(errno));
     return;
 
 failure:
     error = errno;
-    unlink(tmp_c);
-    unlink(tmp_h);
-    if (have_backup) {
-        if (rename(backup_h, dest_h))
-            fail(
-                "cannot replace output (%s) or restore header (%s); "
-                "previous header saved at %s",
-                strerror(error), strerror(errno), backup_h);
-    } else if (installed_header && unlink(dest_h)) {
-        fail("cannot replace output (%s) or remove new header %s (%s)",
-             strerror(error), dest_h, strerror(errno));
+    for (size_t i = 0; i < count; i++) {
+        unlink(files[i].temporary);
+        if (files[i].saved) {
+            if (rename(files[i].backup, files[i].path))
+                fail("cannot replace output (%s) or restore %s from %s: %s",
+                     strerror(error), files[i].path, files[i].backup,
+                     strerror(errno));
+        } else if (files[i].installed && unlink(files[i].path)) {
+            fail("cannot replace output (%s) or remove %s: %s", strerror(error),
+                 files[i].path, strerror(errno));
+        }
     }
-    if (backup_created)
-        rmdir(backup_dir);
+    rmdir(stage);
     fail("cannot replace output: %s", strerror(error));
 }
 
@@ -2216,25 +2234,32 @@ output_path(const char *path, char absolute[PATH_MAX])
 }
 
 static void
-write_dependencies(const char *path, const char *source, const char *header)
+check_output_inputs(const char *destination, const char *label)
 {
-    char destination[PATH_MAX], other[PATH_MAX];
-    output_path(path, destination);
-    output_path(source, other);
-    if (!strcmp(destination, other))
-        fail("dependency file must differ from generated output files");
-    output_path(header, other);
-    if (!strcmp(destination, other))
-        fail("dependency file must differ from generated output files");
+    char other[PATH_MAX];
     for (size_t i = 0; i < ninputs; i++)
-        if (!strcmp(destination, input_paths[i]))
-            fail("dependency file must differ from configuration inputs");
+        if (!strcasecmp(destination, input_paths[i]))
+            fail("%s must differ from configuration inputs", label);
     for (size_t i = 0; i < COUNT(sources); i++) {
         if (!realpath(sources[i].path, other))
             fail("%s: %s", sources[i].path, strerror(errno));
-        if (!strcmp(destination, other))
-            fail("dependency file must differ from generator sources");
+        if (!strcasecmp(destination, other))
+            fail("%s must differ from generator sources", label);
     }
+}
+
+static void
+write_dependencies(const char *path, const struct output_file files[],
+                   size_t count)
+{
+    char destination[PATH_MAX], other[PATH_MAX];
+    output_path(path, destination);
+    for (size_t i = 0; i < count; i++) {
+        output_path(files[i].path, other);
+        if (!strcasecmp(destination, other))
+            fail("dependency file must differ from generated output files");
+    }
+    check_output_inputs(destination, "dependency file");
     char tmp[PATH_MAX];
     if (snprintf(tmp, sizeof(tmp), "%s.XXXXXX", path) >= (int)sizeof(tmp))
         fail("dependency file path is too long");
@@ -2247,9 +2272,11 @@ write_dependencies(const char *path, const char *source, const char *header)
         unlink(tmp);
         fail("cannot open dependency file %s", path);
     }
-    dependency_path(out, source);
-    fputc(' ', out);
-    dependency_path(out, header);
+    for (size_t i = 0; i < count; i++) {
+        if (i)
+            fputc(' ', out);
+        dependency_path(out, files[i].path);
+    }
     fputc(':', out);
     for (size_t i = 0; i < ninputs; i++) {
         fputc(' ', out);
@@ -2270,46 +2297,83 @@ write_dependencies(const char *path, const char *source, const char *header)
 }
 
 static void
-generate(const char *directory, const char *name, const char *depfile)
+generate(const char *directory, const char *name, const char *ids_header,
+         const char *depfile)
 {
     if (!*name || strlen(name) >= NAME_SIZE)
         fail("output name must contain 1..%d characters", NAME_SIZE - 1);
     for (const char *p = name; *p; p++)
         if (!(isalnum((unsigned char)*p) || *p == '_' || *p == '-'))
             fail("output name must use only letters, digits, '_' or '-'");
+    char source[NAME_SIZE + 2], header[NAME_SIZE + 2];
+    snprintf(source, sizeof(source), "%s.c", name);
+    snprintf(header, sizeof(header), "%s.h", name);
+    const char *names[] = {source, header, ids_header};
+    size_t count        = ids_header ? COUNT(names) : COUNT(names) - 1;
+    if (ids_header) {
+        if (!*ids_header || !strcmp(ids_header, ".") ||
+            !strcmp(ids_header, ".."))
+            fail("expected an IDs header filename");
+        for (const char *p = ids_header; *p; p++)
+            if (!(isalnum((unsigned char)*p) || strchr("._-", *p)))
+                fail(
+                    "IDs header filename must use only letters, digits, '.', "
+                    "'_' or '-'");
+        if (!strcasecmp(ids_header, source) || !strcasecmp(ids_header, header))
+            fail("IDs header must differ from other generated output files");
+    }
     if (mkdir(directory, 0755) && errno != EEXIST)
         fail("%s: %s", directory, strerror(errno));
-    char tmp_c[PATH_MAX], tmp_h[PATH_MAX], dest_c[PATH_MAX], dest_h[PATH_MAX];
-    if (snprintf(dest_c, sizeof(dest_c), "%s/%s.c", directory, name) >=
-            (int)sizeof(dest_c) ||
-        snprintf(dest_h, sizeof(dest_h), "%s/%s.h", directory, name) >=
-            (int)sizeof(dest_h) ||
-        snprintf(tmp_c, sizeof(tmp_c), "%s/.%s.c.XXXXXX", directory, name) >=
-            (int)sizeof(tmp_c) ||
-        snprintf(tmp_h, sizeof(tmp_h), "%s/.%s.h.XXXXXX", directory, name) >=
-            (int)sizeof(tmp_h))
-        fail("output path is too long");
-    if (depfile)
-        write_dependencies(depfile, dest_c, dest_h);
-    int fd_c = mkstemp(tmp_c), fd_h = mkstemp(tmp_h);
-    if (fd_c < 0 || fd_h < 0)
-        fail("cannot create output: %s", strerror(errno));
-    FILE *c = fdopen(fd_c, "w"), *h = fdopen(fd_h, "w");
-    if (!c || !h)
-        fail("cannot open output streams: %s", strerror(errno));
-    emit_header(h);
-    emit_source(c, name);
-    bool error = ferror(c) || ferror(h);
-    if (fclose(c))
-        error = true;
-    if (fclose(h))
-        error = true;
-    if (error || chmod(tmp_c, 0644) || chmod(tmp_h, 0644)) {
-        unlink(tmp_c);
-        unlink(tmp_h);
-        fail("cannot write output: %s", strerror(errno));
+    struct output_file files[COUNT(names)] = {0};
+    for (size_t i = 0; i < count; i++)
+        if (snprintf(files[i].path, PATH_MAX, "%s/%s", directory, names[i]) >=
+            PATH_MAX)
+            fail("output path is too long");
+    if (ids_header) {
+        char absolute[PATH_MAX];
+        output_path(files[OUTPUT_IDS].path, absolute);
+        check_output_inputs(absolute, "IDs header");
     }
-    replace_output(tmp_c, tmp_h, dest_c, dest_h);
+    if (depfile)
+        write_dependencies(depfile, files, count);
+
+    char stage[PATH_MAX];
+    int error;
+    if (snprintf(stage, sizeof(stage), "%s/.dice-roll.XXXXXX", directory) >=
+        PATH_MAX)
+        fail("output path is too long");
+    if (!mkdtemp(stage))
+        fail("cannot create output directory: %s", strerror(errno));
+    for (size_t i = 0; i < count; i++) {
+        if (snprintf(files[i].temporary, PATH_MAX, "%s/%zu", stage, i) >=
+                PATH_MAX ||
+            snprintf(files[i].backup, PATH_MAX, "%s/%zu.old", stage, i) >=
+                PATH_MAX) {
+            errno = ENAMETOOLONG;
+            goto failure;
+        }
+        FILE *out = fopen(files[i].temporary, "w");
+        if (!out)
+            goto failure;
+        if (i == OUTPUT_SOURCE)
+            emit_source(out, name);
+        else if (i == OUTPUT_HEADER)
+            emit_header(out, ids_header);
+        else
+            emit_ids_header(out);
+        bool write_error = ferror(out);
+        if (fclose(out) || write_error || chmod(files[i].temporary, 0644))
+            goto failure;
+    }
+    replace_output(files, count, stage);
+    return;
+
+failure:
+    error = errno;
+    for (size_t i = 0; i < count; i++)
+        unlink(files[i].temporary);
+    rmdir(stage);
+    fail("cannot write output: %s", strerror(error));
 }
 
 static void
@@ -2317,10 +2381,13 @@ usage(FILE *out)
 {
     fputs(
         "Usage: dice-roll [-I DIRECTORY ...] CONFIG.dice --output DIRECTORY\n"
-        "                 [--name NAME] [--depfile FILE]\n"
+        "                 [--name NAME] [--ids-header FILENAME] [--depfile "
+        "FILE]\n"
         "       dice-roll [-I DIRECTORY ...] --check CONFIG.dice\n"
         "       dice-roll [-I DIRECTORY ...] --query CONFIG.dice\n"
         "       dice-roll [-I DIRECTORY ...] --graph CONFIG.dice\n"
+        "--name sets the .c/.h basename (default: dice). --ids-header writes\n"
+        "event and chain IDs to a separate header in the output directory.\n"
         "Imports search -I directories in order, then " DICE_SOURCE_DIR
         "/src.\n"
         "Use -I NAMESPACE=DIRECTORY to mount a namespace (e.g. "
@@ -2351,7 +2418,8 @@ main(int argc, char **argv)
     }
     enum { ROLL, CHECK, QUERY, GRAPH } mode = ROLL;
     const char *config                      = NULL;
-    const char *directory = NULL, *name = NULL, *depfile = NULL;
+    const char *directory = NULL, *name = NULL, *depfile = NULL,
+               *ids_header = NULL;
     for (int i = 1; i < argc; i++) {
         if ((!strcmp(argv[i], "--check") || !strcmp(argv[i], "--query") ||
              !strcmp(argv[i], "--graph")) &&
@@ -2367,6 +2435,9 @@ main(int argc, char **argv)
             directory = argv[++i];
         } else if (!strcmp(argv[i], "--name") && !name && i + 1 < argc) {
             name = argv[++i];
+        } else if (!strcmp(argv[i], "--ids-header") && !ids_header &&
+                   i + 1 < argc) {
+            ids_header = argv[++i];
         } else if (!strcmp(argv[i], "--depfile") && !depfile && i + 1 < argc) {
             depfile = argv[++i];
         } else if (argv[i][0] != '-' && !config) {
@@ -2376,7 +2447,9 @@ main(int argc, char **argv)
             return 1;
         }
     }
-    if (!config || (mode == ROLL ? !directory : directory || name || depfile)) {
+    if (!config ||
+        (mode == ROLL ? !directory :
+                        directory || name || depfile || ids_header)) {
         usage(stderr);
         return 1;
     }
@@ -2390,7 +2463,7 @@ main(int argc, char **argv)
     read_config(input_name, ancestors, 0, false, "", false);
     resolve();
     if (mode == ROLL)
-        generate(directory, name ? name : "dice", depfile);
+        generate(directory, name ? name : "dice", ids_header, depfile);
     else if (mode == QUERY) {
         printf("configuration %s\ncallbacks %s\n", config_id,
                extension_callbacks ? "true" : "false");

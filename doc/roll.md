@@ -48,6 +48,10 @@ Imports and includes are tracked as build dependencies. Searched directories
 are tracked too, so adding a higher-precedence import override regenerates the
 configured runtime during an incremental build.
 
+Pass `IDS_HEADER observer-ids.h` to `add_dice_core` to generate a standalone
+header for event and chain IDs. The target property `DICE_ROLL_IDS_HEADER`
+gives its full path. Install it beside `dice.h` when distributing both.
+
 The helpers define `DICE_ROLLED` for configured targets. Include `dice/roll.h`
 or the generated `dice.h` before other Dice headers. The generated header also
 opts a source into rolled mode when used directly.
@@ -209,6 +213,18 @@ build/src/cli/dice-roll observer.dice --output generated
 add import roots, and `--depfile FILE` to write configuration dependencies. The
 generated C file contains dispatch code and tables; the CMake helpers compile it
 with the Dice core and the selected modules.
+
+By default the generator writes `dice.c` and `dice.h`. Use `--name` to set
+their shared basename. To choose a separate filename for the IDs, run
+
+```sh
+dice-roll observer.dice -o generated --name observer --ids-header observer-ids.h
+```
+
+This writes `observer.c`, `observer.h`, and `observer-ids.h` in `generated/`.
+The IDs header contains numeric event and chain macros, including aliases, and
+can be included directly from freestanding C or preprocessed assembly.
+`observer.h` includes it and provides the full runtime interface.
 
 The generator is a **source-tree tool**. It is not installed by
 `cmake --install`, and copying the binary does not make it relocatable. It reads
