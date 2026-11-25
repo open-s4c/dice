@@ -85,10 +85,14 @@ foreach(SRC ${SRCS})
     set(ENDINGS "")
   endif()
 
+  # Both consumers must wait for the single generation target. Expanding
+  # ENDINGS as arguments drops its empty entry and skips the shared library.
+  if("${MODULE}" STREQUAL "tsan")
+    add_dependencies(${TARGET} expand-tsan.c)
+    add_dependencies(${TARGET}.o expand-tsan.c)
+  endif()
+
   foreach(ENDING ${ENDINGS})
-    if("${MODULE}" STREQUAL "tsan")
-      add_dependencies(${TARGET}${ENDING} expand-tsan.c)
-    endif()
     if(NOT "${MODULE}" IN_LIST TSAN_MODULES)
       if(NOT "${DICE_SANITIZER}" STREQUAL "")
         target_compile_options(${TARGET}${ENDING}
