@@ -139,13 +139,20 @@ mempool_alloc(size_t n)
     return mempool_alloc_(n);
 }
 
+/* Alignment padding can separate the payload from its entry. */
+static inline entry_t *
+entry_from_ptr_(void *ptr)
+{
+    return *((entry_t **)ptr - 1);
+}
+
 DICE_HIDE void *
 mempool_realloc_(void *ptr, size_t size)
 {
     void *p = mempool_alloc_(size);
     if (!p || !ptr)
         return p;
-    entry_t *e      = (entry_t *)ptr - 1;
+    entry_t *e      = entry_from_ptr_(ptr);
     size_t old_size = e->size;
     size            = old_size < size ? old_size : size;
     memcpy(p, ptr, size);
@@ -165,7 +172,7 @@ mempool_free_(void *ptr)
     mempool_t *mp = &mp_;
     if (ptr == NULL)
         return;
-    entry_t *e      = *((entry_t **)ptr - 1);
+    entry_t *e      = entry_from_ptr_(ptr);
     size_t bucket   = e->bucket;
     size_t size     = sizes_[bucket];
     entry_t **stack = &mp->stack[bucket];
