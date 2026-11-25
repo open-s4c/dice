@@ -61,7 +61,12 @@ bool ps_dispatch_chain_on_(chain_id);
 
     #if PUBSUB_EXTENSION_CALLBACKS_
 struct chain {
+        #ifdef DICE_ROLL_RUNTIME
+    /* The last bucket serves undeclared in-range IDs in compact tables. */
+    struct type types[PS_TYPE_COUNT + 1];
+        #else
     struct type types[PS_TYPE_COUNT];
+        #endif
 };
 
 static struct chain chains_[PS_CHAIN_COUNT];
@@ -70,8 +75,10 @@ static struct chain chains_[PS_CHAIN_COUNT];
 static struct type *
 ps_callback_list_(chain_id chain, type_id type)
 {
+    if (unlikely(type == ANY_EVENT || type >= MAX_TYPES))
+        return NULL;
     size_t c = PS_CHAIN_INDEX(chain), t = PS_TYPE_INDEX(type);
-    if (unlikely(c >= PS_CHAIN_COUNT || !t || t >= PS_TYPE_COUNT))
+    if (unlikely(c >= PS_CHAIN_COUNT || !t || t > PS_TYPE_COUNT))
         return NULL;
     return &chains_[c].types[t];
 }
@@ -239,17 +246,22 @@ ps_subscribe_(chain_id chain, type_id type, ps_callback_f cb, int slot)
         return ps_subscribe_type_(chain, type, cb, slot, false);
 
     int err;
-        /* Generation supplies the declared event universe for wildcard
-         * expansion.
-         */
         #ifdef DICE_ROLL_RUNTIME
-    for (size_t k = 0; k < ps_event_count_; k++) {
-        type_id i = ps_event_ids_[k];
+    /* Expand over storage indexes, including numeric gaps in direct tables
+     * and the undeclared-ID bucket in compact tables. */
+    size_t c = PS_CHAIN_INDEX(chain);
+    if (c >= PS_CHAIN_COUNT)
+        return PS_INVALID;
+    for (size_t i = 1; i <= PS_TYPE_COUNT; i++) {
+        err = ps_subscribe_list_(&chains_[c].types[i], chain, ANY_EVENT, cb,
+                                 slot, true);
+        if (err != PS_OK)
+            return err;
         #else
     for (size_t i = 1; i < MAX_TYPES; i++) {
-        #endif
         if ((err = ps_subscribe_type_(chain, i, cb, slot, true)) != 0)
             return err;
+        #endif
     }
 
     return PS_OK;
@@ -363,6 +375,8 @@ PUBSUB_API_ enum ps_err
 ps_publish(const chain_id chain, const type_id type, void *event,
            struct metadata *md)
 {
+    if (unlikely(type == ANY_EVENT || type >= MAX_TYPES || chain >= MAX_CHAINS))
+        return PS_INVALID;
     log_debug("=== ps_publish %s/%s", ps_chain_str(chain), ps_type_str(type));
     if (PS_NOT_INITD_())
         return PS_STOP_CHAIN;
@@ -389,6 +403,8 @@ PUBSUB_API_ enum ps_err
 ps_publish(const chain_id chain, const type_id type, void *event,
            struct metadata *md)
 {
+    if (unlikely(type == ANY_EVENT || type >= MAX_TYPES || chain >= MAX_CHAINS))
+        return PS_INVALID;
     if (PS_NOT_INITD_())
         return PS_STOP_CHAIN;
     log_debug("Dispatch %s/%s", ps_chain_str(chain), ps_type_str(type));
@@ -461,7 +477,9 @@ PUBSUB_API_ enum ps_err
 dice_publish_checked(int slot, chain_id chain, type_id type, void *event,
                      struct metadata *md)
 {
-    if (!dice_event_valid_(type) || !dice_chain_valid_(chain) ||
+    if (unlikely(type == ANY_EVENT || type >= MAX_TYPES || chain >= MAX_CHAINS))
+        return PS_INVALID;
+    if (!dice_chain_valid_(chain) ||
         (!(DICE_EXTENSION_CALLBACKS && slot > DICE_LAST_KNOWN_SLOT) &&
          !dice_publishes_allowed_(slot, chain, type)))
         dice_route_error_("publishes", slot, chain, type);

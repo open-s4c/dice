@@ -79,7 +79,7 @@ if(NOT CMAKE_CROSSCOMPILING)
            "-DDL_LIBS=${roll_dl_libs}" -DSOURCE=${PROJECT_SOURCE_DIR}
            -P ${CMAKE_CURRENT_SOURCE_DIR}/inline.cmake)
   set_tests_properties(roll-inline PROPERTIES TIMEOUT 180)
-  foreach(scenario inline-cpp priority-exact publication-parity)
+  foreach(scenario inline-cpp priority-exact publication-parity in-bounds)
     add_test(NAME roll-${scenario} COMMAND ${CMAKE_COMMAND}
              -DDICE=$<TARGET_FILE:dice-cli> -DCC=${CMAKE_C_COMPILER}
              -DCXX=${CMAKE_CXX_COMPILER} -DCC_ID=${CMAKE_C_COMPILER_ID}
@@ -89,7 +89,7 @@ if(NOT CMAKE_CROSSCOMPILING)
              -P ${CMAKE_CURRENT_SOURCE_DIR}/${scenario}.cmake)
   endforeach()
   set_tests_properties(roll-inline-cpp PROPERTIES TIMEOUT 300)
-  set_tests_properties(roll-priority-exact roll-publication-parity
+  set_tests_properties(roll-priority-exact roll-publication-parity roll-in-bounds
                        PROPERTIES TIMEOUT 120)
   add_test(NAME roll-sealed COMMAND ${CMAKE_COMMAND}
            -DDICE=$<TARGET_FILE:dice-cli> -DCC=${CMAKE_C_COMPILER}

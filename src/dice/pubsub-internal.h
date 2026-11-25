@@ -35,10 +35,6 @@ DICE_HIDE const char *dice_chain_name_(chain_id);
 DICE_HIDE const char *dice_event_name_(type_id);
 DICE_HIDE chain_id dice_chain_lookup_(const char *);
 DICE_HIDE type_id dice_event_lookup_(const char *);
-    #if DICE_EXTENSION_CALLBACKS
-DICE_HIDE extern const type_id ps_event_ids_[];
-DICE_HIDE extern const size_t ps_event_count_;
-    #endif
     #if DICE_CALLBACKS
 DICE_HIDE int dice_subscribe_known_(chain_id, type_id, ps_callback_f, int);
     #endif
