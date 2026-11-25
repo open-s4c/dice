@@ -1825,7 +1825,7 @@ emit_header(FILE *out)
           out);
     emit_route_expression(out, subs, nsubs, "S", "C", "E");
     fputs("\n#endif\n", out);
-    int max_event = 127, max_chain = 6;
+    int max_event = 0, max_chain = 6;
     for (size_t i = 0; i < nids; i++) {
         int *max = ids[i].chain ? &max_chain : &max_event;
         if (ids[i].id > *max)
@@ -1881,6 +1881,8 @@ emit_header(FILE *out)
         "static inline __attribute__((always_inline)) enum ps_err\n"
         "dice_publish_inline_(chain_id chain, type_id type, void *event, "
         "struct metadata *md)\n{\n"
+        "    if (unlikely(type == ANY_EVENT || type >= MAX_TYPES || "
+        "chain >= MAX_CHAINS)) return PS_INVALID;\n"
         "    if (unlikely(!ready_) && !ps_initd_())\n"
         "        return PS_STOP_CHAIN;\n"
         "    log_debug(\"Dispatch %s/%s\", ps_chain_str(chain), "
@@ -1912,6 +1914,8 @@ emit_header(FILE *out)
         "dice_publish_inline_nested_(chain_id chain, type_id type, void "
         "*event, "
         "struct metadata *md)\n{\n"
+        "    if (unlikely(type == ANY_EVENT || type >= MAX_TYPES || "
+        "chain >= MAX_CHAINS)) return PS_INVALID;\n"
         "    if (unlikely(!ready_) && !ps_initd_())\n"
         "        return PS_STOP_CHAIN;\n"
         "    enum ps_err err = dice_dispatch_inline_nested_(chain, type, "
@@ -2001,7 +2005,7 @@ emit_known_callbacks(FILE *out)
                     "type_id type, void *event, struct metadata *md)\n{\n"
                     "    (void)chain; (void)type; (void)event; (void)md;\n"
                     "    size_t index = PS_TYPE_INDEX(type);\n"
-                    "    if (!index || index >= PS_TYPE_COUNT) return "
+                    "    if (!index) return "
                     "PS_HANDLER_OFF;\n"
                     "    enum ps_err err;\n",
                     subs[j].handler);
@@ -2009,7 +2013,7 @@ emit_known_callbacks(FILE *out)
                 /* Explicit cases never invoke the wildcard handler. This
                  * handler also serves dynamically registered callbacks for
                  * events without an explicit case in this slot. */
-                fputs("    if (1", out);
+                fputs("    if (index < PS_TYPE_COUNT", out);
                 for (size_t k = first; k < i; k++)
                     if (subs[k].event)
                         fprintf(out, " && type != %d", subs[k].event);
@@ -2018,6 +2022,9 @@ emit_known_callbacks(FILE *out)
                 fputs("    }\n", out);
                 emit_callback_call(out, chain, slot, "0");
             } else {
+                fputs(
+                    "    if (index >= PS_TYPE_COUNT) return PS_HANDLER_OFF;\n",
+                    out);
                 emit_callback_call(out, chain, slot, "index");
             }
             fputs("    return PS_HANDLER_OFF;\n}\n", out);
@@ -2081,19 +2088,6 @@ emit_known_callbacks(FILE *out)
 }
 
 static void
-emit_event_ids(FILE *out)
-{
-    fputs("DICE_HIDE const type_id ps_event_ids_[] = {\n", out);
-    for (size_t i = 0; i < nids; i++)
-        if (!ids[i].chain && ids[i].id && first_id(i))
-            fprintf(out, "    %d,\n", ids[i].id);
-    fputs(
-        "};\nDICE_HIDE const size_t ps_event_count_ = "
-        "sizeof(ps_event_ids_) / sizeof(ps_event_ids_[0]);\n",
-        out);
-}
-
-static void
 emit_source(FILE *out, const char *name)
 {
     emit_preamble(out);
@@ -2107,8 +2101,6 @@ emit_source(FILE *out, const char *name)
     emit_route_checks(out);
     emit_registry(out, false);
     emit_registry(out, true);
-    if (extension_callbacks)
-        emit_event_ids(out);
     if (callbacks)
         emit_known_callbacks(out);
     emit_dispatch(out);

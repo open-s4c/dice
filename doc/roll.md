@@ -77,6 +77,12 @@ Events and chains are inferred from `subscribes` and `publishes`; explicit
 `before` and `after` establish handler order. Missing optional ordering targets
 are ignored; use `require` for dependencies that must exist.
 
+Published event IDs must be greater than `ANY_EVENT` and less than `MAX_TYPES`,
+which is the highest declared event ID plus one. Undeclared IDs within that
+range reach wildcard subscriptions. Explicit subscriptions require declared
+event IDs; at each configured slot, an explicit subscription takes precedence
+over the wildcard.
+
 Callbacks are enabled by default. Loadable modules use the same generated
 header and define `DICE_PLUGIN_MODULE`; load them before initialization if they
 subscribe to `EVENT_DICE_INIT`. Slots with callbacks disabled require linked
